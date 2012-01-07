@@ -1,0 +1,6 @@
+#ifndef CHROOT_ONLY
+
+wireless-tools       # Tools for manipulating Linux Wireless Extensions
+wpasupplicant        # Client support for WPA and WPA2 (IEEE 802.11i)
+
+#endif

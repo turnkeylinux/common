@@ -1,0 +1,4 @@
+Package: *
+Pin: release o=turnkeylinux
+Pin-Priority: 999
+

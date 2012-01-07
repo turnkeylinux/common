@@ -1,0 +1,9 @@
+#!/bin/sh -ex
+
+# sun-java5-* packages workaround: requires license acceptance
+debconf-set-selections << END
+sun-java5-jdk shared/accepted-sun-dlj-v1-1 boolean true
+sun-java5-jre shared/accepted-sun-dlj-v1-1 boolean true
+sun-java5-bin shared/accepted-sun-dlj-v1-1 boolean true
+END
+

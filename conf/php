@@ -1,0 +1,30 @@
+#!/bin/sh -e
+
+setini() {
+    file=$1
+    var=$2
+    val=$3
+
+    echo sed -i "/^$var *=/ s/= *[^ ]\+/= $val/g" $file
+    sed -i "/^$var *=/ s/= *[^ ]\+/= $val/g" $file
+}
+
+set ${PHP_MEMORY_LIMIT:=32M}
+set ${PHP_POST_MAX_SIZE:=16M}
+set ${PHP_UPLOAD_MAX_FILESIZE:=8M}
+
+for f in /etc/php?/*/php.ini; do
+    [ -f $f ] || continue
+    setini $f memory_limit $PHP_MEMORY_LIMIT
+    setini $f post_max_size $PHP_POST_MAX_SIZE
+    setini $f upload_max_filesize $PHP_UPLOAD_MAX_FILESIZE
+done
+
+# '#' is depreciated in php5.3
+for conf in /etc/php5/conf.d /etc/php5/cli/conf.d; do
+    if [ -d $conf ]; then
+        for f in $conf/*; do sed -i "s|#|//|" $f; done
+    fi
+done
+
+exit 0

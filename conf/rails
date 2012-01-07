@@ -1,0 +1,47 @@
+#!/bin/sh -ex
+
+RAILS_APP=railsapp
+DB_USER_NAME=${RAILS_APP}_user
+DB_USER_PASS=$(mcookie)
+
+# convenience execution variables
+MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
+MYSQL_ADMIN="mysqladmin --user=root --password=$MYSQL_PASS"
+
+# start mysql server
+/etc/init.d/mysql start
+
+# create databases for each environment
+for NAME in test development production; do
+    $MYSQL_ADMIN create ${RAILS_APP}_${NAME} --default-character-set=utf8;
+    $MYSQL_BATCH --execute "grant all privileges on ${RAILS_APP}_${NAME}.* to $DB_USER_NAME@localhost identified by '$DB_USER_PASS'; flush privileges;"
+done
+
+# seed rails application
+cd /var/www
+rails --skip -d mysql ${RAILS_APP}
+
+DB_CONF=/var/www/$RAILS_APP/config/database.yml
+sed --in-place "s/^  username: root/  username: $DB_USER_NAME/g" $DB_CONF
+sed --in-place "s/^  password:/  password: $DB_USER_PASS/g" $DB_CONF
+
+# build passenger
+passenger-install-apache2-module --auto
+
+# configure permissions
+chown -R :www-data /var/www/$RAILS_APP
+chown -R www-data:www-data /var/www/$RAILS_APP/tmp
+chown -R www-data:www-data /var/www/$RAILS_APP/log
+
+# apache configuration
+a2enmod rewrite
+a2enmod proxy_balancer
+a2enmod proxy_http
+a2enmod proxy
+a2enmod headers
+
+a2dissite default
+a2ensite $RAILS_APP
+
+# stop mysql server
+/etc/init.d/mysql stop

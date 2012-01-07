@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+CONF=/etc/default/console-setup
+[ -e $CONF ] || exit 0
+
+FONTFACE=VGA
+CODESET=Lat15
+FONTSIZE=16
+
+sed -i "/^CODESET/  s/=.*/=$CODESET/; \
+        /^FONTFACE/ s/=.*/=$FONTFACE/; \
+        /^FONTSIZE/ s/=.*/=$FONTSIZE/;" \
+    $CONF
+
+DEBIAN_FRONTEND=noninteractive dpkg-reconfigure console-setup

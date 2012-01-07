@@ -1,0 +1,48 @@
+#!/bin/sh
+
+PREREQ=""
+DESCRIPTION="Configuring autologin..."
+
+# don't configure autologin if noautologin is passed as a boot param
+for x in $(cat /proc/cmdline); do
+    if [ $x = "noautologin" ]; then
+        exit 0
+    fi
+done
+
+. /scripts/casper-functions
+
+prereqs()
+{
+    echo "$PREREQ"
+}
+
+case $1 in
+# get pre-requisites
+prereqs)
+    prereqs
+    exit 0
+    ;;
+esac
+
+log_begin_msg "$DESCRIPTION"
+
+# Arrange for shells on virtual consoles, rather than login prompts
+
+# debian/lenny
+if [ -f /root/etc/inittab ]; then
+    sed -i -e "s|^\([^:]*:[^:]*:[^:]*\):.*getty.*\<\(tty[0-9]*\).*$|\1:/bin/login -f root </dev/\2 >/dev/\2 2>\&1|" /root/etc/inittab
+fi
+
+# ubuntu/lucid
+if [ "/root/etc/init/tty*" != "$(echo /root/etc/init/tty*)" ]; then
+    for f in /root/etc/init/tty*; do
+        sed -i -e "s|^exec.*|exec /bin/login -f root </dev/$(basename $f .conf) > /dev/$(basename $f .conf) 2>\&1|" $f
+    done
+fi
+
+# Since we use autologin, lastlog doesn't make sense on the console.
+sed -i '/^[^#].*pam_lastlog\.so/s/^/# /' /root/etc/pam.d/login
+
+log_end_msg
+exit 0

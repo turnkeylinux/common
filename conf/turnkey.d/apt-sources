@@ -1,0 +1,64 @@
+#!/bin/bash -e
+
+fatal() {
+    echo "fatal: $@" 1>&2
+    exit 1
+}
+
+SOURCES_LIST=/etc/apt/sources.list.d
+mkdir -p $SOURCES_LIST
+
+ubuntu_sources() {
+cat >$SOURCES_LIST/sources.list<<EOF
+deb http://archive.turnkeylinux.org/ubuntu $CODENAME main
+
+deb http://archive.ubuntu.com/ubuntu $CODENAME main
+deb http://archive.ubuntu.com/ubuntu $CODENAME universe
+# deb http://archive.ubuntu.com/ubuntu $CODENAME restricted
+# deb http://archive.ubuntu.com/ubuntu $CODENAME multiverse
+
+deb http://archive.ubuntu.com/ubuntu $CODENAME-updates main
+deb http://archive.ubuntu.com/ubuntu $CODENAME-updates universe
+# deb http://archive.ubuntu.com/ubuntu $CODENAME-updates restricted
+# deb http://archive.ubuntu.com/ubuntu $CODENAME-updates multiverse
+
+# deb http://archive.ubuntu.com/ubuntu $CODENAME-backports main
+# deb http://archive.ubuntu.com/ubuntu $CODENAME-backports universe
+# deb http://archive.ubuntu.com/ubuntu $CODENAME-backports restricted
+# deb http://archive.ubuntu.com/ubuntu $CODENAME-backports multiverse
+EOF
+
+cat >$SOURCES_LIST/security.sources.list<<EOF
+deb http://archive.turnkeylinux.org/ubuntu $CODENAME-security main
+
+deb http://archive.ubuntu.com/ubuntu $CODENAME-security main
+deb http://archive.ubuntu.com/ubuntu $CODENAME-security universe
+# deb http://archive.ubuntu.com/ubuntu $CODENAME-security restricted
+# deb http://archive.ubuntu.com/ubuntu $CODENAME-security multiverse
+EOF
+}
+
+debian_sources() {
+cat >$SOURCES_LIST/sources.list<<EOF
+deb http://archive.turnkeylinux.org/debian $CODENAME main
+
+deb http://ftp.debian.org/debian $CODENAME main
+deb http://ftp.debian.org/debian $CODENAME contrib
+EOF
+
+cat >$SOURCES_LIST/security.sources.list<<EOF
+deb http://archive.turnkeylinux.org/debian $CODENAME-security main
+
+deb http://security.debian.org/ $CODENAME/updates main
+deb http://security.debian.org/ $CODENAME/updates contrib
+EOF
+}
+
+[ -n "$CODENAME" ] || fatal "CODENAME is not set"
+
+case "$DISTRO" in
+    ubuntu) ubuntu_sources ;;
+    debian) debian_sources ;;
+    *) fatal "DISTRO is not set or not recognized" ;;
+esac
+

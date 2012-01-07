@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+cp /etc/skel/.bashrc /root
+[ -d /etc/skel/.bashrc.d ] && cp -a /etc/skel/.bashrc.d /root
+

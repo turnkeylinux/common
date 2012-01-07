@@ -1,0 +1,5 @@
+#!/bin/sh
+# run git garbage collection after each apt run (Thank Jeremiah!)
+if [ "$VCS" = git ] && [ -d .git ]; then
+    exec git gc
+fi

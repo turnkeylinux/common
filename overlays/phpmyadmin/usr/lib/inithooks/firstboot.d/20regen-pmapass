@@ -1,0 +1,10 @@
+#!/bin/bash -e
+# regenerate phpmyadmin pmadb password
+
+. /etc/default/inithooks
+
+PASSWORD=$(mcookie)
+CONF=/etc/phpmyadmin/config.inc.php
+
+sed -i "s|\['controlpass'\]\(.*\)|\['controlpass'\] = '$PASSWORD';|" $CONF
+$INITHOOKS_PATH/bin/mysqlconf.py --user=pma --pass="$PASSWORD"

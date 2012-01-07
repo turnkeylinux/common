@@ -1,0 +1,12 @@
+#!/bin/sh -e
+
+LANG=en_GB
+LC_ALL=C
+
+locale-gen $LANG
+cat >> /etc/environment << EOF
+LANG=$LANG
+LC_ALL=$LC_ALL
+EOF
+
+echo LANG=$LANG > /etc/default/locale

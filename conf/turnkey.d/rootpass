@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+# chroot only environments don't need a root password
+if [ ! "$CHROOT_ONLY" ]; then
+    if [ -n "$ROOT_PASS" ]; then
+        echo root:$ROOT_PASS | chpasswd
+    else
+        # this is a blank password
+        usermod -p U6aMy0wojraho root
+    fi
+else
+    passwd --lock root
+fi

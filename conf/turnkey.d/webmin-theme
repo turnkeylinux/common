@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+set ${WEBMIN_THEME:=theme-stressfree}
+
+echo "theme=$WEBMIN_THEME" >> /etc/webmin/config
+echo "preroot=$WEBMIN_THEME" >> /etc/webmin/miniserv.conf

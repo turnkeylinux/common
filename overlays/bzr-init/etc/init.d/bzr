@@ -1,0 +1,61 @@
+#!/bin/sh
+# Copyright (c) 2008 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+
+### BEGIN INIT INFO
+# Provides:             bzr
+# Required-Start:       $remote_fs
+# Required-Stop:        $remote_fs
+# Default-Start:        2 3 4 5
+# Default-Stop:         1
+# Short-Description:    Bazaar Repository Server
+### END INIT INFO
+
+DESC="Bazaar Repository Server"
+NAME=bzr
+DAEMON=/usr/bin/$NAME
+PIDFILE=/var/run/$NAME.pid
+LOGFILE=/var/log/$NAME.log
+
+BZR_ROOT=/srv/repos
+
+set -e
+. /lib/lsb/init-functions
+
+# Exit if the daemon is not available
+[ -x "$DAEMON" ] || exit 0
+
+case "$1" in
+  start)
+    log_begin_msg "Starting $DESC"
+    start-stop-daemon --start --make-pidfile --pidfile $PIDFILE --exec $DAEMON -- serve --verbose --directory $BZR_ROOT >$LOGFILE &
+    log_action_end_msg $?
+    ;;
+
+  stop)
+    log_begin_msg "Stopping $DESC"
+    STOP="start-stop-daemon --stop --retry=TERM/30/KILL/5 --pidfile $PIDFILE"
+    if $STOP --quiet; then
+        rm -f $PIDFILE
+    fi
+    log_action_end_msg $?
+    ;;
+
+  restart)
+    $0 stop
+    $0 start
+    ;;
+
+  reload|force-reload)
+    echo "Error: argument '$1' not supported" >&2
+    exit 3
+    ;;
+
+  *)
+    N=/etc/init.d/$NAME
+    echo "Usage: $N {start|stop}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0
+

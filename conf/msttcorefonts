@@ -1,0 +1,7 @@
+#!/bin/sh -ex
+
+# msttcorefonts workaround: use pre-downloaded files
+debconf-set-selections << END
+msttcorefonts msttcorefonts/dldir string /tmp/msfonts
+END
+

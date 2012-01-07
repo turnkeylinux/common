@@ -1,0 +1,23 @@
+#!/bin/sh -ex
+
+set ${PGSQL_PASS:=postgres}
+
+PGSQL_VER=$(ls /etc/postgresql/)
+CONF_DIR=/etc/postgresql/${PGSQL_VER}/main
+
+# recreate postgres and templates using UTF-8
+pg_dropcluster --stop ${PGSQL_VER} main
+pg_createcluster --start -e UTF-8 ${PGSQL_VER} main
+/etc/init.d/postgresql-${PGSQL_VER} stop
+
+# Trust postgres user when connecting over local unix sockets
+sed --in-place "/^local.*postgres/ s/ident/trust/" $CONF_DIR/pg_hba.conf
+
+# Enable password encryption
+sed --in-place "/^#password_encryption = on/ s/#//" $CONF_DIR/postgresql.conf
+
+# Configure postgres password
+/etc/init.d/postgresql-${PGSQL_VER} start
+psql -U postgres -d postgres -c "alter user postgres with encrypted password '$PGSQL_PASS';"
+/etc/init.d/postgresql-${PGSQL_VER} stop
+

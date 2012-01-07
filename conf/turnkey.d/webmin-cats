@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# move System Time and PHP Configuration to System category
+echo time=system >> /etc/webmin/webmin.cats
+echo phpini=system >> /etc/webmin/webmin.cats
+
+# rename "Others" => "Tools" (webmin is weird)
+echo =Tools >> /etc/webmin/webmin.catnames
+
+rm /etc/webmin/*.cache

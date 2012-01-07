@@ -1,0 +1,15 @@
+NameVirtualHost *:80
+NameVirtualHost *:443
+
+<VirtualHost *:80>
+    UseCanonicalName Off
+    Include /etc/apache2/conf/railsapp.conf
+</VirtualHost>
+
+<VirtualHost *:443>
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/cert.pem
+    Include /etc/apache2/conf/railsapp.conf
+    RequestHeader set X_FORWARDED_PROTO 'https'
+</VirtualHost>
+

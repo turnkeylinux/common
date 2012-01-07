@@ -1,0 +1,28 @@
+#!/bin/sh
+
+PREREQ=""
+DESCRIPTION="Configuring sshd to permit empty passwords..."
+
+. /scripts/casper-functions
+
+prereqs()
+{
+    echo "$PREREQ"
+}
+
+case $1 in
+# get pre-requisites
+prereqs)
+    prereqs
+    exit 0
+    ;;
+esac
+
+log_begin_msg "$DESCRIPTION"
+
+# Configure sshd to permit empty passwords
+CONF=/root/etc/ssh/sshd_config
+[ -e $CONF ] && sed -i 's/^PermitEmptyPasswords no/PermitEmptyPasswords yes/' $CONF
+
+log_end_msg
+exit 0

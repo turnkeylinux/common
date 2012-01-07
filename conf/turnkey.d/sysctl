@@ -1,0 +1,15 @@
+#!/bin/bash -e
+
+# KERN_EMERG    0  system is unusable
+# KERN_ALERT    1  action must be taken immediately
+# KERN_CRIT     2  critical conditions
+# KERN_ERR      3  error conditions
+# KERN_WARNING  4  warning conditions
+# KERN_NOTICE   5  normal but significant condition
+# KERN_INFO     6  informational
+# KERN_DEBUG    7  debug-level messages
+
+# suppress low-level messages on the console
+# console default_message minimum_console default_console
+sed -i "s|#kernel.printk\(.*\)|kernel.printk = 1 4 1 7|" /etc/sysctl.conf
+

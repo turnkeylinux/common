@@ -1,0 +1,2 @@
+KERNEL=="controlC[0-9]*", ACTION=="add", \
+	RUN+="/sbin/start-stop-daemon --start --background --pidfile /var/run/pulseaudio/bogus --startas /etc/init.d/pulseaudio -- start %n"

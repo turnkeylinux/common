@@ -1,0 +1,13 @@
+#ifndef CHROOT_ONLY
+
+inputattach          # Utility to attach serial devices to the input subsystem
+discover             # Hardware identification system
+mdetect              # Mouse device autodetection tool
+pciutils             # Linux PCI Utilities
+usbutils             # USB console utilities
+
+#ifdef DEBUG
+lshw            # Information about hardware configuration
+#endif
+
+#endif

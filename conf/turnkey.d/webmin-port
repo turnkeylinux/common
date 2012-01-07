@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+set ${WEBMIN_PORT:=12321}
+
+sed --in-place "s/10000/$WEBMIN_PORT/g" /etc/webmin/miniserv.conf
+

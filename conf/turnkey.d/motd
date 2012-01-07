@@ -1,0 +1,25 @@
+#!/bin/bash -e
+
+MOTD_DIR=/etc/update-motd.d
+
+cat >$MOTD_DIR/00-turnkey-sysinfo<<'EOF'
+#!/bin/sh
+
+exec /usr/share/turnkey-sysinfo/contrib/motd
+EOF
+
+cat >$MOTD_DIR/10-nonpersistent-mode<<'EOF'
+#!/bin/sh
+
+if grep -q boot=casper /proc/cmdline; then
+    echo "  Warning: Non-persistent mode"
+    echo
+    echo "    The system is running in live non-persistent mode. Changes will"
+    echo "    be lost on shutdown/reboot."
+    echo
+fi
+EOF
+
+rm -f $MOTD_DIR/{00-header,10-help-text}
+chmod +x $MOTD_DIR/*
+

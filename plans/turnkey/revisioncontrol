@@ -1,0 +1,6 @@
+git-core
+git-daemon-run
+bzr
+python-paramiko     # required to bzr-push
+mercurial
+subversion

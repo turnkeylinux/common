@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mysqloptimize --defaults-file=/etc/mysql/debian.cnf --all-databases

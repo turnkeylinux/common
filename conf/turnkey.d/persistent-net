@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# remove network configuration that might have been used from build system
+rm -f /etc/udev/rules.d/70-persistent-net.rules
+

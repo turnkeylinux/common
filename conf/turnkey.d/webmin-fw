@@ -1,0 +1,45 @@
+#!/bin/sh -e
+
+set ${WEBMIN_FW_TCP_INCOMING:=22 80 443 12320 12321}
+
+CONF=/etc/iptables.up.rules
+
+cat > $CONF <<EOF
+*nat
+:PREROUTING ACCEPT [13:1124]
+:POSTROUTING ACCEPT [279:22730]
+:OUTPUT ACCEPT [279:22730]
+COMMIT
+*mangle
+:PREROUTING ACCEPT [2156:1261503]
+:INPUT ACCEPT [2143:1260379]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [2144:1119302]
+:POSTROUTING ACCEPT [2144:1119302]
+COMMIT
+*filter
+:FORWARD ACCEPT [0:0]
+:INPUT DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p icmp -m icmp --icmp-type echo-request -j ACCEPT
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+EOF
+
+for port in $WEBMIN_FW_TCP_INCOMING; do
+    echo "-A INPUT -p tcp -m tcp --dport $port -j ACCEPT" >> $CONF
+done
+
+if [ "$WEBMIN_FW_UDP_INCOMING" ]; then
+    for port in $WEBMIN_FW_UDP_INCOMING; do
+        echo "-A INPUT -p udp -m udp --dport $port -j ACCEPT" >> $CONF
+    done
+fi
+
+if [ "$WEBMIN_FW_TCP_INCOMING_REJECT" ]; then
+    for port in $WEBMIN_FW_TCP_INCOMING_REJECT; do
+        echo "-A INPUT -p tcp -m tcp --dport $port -j REJECT" >> $CONF
+    done
+fi
+
+echo "COMMIT" >> $CONF

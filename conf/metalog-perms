@@ -1,0 +1,14 @@
+#!/bin/sh -e
+
+if ! grep -q ^syslog: /etc/group; then
+    addgroup --system syslog
+fi
+chown root:syslog /var/log
+chmod g+s /var/log
+
+LOGDIRS=$(grep "^  logdir" /etc/metalog.conf | awk '{print $3 }' | sed s/\"//g)
+for logdir in $LOGDIRS; do
+    mkdir --mode=750 $logdir
+done
+
+

@@ -1,0 +1,14 @@
+less            
+vim-tiny        
+bash-completion
+whiptail        /* used by package scripts to create user-friendly dialogs */
+
+psmisc          # Utilities for /proc such as killall, pstree, fuser
+procps          # Provides sysctl.conf and utils such as top, free, vmstat
+kbd             # Linux console font and keytable utilities
+
+#ifdef DEBUG
+strace          
+screen          
+man-db          # The on-line manual pager
+#endif

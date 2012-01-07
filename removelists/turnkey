@@ -1,0 +1,11 @@
+/usr/share/locale/
+!/usr/share/locale/en_GB/
+
+/etc/resolvconf/resolv.conf.d/original
+
+/etc/.bzr
+/etc/.bzrignore
+
+/var/log/dpkg.log
+/var/log/bootstrap.log
+/var/log/apt/term.log

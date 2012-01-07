@@ -1,0 +1,7 @@
+#!/bin/bash -e
+
+# blank out configuration file (usually contains passwords)
+[ -e $INITHOOKS_CONF ] && echo > $INITHOOKS_CONF
+
+exit 0
+

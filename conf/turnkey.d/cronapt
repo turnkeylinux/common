@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+cd /etc/cron-apt
+
+cat >> config << EOF
+MAILON="never"
+SYSLOGON="output"
+EOF
+
+echo -n > action.d/3-download
+cat > action.d/5-install << EOF
+autoclean -q -y
+dist-upgrade -q -y -o APT::Get::Show-Upgraded=true -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/security.sources.list -o Dir::Etc::sourceparts=nonexistent -o DPkg::Options::=--force-confdef -o DPkg::Options::=--force-confold
+EOF
+

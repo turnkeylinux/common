@@ -1,0 +1,16 @@
+#!/bin/sh -ex
+
+STORAGE=/srv/storage
+
+# create storage folder
+mkdir -p $STORAGE
+chmod 1775 $STORAGE
+chown root:users $STORAGE
+
+cat >$STORAGE/README.txt<<EOF
+TurnKey Linux $CREDIT_ANCHORTEXT
+http://www.turnkeylinux.org/$HOSTNAME
+EOF
+
+flip -m $STORAGE/README.txt
+

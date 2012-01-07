@@ -1,0 +1,11 @@
+#!/bin/sh -e
+# disable scheduled updates (webmin is managed by apt)
+
+CONF=/etc/webmin/webmin/config
+sed -i "s|update=1|update=|" $CONF
+
+cat>>$CONF<<EOF
+last_version_number=0
+last_version_check=9999999999
+EOF
+

@@ -1,0 +1,20 @@
+#!/bin/sh -e
+
+set ${MERCURIAL_PORT:=8080}
+
+echo Listen $MERCURIAL_PORT >> /etc/apache2/ports.conf
+
+cat >/etc/mercurial/apache.conf<<EOF
+NameVirtualHost *:$MERCURIAL_PORT
+
+<VirtualHost *:$MERCURIAL_PORT>
+    UseCanonicalName Off
+    ServerAdmin  webmaster@localhost
+    AddHandler cgi-script .cgi
+    ScriptAliasMatch ^(.*) /usr/lib/cgi-bin/hgwebdir.cgi/\$1
+</VirtualHost>
+EOF
+
+ln -s /etc/mercurial/apache.conf /etc/apache2/sites-available/mercurial
+a2ensite mercurial
+

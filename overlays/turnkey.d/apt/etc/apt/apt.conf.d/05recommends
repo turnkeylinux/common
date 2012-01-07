@@ -1,0 +1,2 @@
+// Don't consider recommends as dependencies and install them by default
+APT::Install-Recommends "false";

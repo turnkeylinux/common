@@ -1,0 +1,7 @@
+#ifndef CHROOT_ONLY
+
+laptop-detect        # Attempt to detect a laptop
+dmidecode            # Dump Desktop Management Interface data
+pcmciautils          # PCMCIA utilities for Linux 2.6
+
+#endif

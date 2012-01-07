@@ -1,0 +1,7 @@
+samba
+libpam-smbpass  /* keep smb passwords in sync with pam */
+smbclient       /* useful for testing (and connecting to other shares) */
+webmin-samba
+
+flip            /* convert line endings between unix and dos formats */
+

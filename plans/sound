@@ -1,0 +1,4 @@
+#ifndef CHROOT_ONLY
+pulseaudio
+pavucontrol
+#endif

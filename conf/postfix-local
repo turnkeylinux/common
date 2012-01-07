@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+postconf -e inet_interfaces=localhost
+postconf -e myhostname=localhost
+

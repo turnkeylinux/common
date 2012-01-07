@@ -1,0 +1,63 @@
+#!/bin/bash -e
+# variables: CREDIT_STYLE CREDIT_STYLE_EXTRA CREDIT_ANCHORTEXT CREDIT_LOCATION
+
+if [ ! $HOSTNAME ]; then
+    echo "'$(basename $0)' error: hostname not defined"
+    return 1
+fi
+
+capitalize() {
+    FIRSTLET=$(echo "${1:0:1}" | tr "[:lower:]" "[:upper:]");
+    echo ${FIRSTLET}${1:1}
+}
+
+strip() {
+    echo $1 | sed 's/\n//';
+}
+
+# default credit styling
+_CREDIT_STYLE="
+#turnkey-credit {
+    font-family: Tahoma,Sans,Arial,Helvetica,Verdana,sans-serif;
+    font-size: 11px;
+    text-align: center;
+}
+
+#turnkey-credit a {
+    text-decoration: none;
+}
+
+#turnkey-credit a:hover {
+    text-decoration: underline;
+}
+"
+set ${CREDIT_STYLE:=$_CREDIT_STYLE}
+
+HEAD="
+<style type='text/css'>
+$CREDIT_STYLE
+$CREDIT_STYLE_EXTRA
+</style>
+"
+set ${CREDIT_ANCHORTEXT:=$(capitalize "$HOSTNAME") Appliance}
+
+BODY="
+<div id='turnkey-credit'>
+    <div>
+    <a href='http://www.turnkeylinux.org/$HOSTNAME'>$CREDIT_ANCHORTEXT</a> -
+    Powered by <a href='http://www.turnkeylinux.org'>TurnKey Linux</a>
+    </div>
+</div>
+"
+
+set ${CREDIT_LOCATION:=/}
+cat > /etc/apache2/mods-available/substitute.conf<<EOF
+# Support TurnKey Linux by adding credit to footer
+<Location $CREDIT_LOCATION>
+    AddOutputFilterByType SUBSTITUTE text/html
+    Substitute "s|</head>|$(strip "$HEAD")</head>|i"
+    Substitute "s|</body>|$(strip "$BODY")</body>|i"
+</Location>
+EOF
+
+a2enmod substitute

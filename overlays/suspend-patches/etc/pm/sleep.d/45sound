@@ -1,0 +1,35 @@
+#!/bin/bash
+
+. /usr/lib/pm-utils/functions
+
+BUGGY_SOUND_DRIVERS="snd_hda_intel"
+using_buggy_driver()
+{
+    for driver in $BUGGY_SOUND_DRIVERS; do
+        if lsmod |grep -q $driver; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+reload_sound()
+{
+    if ! using_buggy_driver; then
+        return 0
+    fi
+
+    fuser -k /dev/snd/*
+    sleep 1
+    
+    modprobe -r $(lsmod|cut -d ' ' -f 1|grep ^snd_)
+    udevtrigger
+}
+
+case "$1" in
+    resume|thaw)
+        reload_sound
+		;;
+esac
+
+exit $?

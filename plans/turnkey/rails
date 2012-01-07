@@ -1,0 +1,19 @@
+apache2
+webmin-apache
+apache2-mpm-prefork
+
+mysql-server
+webmin-mysql
+
+ruby-enterprise
+
+build-essential            /* needed to build gems */
+libmysqlclient15-dev       /* needed to build mysql gem */
+libreadline5-dev           /* needed for rails console */
+
+apache2-prefork-dev        /* needed to build passenger gem */
+libapr1-dev                /* needed to build passenger gem */
+libaprutil1-dev            /* needed to build passenger gem */
+
+postfix
+webmin-postfix

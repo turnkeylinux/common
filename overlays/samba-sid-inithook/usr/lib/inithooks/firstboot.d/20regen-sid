@@ -1,0 +1,5 @@
+#!/bin/bash -e
+# remove samba secrets (sid will be regenerated)
+
+rm -f /var/lib/samba/secrets.tdb
+

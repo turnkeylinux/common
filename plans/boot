@@ -1,0 +1,28 @@
+#ifndef CHROOT_ONLY
+
+syslinux             # Bootloader for linux/i386 using ms-dos floppies
+casper               # Run a "live" preinstalled system from read-only media
+hdparm               # Tune hard disk parameters for high performance
+
+#ifdef UBUNTU
+upstart
+#endif
+
+#ifdef DEBIAN
+sysvinit
+#endif
+
+#ifdef KERNEL
+KERNEL
+#else
+#ifdef UBUNTU
+linux-image-generic 
+#endif
+#ifdef DEBIAN
+linux-image-2.6-486
+aufs-modules-2.6-486
+squashfs-modules-2.6-486
+#endif
+#endif
+
+#endif

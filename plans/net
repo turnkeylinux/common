@@ -1,0 +1,10 @@
+ifupdown             # high level tools to configure network interfaces 
+ethtool              # display or change ethernet card settings
+bind9-host           # Version of 'host' bundled with BIND 9.X
+netbase              # Basic TCP/IP networking system
+net-tools            # The NET-3 networking toolkit
+iproute              # networking and traffic control tools
+udhcpc               # very small DHCP client
+traceroute           # Traces the route taken by packets over a tcp/ip network
+iputils-ping         # Tools to test the reachability of network hosts
+

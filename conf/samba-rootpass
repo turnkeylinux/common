@@ -1,0 +1,18 @@
+#!/bin/sh -ex
+
+# set samba root password
+passwd --unlock root                      # useful when testing in chroot
+
+if [ -n "$ROOT_PASS" ]; then
+    echo root:$ROOT_PASS | chpasswd
+else
+    # this is a blank password
+    usermod -p U6aMy0wojraho root
+fi
+
+if [ "$ROOT_PASS" ]; then
+    (echo "$ROOT_PASS" ; echo "$ROOT_PASS" ) | smbpasswd -a -s root
+else
+    smbpasswd -a -n root
+fi
+

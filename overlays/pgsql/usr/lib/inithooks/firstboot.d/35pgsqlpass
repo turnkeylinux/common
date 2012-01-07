@@ -1,0 +1,7 @@
+#!/bin/bash -e
+# set pgsql postgres password
+
+. /etc/default/inithooks
+
+[ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
+$INITHOOKS_PATH/bin/pgsqlconf.py --user=postgres --pass="$DB_PASS"

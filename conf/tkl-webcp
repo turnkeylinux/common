@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+# unpack turnkey web controlpanel js and css
+gzip -d /var/www/js/*.gz
+gzip -d /var/www/css/*.gz
+
