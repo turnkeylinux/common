@@ -1,12 +1,11 @@
 #!/bin/sh -e
 
-LANG=en_GB
+cat >> /etc/default/locale << EOF
+LANG=en_US.UTF-8
+LANGUAGE=en_US.UTF-8
 LC_ALL=C
-
-locale-gen $LANG
-cat >> /etc/environment << EOF
-LANG=$LANG
-LC_ALL=$LC_ALL
+LC_CTYPE=C
 EOF
 
-echo LANG=$LANG > /etc/default/locale
+locale-gen en_US.UTF-8
+

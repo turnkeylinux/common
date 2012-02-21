@@ -1,5 +1,5 @@
 /usr/share/locale/
-!/usr/share/locale/en_GB/
+!/usr/share/locale/en_US/
 
 /etc/resolvconf/resolv.conf.d/original
 
