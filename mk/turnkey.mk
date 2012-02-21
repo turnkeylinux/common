@@ -38,7 +38,7 @@ define _root.patched/post
 		echo; \
 	fi
 
-	fab-chroot $O/root.patched "dpkg -i *.deb && rm *.deb"
+	fab-chroot $O/root.patched "dpkg -i *.deb && rm *.deb && rm -f /var/log/dpkg.log"
 endef
 root.patched/post += $(_root.patched/post)
 
