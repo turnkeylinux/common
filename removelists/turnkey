@@ -3,3 +3,4 @@
 /var/log/dpkg.log
 /var/log/bootstrap.log
 /var/log/apt/term.log
+/var/log/apt/history.log
