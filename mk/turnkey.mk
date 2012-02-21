@@ -1,4 +1,4 @@
-RELEASE ?= ubuntu/lucid
+RELEASE ?= debian/squeeze
 
 CDROOT ?= gfxboot-turnkey
 HOSTNAME ?= $(shell basename $(shell pwd))
