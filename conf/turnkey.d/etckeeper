@@ -1,0 +1,5 @@
+#!/bin/sh -e
+# un-initialize etckeeper
+
+etckeeper uninit -f
+
