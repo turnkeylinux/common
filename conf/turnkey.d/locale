@@ -7,5 +7,30 @@ LC_ALL=C
 LC_CTYPE=C
 EOF
 
+cat > /etc/locale.nopurge << EOF
+## Configuration file for localepurge(8)
+
+# Remove localized man pages
+MANDELETE
+
+# Delete new locales which appear on the system without bothering you
+DONTBOTHERNEWLOCALE
+
+# Display freed disk space when purging superfluous data
+SHOWFREEDSPACE
+
+# Use faster (but less accurate) free space calculation
+#QUICKNDIRTYCALC
+
+# Display verbose output
+VERBOSE
+
+# Keep these locales after package installations via apt-get(8)
+en
+en_US
+en_US.UTF-8
+EOF
+
 locale-gen en_US.UTF-8
+localepurge
 

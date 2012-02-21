@@ -23,6 +23,7 @@ etckeeper
 git-core
 
 lsb-release
+localepurge
 man-db
 screen
 nano
@@ -30,11 +31,11 @@ ntp
 
 shellinabox*
 
-webmin             
+webmin
 webmin-theme-stressfree
-webmin-net         
-webmin-software    
-webmin-useradmin   
+webmin-net
+webmin-software
+webmin-useradmin
 webmin-passwd
 webmin-shell
 webmin-custom

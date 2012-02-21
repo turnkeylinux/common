@@ -1,10 +1,4 @@
-/usr/share/locale/
-!/usr/share/locale/en_US/
-
 /etc/resolvconf/resolv.conf.d/original
-
-/etc/.bzr
-/etc/.bzrignore
 
 /var/log/dpkg.log
 /var/log/bootstrap.log
