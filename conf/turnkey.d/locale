@@ -17,13 +17,13 @@ MANDELETE
 DONTBOTHERNEWLOCALE
 
 # Display freed disk space when purging superfluous data
-SHOWFREEDSPACE
+#SHOWFREEDSPACE
 
 # Use faster (but less accurate) free space calculation
 #QUICKNDIRTYCALC
 
 # Display verbose output
-VERBOSE
+#VERBOSE
 
 # Keep these locales after package installations via apt-get(8)
 en
