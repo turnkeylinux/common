@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+mv /etc/webmin/system-status/history /var/webmin/
+ln -s /etc/webmin/system-status/history /var/webmin/history
