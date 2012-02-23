@@ -1,11 +1,24 @@
 #!/bin/sh -e
-# disable scheduled updates (webmin is managed by apt)
 
+# disable scheduled updates
 CONF=/etc/webmin/webmin/config
 sed -i "s|update=1|update=|" $CONF
 
 cat>>$CONF<<EOF
 last_version_number=0
 last_version_check=9999999999
+EOF
+
+# disable webmin upgrades
+cat >/usr/share/webmin/webmin/edit_upgrade.cgi<<EOF
+#!/usr/bin/perl
+
+require './webmin-lib.pl';
+&ReadParse();
+&ui_print_header(undef, \$text{'upgrade_title'}, "");
+
+print "<p>Webmin and it's modules are installed and upgraded via APT.</p>";
+
+&ui_print_footer("", \$text{'index_return'});
 EOF
 
