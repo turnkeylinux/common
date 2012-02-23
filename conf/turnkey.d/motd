@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 MOTD_DIR=/etc/update-motd.d
+mkdir -p $MOTD_DIR
 
 cat >$MOTD_DIR/00-turnkey-sysinfo<<'EOF'
 #!/bin/sh
@@ -20,6 +21,6 @@ if grep -q boot=casper /proc/cmdline; then
 fi
 EOF
 
-rm -f $MOTD_DIR/{00-header,10-help-text}
+rm -f $MOTD_DIR/{00-header,10-help-text} # incl. in ubuntu, not in debian
 chmod +x $MOTD_DIR/*
 
