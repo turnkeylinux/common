@@ -1,7 +1,0 @@
-#!/bin/sh -e
-
-# this works around nasty foolishness in resolvconf's postinst
-
-rm -rf /etc/resolvconf/run
-ln -s /var/run/resolvconf /etc/resolvconf/run
-mkdir -p /var/run/resolvconf/interface
