@@ -39,6 +39,8 @@ define _root.patched/post
 	fi
 
 	fab-chroot $O/root.patched "dpkg -i *.deb && rm *.deb && rm -f /var/log/dpkg.log"
+
+	fab-chroot $O/root.patched "which insserv >/dev/null && insserv"
 endef
 root.patched/post += $(_root.patched/post)
 
