@@ -1,4 +1,5 @@
 #!/bin/sh -e
 
+mkdir -p /etc/webmin/system-status/history
 mv /etc/webmin/system-status/history /var/webmin/
-ln -s /etc/webmin/system-status/history /var/webmin/history
+ln -s /var/webmin/history /etc/webmin/system-status/history 
