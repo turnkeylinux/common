@@ -13,9 +13,13 @@ import getopt
 from executil import ExecError, getoutput, system
 from dialog_wrapper import Dialog
 
-TEXT_SERVICES = """1) TurnKey Backup and Migration: saves changes to files, databases and package management to encrypted storage which servers can be automatically restored from. http://www.turnkeylinux.org/tklbam
+TEXT_SERVICES = """1) TurnKey Backup and Migration: saves changes to files,
+   databases and package management to encrypted storage
+   which servers can be automatically restored from.
+   http://www.turnkeylinux.org/tklbam
 
-2) TurnKey Domain Management and Dynamic DNS: http://www.turnkeylinux.org/dns
+2) TurnKey Domain Management and Dynamic DNS:
+   http://www.turnkeylinux.org/dns
 
 You can start using these services immediately if you initialize now. Or you can do this manually later (e.g., from the command line / Webmin)
 
