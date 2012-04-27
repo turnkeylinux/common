@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+# bugfix: fastcgi-php also needs to be enabled
+lighty-enable-mod fastcgi-php
