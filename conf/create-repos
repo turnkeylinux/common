@@ -47,7 +47,6 @@ export EMAIL=root@localhost
 dvcs_repo hg
 
 cat >$REPOS/hg/helloworld/.hg/hgrc<<EOF
-.hg/hgrc
 [web]
 contact = root@localhost
 description = Hello World
