@@ -11,7 +11,7 @@ NameVirtualHost *:$MERCURIAL_PORT
     UseCanonicalName Off
     ServerAdmin  webmaster@localhost
     AddHandler cgi-script .cgi
-    ScriptAliasMatch ^(.*) /usr/lib/cgi-bin/hgwebdir.cgi/\$1
+    ScriptAliasMatch ^(.*) /usr/lib/cgi-bin/hgweb.cgi/\$1
 </VirtualHost>
 EOF
 

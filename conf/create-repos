@@ -60,9 +60,11 @@ style = git-web
 /srv/repos/hg/ = /srv/repos/hg/
 EOF
 
-cp /usr/share/doc/mercurial/examples/hgwebdir.cgi /usr/lib/cgi-bin
-chmod +x /usr/lib/cgi-bin/hgwebdir.cgi
+cp /usr/share/doc/mercurial/examples/hgweb.cgi /usr/lib/cgi-bin
+chmod +x /usr/lib/cgi-bin/hgweb.cgi
 ln -s /etc/mercurial/hgweb.config /usr/lib/cgi-bin/hgweb.config
+
+sed -i "s|^config = \(.*\)|config = \"hgweb.config\"|" /usr/lib/cgi-bin/hgweb.cgi
 
 # create subversion repo
 TARGET=$REPOS/svn/helloworld
