@@ -4,6 +4,23 @@ RAILS_APP=railsapp
 DB_USER_NAME=${RAILS_APP}_user
 DB_USER_PASS=$(mcookie)
 
+SRC=/usr/local/src
+
+# uninstall gems installed by ruby-enterprise
+for g in $(ls /usr/local/lib/ruby/gems/1.8/cache); do
+    GEM_NAME=$(echo $g | sed "s|-\(.*\).gem||")
+    gem uninstall -a -I -x -n /usr/local/bin $GEM_NAME
+done
+
+# install gems from overlay (rails-gems, rails-gems-legacy)
+cd $SRC/gems
+gem install --local --no-rdoc --no-ri *.gem
+
+# build and configure passenger
+passenger-install-apache2-module --auto
+PASSENGER=$(echo $(basename $(ls -d /usr/local/lib/ruby/gems/1.8/gems/passenger*)))
+sed -i "s|PASSENGER|$PASSENGER|g" /etc/apache2/conf.d/passenger
+
 # convenience execution variables
 MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
 MYSQL_ADMIN="mysqladmin --user=root --password=$MYSQL_PASS"
@@ -19,17 +36,14 @@ done
 
 # seed rails application
 cd /var/www
-rails --skip -d mysql ${RAILS_APP}
+rails new ${RAILS_APP} -d mysql --skip
 
 DB_CONF=/var/www/$RAILS_APP/config/database.yml
 sed --in-place "s/^  username: root/  username: $DB_USER_NAME/g" $DB_CONF
 sed --in-place "s/^  password:/  password: $DB_USER_PASS/g" $DB_CONF
 
-# build passenger
-passenger-install-apache2-module --auto
-
 # configure permissions
-chown -R :www-data /var/www/$RAILS_APP
+chown -R root:www-data /var/www/$RAILS_APP
 chown -R www-data:www-data /var/www/$RAILS_APP/tmp
 chown -R www-data:www-data /var/www/$RAILS_APP/log
 
@@ -45,3 +59,7 @@ a2ensite $RAILS_APP
 
 # stop mysql server
 /etc/init.d/mysql stop
+
+# cleanup
+rm -rf $SRC/gems
+
