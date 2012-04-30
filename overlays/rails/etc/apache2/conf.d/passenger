@@ -1,5 +1,5 @@
-LoadModule passenger_module /usr/local/lib/ruby/gems/1.8/gems/passenger-2.2.14/ext/apache2/mod_passenger.so
-PassengerRoot /usr/local/lib/ruby/gems/1.8/gems/passenger-2.2.14
+LoadModule passenger_module /usr/local/lib/ruby/gems/1.8/gems/PASSENGER/ext/apache2/mod_passenger.so
+PassengerRoot /usr/local/lib/ruby/gems/1.8/gems/PASSENGER
 PassengerRuby /usr/local/bin/ruby
 PassengerDefaultUser www-data
 
