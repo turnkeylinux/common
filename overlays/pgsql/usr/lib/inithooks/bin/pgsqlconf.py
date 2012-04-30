@@ -41,7 +41,7 @@ class PostgreSQL:
 
     def _is_alive(self):
         try:
-            system("/etc/init.d/postgresql-8.4 status >/dev/null")
+            system("/etc/init.d/postgresql status >/dev/null")
         except ExecError, e:
             if e.exitcode == 3: #ie. stopped
                 return False

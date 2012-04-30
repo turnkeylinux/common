@@ -33,6 +33,8 @@ ln -s $REPOS/git/helloworld/.git $GITPUB/helloworld.git
 ln -s $GITPUB $REPOS/git/public
 echo "Hello World" > $REPOS/git/helloworld/.git/description
 
+sed -i "/GIT_DAEMON_ENABLE/ s/false/true/" /etc/default/git-daemon
+
 # configure bzr repo
 export BZR_EMAIL=root@localhost
 dvcs_repo bzr
@@ -45,7 +47,6 @@ export EMAIL=root@localhost
 dvcs_repo hg
 
 cat >$REPOS/hg/helloworld/.hg/hgrc<<EOF
-.hg/hgrc
 [web]
 contact = root@localhost
 description = Hello World
@@ -59,9 +60,11 @@ style = git-web
 /srv/repos/hg/ = /srv/repos/hg/
 EOF
 
-cp /usr/share/doc/mercurial/examples/hgwebdir.cgi /usr/lib/cgi-bin
-chmod +x /usr/lib/cgi-bin/hgwebdir.cgi
+cp /usr/share/doc/mercurial/examples/hgweb.cgi /usr/lib/cgi-bin
+chmod +x /usr/lib/cgi-bin/hgweb.cgi
 ln -s /etc/mercurial/hgweb.config /usr/lib/cgi-bin/hgweb.config
+
+sed -i "s|^config = \(.*\)|config = \"hgweb.config\"|" /usr/lib/cgi-bin/hgweb.cgi
 
 # create subversion repo
 TARGET=$REPOS/svn/helloworld
