@@ -1,0 +1,10 @@
+How to get the gems
+===================
+
+gem install passenger
+gem install rake
+gem install rails
+gem install bundler
+gem install mysql -- --with-mysql-config='/usr/bin/mysql_config'
+
+They are cached in: /usr/local/lib/ruby/gems/1.8/cache
