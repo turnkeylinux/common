@@ -11,6 +11,7 @@ for g in $(ls /usr/local/lib/ruby/gems/1.8/cache); do
     GEM_NAME=$(echo $g | sed "s|-\(.*\).gem||")
     gem uninstall -a -I -x -n /usr/local/bin $GEM_NAME
 done
+rm -f /usr/local/lib/ruby/gems/1.8/cache/*.gem
 
 # install gems from overlay (rails-gems, appliance/gems.overlay)
 cd $SRC/gems
