@@ -16,5 +16,8 @@ apache2-prefork-dev        /* needed to build passenger gem */
 libapr1-dev                /* needed to build passenger gem */
 libaprutil1-dev            /* needed to build passenger gem */
 
+libxml2-dev                /* common dep for gem building, e.g., sanitize */
+libxslt1-dev               /* common dep for gem building, e.g., sanitize */
+
 postfix
 webmin-postfix
