@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+# unpack and configure appengine documentation
+SRC=/usr/local/src
+GAE_DOCS=/var/www/docs
+
+NAME=google-appengine-docs
+unzip $SRC/$NAME-*.zip -d $SRC; rm -f $SRC/$NAME-*.zip
+mv -T $SRC/$NAME-* $GAE_DOCS
+find $GAE_DOCS -type f -exec chmod 644 {} \;
+chown -R root:www-data $GAE_DOCS
+
