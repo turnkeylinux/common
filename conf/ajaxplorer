@@ -1,0 +1,29 @@
+#!/bin/sh -ex
+
+SRC=/usr/local/src
+STORAGE=/srv/storage
+WWWROOT=/var/www/ajaxplorer
+ADMIN_PASS=turnkey
+
+# unpack
+unzip $SRC/ajaxplorer-core-*.zip -d /var/www
+mv /var/www/ajaxplorer-core-* $WWWROOT
+chown -R www-data:www-data $WWWROOT/data
+
+# apply customization overlay
+cp -TdR $SRC/ajaxplorer.overlay $WWWROOT
+chown -R www-data:www-data $WWWROOT/data
+
+# initial setup
+lighty-enable-mod fastcgi
+lighty-enable-mod fastcgi-php
+/etc/init.d/lighttpd start
+curl http://127.0.0.1/index.php?ignore_tests=true >/dev/null
+/etc/init.d/lighttpd stop
+
+# set initial admin local password
+/usr/lib/inithooks/bin/ajaxplorer.py --pass=$ADMIN_PASS
+
+# cleanup
+rm -rf $SRC/ajaxplorer*
+
