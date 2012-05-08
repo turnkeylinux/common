@@ -1,0 +1,15 @@
+#!/bin/sh -ex
+# configure automatic unix/samba user/group synchronization
+
+cat >>/etc/webmin/samba/config<<EOF
+sync_gid=
+sync_delete_profile=1
+sync_change_profile=1
+sync_delete=1
+sync_add=1
+sync_change=1
+gsync_delete=1
+gsync_type=l
+gsync_change=1
+gsync_add=1
+EOF
