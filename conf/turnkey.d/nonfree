@@ -11,7 +11,6 @@ if [ "$NONFREE" ]; then
 
     APT_SOURCES=/etc/apt/sources.list.d
     sed -i "/$CODENAME non-free/ s/# //" $APT_SOURCES/sources.list
-    sed -i "/$CODENAME-updates non-free/ s/# //" $APT_SOURCES/sources.list
-    sed -i "/$CODENAME-security non-free/ s/# //" $APT_SOURCES/security.sources.list
+    sed -i "/$CODENAME\/updates non-free/ s/# //" $APT_SOURCES/security.sources.list
 fi
 
