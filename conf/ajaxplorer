@@ -14,6 +14,11 @@ chown -R www-data:www-data $WWWROOT/data
 cp -TdR $SRC/ajaxplorer.overlay $WWWROOT
 chown -R www-data:www-data $WWWROOT/data
 
+# apply smb root write fix
+PATCH=$SRC/ajaxplorer-smb-root-write-fix.diff
+FS_ACCESS_DRIVER=$WWWROOT/plugins/access.fs/class.fsAccessDriver.php
+patch $FS_ACCESS_DRIVER $PATCH
+
 # initial setup
 lighty-enable-mod fastcgi
 lighty-enable-mod fastcgi-php

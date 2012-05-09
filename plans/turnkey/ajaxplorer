@@ -1,4 +1,5 @@
 lighttpd        /* we use lighty to power ajaxplorer */
+patch           /* required to apply smb root write fix */
 
 php5-cgi
 php5-cli
