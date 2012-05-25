@@ -1,0 +1,17 @@
+server {
+    listen 0.0.0.0:80;
+    access_log /var/log/nginx/nodejs.access.log;
+    error_log /var/log/nginx/nodejs.error.log;
+
+    include /etc/nginx/include/nodejs-proxy;
+}
+
+server {
+    listen 0.0.0.0:443;
+    access_log /var/log/nginx/nodejs.access.log;
+    error_log /var/log/nginx/nodejs.error.log;
+
+    include /etc/nginx/include/ssl;
+    include /etc/nginx/include/nodejs-proxy;
+}
+
