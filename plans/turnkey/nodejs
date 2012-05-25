@@ -1,0 +1,10 @@
+build-essential
+openssl
+libssl-dev
+pkg-config
+curl
+
+nginx
+
+postfix
+webmin-postfix
