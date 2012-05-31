@@ -1,0 +1,20 @@
+#!/bin/sh -ex
+
+SRC=/usr/local/src
+
+W2PPASS=turnkey
+W2PROOT=/var/www/web2py
+
+# unpack web2py
+unzip $SRC/web2py_src.zip -d $(dirname $W2PROOT)
+rm $SRC/web2py_src.zip
+chown -R www-data:www-data $W2PROOT
+
+# create web2py admin interface password
+/usr/lib/inithooks/bin/web2py.py --pass=$W2PPASS
+
+# configure apache
+a2dissite default
+a2ensite web2py
+a2enmod rewrite
+
