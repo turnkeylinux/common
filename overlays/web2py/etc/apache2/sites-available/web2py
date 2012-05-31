@@ -1,0 +1,27 @@
+NameVirtualHost *:80
+NameVirtualHost *:443
+
+WSGIScriptAlias / /var/www/web2py/wsgihandler.py
+WSGIDaemonProcess web2py processes=1 threads=3
+WSGIProcessGroup web2py
+
+<VirtualHost *:80>
+    UseCanonicalName Off
+    ServerAdmin webmaster@localhost
+
+    RewriteEngine On
+    RewriteRule ^/admin(.*) https://%{SERVER_NAME}/admin$1 [R,L]
+</VirtualHost>
+
+<VirtualHost *:443>
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/cert.pem
+    ServerAdmin webmaster@localhost
+</VirtualHost>
+
+AliasMatch ^/([^/]+)/static/(.*) /var/www/web2py/applications/$1/static/$2
+<Directory /var/www/web2py/applications/*/static/>
+    Order Allow,Deny
+    Allow from all
+</Directory>
+
