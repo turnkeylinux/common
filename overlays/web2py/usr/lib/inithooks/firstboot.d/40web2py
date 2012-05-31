@@ -1,0 +1,8 @@
+#!/bin/bash -e
+# set web2py admin console password
+
+. /etc/default/inithooks
+
+[ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
+$INITHOOKS_PATH/bin/web2py.py --pass="$APP_PASS"
+
