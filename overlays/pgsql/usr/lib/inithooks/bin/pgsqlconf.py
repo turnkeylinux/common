@@ -29,7 +29,7 @@ def escape_chars(s):
     return s
 
 class PostgreSQL:
-    def __init__(self):
+    def __init__(self, database='postgres'):
         system('mkdir -p /var/run/postgresql')
         system('chown postgres:postgres /var/run/postgresql')
         system('chmod 2775 /var/run/postgresql')
@@ -38,6 +38,8 @@ class PostgreSQL:
         if not self._is_alive():
             self._start()
             self.selfstarted = True
+
+        self.database = database
 
     def _is_alive(self):
         try:
@@ -62,7 +64,7 @@ class PostgreSQL:
 
     def execute(self, query):
         #assumes local unix socket trust
-        system('psql -q -U postgres -d postgres -c "%s"' % query)
+        system('psql -q -U postgres -d %s -c "%s"' % (self.database, query))
 
 def usage(s=None):
     if s:
