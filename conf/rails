@@ -37,7 +37,7 @@ done
 
 # seed rails application (3.x requires new)
 cd /var/www
-if $(rails --version | grep -q 2.3); then
+if $(rails --version | grep -q "Rails 2.3"); then
     rails ${RAILS_APP} -d mysql --skip
 else
     rails new ${RAILS_APP} -d mysql --skip
