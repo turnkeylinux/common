@@ -1,20 +1,5 @@
 #!/bin/sh -ex
 
-SRC=/usr/local/src
-
-# unpack and install node (if pre-build is available, use it)
-if [ -e $SRC/node-*-build.tar.gz ]; then
-    tar -zxf $SRC/node-*-build.tar.gz -C $SRC
-    cd $SRC/node-*
-    make install
-else
-    tar -zxf $SRC/node-*.tar.gz -C $SRC
-    cd $SRC/node-*
-    ./configure
-    make
-    make install
-fi
-
 # nodejs service
 adduser --system --disabled-login --group --no-create-home nodejs
 update-rc.d -f nodejs defaults || true
@@ -24,12 +9,4 @@ chown nodejs:nodejs /var/log/nodejs.log
 # nginx
 rm -f /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/nodejs /etc/nginx/sites-enabled/nodejs
-
-# npm completion
-npm completion > /etc/skel/.bashrc.d/npm
-chmod +x /etc/skel/.bashrc.d/npm
-cp /etc/skel/.bashrc.d/npm /root/.bashrc.d/npm
-
-# cleanup
-rm -rf $SRC/node-*
 
