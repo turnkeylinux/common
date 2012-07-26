@@ -1,21 +1,28 @@
 #!/bin/sh -ex
 
-RAILS_APP=railsapp
-DB_USER_NAME=${RAILS_APP}_user
-DB_USER_PASS=$(mcookie)
+if [ ! $HOSTNAME ]; then
+    echo "'$(basename $0)' error: hostname not defined"
+    return 1
+fi
+APPNAME=$HOSTNAME
 
+DB_USER=$APPNAME
+DB_PASS=$(mcookie)
+WEBROOT=/var/www/$APPNAME
 SRC=/usr/local/src
 
-# uninstall gems installed by ruby-enterprise
-for g in $(ls /usr/local/lib/ruby/gems/1.8/cache); do
-    GEM_NAME=$(echo $g | sed "s|-\(.*\).gem||")
-    gem uninstall -a -I -x -n /usr/local/bin $GEM_NAME
-done
-rm -f /usr/local/lib/ruby/gems/1.8/cache/*.gem
+if [ -d $SRC/gems ]; then
+    # uninstall gems installed by ruby-enterprise
+    for g in $(ls /usr/local/lib/ruby/gems/1.8/cache); do
+        GEM_NAME=$(echo $g | sed "s|-\(.*\).gem||")
+        gem uninstall -a -I -x -n /usr/local/bin $GEM_NAME
+    done
+    rm -f /usr/local/lib/ruby/gems/1.8/cache/*.gem
 
-# install gems from overlay (rails-gems, appliance/gems.overlay)
-cd $SRC/gems
-gem install --local --no-rdoc --no-ri *.gem
+    # install gems from overlay (rails-gems, appliance/gems.overlay)
+    cd $SRC/gems
+    gem install --local --no-rdoc --no-ri *.gem
+fi
 
 # build and configure passenger
 passenger-install-apache2-module --auto
@@ -30,27 +37,28 @@ MYSQL_ADMIN="mysqladmin --user=root --password=$MYSQL_PASS"
 /etc/init.d/mysql start
 
 # create databases for each environment
-for NAME in test development production; do
-    $MYSQL_ADMIN create ${RAILS_APP}_${NAME} --default-character-set=utf8;
-    $MYSQL_BATCH --execute "grant all privileges on ${RAILS_APP}_${NAME}.* to $DB_USER_NAME@localhost identified by '$DB_USER_PASS'; flush privileges;"
+for DB_ENV in test development production; do
+    DB_NAME=${APPNAME}_${DB_ENV}
+    $MYSQL_ADMIN create $DB_NAME --default-character-set=utf8;
+    $MYSQL_BATCH --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
 done
 
 # seed rails application (3.x requires new)
 cd /var/www
 if $(rails --version | grep -q "Rails 2.3"); then
-    rails ${RAILS_APP} -d mysql --skip
+    rails $APPNAME -d mysql --skip
 else
-    rails new ${RAILS_APP} -d mysql --skip
+    rails new $APPNAME -d mysql --skip
 fi
 
-DB_CONF=/var/www/$RAILS_APP/config/database.yml
-sed --in-place "s/^  username: root/  username: $DB_USER_NAME/g" $DB_CONF
-sed --in-place "s/^  password:/  password: $DB_USER_PASS/g" $DB_CONF
+CONF=$WEBROOT/config/database.yml
+sed -i "s|username:.*|username: $DB_USER|g" $CONF
+sed -i "s|password:.*|password: $DB_PASS|g" $CONF
 
 # configure permissions
-chown -R root:www-data /var/www/$RAILS_APP
-chown -R www-data:www-data /var/www/$RAILS_APP/tmp
-chown -R www-data:www-data /var/www/$RAILS_APP/log
+chown -R root:www-data $WEBROOT
+chown -R www-data:www-data $WEBROOT/tmp
+chown -R www-data:www-data $WEBROOT/log
 
 # apache configuration
 a2enmod rewrite
@@ -60,7 +68,14 @@ a2enmod proxy
 a2enmod headers
 
 a2dissite default
-a2ensite $RAILS_APP
+
+mv /etc/apache2/conf/rails.conf /etc/apache2/conf/$APPNAME.conf
+sed -i "s|@APPNAME@|$APPNAME|g" /etc/apache2/conf/$APPNAME.conf
+
+mv /etc/apache2/sites-available/rails /etc/apache2/sites-available/$APPNAME
+sed -i "s|@APPNAME@|$APPNAME|g" /etc/apache2/sites-available/$APPNAME
+
+a2ensite $APPNAME
 
 # stop mysql server
 /etc/init.d/mysql stop
