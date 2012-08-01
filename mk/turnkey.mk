@@ -12,7 +12,7 @@ COMMON_OVERLAYS := turnkey.d $(COMMON_OVERLAYS)
 COMMON_CONF := turnkey.d $(COMMON_CONF)
 COMMON_REMOVELISTS += turnkey
 
-VERSION_TAG ?= rc
+VERSION_TAG ?=
 
 FAB_SHARE_PATH ?= /usr/share/fab
 
