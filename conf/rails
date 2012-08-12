@@ -1,10 +1,11 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
 if [ ! $HOSTNAME ]; then
     echo "'$(basename $0)' error: hostname not defined"
     return 1
 fi
 APPNAME=$HOSTNAME
+[ "$APPNAME" == "rails" ] && APPNAME=railsapp ## namespace conflict
 
 DB_USER=$APPNAME
 DB_PASS=$(mcookie)
