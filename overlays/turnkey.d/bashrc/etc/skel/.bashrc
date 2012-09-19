@@ -61,9 +61,9 @@ promptpath () {
         return
     fi
 
-    path_dir=$(dirname $PWD)
+    path_dir=$(dirname "$PWD")
     # if our parent dir is a top-level directory, don't mangle it
-    if [ $(dirname $path_dir) = "/" ]; then
+    if [ $(dirname "$path_dir") = "/" ]; then
         echo $PWD
     else
         path_parent=$(basename "$path_dir")
