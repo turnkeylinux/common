@@ -94,10 +94,10 @@ def main():
             fqdn = val
 
     if apikey:
-        system('tklbam-init %s' % apikey)
+        system('tklbam-init', apikey)
 
         if fqdn:
-            system('hubdns-init %s %s' % (apikey, fqdn))
+            system('hubdns-init', apikey, fqdn)
             system('hubdns-update')
 
         return
@@ -120,7 +120,7 @@ def main():
             break
 
         try:
-            getoutput('tklbam-init %s' % apikey)
+            getoutput('tklbam-init', apikey)
             d.msgbox('Success! Linked TKLBAM to Hub', SUCCESS_TKLBAM)
             initialized_tklbam = True
             break
@@ -140,7 +140,7 @@ def main():
             d.infobox("Linking HubDNS to the TurnKey Hub...")
 
             try:
-                getoutput('hubdns-init %s %s' % (apikey, fqdn))
+                getoutput('hubdns-init', apikey, fqdn)
                 getoutput('hubdns-update')
                 d.msgbox('Success! Assigned %s' % fqdn, SUCCESS_HUBDNS)
                 break
