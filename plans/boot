@@ -18,7 +18,7 @@ KERNEL
 linux-image-generic 
 #endif
 #ifdef DEBIAN
-linux-image-2.6-686
+linux-image-686-pae
 #endif
 #endif
 
