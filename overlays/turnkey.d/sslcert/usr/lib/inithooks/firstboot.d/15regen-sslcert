@@ -14,13 +14,8 @@ if [ $# -ne "0" ]; then
     HELP=y
 fi
 
-set ${C:=""}
-set ${ST:=""}
-set ${L:=""}
 set ${O:="TurnKey Linux"}
 set ${OU:="Software appliances"}
-set ${CN:=""}
-set ${emailAddress:=""}
 
 set ${DAYS:=3650}
 set ${BITS:=1024}
