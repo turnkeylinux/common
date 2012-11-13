@@ -1,4 +1,4 @@
-RELEASE ?= debian/squeeze
+RELEASE ?= debian/wheezy
 
 CDROOT ?= gfxboot-turnkey
 HOSTNAME ?= $(shell basename $(shell pwd))
