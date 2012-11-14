@@ -15,6 +15,7 @@ auto-apt-archive
 python-dialog
 turnkey-pylib
 turnkey-sysinfo
+turnkey-version
 
 cron
 cron-apt
