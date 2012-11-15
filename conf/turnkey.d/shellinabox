@@ -31,11 +31,15 @@ done
 # weird issue that I can't replicate constantly, ugly hack in the meantime
 rm -f /{on,On,Black.css,White.css,Terminal.css}
 
+
 # set white on black as default (easier on the eyes)
 ENABLED=/etc/shellinabox/options-enabled
 AVAILABLE=/etc/shellinabox/options-available
 mv $AVAILABLE/00+Black\ on\ White.css $AVAILABLE/00_Black\ on\ White.css
 mv $AVAILABLE/00_White\ On\ Black.css $AVAILABLE/00+White\ on\ Black.css
+
+# fix dialog colors
+echo "#vt100 .ansi0.bgAnsi7 { color: black; }" >> $AVAILABLE/00+White\ on\ Black.css
 
 rm -f $ENABLED/00*
 ln -s $AVAILABLE/00_Black\ on\ White.css $ENABLED/00_Black\ on\ White.css
