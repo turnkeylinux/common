@@ -3,3 +3,5 @@
 cp /etc/skel/.bashrc /root
 [ -d /etc/skel/.bashrc.d ] && cp -a /etc/skel/.bashrc.d /root
 
+cp /etc/skel/.profile /root
+[ -d /etc/skel/.profile.d ] && cp -a /etc/skel/.profile.d /root
