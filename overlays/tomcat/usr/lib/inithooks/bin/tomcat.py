@@ -13,6 +13,8 @@ import xml.dom.minidom
 from executil import system
 from dialog_wrapper import Dialog
 
+import signal
+
 TOMCAT_INIT="/etc/init.d/tomcat6"
 TOMCAT_USERS="/etc/tomcat6/tomcat-users.xml"
 
@@ -24,6 +26,7 @@ def usage(s=None):
     sys.exit(1)
 
 def main():
+    signal.signal(signal.SIGINT, signal.SIG_IGN)
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "h", ['help', 'pass='])
     except getopt.GetoptError, e:

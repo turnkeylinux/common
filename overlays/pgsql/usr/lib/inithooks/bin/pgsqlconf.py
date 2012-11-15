@@ -12,6 +12,7 @@ Options:
 
 import sys
 import getopt
+import signal
 
 from dialog_wrapper import Dialog
 from executil import ExecError, system
@@ -74,6 +75,8 @@ def usage(s=None):
     sys.exit(1)
 
 def main():
+    signal.signal(signal.SIGINT, signal.SIG_IGN)
+
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "hu:p:",
                                        ['help', 'user=', 'pass='])
