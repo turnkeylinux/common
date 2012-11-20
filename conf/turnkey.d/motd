@@ -24,3 +24,6 @@ EOF
 rm -f $MOTD_DIR/{00-header,10-help-text} # incl. in ubuntu, not in debian
 chmod +x $MOTD_DIR/*
 
+rm /etc/motd
+ln -s /var/run/motd /etc/motd
+
