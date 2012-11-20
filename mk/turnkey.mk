@@ -24,7 +24,7 @@ define _root.patched/post
 	# tagging package management system with release package
 	# setting /etc/turnkey_version and apt user-agent
 	#
-	$(FAB_SHARE_PATH)/make-release-deb.py $(FAB_PATH)/products/turnkey/core/changelog $O/root.patched
+	$(FAB_SHARE_PATH)/make-release-deb.py $(FAB_PATH)/products/core/changelog $O/root.patched
 	@if [ -f ./changelog ]; then \
 		echo $(FAB_SHARE_PATH)/make-release-deb.py ./changelog $O/root.patched; \
 		$(FAB_SHARE_PATH)/make-release-deb.py ./changelog $O/root.patched; \
