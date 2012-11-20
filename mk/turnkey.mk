@@ -12,8 +12,6 @@ COMMON_OVERLAYS := turnkey.d $(COMMON_OVERLAYS)
 COMMON_CONF := turnkey.d $(COMMON_CONF)
 COMMON_REMOVELISTS += turnkey
 
-VERSION_TAG ?=
-
 FAB_SHARE_PATH ?= /usr/share/fab
 
 # this hack allows inheritors to define their own root.patched/post hooks
