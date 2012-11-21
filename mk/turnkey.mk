@@ -1,4 +1,4 @@
-RELEASE ?= debian/squeeze
+RELEASE ?= debian/wheezy
 
 CDROOT ?= gfxboot-turnkey
 HOSTNAME ?= $(shell basename $(shell pwd))
@@ -12,8 +12,6 @@ COMMON_OVERLAYS := turnkey.d $(COMMON_OVERLAYS)
 COMMON_CONF := turnkey.d $(COMMON_CONF)
 COMMON_REMOVELISTS += turnkey
 
-VERSION_TAG ?=
-
 FAB_SHARE_PATH ?= /usr/share/fab
 
 # this hack allows inheritors to define their own root.patched/post hooks
@@ -24,7 +22,7 @@ define _root.patched/post
 	# tagging package management system with release package
 	# setting /etc/turnkey_version and apt user-agent
 	#
-	$(FAB_SHARE_PATH)/make-release-deb.py $(FAB_PATH)/products/turnkey/core/changelog $O/root.patched
+	$(FAB_SHARE_PATH)/make-release-deb.py $(FAB_PATH)/products/core/changelog $O/root.patched
 	@if [ -f ./changelog ]; then \
 		echo $(FAB_SHARE_PATH)/make-release-deb.py ./changelog $O/root.patched; \
 		$(FAB_SHARE_PATH)/make-release-deb.py ./changelog $O/root.patched; \

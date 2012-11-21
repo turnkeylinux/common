@@ -18,3 +18,13 @@ function git-branch()
         $git_branch_bin -v -a $*
     fi
 }
+
+# useful aliases
+alias gs="git-status"
+alias gd="git-diff"
+alias ga="git-add"
+alias gc="git-commit"
+alias gca="git-commit -v -a"
+alias gcam="git-commit --amend -v"
+alias gl="git-log"
+alias gll="git-log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
