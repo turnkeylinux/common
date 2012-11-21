@@ -42,9 +42,9 @@ debian_sources() {
 cat >$SOURCES_LIST/sources.list<<EOF
 deb http://archive.turnkeylinux.org/debian $CODENAME main
 
-deb http://cdn.debian.org/debian $CODENAME main
-deb http://cdn.debian.org/debian $CODENAME contrib
-# deb http://cdn.debian.org/debian $CODENAME non-free
+deb http://cdn.debian.net/debian $CODENAME main
+deb http://cdn.debian.net/debian $CODENAME contrib
+# deb http://cdn.debian.net/debian $CODENAME non-free
 EOF
 
 cat >$SOURCES_LIST/security.sources.list<<EOF
