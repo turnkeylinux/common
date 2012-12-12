@@ -26,7 +26,7 @@ define _root.patched/post
 	@if [ -f ./changelog ]; then \
 		echo $(FAB_SHARE_PATH)/make-release-deb.py ./changelog $O/root.patched; \
 		$(FAB_SHARE_PATH)/make-release-deb.py ./changelog $O/root.patched; \
-		turnkey_version=$$($(FAB_SHARE_PATH)/turnkey-version.py --dist=$(CODENAME) --tag=$(VERSION_TAG) ./changelog); \
+		turnkey_version=$$($(FAB_SHARE_PATH)/turnkey-version.py --dist=$(CODENAME) --tag=$(VERSION_TAG) ./changelog $(FAB_ARCH)); \
 		turnkey_aptconf="Acquire::http::User-Agent \"TurnKey APT-HTTP/1.3 ($$turnkey_version)\";"; \
 		echo $$turnkey_version > $O/root.patched/etc/turnkey_version; \
 		echo $$turnkey_aptconf > $O/root.patched/etc/apt/apt.conf.d/01turnkey; \
