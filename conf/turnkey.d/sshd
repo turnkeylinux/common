@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+# disable sshd dns checks (if resolution fails will prevent logins)
+echo "UseDNS no" >> /etc/ssh/sshd_config
+
