@@ -5,8 +5,17 @@
 wget
 rsync
 
-di-live*
-confconsole*
+di-live
+whiptail        /* di-live recommends */
+kbd             /* di-live recommends */
+lvm2            /* di-live recommends */
+file            /* di-live recommends */
+eject           /* di-live recommends */
+
+confconsole
+kbd             /* confconsole recommends */
+di-live         /* confconsole recommends */
+resolvconf      /* confconsole recommends */
 
 tklbam
 hubdns
@@ -29,7 +38,8 @@ screen
 nano
 ntp
 
-shellinabox*
+shellinabox
+openssl         /* shellinabox recommends */
 
 webmin
 webmin-theme-stressfree
@@ -39,11 +49,12 @@ webmin-useradmin
 webmin-passwd
 webmin-shell
 webmin-custom
-webmin-updown*
 webmin-file
 webmin-text-editor
 webmin-lvm
 webmin-tklbam
+webmin-updown
+unzip           /* webmin-updown recommends */
 
 logrotate
 rsyslog
