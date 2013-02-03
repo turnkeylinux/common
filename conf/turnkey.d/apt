@@ -1,0 +1,37 @@
+#!/bin/bash -e
+# create apt sources
+# environment variables:
+#   - required: CODENAME
+#   - optional: NONFREE
+
+fatal() {
+    echo "fatal: $@" 1>&2
+    exit 1
+}
+
+[ -n "$CODENAME" ] || fatal "CODENAME is not set"
+
+SOURCES_LIST=/etc/apt/sources.list.d
+mkdir -p $SOURCES_LIST
+
+cat >$SOURCES_LIST/sources.list<<EOF
+deb http://archive.turnkeylinux.org/debian $CODENAME main
+
+deb http://cdn.debian.net/debian $CODENAME main
+deb http://cdn.debian.net/debian $CODENAME contrib
+# deb http://cdn.debian.net/debian $CODENAME non-free
+EOF
+
+cat >$SOURCES_LIST/security.sources.list<<EOF
+deb http://archive.turnkeylinux.org/debian $CODENAME-security main
+
+deb http://security.debian.org/ $CODENAME/updates main
+deb http://security.debian.org/ $CODENAME/updates contrib
+# deb http://security.debian.org/ $CODENAME/updates non-free
+EOF
+
+if [ "$NONFREE" ]; then
+    sed -i "/non-free/ s/# //" $SOURCES_LIST/sources.list
+    sed -i "/non-free/ s/# //" $SOURCES_LIST/security.sources.list
+fi
+
