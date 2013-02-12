@@ -5,3 +5,5 @@ cp /etc/skel/.bashrc /root
 
 cp /etc/skel/.profile /root
 [ -d /etc/skel/.profile.d ] && cp -a /etc/skel/.profile.d /root
+
+exit 0
