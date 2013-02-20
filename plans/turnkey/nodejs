@@ -2,7 +2,6 @@ build-essential
 openssl
 libssl-dev
 pkg-config
-curl
 
 nginx
 
