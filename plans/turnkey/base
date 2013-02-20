@@ -3,6 +3,7 @@
 #include <console>
 
 wget
+curl
 rsync
 
 di-live
