@@ -1,33 +1,50 @@
 #!/bin/bash -ex
 
-if [ ! $HOSTNAME ]; then
+if [ $HOSTNAME ]; then
+    APPNAME=$HOSTNAME
+    [ "$APPNAME" == "rails" ] && APPNAME=railsapp ## namespace conflict
+else
     echo "'$(basename $0)' error: hostname not defined"
     return 1
 fi
-APPNAME=$HOSTNAME
-[ "$APPNAME" == "rails" ] && APPNAME=railsapp ## namespace conflict
 
 DB_USER=$APPNAME
 DB_PASS=$(mcookie)
 WEBROOT=/var/www/$APPNAME
-SRC=/usr/local/src
 
-if [ -d $SRC/gems ]; then
-    # uninstall gems installed by ruby-enterprise
-    for g in $(ls /usr/local/lib/ruby/gems/1.8/cache); do
-        GEM_NAME=$(echo $g | sed "s|-\(.*\).gem||")
-        gem uninstall -a -I -x -n /usr/local/bin $GEM_NAME
-    done
-    rm -f /usr/local/lib/ruby/gems/1.8/cache/*.gem
+dl() {
+    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
+    cd $2; curl -L -f -O $PROXY $1; cd -
+}
 
-    # install gems from overlay (rails-gems, appliance/gems.overlay)
-    cd $SRC/gems
-    gem install --local --no-rdoc --no-ri *.gem
-fi
+# install ruby-enterprise
+RUBYENT=http://rubyenterpriseedition.googlecode.com/files
+[ $I386 ] && RUBYENT=$RUBYENT/ruby-enterprise_1.8.7-2012.02_i386_ubuntu10.04.deb
+[ $AMD64 ] && RUBYENT=$RUBYENT/ruby-enterprise_1.8.7-2012.02_amd64_debian6.0.deb
+dl $RUBYENT /usr/local/src
+DEBIAN_FRONTEND=noninteractive dpkg -i /usr/local/src/ruby-enterprise*.deb
+rm /usr/local/src/ruby-enterprise*.deb
+
+# uninstall gems installed by ruby-enterprise
+for g in $(ls /usr/local/lib/ruby/gems/*/cache); do
+    GEM_NAME=$(echo $g | sed "s|-\(.*\).gem||")
+    gem uninstall -a -I -x -n /usr/local/bin $GEM_NAME
+done
+rm -f /usr/local/lib/ruby/gems/*/cache/*.gem
+
+[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
+GEMOPTS="--no-rdoc --no-ri"
+gem install $GEMOPTS passenger
+gem install $GEMOPTS rake
+gem install $GEMOPTS rails
+gem install $GEMOPTS bundler
+gem install $GEMOPTS mysql -- --with-mysql-config='/usr/bin/mysql_config'
+gem install $GEMOPTS execjs
+gem install $GEMOPTS therubyracer
 
 # build and configure passenger
 passenger-install-apache2-module --auto
-PASSENGER=$(echo $(basename $(ls -d /usr/local/lib/ruby/gems/1.8/gems/passenger*)))
+PASSENGER=$(echo $(basename $(ls -d /usr/local/lib/ruby/gems/*/gems/passenger*)))
 sed -i "s|PASSENGER|$PASSENGER|g" /etc/apache2/conf.d/passenger
 
 # convenience execution variables
@@ -51,6 +68,7 @@ if $(rails --version | grep -q "Rails 2.3"); then
 else
     rails new $APPNAME -d mysql --skip
 fi
+unset HTTP_PROXY
 
 CONF=$WEBROOT/config/database.yml
 sed -i "s|username:.*|username: $DB_USER|g" $CONF
@@ -80,7 +98,4 @@ a2ensite $APPNAME
 
 # stop mysql server
 /etc/init.d/mysql stop
-
-# cleanup
-rm -rf $SRC/gems
 
