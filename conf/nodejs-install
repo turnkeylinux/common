@@ -1,25 +1,33 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
 SRC=/usr/local/src
 
-# unpack and install node (if pre-build is available, use it)
-if [ -e $SRC/node-*-build.tar.gz ]; then
-    tar -zxf $SRC/node-*-build.tar.gz -C $SRC
-    cd $SRC/node-*
-    make install
-else
-    tar -zxf $SRC/node-*.tar.gz -C $SRC
-    cd $SRC/node-*
-    ./configure
-    make
-    make install
-fi
+dl() {
+    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
+    cd $2; curl -L -f -O $PROXY $1; cd -
+}
+
+dl http://nodejs.org/dist/latest/SHASUMS.txt $SRC
+
+TARBALL_RE="linux-x${FAB_ARCH: -2:2}"
+TARBALL=$(grep $TARBALL_RE $SRC/SHASUMS.txt | cut -d " " -f 3)
+dl http://nodejs.org/dist/latest/${TARBALL} $SRC
+
+grep $TARBALL $SRC/SHASUMS.txt > $SRC/$TARBALL.sha1
+cd $SRC
+sha1sum -c $TARBALL.sha1
+rm SHASUMS.txt $TARBALL.sha1
+
+tar -zxf $SRC/$TARBALL -C $SRC
+rm $SRC/$TARBALL
+ln -s $SRC/node-v* $SRC/node
+
+for f in $(ls $SRC/node/bin); do
+    ln -s $SRC/node/bin/$f /usr/local/bin/$f
+done
 
 # npm completion
 npm completion > /etc/skel/.bashrc.d/npm
 chmod +x /etc/skel/.bashrc.d/npm
 cp /etc/skel/.bashrc.d/npm /root/.bashrc.d/npm
-
-# cleanup
-rm -rf $SRC/node-*
 
