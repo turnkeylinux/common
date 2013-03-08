@@ -1,14 +1,24 @@
 #!/bin/sh -ex
 
-SRC=/usr/local/src
+dl() {
+    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
+    cd $2; curl -L -f -O $PROXY $1; cd -
+}
 
+SRC=/usr/local/src
 W2PPASS=turnkey
 W2PROOT=/var/www/web2py
 
-# unpack web2py
+# download and unpack web2py
+dl http://www.web2py.com/examples/static/web2py_src.zip $SRC
 unzip $SRC/web2py_src.zip -d $(dirname $W2PROOT)
 rm $SRC/web2py_src.zip
 chown -R www-data:www-data $W2PROOT
+
+# workaround turnkey-pylib git.py conflict
+CONF=$W2PROOT/applications/admin/controllers/default.py
+ERR="disabled git import due to turnkey-pylib conflict"
+sed -i "s|import git|# import git\n    raise ImportError('$ERR')|" $CONF
 
 # create web2py admin interface password
 /usr/lib/inithooks/bin/web2py.py --pass=$W2PPASS
