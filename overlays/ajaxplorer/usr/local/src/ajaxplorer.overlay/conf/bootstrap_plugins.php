@@ -42,6 +42,7 @@ $PLUGINS = array(
             "MASTER_DRIVER"         => "smb",
             "TRANSMIT_CLEAR_PASS"   => true,
             "USER_ID_SEPARATOR"     => "-",
+            "USER_BASE_DRIVER"      => "serial",
             "DRIVERS" => array(
                 "smb" => array(
                     "LABEL"    => "Samba",
