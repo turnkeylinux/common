@@ -1,1 +1,1 @@
-a:7:{i:1;s:2:"rw";s:11:"smb_storage";s:2:"rw";s:11:"ajxp_shared";s:2:"rw";s:10:"ajxp.admin";b:1;i:0;s:2:"rw";s:9:"ajxp_conf";s:2:"rw";s:11:"fs_template";s:2:"rw";}
+a:7:{i:1;s:2:"rw";s:11:"ajxp_shared";s:2:"rw";s:10:"ajxp.admin";b:1;s:11:"smb_storage";s:2:"rw";s:8:"smb_home";s:2:"rw";s:9:"ajxp_conf";s:2:"rw";s:11:"fs_template";s:2:"rw";}
