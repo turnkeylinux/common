@@ -28,6 +28,13 @@ lighty-enable-mod fastcgi-php
 curl http://127.0.0.1/index.php?ignore_tests=true >/dev/null
 /etc/init.d/lighttpd stop
 
+# set default conf
+cat >> $WEBROOT/conf/bootstrap_conf.php<<EOF
+
+define("AJXP_LOCALE", "en_US.UTF-8");
+define("AJXP_FORCE_SSL_REDIRECT", true);
+EOF
+
 # set initial admin local password
 /usr/lib/inithooks/bin/ajaxplorer.py --pass=$ADMIN_PASS
 
