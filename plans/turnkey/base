@@ -67,4 +67,7 @@ webmin-firewall
 ssh
 webmin-sshd
 
-acpid
+#ifndef CHROOT_ONLY
+acpi-support-base
+#endif
+
