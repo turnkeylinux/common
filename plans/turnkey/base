@@ -8,13 +8,13 @@ rsync
 
 di-live
 whiptail        /* di-live recommends */
-kbd             /* di-live recommends */
+console-tools   /* di-live recommends */
 lvm2            /* di-live recommends */
 file            /* di-live recommends */
 eject           /* di-live recommends */
 
 confconsole
-kbd             /* confconsole recommends */
+console-tools   /* confconsole recommends */
 di-live         /* confconsole recommends */
 resolvconf      /* confconsole recommends */
 
