@@ -9,6 +9,7 @@ php5-pgsql
 webmin-postgresql
 
 php5-xcache
+php5-cli
 phppgadmin
 
 postfix
