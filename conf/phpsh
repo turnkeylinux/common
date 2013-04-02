@@ -1,0 +1,14 @@
+#!/bin/bash -ex
+
+PHPSH=/usr/local/src/phpsh
+
+[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
+git clone https://github.com/facebook/phpsh.git $PHPSH
+unset HTTP_PROXY
+
+cd $PHPSH
+USER=root python setup.py install
+cd -
+
+rm -rf $PHPSH
+
