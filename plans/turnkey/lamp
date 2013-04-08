@@ -11,8 +11,6 @@ webmin-phpini
 
 phpmyadmin
 php5-xcache
-php5-xdebug
-php5-pear
 
 postfix
 webmin-postfix
