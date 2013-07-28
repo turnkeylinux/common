@@ -1,4 +1,4 @@
-RELEASE ?= debian/squeeze
+RELEASE ?= debian/$(shell lsb_release -s -c)
 
 CDROOT ?= gfxboot-turnkey
 HOSTNAME ?= $(shell basename $(shell pwd))
