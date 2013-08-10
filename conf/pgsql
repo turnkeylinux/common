@@ -12,6 +12,7 @@ pg_createcluster --start -e UTF-8 ${PGSQL_VER} main
 
 # Trust postgres user when connecting over local unix sockets
 sed -i "/^local.*postgres/ s/ident/trust/" $CONF_DIR/pg_hba.conf
+sed -i "/^local.*postgres/ s/peer/trust/" $CONF_DIR/pg_hba.conf
 
 # Enable password encryption
 sed -i "/^#password_encryption = on/ s/#//" $CONF_DIR/postgresql.conf
