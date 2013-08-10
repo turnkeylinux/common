@@ -13,6 +13,7 @@ Options:
 import sys
 import getopt
 import signal
+import subprocess
 
 from dialog_wrapper import Dialog
 from executil import ExecError, system
@@ -44,7 +45,9 @@ class PostgreSQL:
 
     def _is_alive(self):
         try:
-            system("/etc/init.d/postgresql status >/dev/null")
+            out = subprocess.check_output(['/etc/init.d/postgresql', 'status'])
+            if out.find('main') == -1:
+                return False
         except ExecError, e:
             if e.exitcode == 3: #ie. stopped
                 return False
@@ -54,11 +57,11 @@ class PostgreSQL:
         return True
 
     def _start(self):
-        system('pg_ctlcluster -o "-h \'\'" 8.4 main start > /dev/null 2>&1')
+        system("/etc/init.d/postgresql start > /dev/null 2>&1")
 
     def _stop(self):
         if self.selfstarted:
-            system('pg_ctlcluster -o "-h \'\'" 8.4 main stop > /dev/null 2>&1')
+            system("/etc/init.d/postgresql stop > /dev/null 2>&1")
 
     def __del__(self):
         self._stop()
