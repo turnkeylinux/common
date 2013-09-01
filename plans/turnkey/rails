@@ -6,7 +6,7 @@ mysql-server
 webmin-mysql
 
 build-essential            /* needed to build gems */
-libmysqlclient15-dev       /* needed to build mysql gem */
+libmysqlclient-dev         /* needed to build mysql gem */
 libcurl4-openssl-dev       /* needed to build passenger apache2 module */
 libreadline5-dev           /* needed for rails console */
 
