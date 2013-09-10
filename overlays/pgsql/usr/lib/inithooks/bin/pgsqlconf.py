@@ -15,6 +15,7 @@ import getopt
 import signal
 import subprocess
 
+from subprocess import Popen, PIPE
 from dialog_wrapper import Dialog
 from executil import ExecError, system
 
@@ -67,8 +68,10 @@ class PostgreSQL:
         self._stop()
 
     def execute(self, query):
-        #assumes local unix socket trust
-        system('psql -q -U postgres -d %s -c "%s"' % (self.database, query))
+        p = Popen("su postgres -c 'psql -q %s'" % self.database, shell=True, stdin=PIPE)
+        p.communicate(query)
+        if p.returncode != 0:
+            raise ExecError("postgres command failed")
 
 def usage(s=None):
     if s:

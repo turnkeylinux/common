@@ -10,10 +10,6 @@ pg_dropcluster --stop ${PGSQL_VER} main
 pg_createcluster --start -e UTF-8 ${PGSQL_VER} main
 /etc/init.d/postgresql stop
 
-# Trust postgres user when connecting over local unix sockets
-sed -i "/^local.*postgres/ s/ident/trust/" $CONF_DIR/pg_hba.conf
-sed -i "/^local.*postgres/ s/peer/trust/" $CONF_DIR/pg_hba.conf
-
 # Enable password encryption
 sed -i "/^#password_encryption = on/ s/#//" $CONF_DIR/postgresql.conf
 
@@ -22,6 +18,13 @@ sed -i "/^shared_buffers =/ s/32/24/" $CONF_DIR/postgresql.conf
 
 # Configure postgres password
 /etc/init.d/postgresql start
-psql -U postgres -d postgres -c "alter user postgres with encrypted password '$PGSQL_PASS';"
-/etc/init.d/postgresql stop
 
+su postgres -c 'psql postgres' << EOF
+alter user postgres with encrypted password '$PGSQL_PASS';
+EOF
+
+# give user root superuser privileges over postgres
+su postgres -c "createuser --superuser root"
+su postgres -c "createdb root"
+
+/etc/init.d/postgresql stop
