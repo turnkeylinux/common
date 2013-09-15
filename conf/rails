@@ -24,8 +24,8 @@ gem install $GEMOPTS therubyracer
 
 # build and configure passenger
 passenger-install-apache2-module --auto
-PASSENGER=$(echo $(basename $(ls -d /usr/local/lib/ruby/gems/*/gems/passenger*)))
-sed -i "s|PASSENGER|$PASSENGER|g" /etc/apache2/conf.d/passenger
+PASSENGER_ROOT=$(echo $(ls -d /var/lib/gems/*/gems/passenger*))
+sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/conf.d/passenger
 
 # convenience execution variables
 MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
