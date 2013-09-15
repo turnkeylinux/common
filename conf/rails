@@ -12,26 +12,6 @@ DB_USER=$APPNAME
 DB_PASS=$(mcookie)
 WEBROOT=/var/www/$APPNAME
 
-dl() {
-    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
-    cd $2; curl -L -f -O $PROXY $1; cd -
-}
-
-# install ruby-enterprise
-RUBYENT=http://rubyenterpriseedition.googlecode.com/files
-[ $I386 ] && RUBYENT=$RUBYENT/ruby-enterprise_1.8.7-2012.02_i386_ubuntu10.04.deb
-[ $AMD64 ] && RUBYENT=$RUBYENT/ruby-enterprise_1.8.7-2012.02_amd64_debian6.0.deb
-dl $RUBYENT /usr/local/src
-DEBIAN_FRONTEND=noninteractive dpkg -i /usr/local/src/ruby-enterprise*.deb
-rm /usr/local/src/ruby-enterprise*.deb
-
-# uninstall gems installed by ruby-enterprise
-for g in $(ls /usr/local/lib/ruby/gems/*/cache); do
-    GEM_NAME=$(echo $g | sed "s|-\(.*\).gem||")
-    gem uninstall -a -I -x -n /usr/local/bin $GEM_NAME
-done
-rm -f /usr/local/lib/ruby/gems/*/cache/*.gem
-
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 GEMOPTS="--no-rdoc --no-ri"
 gem install $GEMOPTS passenger
