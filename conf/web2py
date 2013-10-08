@@ -15,6 +15,9 @@ unzip $SRC/web2py_src.zip -d $(dirname $W2PROOT)
 rm $SRC/web2py_src.zip
 chown -R www-data:www-data $W2PROOT
 
+# copy wsgihandler to web2py root
+cp $W2PROOT/handlers/wsgihandler.py $W2PROOT/wsgihandler.py
+
 # workaround turnkey-pylib git.py conflict
 CONF=$W2PROOT/applications/admin/controllers/default.py
 ERR="disabled git import due to turnkey-pylib conflict"
