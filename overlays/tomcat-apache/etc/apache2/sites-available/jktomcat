@@ -10,7 +10,6 @@ NameVirtualHost *:443
     MaxRequestsPerChild  0
 </IfModule>
 
-JkWorkersFile   /etc/libapache2-mod-jk/workers.properties
 JkLogFile       /var/log/apache2/mod_jk.log
 JkLogLevel      info
 Include         /etc/tomcat6/mod_jk.conf
