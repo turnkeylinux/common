@@ -1,10 +1,14 @@
 #!/bin/bash -e
-# regenerate phpmyadmin pmadb password
+# regenerate phpmyadmin secrets (pmadb password, blowfish secret)
 
 . /etc/default/inithooks
 
-PASSWORD=$(mcookie)
 CONF=/etc/phpmyadmin/config.inc.php
 
+SECRET=$(mcookie)
+sed -i "s|\['blowfish_secret'\]\(.*\)|\['blowfish_secret'\] = '$SECRET';|" $CONF
+
+PASSWORD=$(mcookie)
 sed -i "s|\['controlpass'\]\(.*\)|\['controlpass'\] = '$PASSWORD';|" $CONF
 $INITHOOKS_PATH/bin/mysqlconf.py --user=pma --pass="$PASSWORD"
+

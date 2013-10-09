@@ -6,7 +6,8 @@ $i = 0;
 $i++;
 
 /* Authentication type */
-//$cfg['Servers'][$i]['auth_type'] = 'cookie';
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
+$cfg['blowfish_secret'] = 'f79fdfd5eea032c8986c647ef53e9220';
 
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'localhost';
