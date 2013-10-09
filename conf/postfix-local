@@ -3,3 +3,6 @@
 postconf -e inet_interfaces=localhost
 postconf -e myhostname=localhost
 
+/etc/init.d/postfix start
+/etc/init.d/postfix stop
+
