@@ -4,6 +4,7 @@ CERT_DIR=/etc/ssl/certs
 CERT_GRP=certssl
 
 # create symlink for shellinabox (why can't we just specify the certificate?)
+rm -f /var/lib/shellinabox/certificate.pem
 ln -s $CERT_DIR/cert.pem /var/lib/shellinabox/certificate.pem
 
 # set permissions for certssl group
