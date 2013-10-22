@@ -5,6 +5,5 @@ acpid                      # Utilities for using ACPI power management
 acpi-support               # Collection of useful events for acpi
 acpitool                   # A small, convenient command-line ACPI client
 pm-utils                   # utilities and scripts for power management
-powermanagement-interface  # platform neutral powermanagement interface
 
 #endif
