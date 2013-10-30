@@ -1,4 +1,5 @@
 #ifndef CHROOT_ONLY
 pulseaudio
+pulseaudio-utils
 pavucontrol
 #endif
