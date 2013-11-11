@@ -1,0 +1,4 @@
+BIN=/usr/lib/inithooks/bin
+$BIN/screen_session.py /bin/bash -c "turnkey-init && (chmod -x /root/.profile.d/turnkey-init-fence; [ -x /etc/init.d/turnkey-init-fence ] && (update-rc.d turnkey-init-fence remove; /etc/init.d/turnkey-init-fence stop))"
+
+exit
