@@ -1,0 +1,51 @@
+[audgui]
+filesel_path=/home/liraz/music
+playlist_manager_x=756
+playlist_manager_y=387
+playlist_manager_w=400
+playlist_manager_h=250
+
+[gtkui]
+player_x=960
+player_y=0
+player_width=952
+player_height=1048
+
+[gtkui-layout]
+item_count=4
+item0_name=Search Tool
+item0_pos=0,-1,-1,381,961
+item1_name=Album Art
+item1_pos=-1,0,0,296,196
+item2_name=Blur Scope
+item2_pos=-1,0,0,292,192
+item3_name=Cairo Spectrum
+item3_pos=-1,0,0,296,196
+
+[skins]
+equalizer_x=3198
+equalizer_y=309
+player_x=3198
+player_y=193
+playlist_x=3198
+playlist_y=309
+skin=/usr/share/audacious/Skins/Classic1.3
+playlist_visible=TRUE
+playlist_height=696
+
+[globalHotkey]
+Hotkey_0_key=106
+Hotkey_0_mask=4
+Hotkey_0_type=0
+Hotkey_0_event=10
+NumHotkeys=3
+Hotkey_1_key=63
+Hotkey_1_mask=4
+Hotkey_1_type=0
+Hotkey_1_event=14
+Hotkey_2_key=91
+Hotkey_2_mask=4
+Hotkey_2_type=0
+Hotkey_2_event=11
+
+[audacious]

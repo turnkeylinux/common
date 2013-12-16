@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "syntax: $0 command"
+fi
+
+dbus-send --type=method_call --dest=com.ssokolow.QuickTile /com/ssokolow/QuickTile com.ssokolow.QuickTile.doCommand "string:$1"

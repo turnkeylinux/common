@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gnome-shell-extensions">
+  <schema path="/org/barisione/shell-extensions/boss-mode/" id="org.barisione.shell-extensions.boss-mode">
+    <key name="disable-notifications" type="as">
+      <default><![CDATA[['<Super>B']]]></default>
+      <summary>Keybinding to disable notifications</summary>
+      <description>
+        Keybinding to disable notifications (for instance for incoming chat messages).
+      </description>
+    </key>
+    <key name="enable-notifications" type="as">
+      <default><![CDATA[['<Super>N']]]></default>
+      <summary>Keybinding to enable notifications</summary>
+      <description>
+        Keybinding to enable notifications (for instance for incoming chat messages).
+      </description>
+    </key>
+    <key name="toggle-notifications" type="as">
+      <default>[]</default>
+      <summary>Keybinding to toggle notifications</summary>
+      <description>
+        Keybinding to toggle notifications (for instance for incoming chat messages).
+      </description>
+    </key>
+  </schema>
+</schemalist>

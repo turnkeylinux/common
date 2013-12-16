@@ -1,0 +1,98 @@
+
+[hotkey:activate_left]
+Owner=winwrangler
+Signature=<Super>h
+Description=Switch to the window to the left of the current one
+
+[hotkey:activate_left2]
+Owner=winwrangler
+Signature=<Super>KP_Left
+Description=Switch to the window to the left of the current one
+
+[hotkey:activate_left3]
+Owner=winwrangler
+Signature=<Super>Left
+Description=Switch to the window to the left of the current one
+
+[hotkey:activate_right]
+Owner=winwrangler
+Signature=<Super>l
+Description=Switch to the window to the right of the current one
+
+[hotkey:activate_right2]
+Owner=winwrangler
+Signature=<Super>KP_Right
+Description=Switch to the window to the right of the current one
+
+[hotkey:activate_right3]
+Owner=winwrangler
+Signature=<Super>Right
+Description=Switch to the window to the right of the current one
+
+[hotkey:activate_up]
+Owner=winwrangler
+Signature=<Super>k
+Description=Switch to the window above the current one
+
+[hotkey:activate_up2]
+Owner=winwrangler
+Signature=<Super>KP_Up
+Description=Switch to the window above the current one
+
+[hotkey:activate_up3]
+Owner=winwrangler
+Signature=<Super>Up
+Description=Switch to the window above the current one
+Owner=winwrangler
+Signature=<Super>Up
+Description=Switch to the window above the current one
+
+[hotkey:activate_up4]
+Owner=winwrangler
+Signature=<Super>i
+Description=Switch to the window above the current one
+
+[hotkey:activate_down]
+Owner=winwrangler
+Signature=<Super>j
+Description=Switch to the window below the current one
+
+[hotkey:activate_down2]
+Owner=winwrangler
+Signature=<Super>KP_Down
+Description=Switch to the window below the current one
+
+[hotkey:activate_down3]
+Owner=winwrangler
+Signature=<Super>Down
+Description=Switch to the window below the current one
+
+[hotkey:activate_down4]
+Owner=winwrangler
+Signature=<Super>m
+Description=Switch to the window below the current one
+
+[hotkey:expand]
+Owner=winwrangler
+Signature=
+Description=Expand the currently active window to fill all available space without overlapping any new windows
+
+[hotkey:tile]
+Owner=winwrangler
+Signature=
+Description=Tile all visible windows
+
+[hotkey:twothirds]
+Owner=winwrangler
+Signature=
+Description=Resize the active window to 2/3 of the screen
+
+[hotkey:activate_left4]
+Owner=winwrangler
+Signature=
+Description=Switch to the window to the left of the current one
+
+[hotkey:activate_right4]
+Owner=winwrangler
+Signature=
+Description=Switch to the window to the right of the current one
