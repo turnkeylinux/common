@@ -1,0 +1,272 @@
+{
+   "add": {
+      "message": "Hozz\u00E1ad\u00E1s"
+   },
+   "add_domain_button": {
+      "message": "Domain hozz\u00E1ad\u00E1sa"
+   },
+   "add_filter_button": {
+      "message": "Sz\u0171r\u0151 hozz\u00E1ad\u00E1sa"
+   },
+   "add_filters_msg": {
+      "message": "Sz\u0171r\u0151(k) hozz\u00E1ad\u00E1sa?"
+   },
+   "add_your_own_filters": {
+      "message": "Add hozz\u00E1 a saj\u00E1t sz\u0171r\u0151idet"
+   },
+   "apply_changes": {
+      "message": "V\u00E1ltoztat\u00E1sok alkalmaz\u00E1sa"
+   },
+   "block_element": {
+      "message": "Elem blokkol\u00E1sa"
+   },
+   "cancel": {
+      "message": "M\u00E9gse"
+   },
+   "clickhide_instructions": {
+      "message": "Miut\u00E1n bez\u00E1rtad ezt a bubor\u00E9kot, kattints egy elemre az oldalon.."
+   },
+   "description": {
+      "message": "Blokkolja az ideges\u00EDt\u0151 vide\u00F3rekl\u00E1mokat a YouTube-n, a Facebook rekl\u00E1mjait, bannereket \u00E9s m\u00E9g t\u00F6bbet."
+   },
+   "disable_inline": {
+      "message": "Sz\u00F6veges rekl\u00E1mok tilt\u00E1sa"
+   },
+   "disabled_for_these_domains": {
+      "message": "Az Adblock Plus le van tiltva az al\u00E1bb felsorolt oldalakon. Egy domaint megadhatsz az Adblock Plus ikonra kattintva a c\u00EDmsorban, vagy be\u00EDrhatod a domaint (nem az URL-t) a dobozba \u00E9s kattints a \"Domain hozz\u00E1ad\u00E1sa\" gombra."
+   },
+   "easy_create_filter": {
+      "message": "Sz\u0171r\u0151 l\u00E9trehoz\u00E1sa"
+   },
+   "edit_filters_raw": {
+      "message": "Sz\u0171r\u0151k szerkeszt\u00E9se nyers sz\u00F6vegk\u00E9nt"
+   },
+   "enable_only_the": {
+      "message": "Csak azokat a sz\u0171r\u0151ket enged\u00E9lyezd, amelyekre sz\u00FCks\u00E9ged van. A t\u00FAl sok sz\u0171r\u0151 miatt a Chrome lefagyhat."
+   },
+   "enabled_for_site": {
+      "message": "Ezen az oldalon enged\u00E9lyezve"
+   },
+   "filter_lists": {
+      "message": "Sz\u0171r\u0151 lista"
+   },
+   "filter_must_follow_syntax": {
+      "message": "A sz\u0171r\u0151d k\u00F6vesse az \u003Ca\u003EAdblock Plus szintaxis\u00E1t\u003C/a\u003E."
+   },
+   "filters_acceptableAds2_label": {
+      "message": "N\u00E9h\u00E1ny nem tolakod\u00F3 hirdet\u00E9s enged\u00E9lyez\u00E9se"
+   },
+   "filters_addSubscriptionAdd_label": {
+      "message": "Hozz\u00E1ad\u00E1s"
+   },
+   "filters_addSubscriptionOther_label": {
+      "message": "K\u00FCls\u0151 sz\u0171r\u0151 hozz\u00E1ad\u00E1sa"
+   },
+   "filters_addSubscription_label": {
+      "message": "K\u00FCls\u0151 sz\u0171r\u0151 hozz\u00E1ad\u00E1sa"
+   },
+   "filters_readMore_label": {
+      "message": "Mi ez?"
+   },
+   "filters_subscription_delete_label": {
+      "message": "T\u00F6rl\u00E9s"
+   },
+   "filters_subscription_enabled_label": {
+      "message": "Enged\u00E9lyezve"
+   },
+   "filters_subscription_lastDownload_checksumMismatch": {
+      "message": "Sikertelen, \u00E9rv\u00E9nytelen ellen\u0151rz\u0151 \u00F6sszeg"
+   },
+   "filters_subscription_lastDownload_connectionError": {
+      "message": "Sikertelen, let\u00F6lt\u00E9si hiba"
+   },
+   "filters_subscription_lastDownload_inProgress": {
+      "message": "Let\u00F6lt\u00E9s..."
+   },
+   "filters_subscription_lastDownload_invalidData": {
+      "message": "Sikertelen, \u00E9rv\u00E9nytelen sz\u0171r\u0151lista"
+   },
+   "filters_subscription_lastDownload_invalidURL": {
+      "message": "Sikertelen, \u00E9rv\u00E9nytelen c\u00EDm"
+   },
+   "filters_viewList_label": {
+      "message": "Lista megtekint\u00E9se"
+   },
+   "firstRun_acceptableAdsExplanation": {
+      "message": "Szeretn\u00E9nk arra biztatni a weboldalakat, hogy egy\u00E9rtelm\u0171, nem tolakod\u00F3 hirdet\u00E9seket haszn\u00E1ljanak. Ez\u00E9rt hoztunk l\u00E9tre \u003Ca\u003Eszigor\u00FA ir\u00E1nyelveket\u003C/a\u003E, amelyek seg\u00EDts\u00E9g\u00E9vel azonos\u00EDthat\u00F3k az elfogadhat\u00F3 hirdet\u00E9sek, amelyek az alapbe\u00E1ll\u00EDt\u00E1sok k\u00F6z\u00F6tt tal\u00E1lhat\u00F3k meg. Ha ennek ellen\u00E9re minden hirdet\u00E9st \u003Ca\u003Eblokkolni\u003C/a\u003E szeretne, ezt tov\u00E1bbra is megteheti mind\u00F6ssze n\u00E9h\u00E1ny m\u00E1sodperc alatt."
+   },
+   "firstRun_acceptableAdsHeadline": {
+      "message": "A bosszant\u00F3 hirdet\u00E9sek mostant\u00F3l blokkolva lesznek"
+   },
+   "firstRun_contributor_credits": {
+      "message": "Hozz\u00E1j\u00E1rul\u00F3k n\u00E9vsora"
+   },
+   "firstRun_dataCorruptionWarning": {
+      "message": "\u00C1lland\u00F3an megjelenik ez az oldal? \u003Ca\u003EKattintson ide!\u003C/a\u003E"
+   },
+   "firstRun_donate": {
+      "message": "adom\u00E1nyoz\u00E1s"
+   },
+   "firstRun_donate_label": {
+      "message": "A projekt t\u00E1mogat\u00E1sa"
+   },
+   "firstRun_feature_malware": {
+      "message": "Rosszindulat\u00FA k\u00F3dok blokkol\u00E1sa"
+   },
+   "firstRun_feature_malware_description": {
+      "message": "Tegye a b\u00F6ng\u00E9sz\u00E9st biztons\u00E1gosabb\u00E1 az\u00E1ltal, hogy letiltja az ismert malware c\u00EDmeket."
+   },
+   "firstRun_feature_show_expanded": {
+      "message": "funkci\u00F3k aktiv\u00E1l\u00E1sa"
+   },
+   "firstRun_feature_show_overview": {
+      "message": "\u00E1ttekint\u00E9s mutat\u00E1sa"
+   },
+   "firstRun_feature_social": {
+      "message": "K\u00F6z\u00F6ss\u00E9gi oldalak gombjainak elt\u00E1vol\u00EDt\u00E1sa"
+   },
+   "firstRun_feature_social_description": {
+      "message": "Automatikusan szabaduljon meg a k\u00F6z\u00F6ss\u00E9gi m\u00E9di\u00E1val kapcsolatos gombokt\u00F3l, mint p\u00E9ld\u00E1ul a facebook \"Tetszik\" gombja, amelyek a weboldalakon jelennek meg \u00E9s figyelik az \u00D6n szok\u00E1sait."
+   },
+   "firstRun_feature_tracking": {
+      "message": "K\u00F6vet\u00E9s letilt\u00E1sa"
+   },
+   "firstRun_feature_tracking_description": {
+      "message": "B\u00F6ng\u00E9sszen priv\u00E1tban az\u00E1ltal, hogy letiltja a k\u00F6vet\u00E9st - elrejtheti nyomait a rekl\u00E1mc\u00E9gek el\u0151l, amelyek egy\u00E9bk\u00E9nt figyeln\u00E9k minden l\u00E9p\u00E9s\u00E9t."
+   },
+   "firstRun_features": {
+      "message": "Az Adblock Plus a rekl\u00E1mok blokkol\u00E1s\u00E1n\u00E1l t\u00F6bbre is k\u00E9pes"
+   },
+   "firstRun_share": {
+      "message": "Mondja el bar\u00E1tainak"
+   },
+   "firstRun_share_headline": {
+      "message": "\u003Ca\u003ESeg\u00EDtsen nek\u00FCnk\u003C/a\u003E jobb helly\u00E9 tenni a vil\u00E1gh\u00E1l\u00F3t"
+   },
+   "firstRun_title": {
+      "message": "Sikeresen telep\u00EDtette az Adblock Plus-t"
+   },
+   "firstRun_toggle_off": {
+      "message": "KIKAPCSOLVA"
+   },
+   "firstRun_toggle_on": {
+      "message": "BEKAPCSOLVA"
+   },
+   "found_a_bug": {
+      "message": "Tal\u00E1lt\u00E1l egy hib\u00E1t az Adblock Plus-ban? K\u00E9rlek \u003Ca\u003Ejelentsd itt\u003C/a\u003E."
+   },
+   "general": {
+      "message": "\u00C1ltal\u00E1nos"
+   },
+   "global_remove_subscription_warning": {
+      "message": "Val\u00F3ban el k\u00EDv\u00E1nja t\u00E1vol\u00EDtani ezt a sz\u0171r\u0151t?"
+   },
+   "global_subscription_invalid_location": {
+      "message": "A megadott k\u00FCls\u0151 sz\u0171r\u0151t tartalmaz\u00F3 c\u00EDm helytelen, vagy hib\u00E1s f\u00E1jlnevet tartalmaz."
+   },
+   "last_updated_at": {
+      "message": "Utolj\u00E1ra ekkor lett friss\u00EDtve: $date$ $time$",
+      "placeholders": {
+         "date": {
+            "content": "$2"
+         },
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "last_updated_at_today": {
+      "message": "Utolj\u00E1ra ekkor lett friss\u00EDtve: ma $time$-kor",
+      "placeholders": {
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "name": {
+      "message": "Adblock Plus"
+   },
+   "options": {
+      "message": "Adblock Plus be\u00E1ll\u00EDt\u00E1sok"
+   },
+   "out_of_date_lists": {
+      "message": "Az elavult list\u00E1k id\u0151k\u00F6z\u00F6nk\u00E9nt friss\u00FClnek."
+   },
+   "overlay_hideplaceholders_label": {
+      "message": "Letiltott elemek hely\u0151rz\u0151inek elrejt\u00E9se"
+   },
+   "remove_button": {
+      "message": "Kijel\u00F6lt elt\u00E1vol\u00EDt\u00E1sa"
+   },
+   "show_block_element_menu": {
+      "message": "'Elem blokkol\u00E1sa' megjelen\u00EDt\u00E9se a k\u00F6rnyezeti men\u00FCben"
+   },
+   "show_icon": {
+      "message": "Mutasd az ikont a c\u00EDmsorban"
+   },
+   "stats_label_page": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E ezen az oldalon",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_label_total": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E \u00F6sszesen",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_over": {
+      "message": "t\u00F6bb mint $number$",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_download": {
+      "message": "Adblock Plus let\u00F6lt\u00E9se"
+   },
+   "stats_share_label_fb": {
+      "message": "Megoszt\u00E1s Facebookon"
+   },
+   "stats_share_label_gplus": {
+      "message": "Megoszt\u00E1s Google+-on"
+   },
+   "stats_share_label_twitter": {
+      "message": "Megoszt\u00E1s Twitteren"
+   },
+   "stats_share_message": {
+      "message": "Kisz\u0171rtem $number$ hirdet\u00E9st \u00E9s nyomk\u00F6vet\u0151t az Adblock Plusnak k\u00F6sz\u00F6nhet\u0151en.",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_title": {
+      "message": "Megoszt\u00E1s"
+   },
+   "stats_title": {
+      "message": "Blokkolt hirdet\u00E9sek:"
+   },
+   "subscriptionSelection_location_label": {
+      "message": "Sz\u0171r\u0151lista c\u00EDme:"
+   },
+   "subscriptionSelection_subscriptionSelector_label": {
+      "message": "K\u00E9rem v\u00E1lassza ki a sz\u0171r\u0151t a list\u00E1b\u00F3l:"
+   },
+   "subscriptionSelection_title_label": {
+      "message": "K\u00FCls\u0151 sz\u0171r\u0151 neve:"
+   },
+   "update_now": {
+      "message": "Friss\u00EDt\u00E9s most"
+   },
+   "whitelisted_domains": {
+      "message": "Enged\u00E9lyezett domainek"
+   }
+}

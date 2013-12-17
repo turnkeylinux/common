@@ -1,0 +1,272 @@
+{
+   "add": {
+      "message": "L\u00E4gg till"
+   },
+   "add_domain_button": {
+      "message": "L\u00E4gg till dom\u00E4n"
+   },
+   "add_filter_button": {
+      "message": "L\u00E4gg till filter"
+   },
+   "add_filters_msg": {
+      "message": "L\u00E4gg till filter?"
+   },
+   "add_your_own_filters": {
+      "message": "L\u00E4gg till dina egna filter"
+   },
+   "apply_changes": {
+      "message": "Verkst\u00E4ll \u00E4ndringar"
+   },
+   "block_element": {
+      "message": "Blockera objekt"
+   },
+   "cancel": {
+      "message": "Avbryt"
+   },
+   "clickhide_instructions": {
+      "message": "N\u00E4r denna popup st\u00E4ngs, klicka (eller h\u00F6gerklicka) ett objekt p\u00E5 sidan."
+   },
+   "description": {
+      "message": "Blockerar irriterande videoreklam p\u00E5 YouTube, Facebook-annonser, webbannonser och mycket mer."
+   },
+   "disable_inline": {
+      "message": "Inaktivera infogade textannonser"
+   },
+   "disabled_for_these_domains": {
+      "message": "Adblock Plus \u00E4r inaktiverad f\u00F6r dom\u00E4nerna i denna lista. Du kan l\u00E4gga till en dom\u00E4n via Adblock Plus-ikonen i adressf\u00E4ltet eller genom att skriva dom\u00E4nnamnet (inte URL) i textboxen och klicka p\u00E5 \"L\u00E4gg till dom\u00E4n\"."
+   },
+   "easy_create_filter": {
+      "message": "Skapa filter"
+   },
+   "edit_filters_raw": {
+      "message": "Redigera filter som ren text"
+   },
+   "enable_only_the": {
+      "message": "Aktivera bara dom filter du beh\u00F6ver. F\u00F6r m\u00E5nga kan f\u00E5 Chrome att sluta svara."
+   },
+   "enabled_for_site": {
+      "message": "Aktiverad f\u00F6r den h\u00E4r sidan"
+   },
+   "filter_lists": {
+      "message": "Filterlistor"
+   },
+   "filter_must_follow_syntax": {
+      "message": "Ditt filter m\u00E5ste f\u00F6lja \u003Ca\u003EAdblock Plus filtersyntax\u003C/a\u003E."
+   },
+   "filters_acceptableAds2_label": {
+      "message": "Till\u00E5t viss icke-st\u00F6rande reklam"
+   },
+   "filters_addSubscriptionAdd_label": {
+      "message": "L\u00E4gg till"
+   },
+   "filters_addSubscriptionOther_label": {
+      "message": "L\u00E4gg till en ny prenumeration"
+   },
+   "filters_addSubscription_label": {
+      "message": "L\u00E4gg till filterprenumeration"
+   },
+   "filters_readMore_label": {
+      "message": "L\u00E4s mer"
+   },
+   "filters_subscription_delete_label": {
+      "message": "Ta bort"
+   },
+   "filters_subscription_enabled_label": {
+      "message": "Aktiverat"
+   },
+   "filters_subscription_lastDownload_checksumMismatch": {
+      "message": "Fel kontrollsumma"
+   },
+   "filters_subscription_lastDownload_connectionError": {
+      "message": "Fel vid h\u00E4mtning"
+   },
+   "filters_subscription_lastDownload_inProgress": {
+      "message": "H\u00E4mtar\u2026"
+   },
+   "filters_subscription_lastDownload_invalidData": {
+      "message": "Fel vid validering av filter"
+   },
+   "filters_subscription_lastDownload_invalidURL": {
+      "message": "Ogiltig adress"
+   },
+   "filters_viewList_label": {
+      "message": "Visa lista"
+   },
+   "firstRun_acceptableAdsExplanation": {
+      "message": "Vi vill uppmuntra webbplatser att anv\u00E4nda enkel, diskret reklam. Det \u00E4r d\u00E4rf\u00F6r vi har fastst\u00E4llt \u003Ca\u003Estrikta riktlinjer\u003C/a\u003E f\u00F6r att identifiera acceptabla annonser, som visas under standardinst\u00E4llningar. Om du fortfarande vill blockera alla annonser kan du \u003Ca\u003Einaktivera\u003C/a\u003E detta inom ett par sekunder."
+   },
+   "firstRun_acceptableAdsHeadline": {
+      "message": "Irriterande annonser blockeras nu"
+   },
+   "firstRun_contributor_credits": {
+      "message": "Tack till"
+   },
+   "firstRun_dataCorruptionWarning": {
+      "message": "Forts\u00E4tter denna sida att visas? \u003Ca\u003EKlicka h\u00E4r!\u003C/a\u003E"
+   },
+   "firstRun_donate": {
+      "message": "donera"
+   },
+   "firstRun_donate_label": {
+      "message": "St\u00F6d v\u00E5rt projekt"
+   },
+   "firstRun_feature_malware": {
+      "message": "Malwareblockering"
+   },
+   "firstRun_feature_malware_description": {
+      "message": "G\u00F6ra din surfning s\u00E4krare genom att blockera k\u00E4nda skadliga dom\u00E4ner."
+   },
+   "firstRun_feature_show_expanded": {
+      "message": "aktivera funktioner"
+   },
+   "firstRun_feature_show_overview": {
+      "message": "visa \u00F6versikt"
+   },
+   "firstRun_feature_social": {
+      "message": "Ta bort knappar f\u00F6r Sociala Medier"
+   },
+   "firstRun_feature_social_description": {
+      "message": "F\u00F6rb\u00E4ttrar automatiskt din webbupplevelse genom borttagning av sociala medier knappar, s\u00E5som Facebook Gilla, som visas p\u00E5 webbsidor och sp\u00E5ra ditt beteende."
+   },
+   "firstRun_feature_tracking": {
+      "message": "Inaktivera Sp\u00E5rning"
+   },
+   "firstRun_feature_tracking_description": {
+      "message": "Surfa privat genom att inaktivera sp\u00E5rning - d\u00F6lj dina sp\u00E5r fr\u00E5n reklamf\u00F6retag som vill sp\u00E5ra dina r\u00F6relser."
+   },
+   "firstRun_features": {
+      "message": "Adblock Plus kan g\u00F6ra mer \u00E4n att blockera reklam"
+   },
+   "firstRun_share": {
+      "message": "Ber\u00E4tta f\u00F6r dina v\u00E4nner"
+   },
+   "firstRun_share_headline": {
+      "message": "\u003Ca\u003EHj\u00E4lp oss\u003C/a\u003E att g\u00F6ra webben till en b\u00E4ttre plats"
+   },
+   "firstRun_title": {
+      "message": "Adblock Plus har installerats"
+   },
+   "firstRun_toggle_off": {
+      "message": "AV"
+   },
+   "firstRun_toggle_on": {
+      "message": "P\u00C5"
+   },
+   "found_a_bug": {
+      "message": "Hittat ett fel eller vill du \u00F6vers\u00E4tta Adblock Plus till ett annat spr\u00E5k? V\u00E4nligen, \u003Ca\u003Emeddela h\u00E4r\u003C/a\u003E."
+   },
+   "general": {
+      "message": "Allm\u00E4nt"
+   },
+   "global_remove_subscription_warning": {
+      "message": "Vill du verkligen ta bort denna prenumeration?"
+   },
+   "global_subscription_invalid_location": {
+      "message": "Platsen du angivit \u00E4r antingen ogiltig eller s\u00E5 har du angivit ett felaktigt filnamn."
+   },
+   "last_updated_at": {
+      "message": "Senast uppdaterad den $date$ $time$",
+      "placeholders": {
+         "date": {
+            "content": "$2"
+         },
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "last_updated_at_today": {
+      "message": "Senast uppdaterad i dag $time$",
+      "placeholders": {
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "name": {
+      "message": "Adblock Plus"
+   },
+   "options": {
+      "message": "Adblock Plus Alternativ"
+   },
+   "out_of_date_lists": {
+      "message": "Utdaterade listor uppdateras periodiskt."
+   },
+   "overlay_hideplaceholders_label": {
+      "message": "D\u00F6lj platsh\u00E5llare f\u00F6r blockerade element"
+   },
+   "remove_button": {
+      "message": "Ta bort markerad"
+   },
+   "show_block_element_menu": {
+      "message": "Visa 'Blockera objekt' i h\u00F6gerklicksmeny"
+   },
+   "show_icon": {
+      "message": "Visa ikon i adressf\u00E4ltet"
+   },
+   "stats_label_page": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E p\u00E5 den h\u00E4r sidan",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_label_total": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E totalt",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_over": {
+      "message": "\u00F6ver $number$",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_download": {
+      "message": "Ladda ner Adblock Plus"
+   },
+   "stats_share_label_fb": {
+      "message": "Dela p\u00E5 Facebook"
+   },
+   "stats_share_label_gplus": {
+      "message": "Dela p\u00E5 Google +"
+   },
+   "stats_share_label_twitter": {
+      "message": "Dela p\u00E5 Twitter"
+   },
+   "stats_share_message": {
+      "message": "Jag blockerade $number$ annonser och trackers tack vare Adblock Plus.",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_title": {
+      "message": "Dela det h\u00E4r"
+   },
+   "stats_title": {
+      "message": "Blockerade annonser:"
+   },
+   "subscriptionSelection_location_label": {
+      "message": "Plats f\u00F6r filter:"
+   },
+   "subscriptionSelection_subscriptionSelector_label": {
+      "message": "Var v\u00E4nlig v\u00E4lj en filterprenumeration fr\u00E5n listan:"
+   },
+   "subscriptionSelection_title_label": {
+      "message": "Rubrik f\u00F6r prenumeration:"
+   },
+   "update_now": {
+      "message": "Uppdatera nu"
+   },
+   "whitelisted_domains": {
+      "message": "Vitlistade dom\u00E4ner"
+   }
+}

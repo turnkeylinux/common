@@ -1,0 +1,162 @@
+.listbox {
+  margin: 0;
+}
+.listbox li {
+  display: -webkit-box;
+}
+.listbox li[selected] {
+  background-color: #ffffb8;
+}
+.listbox li .editable {
+  display: -webkit-box;
+  -webkit-box-flex: 1;
+  -webkit-margin-end: 10px;
+  -webkit-margin-start: 10px;
+}
+.listbox li .text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.listbox li .text,
+.listbox li input {
+  display: block;
+  -webkit-box-flex: 1;
+}
+.listbox.filter-names .list-item.highlighted {
+  background-color: #BBCEE9;
+}
+.listbox .list-item:not([selected]) input {
+  display: none;
+}
+.listbox .list-item[selected] .text {
+  display: none;
+}
+.listbox .list-item.disabled:hover,
+.listbox .list-item.highlighted:hover {
+  background-color: rgba(56, 121, 217, 0.2);
+}
+.listbox .list-item.disabled {
+  background-color: #d0d0d0;
+}
+.listbox .list-item .text {
+  color: #464E5A;
+}
+.listbox .template-list-item .text {
+  display: none;
+}
+.filter-set,
+.group-filter-set {
+  bottom: 0;
+}
+.group-filter-set > :first-child {
+  display: -webkit-box;
+}
+.group-filter-set > :first-child > :last-child {
+  display: -webkit-box;
+  width: 516px;
+  opacity: 0;
+  -webkit-margin-start: 20px;
+  -webkit-transition: margin 200ms, opacity 200ms;
+  -webkit-transition-delay: 100ms;
+  -webkit-box-orient: vertical;
+}
+.group-filter-set > :first-child > :last-child.visible {
+  opacity: 1;
+  -webkit-margin-start: 0;
+  -webkit-transition: margin 200ms, opacity 200ms;
+  -webkit-transition-delay: 100ms;
+}
+.group-filter-set > :first-child > :last-child.hidden {
+  display: none;
+}
+.group-filter-set .listbox:first-child {
+  width: 222px;
+}
+.group-filter-set .listbox:last-child {
+  -webkit-box-flex: 1;
+}
+input.filter-group-host {
+  margin: 5px 86px 5px 16px;
+  display: -webkit-box;
+}
+.number-input {
+  width: 100px;
+}
+#whitelist,
+#blacklist {
+  bottom: 0;
+}
+.vertical-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  -webkit-border-start: 1px solid #eee;
+}
+.color-picker .content-area {
+  cursor: default;
+  line-height: 1em;
+  text-align: right;
+  display: -webkit-box;
+}
+.color-picker .content-area .color-picker-box {
+  margin-left: 10px;
+  -webkit-box-pack: center;
+  -webkit-box-orient: vertical;
+}
+.color-picker .content-area .color-picker-box .color-picker-area > div {
+  display: -webkit-box;
+  -webkit-box-align: center;
+  margin-top: 5px;
+}
+.color-picker .content-area .color-picker-box .color-picker-area > div:active {
+  font-weight: bold;
+}
+.color-picker .content-area .color-picker-box .color-picker-area .color-picker-container {
+  position: relative;
+  border: solid 1px #777;
+  height: 16px;
+}
+.color-picker .content-area .color-picker-box .color-picker-area .color-picker-container:hover .cur {
+  opacity: 1;
+}
+.color-picker .content-area .color-picker-box .color-picker-area .color-picker-container canvas {
+  cursor: crosshair;
+}
+.color-picker .content-area .color-picker-box .color-picker-area .color-picker-container .cur {
+  background: url(../graph/miniCurr.gif);
+  cursor: crosshair;
+  height: 9px;
+  opacity: .75;
+  position: absolute;
+  top: 4px;
+  width: 9px;
+  z-index: 1;
+}
+.color-picker .content-area .color-picker-box .east {
+  width: 2.5em;
+}
+.color-picker .content-area .color-picker-box .west {
+  margin-right: 8px;
+  width: 1em;
+}
+.checkered {
+  background: url(../graph/op_8x8.gif);
+}
+.placeholder-icon .content-area > div {
+  display: -webkit-box;
+  -webkit-box-align: end;
+}
+.placeholder-icon .content-area > div:last-child {
+  margin-top: 10px;
+}
+.placeholder-icon .content-area > div label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: center;
+  -webkit-box-flex: 1;
+  -webkit-box-pack: center;
+}
+.placeholder-icon .content-area > div label div {
+  margin-bottom: 2px;
+}

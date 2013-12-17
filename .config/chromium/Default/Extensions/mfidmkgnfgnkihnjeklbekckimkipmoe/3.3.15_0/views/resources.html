@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" type="text/css" href="resources.css"/>
+        <script type="text/javascript" src="../lib/utils.js"></script>
+        <script type="text/javascript" src="../lib/regexp.js"></script>
+        <script type="text/javascript" src="../lib/array.js"></script>
+        <script type="text/javascript" src="../lib/filters.js"></script>
+        <script type="text/javascript" src="../lib/properties.js"></script>
+        <script type="text/javascript" src="../lib/animate.js"></script>
+        <script type="text/javascript" src="../background/data.js"></script>
+        <script type="text/javascript" src="utils.js"></script>
+        <script type="text/javascript" src="resources.js"></script>
+    </head>
+    <body class="frame">
+        <div class="navigation">
+            <ul class="menu">
+                <li class="menu-item resources-menu-item selected">
+                    <a href="#resources">Resources</a>
+                </li>
+                <li class="menu-item whitelist-menu-item">
+                    <a href="#patternlistB">Whitelist</a>
+                </li>
+                <li class="menu-item blacklist-menu-item">
+                    <a href="#patternlistD">Blacklist</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mainview view">
+            <div id="resources" class="selected">
+                <div class="content">
+                    <div class="view">
+                        <h3>Referrer</h3>
+                        <ul class="listbox" id="referrer"></ul>
+                    </div>
+                    <div class="splitter vertical-split" data-min=85 data-max=20 data-pos=14></div>
+                    <div class="view">
+                        <h3>Requests</h3>
+                        <ul class="listbox" id="request"></ul>
+                    </div>
+                </div>
+                <div class="status-bar">
+                    <button class="statusbar-item statusbar-reload" title="Reload">
+                        <div class="glyph"></div>
+                        <div class="glyph shadow"></div>
+                    </button>
+                </div>
+            </div>
+            <div id="patternlistB">
+                <div class="content">
+                    <div class="view">
+                        <ul class="listbox patterns"></ul>
+                    </div>
+                    <div class="splitter horizontal-split" data-min=80 data-max=20 data-pos=100></div>
+                    <div class="view">
+                        <div class="console monospace">
+                            <div class="console-messages">
+                            <div class="console-input">
+                                <div class="input monospace" spellcheck="false"></div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-bar">
+                    <button class="statusbar-item statusbar-console" title="Expand console">
+                        <div class="glyph"></div>
+                        <div class="glyph shadow"></div>
+                    </button>
+                    <button class="statusbar-item statusbar-delete" title="Delete filters">
+                        <div class="glyph"></div>
+                        <div class="glyph shadow"></div>
+                    </button>
+                    <button class="statusbar-item statusbar-live" title="Live Filtering is disabled.&#xA;Click to enable.">
+                        <div class="glyph"></div>
+                        <div class="glyph shadow"></div>
+                    </button>
+                </div>
+            </div>
+            <div id="patternlistD">
+                <div class="content">
+                    <div class="view">
+                        <ul class="listbox patterns"></ul>
+                    </div>
+                    <div class="splitter horizontal-split" data-min=80 data-max=20 data-pos=100></div>
+                    <div class="view">
+                        <div class="console monospace">
+                            <div class="console-messages">
+                            <div class="console-input">
+                                <div class="input monospace" spellcheck="false"></div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-bar">
+                    <button class="statusbar-item statusbar-console" title="Expand console">
+                        <div class="glyph"></div>
+                        <div class="glyph shadow"></div>
+                    </button>
+                    <button class="statusbar-item statusbar-delete" title="Delete filters">
+                        <div class="glyph"></div>
+                        <div class="glyph shadow"></div>
+                    </button>
+                    <button class="statusbar-item statusbar-live" title="Live Filtering is disabled.&#xA;Click to enable.">
+                        <div class="glyph"></div>
+                        <div class="glyph shadow"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <template class="message">
+            <div class="message-panel">
+                <div class="text"></div>
+            </div>
+        </template>
+        <template class="info">
+            <div class="message-panel">
+                <div class="action delete">
+                    <a href="#">x</a>
+                </div>
+                <ol class="monospace"></ol>
+            </div>
+        </template>
+        <template class="request">
+            <li class="list-item"></li>
+        </template>
+        <template class="pattern">
+            <li class="list-item">
+                <div class="action delete">
+                    <a href="#">x</a>
+                </div>
+                <input type="checkbox" class="enable">
+                <div class="text"></div>
+            </li>
+        </template>
+        <template class="prop">
+            <li>
+                <div class="prop-info-name"></div>
+                <div class="prop-info-value"></div>
+            </li>
+        </template>
+        <template class="output">
+            <div class="text"></div>
+        </template>
+    </body>
+</html>

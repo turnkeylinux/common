@@ -1,0 +1,272 @@
+{
+   "add": {
+      "message": "Adaug\u0103"
+   },
+   "add_domain_button": {
+      "message": "Adaug\u0103 domeniu"
+   },
+   "add_filter_button": {
+      "message": "Adaug\u0103 filtru"
+   },
+   "add_filters_msg": {
+      "message": "Adaug\u0103 filtre?"
+   },
+   "add_your_own_filters": {
+      "message": "Adaug\u0103 propriile filtre"
+   },
+   "apply_changes": {
+      "message": "Aplic\u0103 modific\u0103rile"
+   },
+   "block_element": {
+      "message": "Blocheaz\u0103 Elementul"
+   },
+   "cancel": {
+      "message": "Anuleaz\u0103"
+   },
+   "clickhide_instructions": {
+      "message": "Dup\u0103 \u00EEnchiderea acestui pop-up, clic (sau clic-dreapta) pe un element de pe pagin\u0103."
+   },
+   "description": {
+      "message": "Blocheaza agasantele reclame video pe YouTube, reclamele Facebook, banere si multe altele."
+   },
+   "disable_inline": {
+      "message": "Dezactiveaz\u0103 inserturile publicitare de tip text"
+   },
+   "disabled_for_these_domains": {
+      "message": "Adblock Plus este dezactivat pentru domeniile listate mai jos. Po\u021Bi ad\u0103uga un domeniu folosind iconi\u021Ba Adblock Plus in bara de adrese sau scriind domeniul (nu URL-ul) in spa\u021Biul de mai jos \u0219i f\u0103c\u00E2nd clic pe butonul \"Adaug\u0103 domeniu\"."
+   },
+   "easy_create_filter": {
+      "message": "Generare rapid\u0103 filtru"
+   },
+   "edit_filters_raw": {
+      "message": "Editor filtre \u00EEn mod text"
+   },
+   "enable_only_the": {
+      "message": "Activa\u0163i doar listele de filtre necesare. Prea multe \u00EEncetinesc Chrome."
+   },
+   "enabled_for_site": {
+      "message": "Activat pentru acest site"
+   },
+   "filter_lists": {
+      "message": "Liste de filtre"
+   },
+   "filter_must_follow_syntax": {
+      "message": "Filtrul t\u0103u trebuie s\u0103 respecte \u003Ca\u003E sintaxa Adblock Plus pentru filtre\u003C/a\u003E."
+   },
+   "filters_acceptableAds2_label": {
+      "message": "Permite publicitatea discret\u0103"
+   },
+   "filters_addSubscriptionAdd_label": {
+      "message": "Adaug\u0103"
+   },
+   "filters_addSubscriptionOther_label": {
+      "message": "Adaug\u0103 alt abonament"
+   },
+   "filters_addSubscription_label": {
+      "message": "Adaug\u0103 abonament filtru"
+   },
+   "filters_readMore_label": {
+      "message": "Cite\u0219te mai mult"
+   },
+   "filters_subscription_delete_label": {
+      "message": "\u0218terge"
+   },
+   "filters_subscription_enabled_label": {
+      "message": "Activat"
+   },
+   "filters_subscription_lastDownload_checksumMismatch": {
+      "message": "E\u015Fuat, suma de control nu se potrive\u015Fte."
+   },
+   "filters_subscription_lastDownload_connectionError": {
+      "message": "E\u015Fuat, desc\u0103rcare nereu\u015Fit\u0103"
+   },
+   "filters_subscription_lastDownload_inProgress": {
+      "message": "Desc\u0103rcare..."
+   },
+   "filters_subscription_lastDownload_invalidData": {
+      "message": "E\u015Fuat, lista nu este valid\u0103"
+   },
+   "filters_subscription_lastDownload_invalidURL": {
+      "message": "E\u015Fuat, adresa nu este valid\u0103"
+   },
+   "filters_viewList_label": {
+      "message": "Afi\u015Fare list\u0103"
+   },
+   "firstRun_acceptableAdsExplanation": {
+      "message": "Dorim s\u0103 \u00EEncuraj\u0103m site-urile web \u00EEn a utiliza publicitate simpl\u0103, discret\u0103. De aceea ne-am stabilit \u003Ca\u003Ereguli de orientare stricte\u003C/a\u003E pentru a identifica anun\u021Burile acceptabile, care sunt permise de c\u0103tre set\u0103rile implicite. Dac\u0103 totu\u0219i dori\u021Bi s\u0103 bloca toat\u0103 publicitatea, pute\u021Bi \u003Ca\u003Edezactiva\u003C/a\u003E aceste permisiuni \u00EEn c\u00E2teva secunde."
+   },
+   "firstRun_acceptableAdsHeadline": {
+      "message": "Reclamele enervante vor fi blocate acum"
+   },
+   "firstRun_contributor_credits": {
+      "message": "Contributori"
+   },
+   "firstRun_dataCorruptionWarning": {
+      "message": "Aceast\u0103 pagin\u0103 continu\u0103 s\u0103 apar\u0103 \u0219i dup\u0103 terminarea instal\u0103rii? \u003Ca\u003EFace\u021Bi clic aici!\u003C/a\u003E"
+   },
+   "firstRun_donate": {
+      "message": "Dona\u0163ii"
+   },
+   "firstRun_donate_label": {
+      "message": "Ajuta\u021Bi proiectul"
+   },
+   "firstRun_feature_malware": {
+      "message": "Blocare software r\u0103u inten\u0163ionat"
+   },
+   "firstRun_feature_malware_description": {
+      "message": "Securizarea navig\u0103rii prin blocarea domeniilor r\u0103u-inten\u021Bionate cunoscute."
+   },
+   "firstRun_feature_show_expanded": {
+      "message": "Activeaz\u0103 func\u021Bionalit\u0103\u021Bi"
+   },
+   "firstRun_feature_show_overview": {
+      "message": "Arat\u0103 o privire de ansamblu"
+   },
+   "firstRun_feature_social": {
+      "message": "Ascundere butoane Social Media"
+   },
+   "firstRun_feature_social_description": {
+      "message": "Eliminare automat\u0103 a butoanelor mass-media social\u0103, cum ar fi Facebook, care apar pe paginile de web pentru a urm\u0103ri \u0219i \u00EEnregistra comportamentul dumneavoastr\u0103."
+   },
+   "firstRun_feature_tracking": {
+      "message": "Dezactivare urm\u0103rire"
+   },
+   "firstRun_feature_tracking_description": {
+      "message": "Navigare f\u0103r\u0103 urme prin eliminarea indiciilor plantate de c\u0103tre companiile publicitare care urm\u0103resc \u0219i \u00EEnregistreaz\u0103 comportamentul dumneavoastr\u0103."
+   },
+   "firstRun_features": {
+      "message": "Adblock Plus poate face mai mult dec\u00E2t s\u0103 blocheze publicitatea"
+   },
+   "firstRun_share": {
+      "message": "Spune\u021Bi prietenilor dumneavoastr\u0103"
+   },
+   "firstRun_share_headline": {
+      "message": "\u003Ca\u003EAjuta\u021Bi-ne\u003C/a\u003E \u00EEn a \u00EEmbun\u0103t\u0103\u021Bi web-ul"
+   },
+   "firstRun_title": {
+      "message": "Adblock Plus a fost instalat"
+   },
+   "firstRun_toggle_off": {
+      "message": "OFF"
+   },
+   "firstRun_toggle_on": {
+      "message": "ON"
+   },
+   "found_a_bug": {
+      "message": "Ai gasit o eroare? Dore\u0219ti s\u0103 traduci Adblock Plus \u00EEn limba ta?  \u003Ca\u003Escrie o cerere aici\u003C/a\u003E."
+   },
+   "general": {
+      "message": "General"
+   },
+   "global_remove_subscription_warning": {
+      "message": "Sigur dori\u0163i s\u0103 \u00EEndep\u0103rta\u0163i aceast\u0103 subscriere?"
+   },
+   "global_subscription_invalid_location": {
+      "message": "Loca\u0163ia pentru filtre nu este valid\u0103"
+   },
+   "last_updated_at": {
+      "message": "Ultima actualizare la ora $time$ pe data $date$",
+      "placeholders": {
+         "date": {
+            "content": "$2"
+         },
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "last_updated_at_today": {
+      "message": "Ultima actualizare la ora $time$ azi",
+      "placeholders": {
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "name": {
+      "message": "Adblock Plus"
+   },
+   "options": {
+      "message": "Op\u0163iuni Adblock Plus"
+   },
+   "out_of_date_lists": {
+      "message": "Listele vechi sunt actualizate periodic."
+   },
+   "overlay_hideplaceholders_label": {
+      "message": "Ascunde indicatoarele elementelor blocate"
+   },
+   "remove_button": {
+      "message": "\u0218terge filtrul eviden\u0163iat"
+   },
+   "show_block_element_menu": {
+      "message": "Arat\u0103 'Blocheaz\u0103 Elementul' in meniul asociat unui obiect cu clic dreapta"
+   },
+   "show_icon": {
+      "message": "Afi\u015Feaz\u0103 sigla \u00EEn bara de adrese"
+   },
+   "stats_label_page": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E pe aceast\u0103 pagin\u0103",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_label_total": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E \u00EEn total",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_over": {
+      "message": "peste $number$",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_download": {
+      "message": "Descarca Adblock Plus"
+   },
+   "stats_share_label_fb": {
+      "message": "Share pe Facebook"
+   },
+   "stats_share_label_gplus": {
+      "message": "Share pe Google+"
+   },
+   "stats_share_label_twitter": {
+      "message": "Share pe Twitter"
+   },
+   "stats_share_message": {
+      "message": "Am blocat $number$ reclame cu ABP.",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_title": {
+      "message": "Op\u0163iuni de share"
+   },
+   "stats_title": {
+      "message": "Reclame blocate:"
+   },
+   "subscriptionSelection_location_label": {
+      "message": "Loca\u0163ia listei de filtre:"
+   },
+   "subscriptionSelection_subscriptionSelector_label": {
+      "message": "Alege\u021Bi un set de filtre din list\u0103:"
+   },
+   "subscriptionSelection_title_label": {
+      "message": "Titlul abonamentului:"
+   },
+   "update_now": {
+      "message": "Actualizeaz\u0103 acum"
+   },
+   "whitelisted_domains": {
+      "message": "Domenii permise"
+   }
+}

@@ -1,0 +1,247 @@
+{
+   "arrow": {
+      "description": "Arrow title",
+      "message": "\u77E2\u5370"
+   },
+   "blur": {
+      "description": "Blur title",
+      "message": "\u307C\u304B\u3057"
+   },
+   "cancelBtn": {
+      "description": "Cancel button",
+      "message": "\u30AD\u30E3\u30F3\u30BB\u30EB"
+   },
+   "capture_hint": {
+      "description": "Capturing hint",
+      "message": "$CODE1$\u30AD\u30E3\u30D7\u30C1\u30E3\u30FC\u4E2D",
+      "placeholders": {
+         "code1": {
+            "content": "\u003Cspan\u003E\u003C/span\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         }
+      }
+   },
+   "cemail": {
+      "message": "\u63D0\u6848\u306F\u3053\u3061\u3089\u307E\u3067 screenshot@diigo.com"
+   },
+   "color": {
+      "description": "Color Picker title",
+      "message": "\u8272\u9078\u629E"
+   },
+   "crop": {
+      "description": "Crop title",
+      "message": "\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u306E\u4E00\u90E8\u3092\u5207\u308A\u53D6\u308B"
+   },
+   "cropTip": {
+      "description": "Crop Tooltip",
+      "message": "\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u30C9\u30E9\u30C3\u30B0\u3067\u9078\u3093\u3067\u304F\u3060\u3055\u3044\u3002"
+   },
+   "diigo_web_highlighter": {
+      "message": "Web Highlighter - Another Extension by Diigo"
+   },
+   "disableEntireTitle": {
+      "description": "Disable Entire Title",
+      "message": "\u30ED\u30FC\u30AB\u30EB\u30DA\u30FC\u30B8\u3084\u62E1\u5F35\u30AE\u30E3\u30E9\u30EA\u30FC\u3067\u306F\u52D5\u4F5C\u3057\u307E\u305B\u3093\u3002"
+   },
+   "doneBtn": {
+      "description": "Done button",
+      "message": "Crop"
+   },
+   "editTitle": {
+      "description": "Annotate page title",
+      "message": "\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u306B\u6CE8\u91C8\u3092\u3064\u3051\u308B\u3002"
+   },
+   "ellipse": {
+      "description": "Ellipse title",
+      "message": "\u6955\u5186"
+   },
+   "entire": {
+      "description": "Popup menu",
+      "message": "$CODE1$Capture Entire Page",
+      "placeholders": {
+         "code1": {
+            "content": "\u003Cspan\u003E\u003C/span\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         }
+      }
+   },
+   "entire_title": {
+      "message": ""
+   },
+   "extDesc": {
+      "description": "Extension description.",
+      "message": "\u30DA\u30FC\u30B8\u5168\u4F53\u3084\u4E00\u90E8\u3092\u30AD\u30E3\u30D7\u30C1\u30E3\u30FC\u3057\u3001\u5404\u7A2E\u306E\u56F3\u5F62\u3084\u6587\u5B57\u3067\u6CE8\u91C8\u3092\u3064\u3051\u3001\u30EF\u30F3\u30AF\u30EA\u30C3\u30AF\u3067\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3057\u3066\u5171\u6709\u3067\u304D\u307E\u3059\u3002"
+   },
+   "extName": {
+      "description": "Extension name.",
+      "message": "Awesome Screenshot: \u30AD\u30E3\u30D7\u30C1\u30E3\u30FC\u3068\u6CE8\u91C8"
+   },
+   "freeline": {
+      "description": "Free Line title",
+      "message": "\u81EA\u7531\u66F2\u7DDA"
+   },
+   "image_loader": {
+      "description": "Preparing loader",
+      "message": "\u753B\u50CF\u306E\u6E96\u5099\u4E2D"
+   },
+   "line": {
+      "description": "Line title",
+      "message": "\u7DDA"
+   },
+   "logo": {
+      "description": "Awesome Screenshot logo title",
+      "message": "Awesome Screenshot"
+   },
+   "rating": {
+      "message": "\u3069\u3046\u304B\u826F\u3044\uFF15\u3064\u661F\u8A55\u4FA1\u3067\u3001\u6211\u3005\u3092\u30B5\u30DD\u30FC\u30C8\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+   },
+   "reEdit": {
+      "description": "Re-edit link takes user back to re-edit the screenshot",
+      "message": "\u3053\u306E\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u3092\u518D\u7DE8\u96C6"
+   },
+   "rectangle": {
+      "description": "Rectangle title",
+      "message": "\u9577\u65B9\u5F62"
+   },
+   "saveBtn": {
+      "description": "Save button",
+      "message": "\u5B8C\u4E86"
+   },
+   "save_button": {
+      "message": "Save"
+   },
+   "save_congrats": {
+      "description": "Congratulations",
+      "message": "\u304A\u3081\u3067\u3068\u3046\uFF01\u30B9\u30AF\u30EA\u30FC\u30F3\u30B7\u30E7\u30C3\u30C8\u304C\u51FA\u6765\u4E0A\u304C\u308A\u307E\u3057\u305F\u3002"
+   },
+   "save_howto": {
+      "description": "How to header",
+      "message": "\u4F7F\u3044\u65B9"
+   },
+   "save_local": {
+      "description": "Option 1",
+      "message": "\u30AA\u30D7\u30B7\u30E7\u30F31\uFF1A\u30A4\u30E1\u30FC\u30B8\u3092\u4FDD\u5B58"
+   },
+   "savedShareDesc": {
+      "description": "Option 3 details description",
+      "message": "$CODE1$Upload$CODE2$Uploading$CODE3$Cancel$CODE4$Fail to upload to awesomescreenshot.com. You can crop the image to a smaller size and $CODE5$try it again$CODE6$. Shoot an email to $CODE7$screenshot@diigo.com$CODE8$if you still experience problems. $CODE8_5$Twitter$CODE9$Facebook$CODE10$Buzz$CODE11$Gmail$CODE12$Yahoo mail$CODE13$Hotmail$CODE14$Image Link (share via MSN, GTalk, etc.)$CODE15$Link Copied!$CODE16$",
+      "placeholders": {
+         "code1": {
+            "content": "\u003Cp\u003E\u003Ca id='upload' href='javascript:void(0)'\u003E\u003Cspan\u003E\u003C/span\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code10": {
+            "content": "\u003C/a\u003E\u003Ca id='buzz' href='http://www.google.com/buzz/post?' target='_blank'\u003E\u003Cspan\u003E\u003C/span\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code11": {
+            "content": "\u003C/a\u003E\u003C/div\u003E\u003Cdiv id='email-link'\u003E\u003Ca id='gmail' href='https://mail.google.com/mail/?view=cm&tf=0&fs=1&body=' target='_blank'\u003E\u003Cspan\u003E\u003C/span\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code12": {
+            "content": "\u003C/a\u003E\u003Ca id='yahoo' href='http://compose.mail.yahoo.com/' target='_blank'\u003E\u003Cspan\u003E\u003C/span\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code13": {
+            "content": "\u003C/a\u003E\u003Ca id='hotmail' href='http://www.hotmail.msn.com/secure/start?action=compose&body=' target='_blank'\u003E\u003Cspan\u003E\u003C/span\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code14": {
+            "content": "\u003C/a\u003E\u003C/div\u003E\u003Cdiv id='share-link'\u003E\u003Cp\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code15": {
+            "content": "\u003C/p\u003E\u003Cinput type='text' /\u003E\u003Cspan\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code16": {
+            "content": "\u003C/span\u003E\u003C/div\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code2": {
+            "content": "\u003C/a\u003E to \u003Ca href='http://awesomescreenshot.com' target='_blank' class='lightLink'\u003Eawesomescreenshot.com\u003C/a\u003E\u003C/p\u003E\u003Cdiv id='loader'\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code3": {
+            "content": "\u003Ca id='cancel_upload' href='javascript:void(0)'\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code4": {
+            "content": "\u003C/a\u003E\u003C/div\u003E\u003Cdiv id='error'\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code5": {
+            "content": "\u003Ca href='javascript:void(0)' id='retry'\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code6": {
+            "content": "\u003C/a\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code7": {
+            "content": "\u003Ca id='upload_error_contact' href='mailto:screenshot@diigo.com?subject=Awesome Screenshot (Chrome) Upload Error'\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code8": {
+            "content": "\u003C/a\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code8_5": {
+            "content": "\u003C/div\u003E\u003Cdiv id='share-button'\u003E\u003Ca id='twitter' href='http://twitter.com/home?status=' target='_blank'\u003E\u003Cspan\u003E\u003C/span\u003E"
+         },
+         "code9": {
+            "content": "\u003C/a\u003E\u003Ca id='facebook' href='http://www.facebook.com/sharer.php?u=' target='_blank'\u003E\u003Cspan\u003E\u003C/span\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         }
+      }
+   },
+   "scriptOff": {
+      "description": "Capturing hint",
+      "message": "Script not loaded, $CODE1$reload$CODE2$",
+      "placeholders": {
+         "code1": {
+            "content": "\u003Ca href='javascript:void(0)'\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         },
+         "code2": {
+            "content": "\u003C/a\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         }
+      }
+   },
+   "share": {
+      "message": "Option 2: Upload it to get a shareable link"
+   },
+   "text": {
+      "description": "Text title",
+      "message": "\u30C6\u30AD\u30B9\u30C8"
+   },
+   "tip1": {
+      "description": "Screen captured, ready to",
+      "message": "\u753B\u9762\u3067\u3001\u6E96\u5099\u304C\u3067\u304D\u30AD\u30E3\u30D7\u30C1\u30E3"
+   },
+   "tip2": {
+      "description": "and Annotate ",
+      "message": "\u305D\u3057\u3066\u3001\u6CE8\u91C8"
+   },
+   "tweet": {
+      "message": "Please Tweet about Awesome Screenshot"
+   },
+   "undo": {
+      "description": "Undo title",
+      "message": "\u5143\u306B\u623B\u3059"
+   },
+   "visible": {
+      "description": "Popup menu",
+      "message": "$CODE1$Capture Visible Part of Page",
+      "placeholders": {
+         "code1": {
+            "content": "\u003Cspan\u003E\u003C/span\u003E",
+            "example": "\u003Ca\u003E\u003C/a\u003E"
+         }
+      }
+   },
+   "visible_title": {
+      "message": ""
+   }
+}

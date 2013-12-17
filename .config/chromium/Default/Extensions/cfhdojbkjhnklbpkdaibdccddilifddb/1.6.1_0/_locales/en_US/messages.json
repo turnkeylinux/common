@@ -1,0 +1,290 @@
+{
+   "add": {
+      "description": "This is the label for the 'Add' buttons.",
+      "message": "Add"
+   },
+   "add_domain_button": {
+      "message": "Add domain"
+   },
+   "add_filter_button": {
+      "message": "Add filter"
+   },
+   "add_filters_msg": {
+      "message": "Add filter(s)?"
+   },
+   "add_your_own_filters": {
+      "message": "Add your own filters"
+   },
+   "apply_changes": {
+      "message": "Apply changes"
+   },
+   "block_element": {
+      "description": "Label for 'Block Element' context menu item",
+      "message": "Block Element"
+   },
+   "cancel": {
+      "description": "Cancel button label",
+      "message": "Cancel"
+   },
+   "clickhide_instructions": {
+      "message": "After closing this popup, click (or right-click) an element on the page."
+   },
+   "description": {
+      "message": "The free adblock tool for Chrome: Blocks annoying video ads on YouTube, Facebook ads, banners and much more."
+   },
+   "disable_inline": {
+      "message": "Disable inline text ads"
+   },
+   "disabled_for_these_domains": {
+      "message": "Adblock Plus is disabled for the domains listed below. You can add a domain either via the Adblock Plus icon in the address bar or by typing the domain (not a URL) in the box and clicking the \"Add domain\" button."
+   },
+   "easy_create_filter": {
+      "description": "Button label in popup balloon",
+      "message": "Easy create filter"
+   },
+   "edit_filters_raw": {
+      "message": "Edit filters as raw text"
+   },
+   "enable_only_the": {
+      "message": "Enable only the filter lists you need. Too many can make Chrome unresponsive."
+   },
+   "enabled_for_site": {
+      "description": "Popup balloon checkbox label",
+      "message": "Enabled for this site"
+   },
+   "filter_lists": {
+      "description": "This is a tab heading.",
+      "message": "Filter lists"
+   },
+   "filter_must_follow_syntax": {
+      "message": "Your filter must follow the \u003Ca\u003EAdblock Plus filter syntax\u003C/a\u003E."
+   },
+   "filters_acceptableAds2_label": {
+      "message": "Allow some non-intrusive advertising"
+   },
+   "filters_addSubscriptionAdd_label": {
+      "message": "Add"
+   },
+   "filters_addSubscriptionOther_label": {
+      "message": "Add a different subscription"
+   },
+   "filters_addSubscription_label": {
+      "message": "Add filter subscription"
+   },
+   "filters_readMore_label": {
+      "message": "Read more"
+   },
+   "filters_subscription_delete_label": {
+      "message": "Delete"
+   },
+   "filters_subscription_enabled_label": {
+      "message": "Enabled"
+   },
+   "filters_subscription_lastDownload_checksumMismatch": {
+      "message": "Failed, checksum mismatch"
+   },
+   "filters_subscription_lastDownload_connectionError": {
+      "message": "Failed, download failure"
+   },
+   "filters_subscription_lastDownload_inProgress": {
+      "message": "Downloading\u2026"
+   },
+   "filters_subscription_lastDownload_invalidData": {
+      "message": "Failed, not a valid filters list"
+   },
+   "filters_subscription_lastDownload_invalidURL": {
+      "message": "Failed, not a valid address"
+   },
+   "filters_viewList_label": {
+      "message": "View list"
+   },
+   "firstRun_acceptableAdsExplanation": {
+      "message": "We'd like to encourage websites to use straightforward, unobtrusive advertising. That's why we've established \u003Ca\u003Estrict guidelines\u003C/a\u003E to identify acceptable ads, which are shown under default settings. If you still want to block every ad you can \u003Ca\u003Edisable\u003C/a\u003E this in a few seconds."
+   },
+   "firstRun_acceptableAdsHeadline": {
+      "message": "Annoying ads will now be blocked"
+   },
+   "firstRun_contributor_credits": {
+      "message": "Contributor Credits"
+   },
+   "firstRun_dataCorruptionWarning": {
+      "message": "Does this page keep showing up? \u003Ca\u003EClick here!\u003C/a\u003E"
+   },
+   "firstRun_donate": {
+      "message": "donate"
+   },
+   "firstRun_donate_label": {
+      "message": "Support our project"
+   },
+   "firstRun_feature_malware": {
+      "message": "Malware Blocking"
+   },
+   "firstRun_feature_malware_description": {
+      "message": "Make your browsing more secure by blocking known malware domains."
+   },
+   "firstRun_feature_show_expanded": {
+      "message": "activate features"
+   },
+   "firstRun_feature_show_overview": {
+      "message": "show overview"
+   },
+   "firstRun_feature_social": {
+      "message": "Remove Social Media Buttons"
+   },
+   "firstRun_feature_social_description": {
+      "message": "Automatically rid your browsing experience of social media buttons, such as the Facebook Like, which appear on web pages and track your behavior."
+   },
+   "firstRun_feature_tracking": {
+      "message": "Disable Tracking"
+   },
+   "firstRun_feature_tracking_description": {
+      "message": "Browse privately by disabling tracking - hiding your tracks from ad companies that would track your every move."
+   },
+   "firstRun_features": {
+      "message": "Adblock Plus can do more than block ads"
+   },
+   "firstRun_share": {
+      "message": "Tell your friends"
+   },
+   "firstRun_share_headline": {
+      "message": "\u003Ca\u003EGive us a hand\u003C/a\u003E in making the web a better place"
+   },
+   "firstRun_title": {
+      "message": "Adblock Plus has been installed"
+   },
+   "firstRun_toggle_off": {
+      "message": "OFF"
+   },
+   "firstRun_toggle_on": {
+      "message": "ON"
+   },
+   "found_a_bug": {
+      "message": "Found a bug? Want to translate Adblock Plus into your language? Please \u003Ca\u003Efile a request here\u003C/a\u003E."
+   },
+   "general": {
+      "description": "This is a tab heading.",
+      "message": "General"
+   },
+   "global_remove_subscription_warning": {
+      "message": "Do you really want to remove this subscription?"
+   },
+   "global_subscription_invalid_location": {
+      "message": "Filter list location is neither a valid URL nor a valid file name."
+   },
+   "last_updated_at": {
+      "description": "e.g. Last updated at 3:00pm on Apr 1, 2011",
+      "message": "Last updated at $time$ on $date$",
+      "placeholders": {
+         "date": {
+            "content": "$2"
+         },
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "last_updated_at_today": {
+      "description": "e.g. Last updated at 3:00pm today",
+      "message": "Last updated at $time$ today",
+      "placeholders": {
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "name": {
+      "message": "Adblock Plus"
+   },
+   "options": {
+      "message": "Adblock Plus Options"
+   },
+   "out_of_date_lists": {
+      "message": "Out-of-date lists are updated periodically."
+   },
+   "overlay_hideplaceholders_label": {
+      "message": "Hide placeholders of blocked elements"
+   },
+   "remove_button": {
+      "description": "This is the label for the 'Remove selected' buttons.",
+      "message": "Remove selected"
+   },
+   "show_block_element_menu": {
+      "message": "Show 'Block Element' right-click menu item"
+   },
+   "show_icon": {
+      "message": "Show icon in address bar"
+   },
+   "stats_label_page": {
+      "description": "This shows the number of blocked requests on a specific page in the popup.",
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E on this page",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_label_total": {
+      "description": "This shows the total number of blocked requests in the popup.",
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E in total",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_over": {
+      "description": "For some numbers the stats share message will say 'I blocked over 123 ads' instead of 'I blocked 123 ads'. This is a reference to the 'over 9000' meme. This string can be translated simply with '$number$' if that meme isn't known to the speakers of the language or if the resulting sentence would sound weird otherwise.",
+      "message": "over $number$",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_download": {
+      "description": "Label for link to adblockplus.org that is attached when the user wants to share the stats on Facebook.",
+      "message": "Download Adblock Plus"
+   },
+   "stats_share_label_fb": {
+      "message": "Share on Facebook"
+   },
+   "stats_share_label_gplus": {
+      "message": "Share on Google+"
+   },
+   "stats_share_label_twitter": {
+      "message": "Share on Twitter"
+   },
+   "stats_share_message": {
+      "description": "This message will be posted to social networks if the user decides to share the stats.",
+      "message": "I blocked $number$ ads and trackers thanks to Adblock Plus.",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_title": {
+      "description": "Label for the action in the popup which presents the user with all sharing options.",
+      "message": "Share this"
+   },
+   "stats_title": {
+      "description": "Title for the stats section in the popup.",
+      "message": "Blocked ads:"
+   },
+   "subscriptionSelection_location_label": {
+      "message": "Filter list location:"
+   },
+   "subscriptionSelection_subscriptionSelector_label": {
+      "message": "Please choose a filter subscription from the list:"
+   },
+   "subscriptionSelection_title_label": {
+      "message": "Subscription title:"
+   },
+   "update_now": {
+      "message": "Update now"
+   },
+   "whitelisted_domains": {
+      "description": "This is a tab heading.",
+      "message": "Whitelisted domains"
+   }
+}
