@@ -14,7 +14,7 @@
          "time_period": 4
       },
       "clear_lso_data_enabled": false,
-      "custom_chrome_frame": true,
+      "custom_chrome_frame": false,
       "last_clear_browsing_data_time": "13031657728877529",
       "last_known_google_url": "https://www.google.com/",
       "last_prompted_google_url": "https://www.google.com/",
