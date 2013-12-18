@@ -35,7 +35,7 @@
 
 
 
-#x
+#xkill
 "xkill"
     m:0xc + c:9
     Control+Alt + Escape 
@@ -195,10 +195,25 @@
     m:0x4 + c:114
     Control + Right 
 
+#playlist-advance2
+"audtool playlist-advance"
+    m:0x4 + c:85
+    Control + KP_Right 
+
 #playlist-reverse
 "audtool playlist-reverse"
     m:0x4 + c:113
     Control + Left 
+
+#playlist-reverse2
+"audtool playlist-reverse"
+    m:0x4 + c:83
+    Control + KP_Left 
+
+#playback-playpause
+"audtool playback-playpause"
+    m:0x4 + c:84
+    Control + KP_Begin 
 
 #root terminal
 "sudo x-terminal-emulator"
@@ -227,8 +242,8 @@
 
 #audacious
 "wmctrl -a "audacious" || audacious"
-    m:0x5 + c:58
-    Control+Shift + m 
+    m:0x5 + c:38
+    Control+Shift + a 
 
 #lockscreen
 "xscreensaver-command --lock"
