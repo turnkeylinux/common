@@ -246,7 +246,7 @@
     Control+Shift + a 
 
 #lockscreen
-"xscreensaver-command --lock"
+"xscreensaver-command --lock || gnome-screensaver-command  --lock"
     m:0xc + c:46
     Control+Alt + l 
 
