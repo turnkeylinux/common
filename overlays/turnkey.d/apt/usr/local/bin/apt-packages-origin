@@ -1,0 +1,78 @@
+#!/usr/bin/python
+# Author: Liraz Siri <liraz@turnkeylinux.org>
+# list origin of packages
+
+import re
+import subprocess
+
+class Policy:
+    def __init__(self, name):
+        self.name = name
+        self.candidate = None
+        self.sources = {}
+
+def parse_policies(fh):
+    pp = None
+    curversion = None
+
+    for line in fh.readlines():
+        m = re.match(r'^(\S+?):$', line)
+        if m:
+            if pp: 
+                yield pp
+
+            pp = Policy(m.group(1))
+            continue
+
+        if not pp:
+            continue
+
+        m = re.match(r'^\s+Candidate: (.*)', line)
+        if m:
+            pp.candidate = m.group(1)
+            continue
+
+        if not pp.candidate:
+            continue
+
+        line = re.sub(r'^ \*\*\* ', ' ' * 5, line)
+        m = re.match(r' {5}(\d.*?) ', line)
+        if m:
+            curversion = m.group(1)
+            continue
+
+        if not curversion:
+            continue
+
+        m = re.match(r'^ {8}(?:\d+) (.*?) (.*) ', line)
+        if m:
+            if curversion not in pp.sources:
+                pp.sources[curversion] = m.groups()
+
+    yield pp
+
+def main():
+    proc = subprocess.Popen(args="apt-cache policy $(dpkg -l | grep ^ii | awk '{print $2}')", shell=True, bufsize=1, stdout=subprocess.PIPE)
+
+    rows = []
+    for pp in parse_policies(proc.stdout):
+        if pp.candidate in pp.sources:
+            address, component = pp.sources[pp.candidate]
+            rows.append([pp.name, address, component])
+
+        else:
+            rows.append([pp.name, "", ""])
+
+    proc.wait()
+
+    maxcols= [0] * 2
+
+    for col in range(2):
+        maxcols[col] = max([ len(row[col]) for row in rows ])
+
+    fmt = "%%-%ds  %%-%ds  %%s" % (maxcols[0], maxcols[1])
+    for row in rows:
+        print fmt % tuple(row)
+
+if __name__ == "__main__":
+    main()

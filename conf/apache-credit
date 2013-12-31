@@ -43,7 +43,7 @@ set ${CREDIT_ANCHORTEXT:=$(capitalize "$HOSTNAME") Appliance}
 
 BODY="
 <div id='turnkey-credit'>
-    <div>
+    <div style='clear: both;'>
     <a href='http://www.turnkeylinux.org/$HOSTNAME'>$CREDIT_ANCHORTEXT</a> -
     Powered by <a href='http://www.turnkeylinux.org'>TurnKey Linux</a>
     </div>
