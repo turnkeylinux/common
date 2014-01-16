@@ -1,0 +1,272 @@
+{
+   "add": {
+      "message": "Afegeix"
+   },
+   "add_domain_button": {
+      "message": "Afegeix un domini"
+   },
+   "add_filter_button": {
+      "message": "Afegeix un filtre"
+   },
+   "add_filters_msg": {
+      "message": "Voleu afegir els filtres?"
+   },
+   "add_your_own_filters": {
+      "message": "Afegiu els vostres filtres"
+   },
+   "apply_changes": {
+      "message": "Aplica els canvis"
+   },
+   "block_element": {
+      "message": "Bloca l'element"
+   },
+   "cancel": {
+      "message": "Cancel\u00B7la"
+   },
+   "clickhide_instructions": {
+      "message": "Despr\u00E9s de tancar aquesta finestra, cliqueu sobre un element de la p\u00E0gina."
+   },
+   "description": {
+      "message": "Bloqueja els anuncis dins dels v\u00EDdeos de YouTube, els anuncis de Facebook, els b\u00E0ners i molts m\u00E9s."
+   },
+   "disable_inline": {
+      "message": "Desactiva els anuncis de text en l\u00EDnia"
+   },
+   "disabled_for_these_domains": {
+      "message": "L'AdBlock Plus est\u00E0 desactivat als dominis de la llista de sota. Podeu afegir un domini clicant la icona d'AdBlock Plus de la barra d'adreces o b\u00E9 escrivint el domini (no la URL) al quadre de text i clicant \"Afegeix un domini\"."
+   },
+   "easy_create_filter": {
+      "message": "Crea un filtre f\u00E0cilment"
+   },
+   "edit_filters_raw": {
+      "message": "Edita els filtres com a text simple"
+   },
+   "enable_only_the": {
+      "message": "Activeu nom\u00E9s les llistes de filtres que necessiteu. Masses poden alentir el Chromium."
+   },
+   "enabled_for_site": {
+      "message": "Activat per a aquest lloc"
+   },
+   "filter_lists": {
+      "message": "Llistes de filtres"
+   },
+   "filter_must_follow_syntax": {
+      "message": "El vostre filtre ha de seguir la \u003Ca\u003ESintaxi de filtres d'Adblock Plus\u003C/a\u003E."
+   },
+   "filters_acceptableAds2_label": {
+      "message": "Permet la publicitat no intrusiva"
+   },
+   "filters_addSubscriptionAdd_label": {
+      "message": "Afegeix"
+   },
+   "filters_addSubscriptionOther_label": {
+      "message": "Afegeix altre subscripci\u00F3 de filtre"
+   },
+   "filters_addSubscription_label": {
+      "message": "Afegeix el filtre"
+   },
+   "filters_readMore_label": {
+      "message": "M\u00E9s informaci\u00F3"
+   },
+   "filters_subscription_delete_label": {
+      "message": "Suprimeix"
+   },
+   "filters_subscription_enabled_label": {
+      "message": "Activat"
+   },
+   "filters_subscription_lastDownload_checksumMismatch": {
+      "message": "Error en la suma de verificaci\u00F3"
+   },
+   "filters_subscription_lastDownload_connectionError": {
+      "message": "Error en la baixada"
+   },
+   "filters_subscription_lastDownload_inProgress": {
+      "message": "S'est\u00E0 baixant..."
+   },
+   "filters_subscription_lastDownload_invalidData": {
+      "message": "Error, no \u00E9s una llista v\u00E0lida de filtres"
+   },
+   "filters_subscription_lastDownload_invalidURL": {
+      "message": "Error, no \u00E9s una adre\u00E7a v\u00E0lida"
+   },
+   "filters_viewList_label": {
+      "message": "Mostra la llista"
+   },
+   "firstRun_acceptableAdsExplanation": {
+      "message": "Ens agradaria encoratjar els llocs web a utlitzar d'ara en endavant, publicitat no intrusiva. \u00C9s per aix\u00F2 que hem establert uns \u003Ca\u003Epatrons estrictes\u003C/a\u003E per identificar els anuncis acceptables, els quals es mostren a sota de les prefer\u00E8ncies per defecte. Si encara voleu bloquejar tots els anuncis podeu \u003Ca\u003Edesactivar\u003C/a\u003E aix\u00F2 en pocs segons."
+   },
+   "firstRun_acceptableAdsHeadline": {
+      "message": "Els anuncis molestos ara es bloquejaran"
+   },
+   "firstRun_contributor_credits": {
+      "message": "Cr\u00E0dits de contribuci\u00F3"
+   },
+   "firstRun_dataCorruptionWarning": {
+      "message": "Es segueix mostrant aquesta p\u00E0gina? \u003Ca\u003ECliqueu aqu\u00ED!\u003C/a\u003E"
+   },
+   "firstRun_donate": {
+      "message": "Feu un donatiu"
+   },
+   "firstRun_donate_label": {
+      "message": "Recolzeu el nostre projecte"
+   },
+   "firstRun_feature_malware": {
+      "message": "Bloqueig de programari malici\u00F3s"
+   },
+   "firstRun_feature_malware_description": {
+      "message": "Fer la vostra navegaci\u00F3 m\u00E9s segura bloquejant els dominis de malware coneguts."
+   },
+   "firstRun_feature_show_expanded": {
+      "message": "activa les caracter\u00EDstiques"
+   },
+   "firstRun_feature_show_overview": {
+      "message": "mostra la visi\u00F3 general"
+   },
+   "firstRun_feature_social": {
+      "message": "Eliminar els botons de xarxes socials"
+   },
+   "firstRun_feature_social_description": {
+      "message": "Eliminar autom\u00E0ticament de la vostra exper\u00E8ncia de navegaci\u00F3 els botons socials, com el m'agrada de Facebook, que apareixen a les p\u00E0gines web i segueixen el vostre comportament."
+   },
+   "firstRun_feature_tracking": {
+      "message": "Desactivar el seguiment"
+   },
+   "firstRun_feature_tracking_description": {
+      "message": "Navegar de forma privada mitjan\u00E7ant la desactivaci\u00F3 del seguiment \u2013 amagant el vostre rastre a les companyies de publicitat, que us seguirien encara m\u00E9s."
+   },
+   "firstRun_features": {
+      "message": "Adblock Plus pot fer molt m\u00E9s que bloquejar anuncis"
+   },
+   "firstRun_share": {
+      "message": "Digueu-ho a les vostres amistats"
+   },
+   "firstRun_share_headline": {
+      "message": "\u003Ca\u003ED\u00F3neu-nos un cop de m\u00E0\u003C/a\u003E al fer la xarxa un lloc millor"
+   },
+   "firstRun_title": {
+      "message": "S'ha instal\u00B7lat l'AdBlock Plus"
+   },
+   "firstRun_toggle_off": {
+      "message": "DESACTIVAT"
+   },
+   "firstRun_toggle_on": {
+      "message": "ACTIVAT"
+   },
+   "found_a_bug": {
+      "message": "Heu trobat un error? Voleu tradu\u00EFr l'AdBlock Plus al vostre idioma? Si us plau, \u003Ca\u003Edemaneu-ho aqu\u00ED\u003C/a\u003E."
+   },
+   "general": {
+      "message": "General"
+   },
+   "global_remove_subscription_warning": {
+      "message": "Realment desitges eliminar aquesta subscripci\u00F3?"
+   },
+   "global_subscription_invalid_location": {
+      "message": "La llista de filtres no \u00E9s una URL v\u00E0lida ni un nom de fitxer v\u00E0lid."
+   },
+   "last_updated_at": {
+      "message": "\u00DAltima actualitzaci\u00F3 a les $time$ a $date$",
+      "placeholders": {
+         "date": {
+            "content": "$2"
+         },
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "last_updated_at_today": {
+      "message": "\u00DAltima actualitzaci\u00F3 a les $time$ avui",
+      "placeholders": {
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "name": {
+      "message": "AdBlock Plus"
+   },
+   "options": {
+      "message": "Opcions de l'Adblock Plus"
+   },
+   "out_of_date_lists": {
+      "message": "Les llistes obsoletes s\u00F3n actualitzades peri\u00F2dicament."
+   },
+   "overlay_hideplaceholders_label": {
+      "message": "Amaga les localitzacions dels elements blocats"
+   },
+   "remove_button": {
+      "message": "Suprimeix els seleccionats"
+   },
+   "show_block_element_menu": {
+      "message": "Mostra la opci\u00F3 \"Bloca l'element\" com a \u00EDtem d'un men\u00FA contextual"
+   },
+   "show_icon": {
+      "message": "Mostra la icona a la barra d'adreces"
+   },
+   "stats_label_page": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E en aquesta p\u00E0gina",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_label_total": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E en total",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_over": {
+      "message": "$number$",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_download": {
+      "message": "Baixa l'Adblock Plus"
+   },
+   "stats_share_label_fb": {
+      "message": "Compartir a Facebook"
+   },
+   "stats_share_label_gplus": {
+      "message": "Compartir a Google+"
+   },
+   "stats_share_label_twitter": {
+      "message": "Compartir a Twitter"
+   },
+   "stats_share_message": {
+      "message": "He blocat $number$ anuncis i rastrejadors gr\u00E0cies a Adblock Plus.",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_title": {
+      "message": "Comparteix-ho"
+   },
+   "stats_title": {
+      "message": "Anuncis blocats:"
+   },
+   "subscriptionSelection_location_label": {
+      "message": "Filtra la localitzaci\u00F3 de la llista:"
+   },
+   "subscriptionSelection_subscriptionSelector_label": {
+      "message": "Si us plau tria una subscripci\u00F3 de filtre a la llista:"
+   },
+   "subscriptionSelection_title_label": {
+      "message": "T\u00EDtol de la subscripci\u00F3:"
+   },
+   "update_now": {
+      "message": "Actualitza ara"
+   },
+   "whitelisted_domains": {
+      "message": "Dominis autoritzats"
+   }
+}

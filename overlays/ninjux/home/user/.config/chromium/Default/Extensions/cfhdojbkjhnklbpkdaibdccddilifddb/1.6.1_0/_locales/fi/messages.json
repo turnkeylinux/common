@@ -1,0 +1,272 @@
+{
+   "add": {
+      "message": "Lis\u00E4\u00E4"
+   },
+   "add_domain_button": {
+      "message": "Lis\u00E4\u00E4 sivu"
+   },
+   "add_filter_button": {
+      "message": "Lis\u00E4\u00E4 suodatin"
+   },
+   "add_filters_msg": {
+      "message": "Lis\u00E4\u00E4 suodatin\\suodattimia?"
+   },
+   "add_your_own_filters": {
+      "message": "Lis\u00E4\u00E4 omia suodattimia"
+   },
+   "apply_changes": {
+      "message": "Hyv\u00E4ksy muutokset"
+   },
+   "block_element": {
+      "message": "Est\u00E4 Elementti"
+   },
+   "cancel": {
+      "message": "Peruuta"
+   },
+   "clickhide_instructions": {
+      "message": "T\u00E4m\u00E4n ikkunan sulkemisen j\u00E4lkeen klikkaa (tai oikea klikkaa) elementti\u00E4 jonka haluat est\u00E4\u00E4."
+   },
+   "description": {
+      "message": "Ilmainen Adblock ty\u00F6kalu Chromelle: Est\u00E4\u00E4 \u00E4rsytt\u00E4v\u00E4t Youtuben videomainokset, Facebookin mainokset, bannerit ja paljon muuta."
+   },
+   "disable_inline": {
+      "message": "Est\u00E4 tekstimainokset"
+   },
+   "disabled_for_these_domains": {
+      "message": "Adblock Plus ei est\u00E4 mainoksia sivuilla jotka ovat alla listattuna. Voit lis\u00E4t\u00E4 sivun joko Adblock Plus kuvakkeesta osoiterivilt\u00E4 tai kirjoittamalla sivun (ei osoitetta) laatikkoon ja klikkaamalla \"lis\u00E4\u00E4 sivu\" nappia."
+   },
+   "easy_create_filter": {
+      "message": "Helppo lis\u00E4\u00E4 suodatin"
+   },
+   "edit_filters_raw": {
+      "message": "Editoi suodattimia tekstimuodossa"
+   },
+   "enable_only_the": {
+      "message": "Valitse ainoastaan ne suodatinlistat joita tarvitset. Liian moni lista voi tehd\u00E4 Chromesta ep\u00E4vakaan."
+   },
+   "enabled_for_site": {
+      "message": "K\u00E4yt\u00F6ss\u00E4 t\u00E4ll\u00E4 sivulla"
+   },
+   "filter_lists": {
+      "message": "Suodatinlistat"
+   },
+   "filter_must_follow_syntax": {
+      "message": "Suodattimesi on noudatettava \u003Ca\u003EAdblock Plus suodattimen syntaksia\u003C/a\u003E."
+   },
+   "filters_acceptableAds2_label": {
+      "message": "Salli osa ei-h\u00E4iritsev\u00E4st\u00E4 mainonnasta"
+   },
+   "filters_addSubscriptionAdd_label": {
+      "message": "Lis\u00E4\u00E4"
+   },
+   "filters_addSubscriptionOther_label": {
+      "message": "Lis\u00E4\u00E4 jokin muu tilaus"
+   },
+   "filters_addSubscription_label": {
+      "message": "Lis\u00E4\u00E4 suodatintilaus"
+   },
+   "filters_readMore_label": {
+      "message": "Lue lis\u00E4\u00E4"
+   },
+   "filters_subscription_delete_label": {
+      "message": "Poista"
+   },
+   "filters_subscription_enabled_label": {
+      "message": "K\u00E4yt\u00F6ss\u00E4"
+   },
+   "filters_subscription_lastDownload_checksumMismatch": {
+      "message": "Ep\u00E4onnistui, tarkistussumma ei t\u00E4sm\u00E4\u00E4"
+   },
+   "filters_subscription_lastDownload_connectionError": {
+      "message": "Ep\u00E4onnistui, latausvirhe"
+   },
+   "filters_subscription_lastDownload_inProgress": {
+      "message": "Lataa..."
+   },
+   "filters_subscription_lastDownload_invalidData": {
+      "message": "Ep\u00E4onnistui, kelvoton suodatinlista"
+   },
+   "filters_subscription_lastDownload_invalidURL": {
+      "message": "Ep\u00E4onnistui, kelvoton osoite"
+   },
+   "filters_viewList_label": {
+      "message": "N\u00E4yt\u00E4 lista"
+   },
+   "firstRun_acceptableAdsExplanation": {
+      "message": "Kannustamme verkkosivuja k\u00E4ytt\u00E4m\u00E4\u00E4n suoraviivaista ei-h\u00E4iritsev\u00E4\u00E4 mainontaa. T\u00E4m\u00E4n vuoksi olemme luoneet \u003Ca\u003Etiukat ohjes\u00E4\u00E4nn\u00F6t\u003C/a\u003E hyv\u00E4ksytt\u00E4vien mainosten tunnistamiseksi, jotka n\u00E4ytet\u00E4\u00E4n oletusasetuksilla. Jos silti haluat est\u00E4\u00E4 kaikki mainokset, voit ottaa t\u00E4m\u00E4n \u003Ca\u003Epois k\u00E4yt\u00F6st\u00E4\u003C/a\u003E muutaman sekunnin kuluttua."
+   },
+   "firstRun_acceptableAdsHeadline": {
+      "message": "\u00C4rsytt\u00E4v\u00E4t mainokset estet\u00E4\u00E4n"
+   },
+   "firstRun_contributor_credits": {
+      "message": "Avustajat:"
+   },
+   "firstRun_dataCorruptionWarning": {
+      "message": "N\u00E4etk\u00F6 t\u00E4m\u00E4n sivun koko ajan? \u003Ca\u003ENapsauta t\u00E4t\u00E4!\u003C/a\u003E"
+   },
+   "firstRun_donate": {
+      "message": "lahjoita"
+   },
+   "firstRun_donate_label": {
+      "message": "Tue projektiamme"
+   },
+   "firstRun_feature_malware": {
+      "message": "Haittaohjelmien est\u00E4minen"
+   },
+   "firstRun_feature_malware_description": {
+      "message": "Tee selaimestasi turvallisempi est\u00E4m\u00E4ll\u00E4 tunnettuja haitallisia ohjelmia sis\u00E4lt\u00E4vi\u00E4 verkko-osoitteita."
+   },
+   "firstRun_feature_show_expanded": {
+      "message": "aktiiviset toiminnot"
+   },
+   "firstRun_feature_show_overview": {
+      "message": "n\u00E4yt\u00E4 yleiskatsaus"
+   },
+   "firstRun_feature_social": {
+      "message": "Sosiaalisen median painikkeiden poistaminen"
+   },
+   "firstRun_feature_social_description": {
+      "message": "Poistamalla automaattisesti sosiaalisen median painikkeet, kuten Facebookin tykk\u00E4\u00E4 -painikkeet, jotka ilmestyv\u00E4t useille sivustoille ja seuraavat  verkkok\u00E4ytt\u00E4ytymist\u00E4si."
+   },
+   "firstRun_feature_tracking": {
+      "message": "Seuraamisen est\u00E4minen"
+   },
+   "firstRun_feature_tracking_description": {
+      "message": "Selaa yksityisesti est\u00E4m\u00E4ll\u00E4 seuraaminen - piilottamalla j\u00E4lkesi mainosyhti\u00F6ilt\u00E4, jotka muuten seuraavat jokaista liikett\u00E4si."
+   },
+   "firstRun_features": {
+      "message": "Adblock Plus voi tehd\u00E4 paljon enemm\u00E4n, kuin vain est\u00E4\u00E4 mainoksia"
+   },
+   "firstRun_share": {
+      "message": "Kerro kavereillesi"
+   },
+   "firstRun_share_headline": {
+      "message": "\u003Ca\u003EAuta meit\u00E4\u003C/a\u003E tekem\u00E4\u00E4n verkosta parempi paikka"
+   },
+   "firstRun_title": {
+      "message": "Adblock Plus on asennettu"
+   },
+   "firstRun_toggle_off": {
+      "message": "OFF"
+   },
+   "firstRun_toggle_on": {
+      "message": "ON"
+   },
+   "found_a_bug": {
+      "message": "L\u00F6ysitk\u00F6 vian? Haluatko k\u00E4\u00E4nt\u00E4\u00E4 Adblock Plusin omalle kielellesi? Ole hyv\u00E4 ja \u003Ca\u003Ekirjoita hakemus t\u00E4\u00E4ll\u00E4\u003C/a\u003E."
+   },
+   "general": {
+      "message": "Yleiset"
+   },
+   "global_remove_subscription_warning": {
+      "message": "Haluatko varmasti poistaa t\u00E4m\u00E4n tilauksen?"
+   },
+   "global_subscription_invalid_location": {
+      "message": "Suodatinlistan sijainti on joko kelvoton osoite tai tiedoston nimi."
+   },
+   "last_updated_at": {
+      "message": "Viimeksi p\u00E4ivitetty $time$ $date$",
+      "placeholders": {
+         "date": {
+            "content": "$2"
+         },
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "last_updated_at_today": {
+      "message": "Viimeksi p\u00E4ivitetty $time$ t\u00E4n\u00E4\u00E4n",
+      "placeholders": {
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "name": {
+      "message": "Adblock Plus"
+   },
+   "options": {
+      "message": "Adblock Plus asetukset"
+   },
+   "out_of_date_lists": {
+      "message": "Vanhentuneet listat p\u00E4ivitet\u00E4\u00E4n s\u00E4\u00E4nn\u00F6llisesti."
+   },
+   "overlay_hideplaceholders_label": {
+      "message": "Piilota elementit, jotka sis\u00E4lt\u00E4v\u00E4t estettyj\u00E4 elementtej\u00E4"
+   },
+   "remove_button": {
+      "message": "Poista valitut"
+   },
+   "show_block_element_menu": {
+      "message": "N\u00E4yt\u00E4 'Est\u00E4 Elementti' oikea-klikkaus valikossa"
+   },
+   "show_icon": {
+      "message": "N\u00E4yt\u00E4 kuva osoiterivill\u00E4"
+   },
+   "stats_label_page": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E t\u00E4ll\u00E4 sivulla",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_label_total": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E yhteens\u00E4",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_over": {
+      "message": "yli $number$",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_download": {
+      "message": "Lataa Adblock Plus"
+   },
+   "stats_share_label_fb": {
+      "message": "Jaa Facebookissa"
+   },
+   "stats_share_label_gplus": {
+      "message": "Jaa Google +-palvelussa"
+   },
+   "stats_share_label_twitter": {
+      "message": "Jaa Twitteriss\u00E4"
+   },
+   "stats_share_message": {
+      "message": "Estin $number$ mainosta ja trackeri\u00E4 kiitos Adblock Plus;an.",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_title": {
+      "message": "Jaa t\u00E4m\u00E4"
+   },
+   "stats_title": {
+      "message": "Estetyt mainokset:"
+   },
+   "subscriptionSelection_location_label": {
+      "message": "Listan sijainti:"
+   },
+   "subscriptionSelection_subscriptionSelector_label": {
+      "message": "Valitse suodatintilaus listasta:"
+   },
+   "subscriptionSelection_title_label": {
+      "message": "Tilauksen nimi:"
+   },
+   "update_now": {
+      "message": "P\u00E4ivit\u00E4 nyt"
+   },
+   "whitelisted_domains": {
+      "message": "Sallitut sivut"
+   }
+}

@@ -1,0 +1,259 @@
+###########################
+# xbindkeys configuration #
+###########################
+#
+# Version: 0.1.3
+#
+# If you edit this, do not forget to uncomment any lines that you change.
+# The pound(#) symbol may be used anywhere for comments.
+#
+# A list of keys is in /usr/include/X11/keysym.h and in
+# /usr/include/X11/keysymdef.h 
+# The XK_ is not needed. 
+#
+# List of modifier (on my keyboard): 
+#   Control, Shift, Mod1 (Alt), Mod2 (NumLock), 
+#   Mod3 (CapsLock), Mod4, Mod5 (Scroll). 
+#
+# Another way to specifie a key is to use 'xev' and set the 
+# keycode with c:nnn or the modifier with m:nnn where nnn is 
+# the keycode or the state returned by xev 
+#
+# This file is created by xbindkey_config 
+# The structure is : 
+# # Remark 
+# "command" 
+# m:xxx + c:xxx 
+# Shift+... 
+
+
+
+
+#keystate_numlock = enable
+#keystate_scrolllock = enable
+#keystate_capslock = enable
+
+
+
+#xkill
+"xkill"
+    m:0xc + c:9
+    Control+Alt + Escape 
+
+#grid_put_left
+"~/.config/bin/quicktile left"
+    m:0x48 + c:43
+    Alt+Mod4 + h 
+
+#grid_put_right
+"~/.config/bin/quicktile right"
+    m:0x48 + c:46
+    Alt+Mod4 + l 
+
+#grid_put_top
+"~/.config/bin/quicktile top"
+    m:0x48 + c:45
+    Alt+Mod4 + k 
+
+#grid_put_bottom
+"~/.config/bin/quicktile bottom"
+    m:0x48 + c:44
+    Alt+Mod4 + j 
+
+#grid_put_topleft
+"~/.config/bin/quicktile top-left"
+    m:0x48 + c:30
+    Alt+Mod4 + u 
+
+#grid_put_topright
+"~/.config/bin/quicktile top-right"
+    m:0x48 + c:32
+    Alt+Mod4 + o 
+
+#grid_put_bottomleft
+"~/.config/bin/quicktile bottom-left"
+    m:0x48 + c:57
+    Alt+Mod4 + n 
+
+#grid_put_bottomright
+"~/.config/bin/quicktile bottom-right"
+    m:0x48 + c:59
+    Alt+Mod4 + comma 
+
+#grid_put_center
+"~/.config/bin/quicktile middle"
+    m:0x48 + c:65
+    Alt+Mod4 + space 
+
+#grid_put_left2
+"~/.config/bin/quicktile left"
+    m:0x48 + c:113
+    Alt+Mod4 + Left 
+
+#grid_put_right2
+"~/.config/bin/quicktile right"
+    m:0x48 + c:114
+    Alt+Mod4 + Right 
+
+#grid_put_top2
+"~/.config/bin/quicktile top"
+    m:0x48 + c:111
+    Alt+Mod4 + Up 
+
+#grid_put_bottom2
+"~/.config/bin/quicktile bottom"
+    m:0x48 + c:116
+    Alt+Mod4 + Down 
+
+#grid_put_bottom2
+"~/.config/bin/quicktile bottom"
+    m:0x48 + c:58
+    Alt+Mod4 + m 
+
+#grid_put_top2
+"~/.config/bin/quicktile top"
+    m:0x48 + c:31
+    Alt+Mod4 + i 
+
+#move-to-center
+"~/.config/bin/quicktile move-to-center"
+    m:0x41 + c:65
+    Shift+Mod4 + space 
+
+#move-to-center2
+"~/.config/bin/quicktile move-to-center"
+    m:0x41 + c:84
+    Shift+Mod4 + KP_Begin 
+
+#grid_put_left3
+"~/.config/bin/quicktile left"
+    m:0x48 + c:83
+    Alt+Mod4 + KP_Left 
+
+#grid_put_right3
+"~/.config/bin/quicktile right"
+    m:0x48 + c:85
+    Alt+Mod4 + KP_Right 
+
+#grid_put_top3
+"~/.config/bin/quicktile top"
+    m:0x48 + c:80
+    Alt+Mod4 + KP_Up 
+
+#grid_put_bottom3
+"~/.config/bin/quicktile bottom"
+    m:0x48 + c:88
+    Alt+Mod4 + KP_Down 
+
+#grid_put_topleft3
+"~/.config/bin/quicktile top-left"
+    m:0x48 + c:79
+    Alt+Mod4 + KP_Home 
+
+#grid_put_topright3
+"~/.config/bin/quicktile top-right"
+    m:0x48 + c:81
+    Alt+Mod4 + KP_Prior 
+
+#grid_put_bottomleft3
+"~/.config/bin/quicktile bottom-left"
+    m:0x48 + c:87
+    Alt+Mod4 + KP_End 
+
+#grid_put_bottomright3
+"~/.config/bin/quicktile bottom-right"
+    m:0x48 + c:89
+    Alt+Mod4 + KP_Next 
+
+#grid_put_center3
+"~/.config/bin/quicktile middle"
+    m:0x48 + c:84
+    Alt+Mod4 + KP_Begin 
+
+#monitor-switch
+"~/.config/bin/quicktile monitor-switch"
+    m:0x41 + c:22
+    Shift+Mod4 + BackSpace 
+
+#monitor-switch2
+"~/.config/bin/quicktile monitor-switch"
+    m:0x48 + c:22
+    Alt+Mod4 + BackSpace 
+
+#volume_up
+"amixer sset Master,0 7%+"
+    m:0x4 + c:111
+    Control + Up 
+
+#volume_down
+"amixer sset Master,0 7%-"
+    m:0x4 + c:116
+    Control + Down 
+
+#playlist-advance
+"audtool playlist-advance"
+    m:0x4 + c:114
+    Control + Right 
+
+#playlist-advance2
+"audtool playlist-advance"
+    m:0x4 + c:85
+    Control + KP_Right 
+
+#playlist-reverse
+"audtool playlist-reverse"
+    m:0x4 + c:113
+    Control + Left 
+
+#playlist-reverse2
+"audtool playlist-reverse"
+    m:0x4 + c:83
+    Control + KP_Left 
+
+#playback-playpause
+"audtool playback-playpause"
+    m:0x4 + c:84
+    Control + KP_Begin 
+
+#root terminal
+"sudo x-terminal-emulator"
+    m:0x5 + c:27
+    Control+Shift + r 
+
+#browser
+"x-www-browser"
+    m:0x5 + c:25
+    Control+Shift + w 
+
+#editor
+"gvim"
+    m:0x5 + c:26
+    Control+Shift + e 
+
+#nightmode
+"redshift -O 1000"
+    m:0x40 + c:57
+    Mod4 + n 
+
+#morningmode
+"redshift -x"
+    m:0x41 + c:57
+    Shift+Mod4 + n 
+
+#audacious
+"wmctrl -a "audacious" || audacious"
+    m:0x5 + c:38
+    Control+Shift + a 
+
+#lockscreen
+"xscreensaver-command --lock || gnome-screensaver-command  --lock"
+    m:0xc + c:46
+    Control+Alt + l 
+
+#ADD
+"~/.config/bin/toggle-add"
+    m:0x40 + c:38
+    Mod4 + a 
+
+#
+# End of xbindkeys configuration

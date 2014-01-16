@@ -1,0 +1,456 @@
+{
+   "apps": {
+      "shortcuts_have_been_created": true
+   },
+   "bookmark_bar": {
+      "show_on_all_tabs": false
+   },
+   "browser": {
+      "check_default_browser": false,
+      "clear_data": {
+         "form_data": true,
+         "hosted_apps_data": true,
+         "passwords": true,
+         "time_period": 4
+      },
+      "clear_lso_data_enabled": false,
+      "custom_chrome_frame": false,
+      "last_clear_browsing_data_time": "13031657728877529",
+      "last_known_google_url": "https://www.google.com/",
+      "last_prompted_google_url": "https://www.google.com/",
+      "pepper_flash_settings_enabled": false,
+      "show_home_button": true,
+      "window_placement": {
+         "bottom": 1080,
+         "left": 1970,
+         "maximized": false,
+         "right": 3250,
+         "top": 0,
+         "work_area_bottom": 1080,
+         "work_area_left": 1920,
+         "work_area_right": 3840,
+         "work_area_top": 0
+      }
+   },
+   "cloud_print": {
+      "email": ""
+   },
+   "countryid_at_install": 18242,
+   "default_apps_install_state": 3,
+   "default_search_provider": {
+      "alternate_urls": [ "{google:baseURL}#q={searchTerms}", "{google:baseURL}search#q={searchTerms}", "{google:baseURL}webhp#q={searchTerms}" ],
+      "enabled": true,
+      "encodings": "UTF-8",
+      "icon_url": "http://www.google.com/favicon.ico",
+      "id": "2",
+      "image_url": "{google:baseURL}searchbyimage/upload",
+      "image_url_post_params": "encoded_image={google:imageThumbnail},image_url={google:imageURL},sbisrc={google:imageSearchSource},original_width={google:imageOriginalWidth},original_height={google:imageOriginalHeight}",
+      "instant_url": "{google:baseURL}webhp?sourceid=chrome-instant&{google:RLZ}{google:instantEnabledParameter}{google:instantExtendedEnabledParameter}{google:ntpIsThemedParameter}{google:omniboxStartMarginParameter}ie={inputEncoding}",
+      "instant_url_post_params": "",
+      "keyword": "google.com",
+      "name": "Google",
+      "new_tab_url": "{google:baseURL}_/chrome/newtab?{google:RLZ}{google:instantExtendedEnabledParameter}{google:ntpIsThemedParameter}ie={inputEncoding}",
+      "prepopulate_id": "1",
+      "search_terms_replacement_key": "espv",
+      "search_url": "{google:baseURL}search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:bookmarkBarPinned}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}{google:omniboxStartMarginParameter}ie={inputEncoding}",
+      "search_url_post_params": "",
+      "suggest_url": "{google:baseSuggestURL}search?{google:searchFieldtrialParameter}client={google:suggestClient}&q={searchTerms}&{google:cursorPosition}{google:zeroPrefixUrl}{google:pageClassification}sugkey={google:suggestAPIKeyParameter}",
+      "suggest_url_post_params": ""
+   },
+   "distribution": {
+      "create_all_shortcuts": true,
+      "import_bookmarks": false,
+      "import_bookmarks_from_file": "/etc/chromium/initial_bookmarks.html",
+      "make_chrome_default": false,
+      "make_chrome_default_for_user": false,
+      "show_welcome_page": false,
+      "skip_first_run_ui": true
+   },
+   "dns_prefetching": {
+      "host_referral_list": [ 2 ],
+      "startup_list": [ 1, "https://easylist-downloads.adblockplus.org/", "https://ssl.google-analytics.com/" ]
+   },
+   "download": {
+      "directory_upgrade": true
+   },
+   "extensions": {
+      "alerts": {
+         "initialized": true
+      },
+      "autoupdate": {
+         "last_check": "13031305073229777",
+         "next_check": "13031668490448577"
+      },
+      "chrome_url_overrides": {
+         "bookmarks": [ "chrome-extension://eemcgdkfndhakfknompkggombfjjjeno/main.html" ]
+      },
+      "last_chrome_version": "31.0.1650.63",
+      "settings": {
+         "ahfgeienlihckogmohjhadlkjgocpleb": {
+            "active_permissions": {
+               "api": [ "management", "webstorePrivate" ]
+            },
+            "app_launcher_ordinal": "t",
+            "creation_flags": 1,
+            "from_bookmark": false,
+            "from_webstore": false,
+            "install_time": "13030736890266089",
+            "location": 5,
+            "manifest": {
+               "app": {
+                  "launch": {
+                     "web_url": "https://chrome.google.com/webstore"
+                  },
+                  "urls": [ "https://chrome.google.com/webstore" ]
+               },
+               "description": "Chrome Web Store",
+               "icons": {
+                  "128": "webstore_icon_128.png",
+                  "16": "webstore_icon_16.png"
+               },
+               "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCtl3tO0osjuzRsf6xtD2SKxPlTfuoy7AWoObysitBPvH5fE1NaAA1/2JkPWkVDhdLBWLaIBPYeXbzlHp3y4Vv/4XG+aN5qFE3z+1RU/NqkzVYHtIpVScf3DjTYtKVL66mzVGijSoAIwbFCC3LpGdaoe6Q1rSRDp76wR6jjFzsYwQIDAQAB",
+               "name": "Store",
+               "permissions": [ "webstorePrivate", "management" ],
+               "version": "0.2"
+            },
+            "page_ordinal": "n",
+            "path": "/usr/lib/chromium/resources/web_store",
+            "was_installed_by_default": false
+         },
+         "cfhdojbkjhnklbpkdaibdccddilifddb": {
+            "active_permissions": {
+               "api": [ "contextMenus", "notifications", "tabs", "unlimitedStorage", "webNavigation", "webRequest", "webRequestBlocking", "webRequestInternal" ],
+               "explicit_host": [ "http://*/*", "https://*/*" ],
+               "scriptable_host": [ "http://*/*", "https://*/*" ]
+            },
+            "creation_flags": 9,
+            "from_bookmark": false,
+            "from_webstore": true,
+            "granted_permissions": {
+               "api": [ "contextMenus", "notifications", "tabs", "unlimitedStorage", "webNavigation", "webRequest", "webRequestBlocking", "webRequestInternal" ],
+               "explicit_host": [ "http://*/*", "https://*/*" ],
+               "scriptable_host": [ "http://*/*", "https://*/*" ]
+            },
+            "initial_keybindings_set": true,
+            "install_time": "13031185094483922",
+            "lastpingday": "13031222403091731",
+            "location": 1,
+            "manifest": {
+               "background": {
+                  "scripts": [ "lib/compat.js", "lib/info.js", "lib/io.js", "lib/adblockplus.js", "lib/punycode.js", "lib/publicSuffixList.js", "lib/basedomain.js", "lib/sha1.js", "lib/jsbn.js", "lib/rsa.js", "webrequest.js", "popupBlocker.js", "background.js" ]
+               },
+               "content_scripts": [ {
+                  "all_frames": true,
+                  "js": [ "include.preload.js" ],
+                  "matches": [ "http://*/*", "https://*/*" ],
+                  "run_at": "document_start"
+               }, {
+                  "all_frames": true,
+                  "js": [ "include.postload.js" ],
+                  "matches": [ "http://*/*", "https://*/*" ],
+                  "run_at": "document_end"
+               } ],
+               "current_locale": "en_US",
+               "default_locale": "en_US",
+               "description": "The free adblock tool for Chrome: Blocks annoying video ads on YouTube, Facebook ads, banners and much more.",
+               "icons": {
+                  "128": "icons/abp-128.png",
+                  "16": "icons/abp-16.png",
+                  "19": "icons/abp-19.png",
+                  "32": "icons/abp-32.png",
+                  "48": "icons/abp-48.png"
+               },
+               "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCxGWIIBRUVzQIXITqE6+js1FA24fsZC58G0fxcO1Duwfps+9gip5tedTziErKEpeAQVkgasdT4kk+b6Lw27yp3oysAj6zD9j+j4W+EMArTXqMIc6SMYD7Z8bPcwPb3tC1MUxMSpO6oOVpFE23UhKe91SYnrK92nHI2cmsor5elXQIDAQAB",
+               "manifest_version": 2,
+               "minimum_chrome_version": "18.0",
+               "name": "Adblock Plus",
+               "options_page": "options.html",
+               "page_action": {
+                  "default_icon": "icons/abp-19.png",
+                  "default_popup": "popup.html",
+                  "default_title": "Adblock Plus"
+               },
+               "permissions": [ "tabs", "http://*/*", "https://*/*", "contextMenus", "webRequest", "webRequestBlocking", "webNavigation", "unlimitedStorage", "notifications" ],
+               "update_url": "https://clients2.google.com/service/update2/crx",
+               "version": "1.6.1",
+               "web_accessible_resources": [ "block.html" ]
+            },
+            "path": "cfhdojbkjhnklbpkdaibdccddilifddb/1.6.1_0",
+            "state": 1,
+            "was_installed_by_default": false
+         },
+         "cpngackimfmofbokmjmljamhdncknpmg": {
+            "has_declarative_rules": false
+         },
+         "dbepggeogbaibhgnhhndojpepiihcmeb": {
+            "active_permissions": {
+               "api": [ "bookmarks", "clipboardRead", "history", "tabs" ],
+               "explicit_host": [ "\u003Call_urls\u003E", "chrome://favicon/*" ],
+               "scriptable_host": [ "\u003Call_urls\u003E" ]
+            },
+            "creation_flags": 9,
+            "from_bookmark": false,
+            "from_webstore": true,
+            "granted_permissions": {
+               "api": [ "bookmarks", "clipboardRead", "history", "tabs" ],
+               "explicit_host": [ "\u003Call_urls\u003E", "chrome://favicon/*" ],
+               "scriptable_host": [ "\u003Call_urls\u003E" ]
+            },
+            "initial_keybindings_set": true,
+            "install_time": "13031047809553198",
+            "lastpingday": "13031222403091731",
+            "location": 1,
+            "manifest": {
+               "background": {
+                  "scripts": [ "lib/utils.js", "background_scripts/commands.js", "lib/clipboard.js", "background_scripts/settings.js", "background_scripts/completion.js", "background_scripts/marks.js", "background_scripts/main.js" ]
+               },
+               "browser_action": {
+                  "default_icon": "icons/browser_action_disabled.png",
+                  "default_popup": "pages/popup.html"
+               },
+               "content_scripts": [ {
+                  "all_frames": true,
+                  "css": [ "content_scripts/vimium.css" ],
+                  "js": [ "lib/utils.js", "lib/keyboard_utils.js", "lib/dom_utils.js", "lib/handler_stack.js", "lib/clipboard.js", "content_scripts/link_hints.js", "content_scripts/vomnibar.js", "content_scripts/scroller.js", "content_scripts/marks.js", "content_scripts/vimium_frontend.js" ],
+                  "matches": [ "\u003Call_urls\u003E" ],
+                  "run_at": "document_start"
+               } ],
+               "description": "The Hacker's Browser. Vimium provides keyboard shortcuts for navigation and control in the spirit of Vim.",
+               "icons": {
+                  "128": "icons/icon128.png",
+                  "16": "icons/icon16.png",
+                  "48": "icons/icon48.png"
+               },
+               "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCavizCZ9EnBGbtcRmMErcaxD2WUHJ9ME8IYGQhUBlFgIvchJjAO8koyak3AM95dqu3sOLdtIYD+75T82V1Wl5fLnHAeij2/IWL2VViTHeZhXZl1+rD9sRDaEYd7aZetpJ29+XXfhVphKArCCfwbYCtoJhTIr6S6DYsXuRevoV0EwIDAQAB",
+               "manifest_version": 2,
+               "name": "Vimium",
+               "options_page": "pages/options.html",
+               "permissions": [ "tabs", "bookmarks", "history", "clipboardRead", "\u003Call_urls\u003E" ],
+               "update_url": "https://clients2.google.com/service/update2/crx",
+               "version": "1.44"
+            },
+            "path": "dbepggeogbaibhgnhhndojpepiihcmeb/1.44_0",
+            "state": 1,
+            "was_installed_by_default": false
+         },
+         "eemcgdkfndhakfknompkggombfjjjeno": {
+            "active_permissions": {
+               "api": [ "bookmarks", "bookmarkManagerPrivate", "metricsPrivate", "systemPrivate", "tabs" ],
+               "explicit_host": [ "chrome://favicon/*", "chrome://resources/*" ]
+            },
+            "creation_flags": 1,
+            "from_bookmark": false,
+            "from_webstore": false,
+            "initial_keybindings_set": true,
+            "install_time": "13030736890265238",
+            "location": 5,
+            "manifest": {
+               "chrome_url_overrides": {
+                  "bookmarks": "main.html"
+               },
+               "content_security_policy": "object-src 'none'; script-src chrome://resources 'self'",
+               "description": "Bookmark Manager",
+               "incognito": "split",
+               "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDQcByy+eN9jzazWF/DPn7NW47sW7lgmpk6eKc0BQM18q8hvEM3zNm2n7HkJv/R6fU+X5mtqkDuKvq5skF6qqUF4oEyaleWDFhd1xFwV7JV+/DU7bZ00w2+6gzqsabkerFpoP33ZRIw7OviJenP0c0uWqDWF8EGSyMhB3txqhOtiQIDAQAB",
+               "manifest_version": 2,
+               "name": "Bookmark Manager",
+               "permissions": [ "bookmarks", "bookmarkManagerPrivate", "metricsPrivate", "systemPrivate", "tabs", "chrome://favicon/", "chrome://resources/" ],
+               "version": "0.1"
+            },
+            "path": "/usr/lib/chromium/resources/bookmark_manager",
+            "was_installed_by_default": false
+         },
+         "mfehgcgbbipciphmccgaenjidiccnmng": {
+            "active_permissions": {
+               "api": [ "cloudPrintPrivate" ]
+            },
+            "creation_flags": 1,
+            "from_bookmark": false,
+            "from_webstore": false,
+            "install_time": "13030736890265840",
+            "location": 5,
+            "manifest": {
+               "app": {
+                  "launch": {
+                     "web_url": "https://www.google.com/cloudprint"
+                  },
+                  "urls": [ "https://www.google.com/cloudprint/enable_chrome_connector" ]
+               },
+               "description": "Cloud Print",
+               "display_in_launcher": false,
+               "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDqOhnwk4+HXVfGyaNsAQdU/js1Na56diW08oF1MhZiwzSnJsEaeuMN9od9q9N4ZdK3o1xXOSARrYdE+syV7Dl31nf6qz3A6K+D5NHe6sSB9yvYlIiN37jdWdrfxxE0pRYEVYZNTe3bzq3NkcYJlOdt1UPcpJB+isXpAGUKUvt7EQIDAQAB",
+               "name": "Cloud Print",
+               "permissions": [ "cloudPrintPrivate" ],
+               "version": "0.1"
+            },
+            "path": "/usr/lib/chromium/resources/cloud_print",
+            "was_installed_by_default": false
+         },
+         "mfidmkgnfgnkihnjeklbekckimkipmoe": {
+            "active_permissions": {
+               "api": [ "idle", "storage", "tabs", "webNavigation" ],
+               "explicit_host": [ "http://*/*", "https://*/*" ],
+               "scriptable_host": [ "http://*/*", "https://*/*" ]
+            },
+            "creation_flags": 9,
+            "from_bookmark": false,
+            "from_webstore": true,
+            "granted_permissions": {
+               "api": [ "idle", "storage", "tabs", "webNavigation" ],
+               "explicit_host": [ "http://*/*", "https://*/*" ],
+               "scriptable_host": [ "http://*/*", "https://*/*" ]
+            },
+            "initial_keybindings_set": true,
+            "install_time": "13031185319350997",
+            "lastpingday": "13031222403091731",
+            "location": 1,
+            "manifest": {
+               "background": {
+                  "scripts": [ "lib/utils.js", "lib/paths.js", "lib/regexp.js", "lib/color.js", "lib/properties.js", "background/utils.js", "background/style.js", "background/filters.js", "background/data.js", "background/sync.js", "background/profile.js", "background/tabs.js", "background/background.js" ]
+               },
+               "content_scripts": [ {
+                  "all_frames": true,
+                  "js": [ "content.js" ],
+                  "matches": [ "http://*/*", "https://*/*" ],
+                  "run_at": "document_start"
+               } ],
+               "description": "Flash content filter for Chrome.",
+               "icons": {
+                  "128": "graph/icon128.png",
+                  "16": "graph/icon16.png",
+                  "48": "graph/icon48.png"
+               },
+               "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCn+9sWtNAr67qK2Ybh50R8JiYhMfKITff8t4QFCylt0qvyy6Nmmx1uHTVhjiJCzCMYXYnYoAHpv8eN4stdtHl1pJW0nIgv6jbT29Yd24lqSovDlAmxfctJHJWtY0AMk6CyxpeTHlVWkzT5LJoUh12skIGjxxclY6qaR1LmqWcx9wIDAQAB",
+               "manifest_version": 2,
+               "minimum_chrome_version": "26",
+               "name": "FlashControl",
+               "options_page": "views/options.html",
+               "page_action": {
+                  "default_icon": {
+                     "19": "graph/icon19.png",
+                     "38": "graph/icon32.png"
+                  },
+                  "default_popup": "views/popup.html"
+               },
+               "permissions": [ "http://*/*", "https://*/*", "tabs", "idle", "storage", "webNavigation" ],
+               "update_url": "https://clients2.google.com/service/update2/crx",
+               "version": "3.3.15",
+               "web_accessible_resources": [ "graph/icon16.png", "graph/icon24.png", "graph/icon32.png", "graph/icon48.png", "graph/icon24d.png", "graph/icon32d.png", "graph/icon48d.png", "graph/icon24f.png", "graph/icon32f.png", "graph/icon48f.png" ]
+            },
+            "path": "mfidmkgnfgnkihnjeklbekckimkipmoe/3.3.15_0",
+            "state": 1,
+            "was_installed_by_default": false
+         },
+         "nbmfhhgdnofdgmpeophijiaaabbbgalp": {
+            "has_declarative_rules": false
+         },
+         "nmmhkkegccagdldgiimedpiccmgmieda": {
+            "ack_external": true,
+            "active_permissions": {
+               "api": [ "app.currentWindowInternal", "app.runtime", "app.window", "identity", "webRequestInternal", "webview" ],
+               "explicit_host": [ "https://checkout.google.com/*", "https://sandbox.google.com/*", "https://www.google.com/*" ]
+            },
+            "creation_flags": 9,
+            "events": [ "app.runtime.onLaunched" ],
+            "from_bookmark": false,
+            "from_webstore": true,
+            "initial_keybindings_set": true,
+            "install_time": "13030736891385300",
+            "lastpingday": "13031222403091731",
+            "location": 7,
+            "manifest": {
+               "app": {
+                  "background": {
+                     "scripts": [ "craw_background.js" ]
+                  }
+               },
+               "current_locale": "en_US",
+               "default_locale": "en",
+               "description": "Google Wallet for digital goods",
+               "display_in_launcher": false,
+               "display_in_new_tab_page": false,
+               "icons": {
+                  "128": "images/icon_128.png",
+                  "16": "images/icon_16.png"
+               },
+               "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrKfMnLqViEyokd1wk57FxJtW2XXpGXzIHBzv9vQI/01UsuP0IV5/lj0wx7zJ/xcibUgDeIxobvv9XD+zO1MdjMWuqJFcKuSS4Suqkje6u+pMrTSGOSHq1bmBVh0kpToN8YoJs/P/yrRd7FEtAXTaFTGxQL4C385MeXSjaQfiRiQIDAQAB",
+               "manifest_version": 2,
+               "minimum_chrome_version": "29",
+               "name": "Google Wallet",
+               "oauth2": {
+                  "auto_approve": true,
+                  "client_id": "203784468217.apps.googleusercontent.com",
+                  "scopes": [ "https://www.googleapis.com/auth/sierra", "https://www.googleapis.com/auth/sierrasandbox" ]
+               },
+               "permissions": [ "identity", "webview", "https://checkout.google.com/", "https://sandbox.google.com/checkout/", "https://www.google.com/" ],
+               "update_url": "https://clients2.google.com/service/update2/crx",
+               "version": "0.0.5.0"
+            },
+            "path": "nmmhkkegccagdldgiimedpiccmgmieda/0.0.5.0_0",
+            "running": false,
+            "state": 1,
+            "was_installed_by_default": false
+         },
+         "oojbknijfmdmidgcgchmojbildmbdamm": {
+            "has_declarative_rules": false
+         }
+      },
+      "theme": {
+         "id": "",
+         "use_system": true
+      },
+      "toolbar": [ "alelhddbbhepgpmgidjdcjakblofbmce", "dbepggeogbaibhgnhhndojpepiihcmeb" ],
+      "toolbarsize": -1
+   },
+   "google": {
+      "services": {
+         "signin": {
+            "LSID": "",
+            "SID": ""
+         }
+      }
+   },
+   "homepage": "http://www.debian.org",
+   "intl": {
+      "accept_languages": "en-US,en"
+   },
+   "invalidator": {
+      "client_id": "P1BrkJ6MNQ+arPIcUW1jMQ=="
+   },
+   "net": {
+      "http_server_properties": {
+         "version": 2
+      }
+   },
+   "ntp": {
+      "app_page_names": [ "Apps" ],
+      "shown_page": 2048
+   },
+   "plugins": {
+      "removed_old_component_pepper_flash_settings": true
+   },
+   "profile": {
+      "avatar_index": 0,
+      "content_settings": {
+         "clear_on_exit_migrated": true,
+         "pattern_pairs": {
+            "https://[*.]extensions.gnome.org:443,*": {
+               "plugins": 1
+            }
+         },
+         "pref_version": 1
+      },
+      "exit_type": "Normal",
+      "exited_cleanly": true,
+      "local_profile_id": 13498932,
+      "managed_user_id": "",
+      "name": "First user"
+   },
+   "savefile": {
+      "default_directory": "/home/test/Downloads"
+   },
+   "session": {
+      "restore_on_startup_migrated": true
+   },
+   "translate_blocked_languages": [ "en" ]
+}

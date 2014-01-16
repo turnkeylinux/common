@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Type=Application
+Exec=eval $(gnome-keyring-daemon -s) xbindkeys
+Hidden=false
+X-GNOME-Autostart-enabled=true
+Name[en_GB]=xbindkeys
+Name=xbindkeys
+Comment[en_GB]=Bind commands to arbitrary key and mouse events
+Comment=Bind commands to arbitrary key and mouse events

@@ -1,0 +1,260 @@
+{
+   "add": {
+      "message": "Dodaj"
+   },
+   "add_domain_button": {
+      "message": "Dodaj domenu"
+   },
+   "add_filter_button": {
+      "message": "Dodaj filter"
+   },
+   "add_filters_msg": {
+      "message": "Dodaj filter(e)?"
+   },
+   "add_your_own_filters": {
+      "message": "Dodaj vlastite filtere"
+   },
+   "apply_changes": {
+      "message": "Primjeni promjene"
+   },
+   "block_element": {
+      "message": "Blokiraj element"
+   },
+   "cancel": {
+      "message": "Poni\u0161ti"
+   },
+   "clickhide_instructions": {
+      "message": "Nakon zatvaranja ovog sko\u010Dnog prozora, kliknite (ili desni klik mi\u0161a) na element na ovoj stranici."
+   },
+   "description": {
+      "message": "Besplatan alat za blokiranje reklama na Chromeu: blokira nametljive video reklame na YouTubeu, Facebooku, banere i jo\u0161 mnogo toga."
+   },
+   "disable_inline": {
+      "message": "Onemogu\u0107i tekstualne reklame iste linije"
+   },
+   "disabled_for_these_domains": {
+      "message": "Adblock Plus je onemogu\u0107en za domene na popisu ispod. Mo\u017Eete dodati domenu ili pomo\u0107u Adblock Plus ikone u adresnoj traci ili upisivanjem domene (ne URL-a) u polju ispod i klikom na tipku \"Dodaj domenu\"."
+   },
+   "easy_create_filter": {
+      "message": "Lako napravi filter"
+   },
+   "edit_filters_raw": {
+      "message": "Uredi filtere kao raw tekst"
+   },
+   "enable_only_the": {
+      "message": "Omogu\u0107ite samo popis filtera koji vam je potreban. Zbog previ\u0161e omogu\u0107enih popisa Chrome mo\u017Ee prestati raditi."
+   },
+   "enabled_for_site": {
+      "message": "Omogu\u0107i za ovu stranicu"
+   },
+   "filter_lists": {
+      "message": "Popisi filtera"
+   },
+   "filter_must_follow_syntax": {
+      "message": "Va\u0161i filtri moraju slijediti \u003Ca\u003EAdblock Plus filter sintaksa\u003C/a\u003E."
+   },
+   "filters_acceptableAds2_label": {
+      "message": "Dopusti neke nenametljive reklame"
+   },
+   "filters_addSubscriptionAdd_label": {
+      "message": "Dodaj"
+   },
+   "filters_addSubscriptionOther_label": {
+      "message": "Dodaj drugu pretplatu"
+   },
+   "filters_addSubscription_label": {
+      "message": "Dodaj pretplatu filtera"
+   },
+   "filters_readMore_label": {
+      "message": "Pro\u010Ditaj vi\u0161e"
+   },
+   "filters_subscription_delete_label": {
+      "message": "Obri\u0161i"
+   },
+   "filters_subscription_enabled_label": {
+      "message": "Omogu\u0107en"
+   },
+   "filters_subscription_lastDownload_checksumMismatch": {
+      "message": "Neuspje\u0161no, neuskla\u0111enost checksum-a."
+   },
+   "filters_subscription_lastDownload_connectionError": {
+      "message": "Neuspje\u0161no, gre\u0161ka preuzimanja"
+   },
+   "filters_subscription_lastDownload_inProgress": {
+      "message": "Preuzimanje..."
+   },
+   "filters_subscription_lastDownload_invalidData": {
+      "message": "Neuspje\u0161no, neispravan popis filtera"
+   },
+   "filters_subscription_lastDownload_invalidURL": {
+      "message": "Neuspje\u0161no, neispravna adresa"
+   },
+   "filters_viewList_label": {
+      "message": "Pogledaj popis"
+   },
+   "firstRun_acceptableAdsHeadline": {
+      "message": "Naporni oglasi \u0107e sada biti blokirani"
+   },
+   "firstRun_dataCorruptionWarning": {
+      "message": "Nastavlja li se ova stranica pojavljivati? \u003Ca\u003EKliknite ovdje!\u003C/a\u003E"
+   },
+   "firstRun_donate": {
+      "message": "doniraj"
+   },
+   "firstRun_donate_label": {
+      "message": "Podr\u017Ei na\u0161 projekt"
+   },
+   "firstRun_feature_malware": {
+      "message": "Blokiranje malwara"
+   },
+   "firstRun_feature_show_expanded": {
+      "message": "uklju\u010Di zna\u010Dajke"
+   },
+   "firstRun_feature_show_overview": {
+      "message": "Prika\u017Ei pregled"
+   },
+   "firstRun_feature_social": {
+      "message": "Ukloni tipke dru\u0161tvenih mre\u017Ea"
+   },
+   "firstRun_feature_social_description": {
+      "message": "Automatski oslobodi svoje internetsko iskustvo od napornih gumba kao \u0161to su Facebook Like gumb, koji se pojavljuju na stranicama i prate va\u0161e pona\u0161anje."
+   },
+   "firstRun_feature_tracking": {
+      "message": "Onemogu\u0107i pra\u0107enje"
+   },
+   "firstRun_feature_tracking_description": {
+      "message": "Surfaj privatno s isklju\u010Denim pra\u0107enjem - skrivaju\u0107i se od oglasnih tvrtki koje prate tvoj svaki potez."
+   },
+   "firstRun_features": {
+      "message": "Adblock Plus mo\u017Ee u\u010Diniti mnogo vi\u0161e nego samo blokirati reklame"
+   },
+   "firstRun_share": {
+      "message": "Reci svojim prijateljima"
+   },
+   "firstRun_title": {
+      "message": "Adblock Plus je instaliran"
+   },
+   "firstRun_toggle_off": {
+      "message": "ISKLJU\u010CI"
+   },
+   "firstRun_toggle_on": {
+      "message": "UKLJU\u010CI"
+   },
+   "found_a_bug": {
+      "message": "Prona\u0161li ste gre\u0161ku? \u017Delite prevesti Adblock Plus na svoj jezik? \u003Ca\u003EPodnesite zahtjev ovdje\u003C/a\u003E."
+   },
+   "general": {
+      "message": "Op\u0107enito"
+   },
+   "global_remove_subscription_warning": {
+      "message": "\u017Delite li stvarno ukloniti ovu pretplatu?"
+   },
+   "global_subscription_invalid_location": {
+      "message": "Lokacija popisa filtera nije niti valjana web adresa niti naziv datoteke."
+   },
+   "last_updated_at": {
+      "message": "Posljednji put je a\u017Eurirano $date$ u $time$",
+      "placeholders": {
+         "date": {
+            "content": "$2"
+         },
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "last_updated_at_today": {
+      "message": "Posljednj put je a\u017Eurirano danas u $time$",
+      "placeholders": {
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "name": {
+      "message": "Adblock Plus"
+   },
+   "options": {
+      "message": "Adblock Plus mogu\u0107nosti"
+   },
+   "out_of_date_lists": {
+      "message": "Zastarjeli popisi redovito se a\u017Euriraju."
+   },
+   "overlay_hideplaceholders_label": {
+      "message": "Sakrij rezervirana mjesta blokiranih elemenata"
+   },
+   "remove_button": {
+      "message": "Ukloni odabrano"
+   },
+   "show_block_element_menu": {
+      "message": "Prika\u017Ei 'Blokiraj element' stavku izbornika desnog klika"
+   },
+   "show_icon": {
+      "message": "Prika\u017Ei ikonu u adresnoj traci"
+   },
+   "stats_label_page": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E na ovoj stranici",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_label_total": {
+      "message": "\u003Cstrong\u003E$number$\u003C/strong\u003E ukupno",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_over": {
+      "message": "preko $number$",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_download": {
+      "message": "Preuzmi Adblock Plus"
+   },
+   "stats_share_label_fb": {
+      "message": "Podijelite na Facebooku"
+   },
+   "stats_share_label_gplus": {
+      "message": "Podijelite na Google+"
+   },
+   "stats_share_label_twitter": {
+      "message": "Podijelite na Twitteru"
+   },
+   "stats_share_message": {
+      "message": "Blokirao sam $number$ reklama i pratitelja zahvaljuju\u0107i Adblock Plusu.",
+      "placeholders": {
+         "number": {
+            "content": "$1"
+         }
+      }
+   },
+   "stats_share_title": {
+      "message": "Podijelite ovo"
+   },
+   "stats_title": {
+      "message": "Blokirane reklame:"
+   },
+   "subscriptionSelection_location_label": {
+      "message": "Lokacija popisa filtera:"
+   },
+   "subscriptionSelection_subscriptionSelector_label": {
+      "message": "Molimo odaberite pretplatu na filter sa popisa:"
+   },
+   "subscriptionSelection_title_label": {
+      "message": "Naslov pretplate:"
+   },
+   "update_now": {
+      "message": "A\u017Euriraj odmah"
+   },
+   "whitelisted_domains": {
+      "message": "Dopu\u0161tene domene"
+   }
+}

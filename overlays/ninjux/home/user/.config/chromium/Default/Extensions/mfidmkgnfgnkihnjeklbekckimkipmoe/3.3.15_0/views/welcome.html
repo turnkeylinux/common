@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>FlashControl is installed</title>
+        <link rel="stylesheet" type="text/css" href="welcome.css"/>
+        <script src="../background/data.js"></script>
+        <script src="welcome.js"></script>
+    </head>
+    <body>
+        <h1 id="title" class="flex welcome">FlashControl is installed</h1>
+        <div id="intro">
+            <div id="description" class="flex">
+                <div class="flex block info">
+                    <h2>Address bar menu</h2>
+                    <div>Load and unload Flash in webpages, temporarily or permanently. </div>
+                    <div class="preview"></div>
+                </div>
+                <div class="flex block info">
+                    <h2>Additional features</h2>
+                    <div>After selectively unblocking Flash, block it again.</div>
+                    <div class="preview"></div>
+                </div>
+                <div class="flex block info">
+                    <h2>Web filters</h2>
+                    <div>Automatically remove offensive or inappropriate content. </div>
+                    <div class="preview"></div>
+                </div>
+            </div>
+            <div class="blockquote">You may now configure your <span id="wizard" class="link">settings</span>.</div>
+        </div>
+        <div id="content" class="block">
+            <div>
+                <h2>Preferred default behavior</h2>
+                <hr>
+                <p>What should FlashControl do?</p>
+                <select id="behavior">
+                    <option>Block Flash</option>
+                    <option>Allow Flash</option>
+                </select>
+            </div>
+            <div>
+                <h2>Address bar menu</h2>
+                <hr>
+                <p>Do you want an icon in the address bar?</p>
+                <select id="menu">
+                    <option>No</option>
+                    <option>Yes</option>
+                </select>
+            </div>
+            <div>
+                <h2>Address bar icon display</h2>
+                <hr>
+                <p>When should the icon appear?</p>
+                <select id="omni">
+                    <option>Only where Flash is used</option>
+                    <option>Always</option>
+                </select>
+            </div>
+            <div>
+                <h2>Additional features</h2>
+                <hr>
+                <p>Do you want a re-block button added to each Flash placeholder?</p>
+                <select id="button">
+                    <option>No</option>
+                    <option>Yes</option>
+                </select>
+            </div>
+            <div>
+                <h2>Web filters</h2>
+                <hr>
+                <p>Will you be creating your own filters?</p>
+                <select id="interface">
+                    <option>No</option>
+                    <option>Yes</option>
+                </select>
+            </div>
+            <div>
+                <h2>Complete</h2>
+                <hr>
+                <p>Click Save to apply your changes.</p>
+            </div>
+            <p id="nav">
+                <button id="save">Save</button>
+                <button id="cancel">Cancel</button>
+                <button id="back">Back</button>
+                <button id="next">Next</button>
+            </p>
+        </div>
+    </body>
+</html>

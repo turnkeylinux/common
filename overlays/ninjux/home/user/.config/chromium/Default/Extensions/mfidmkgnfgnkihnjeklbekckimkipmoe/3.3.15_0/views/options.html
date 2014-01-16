@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>FlashControl - Options</title>
+        <link rel="stylesheet" type="text/css" href="chrome.css"/>
+        <link rel="stylesheet" type="text/css" href="options.css"/>
+        <script type="text/javascript" src="../lib/utils.js"></script>
+        <script type="text/javascript" src="../lib/color.js"></script>
+        <script type="text/javascript" src="../lib/colorpicker.js"></script>
+        <script type="text/javascript" src="../lib/filters.js"></script>
+        <script type="text/javascript" src="../lib/properties.js"></script>
+        <script type="text/javascript" src="../background/data.js"></script>
+        <script type="text/javascript" src="utils.js"></script>
+        <script type="text/javascript" src="options.js"></script>
+    </head>
+    <body class="frame">
+        <div class="navigation">
+	        <h1><a href="https://chrome.google.com/webstore/detail/flashcontrol/mfidmkgnfgnkihnjeklbekckimkipmoe" target="_blank">FlashControl</a></h1>
+	        <ul class="menu">
+		        <li class="selected">
+		            <a href="#settings">Settings</a>
+		        </li>
+		        <li>
+		            <a href="#whitelist">Whitelist</a>
+		        </li>
+		        <li>
+		            <a href="#blacklist">Blacklist</a>
+		        </li>
+	        </ul>
+	        <ul class="menu">
+		        <li>
+		            <a href="#about">About</a>
+		        </li>
+	        </ul>
+        </div>
+        <div class="mainview view">
+	        <div id="settings" class="selected">
+		        <header>
+		            <h1>Settings</h1>
+		        </header>
+		        <div class="content">
+		            <h3>Backup and Restore</h3>
+			        <section>
+			            <div class="settings-row">
+		                    <button id="sync">Sync settings</button>
+		                    <button id="reset">Reset settings</button>
+                            <button id="import">Import/Export filters</button>
+			            </div>
+                    </section>
+			        <h3>General</h3>
+			        <section>
+			            <div class="checkbox">
+				            <label>
+				                <input type="checkbox" id="enabled">
+				                <span>Enable FlashControl</span>
+				            </label>
+			            </div>
+	                    <span class="settings-row">Set FlashControl's default behavior.</span>
+	                    <div class="settings-row">
+	                        <select id="defaultmode">
+	                            <option>Block Flash</option>
+	                            <option>Allow Flash</option>
+	                        </select>
+	                    </div>
+                    </section>
+                    <h3>Address bar</h3>
+                    <section>
+			            <div class="checkbox">
+				            <label>
+				                <input type="checkbox" id="omniicon">
+				                <span>Enable the <a class="external-link" target="_blank" href="https://support.google.com/chrome/?p=settings_omnibox">omnibox</a> menu</span>
+				            </label>
+			            </div>
+			            <div class="checkbox">
+				            <label>
+				                <input type="checkbox" id="omnialways">
+				                <span>Always show the menu icon</span>
+				            </label>
+			            </div>
+	                    <span class="settings-row">Set the type of menu interface.</span>
+	                    <select id="optionsview">
+	                        <option>Simple</option>
+	                        <option>Moderate</option>
+	                        <option>Advanced</option>
+	                    </select>
+		            </section>
+                    <h3>Placeholders</h3>
+                    <section>
+			            <div class="settings-row">
+			                <button id="color">Change the color</button>
+			                <button id="icon">Change the icon</button>
+			            </div>
+		                <div class="checkbox">
+				            <label>
+				                <input type="checkbox" id="showicon">
+				                <span>Show an icon</span>
+				            </label>
+			            </div>
+			            <div class="checkbox">
+				            <label>
+				                <input type="checkbox" id="flashborder">
+				                <span>Draw a border</span>
+				            </label>
+			            </div>
+			            <div class="checkbox">
+				            <label>
+				                <input type="checkbox" id="paneltooltip">
+				                <span>Show Flash location tooltip</span>
+				            </label>
+			            </div>
+			            <div class="checkbox">
+				            <label>
+				                <input type="checkbox" id="toolbar">
+				                <span>Show the reblock button</span>
+				            </label>
+			            </div>
+			            <span class="settings-row">Set the reblock button placement.</span>
+	                    <select id="toolbarposition">
+	                        <option>Top left</option>
+	                        <option>Top right</option>
+	                        <option>Bottom left</option>
+	                        <option>Bottom right</option>
+	                    </select>
+                    </section>
+                    <h3>Tabs</h3>
+			        <section>
+			            <div class="checkbox">
+				            <label>
+				                <input type="checkbox" id="foreground">
+				                <span>Allow Flash when focused</span>
+				            </label>
+			            </div>
+			            <div class="checkbox">
+				            <label>
+				                <input type="checkbox" id="background">
+				                <span>Block Flash when in background</span>
+				            </label>
+			            </div>
+			            <div class="checkbox">
+				            <label>
+				                <input type="checkbox" id="preservefocus">
+				                <span>Preserve state if focused tab is new</span>
+				            </label>
+			            </div>
+                    </section>
+			        <h3>Power Management</h3>
+			        <section>
+			            <div class="settings-row">
+			                <span class="settings-row">Block Flash when the computer has not been used for a period of time.</span>
+		                    <input type="text" id="idlehours" class="number-input" placeholder="hours">
+		                    <span>:</span>
+		                    <input type="text" id="idleminutes" class="number-input" placeholder="minutes">
+		                </div>
+		                <div class="radio">
+				            <label>
+			                    <input type="radio" id="alltabs" name="idle">
+			                    <span>All tabs</span>
+				            </label>
+			            </div>
+			            <div class="radio">
+				            <label>
+				                <input type="radio" id="bgtabs" name="idle">
+				                <span>Only background tabs</span>
+				            </label>
+			            </div>
+                    </section>
+		        </div>
+	        </div>
+	        <div id="whitelist">
+		        <header>
+		            <h1>Whitelist</h1>
+		            <div class="navigation horizontal">
+		                <ul class="menu">
+		                    <li class="selected">
+		                        <a href="#patternlistA">Page</a>
+		                    </li>
+		                    <li>
+		                        <a href="#patternlistB">Selective</a>
+		                    </li>
+		                    <li>
+		                        <a href="#patternlistE">Global</a>
+		                    </li>
+	                    </ul>
+	                </div>
+		        </header>
+		        <div class="content">
+	                <div class="subview">
+	                    <div id="patternlistA" class="filter-set selected">
+	                        <ul class="listbox highlightable">
+	                            <li class="template-list-item">
+                                    <div class="editable">
+                                        <a href="#" class="text"></a>
+                                        <input type="text" placeholder="http://example.com/*">
+                                    </div>
+                                    <a href="#" class="action">disable</a>
+                                    <a href="#" class="delete">delete</a>
+                                </li>
+	                        </ul>
+	                    </div>
+	                    <div id="patternlistB" class="group-filter-set">
+	                        <div>
+	                            <ul class="listbox filter-names highlightable">
+	                                <li class="template-list-item">
+                                        <div class="editable">
+                                            <a href="#" class="text"></a>
+                                            <input type="text" placeholder="Enter a name">
+                                        </div>
+                                        <a href="#" class="action">disable</a>
+                                        <a href="#" class="delete">delete</a>
+                                    </li>
+	                            </ul>
+		                        <div class="vertical-line"></div>
+		                        <div>
+		                            <input type="text" class="filter-group-host" placeholder="http://example.com/*">
+	                                <ul class="listbox filter-group highlightable">
+	                                    <li class="template-list-item">
+                                            <div class="editable">
+                                                <a href="#" class="text"></a>
+                                                <input type="text" placeholder="*/example.swf">
+                                            </div>
+                                            <a href="#" class="action">disable</a>
+                                            <a href="#" class="delete">delete</a>
+                                        </li>
+	                                </ul>
+		                        </div>
+		                    </div>
+	                    </div>
+	                    <div id="patternlistE" class="group-filter-set">
+	                        <div>
+	                            <ul class="listbox filter-names highlightable">
+	                                <li class="template-list-item">
+                                        <div class="editable">
+                                            <a href="#" class="text"></a>
+                                            <input type="text" placeholder="Enter a name">
+                                        </div>
+                                        <a href="#" class="action">disable</a>
+                                        <a href="#" class="delete">delete</a>
+                                    </li>
+	                            </ul>
+		                        <div class="vertical-line"></div>
+		                        <div>
+		                            <input type="text" class="filter-group-host" placeholder="http://*.example.com">
+	                                <ul class="listbox filter-group highlightable">
+	                                    <li class="template-list-item">
+                                            <div class="editable">
+                                                <a href="#" class="text"></a>
+                                                <input type="text" placeholder="*/example.swf">
+                                            </div>
+                                            <a href="#" class="action">disable</a>
+                                            <a href="#" class="delete">delete</a>
+                                        </li>
+	                                </ul>
+		                        </div>
+		                    </div>
+	                    </div>
+	                </div>
+		        </div>
+	        </div>
+	        <div id="blacklist">
+		        <header>
+		            <h1>Blacklist</h1>
+		        </header>
+		        <div class="content">
+		            <div class="navigation horizontal">
+		                <ul class="menu">
+		                    <li class="selected">
+		                        <a href="#patternlistC">Page</a>
+		                    </li>
+		                    <li>
+		                        <a href="#patternlistD">Selective</a>
+		                    </li>
+		                    <li>
+		                        <a href="#patternlistF">Global</a>
+		                    </li>
+	                    </ul>
+	                </div>
+	                <div class="subview">
+	                    <div id="patternlistC" class="filter-set selected">
+	                        <ul class="listbox highlightable">
+	                            <li class="template-list-item">
+                                    <div class="editable">
+                                        <a href="#" class="text"></a>
+                                        <input type="text" placeholder="http://example.com/*">
+                                    </div>
+                                    <a href="#" class="action">disable</a>
+                                    <a href="#" class="delete">delete</a>
+                                </li>
+	                        </ul>
+	                    </div>
+	                    <div id="patternlistD" class="group-filter-set">
+	                        <div>
+	                            <ul class="listbox filter-names highlightable">
+	                                <li class="template-list-item">
+                                        <div class="editable">
+                                            <a href="#" class="text"></a>
+                                            <input type="text" placeholder="Enter a name">
+                                        </div>
+                                        <a href="#" class="action">disable</a>
+                                        <a href="#" class="delete">delete</a>
+                                    </li>
+	                            </ul>
+		                        <div class="vertical-line"></div>
+		                        <div>
+		                            <input type="text" class="filter-group-host" placeholder="http://example.com/*">
+	                                <ul class="listbox filter-group highlightable">
+	                                    <li class="template-list-item">
+                                            <div class="editable">
+                                                <a href="#" class="text"></a>
+                                                <input type="text" placeholder="*/example.swf">
+                                            </div>
+                                            <a href="#" class="action">disable</a>
+                                            <a href="#" class="delete">delete</a>
+                                        </li>
+	                                </ul>
+		                        </div>
+		                    </div>
+	                    </div>
+	                    <div id="patternlistF" class="group-filter-set">
+	                        <div>
+	                            <ul class="listbox filter-names highlightable">
+	                                <li class="template-list-item">
+                                        <div class="editable">
+                                            <a href="#" class="text"></a>
+                                            <input type="text" placeholder="Enter a name">
+                                        </div>
+                                        <a href="#" class="action">disable</a>
+                                        <a href="#" class="delete">delete</a>
+                                    </li>
+	                            </ul>
+		                        <div class="vertical-line"></div>
+		                        <div>
+		                            <input type="text" class="filter-group-host" placeholder="http://*.example.com">
+	                                <ul class="listbox filter-group highlightable">
+	                                    <li class="template-list-item">
+                                            <div class="editable">
+                                                <a href="#" class="text"></a>
+                                                <input type="text" placeholder="*/example.swf">
+                                            </div>
+                                            <a href="#" class="action">disable</a>
+                                            <a href="#" class="delete">delete</a>
+                                        </li>
+	                                </ul>
+		                        </div>
+		                    </div>
+	                    </div>
+	                </div>
+		        </div>
+	        </div>
+	        <div id="about">
+		        <header>
+		            <h1>About</h1>
+		        </header>
+		        <div class="content">
+			        <div>
+			            <div id="about-container">
+                            <img src="../graph/icon32.png" width=32 height=32>
+                            <div id="product-description">
+                                <h2>FlashControl</h2>
+                                <span>Flash content filter for Chrome.</span>
+                            </div>
+                        </div>
+                        <div id="help-container">
+                            <button id="report">Report an issue</button>
+                        </div>
+                        <div id="version-container">
+			                <span>Version </span><span id="version"></span>
+                        </div>
+                        <div id="product-container">
+                            <div>Flash plugin <span id="flash"></span></div>
+                            <div>This UI was made using <a href="http://github.com/roykolak/chrome-bootstrap" target="_blank">chrome-bootstrap</a>.</div>
+                        </div>
+                    </div>
+		        </div>
+	        </div>
+        </div>
+        <template class="listitem">
+            <li class="list-item">
+                <div class="editable">
+                    <a href="#" class="text"></a>
+                    <input type="text" spellcheck="false">
+                </div>
+                <a href="#" class="action">disable</a>
+                <a href="#" class="delete">delete</a>
+            </li>
+        </template>
+        <template class="colorpicker">
+            <div class="page color-picker">
+                <a href="#" class="close-button">delete</a>
+                <h1>Placeholder color</h1>
+                <div class="content-area">
+                    <canvas width=200 height=156 class="checkered"></canvas>
+                </div>
+                <div class="action-area">
+                    <div class="action-area-right">
+                        <div class="button-strip">
+                            <button class="reset-button">Reset</button>
+                            <button class="save-button">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template class="placeholdericon">
+            <div class="page placeholder-icon">
+                <a href="#" class="close-button">delete</a>
+                <h1>Placeholder icon</h1>
+                <div class="content-area">
+                    <label>
+                        <input type="checkbox">
+                        <span>Desaturate</span>
+                    </label>
+                    <div>
+                        <label>
+                            <div>
+                                <img src="../graph/icon24f.png" width=24 height=24>
+                            </div>
+                            <input type="radio" name="panelicon">
+                        </label>
+                        <label>
+                            <div>
+                                <img src="../graph/icon32f.png" width=32 height=32>
+                            </div>
+                            <input type="radio" name="panelicon">
+                        </label>
+                        <label>
+                            <div>
+                                <img src="../graph/icon48f.png" width=48 height=48>
+                            </div>
+                            <input type="radio" name="panelicon">
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <div>
+                                <img src="../graph/icon24.png" width=24 height=24>
+                            </div>
+                            <input type="radio" name="panelicon">
+                        </label>
+                        <label>
+                            <div>
+                                <img src="../graph/icon32.png" width=32 height=32>
+                            </div>
+                            <input type="radio" name="panelicon">
+                        </label>
+                        <label>
+                            <div>
+                                <img src="../graph/icon48.png" width=48 height=48>
+                            </div>
+                            <input type="radio" name="panelicon">
+                        </label>
+                    </div>
+                </div>
+                <div class="action-area">
+                    <div class="action-area-right">
+                        <div class="button-strip">
+                            <button class="cancel-button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template class="info">
+            <div class="page">
+                <h1></h1>
+                <div class="content-area"></div>
+                <div class="action-area">
+                    <div class="action-area-right">
+                        <div class="button-strip">
+                            <button class="cancel-button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template class="notify">
+            <div class="page">
+                <h1></h1>
+                <div class="content-area"></div>
+                <div class="action-area">
+                    <div class="action-area-center">
+                        <div class="button-strip">
+                            <div class="throbber"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template class="reset">
+            <div class="page">
+                <a href="#" class="close-button">delete</a>
+                <h1>Restore</h1>
+                <div class="content-area">
+                    <p class="settings-row description">Choose the data to erase (this will restore the default install settings).</p>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="settings-checkbox" checked>
+                            <span>Settings</span>
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="filters-checkbox" checked>
+                            <span>Filters</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="action-area">
+                    <div class="action-area-right">
+                        <div class="button-strip">
+                            <button class="cancel-button">Cancel</button>
+                            <button class="erase-button">Erase</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template class="sync">
+            <div class="page">
+                <a href="#" class="close-button">delete</a>
+                <h1>Sync settings</h1>
+                <div class="content-area">
+                    <p class="settings-row description"><a class="external-link" target="_blank" href="https://support.google.com/chrome/?p=mktg_signin">Sign in</a> to Google Chrome with your Google Account to begin using Sync. If Sync is enabled, your settings will be shared with your current account.</p>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="sync-checkbox" checked>
+                            <span>Enable Sync</span>
+                        </label>
+                    </div>
+                    <hr>
+                    <span class="settings-row description">Choose the data to sync to your account.</span>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="settings-checkbox" checked>
+                            <span>Settings</span>
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" class="filters-checkbox" checked>
+                            <span>Filters</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="action-area">
+                    <div class="action-area-right">
+                        <div class="button-strip">
+                            <button class="cancel-button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template class="import">
+            <div class="page">
+                <a href="#" class="close-button">delete</a>
+                <h1>Import/Export filters</h1>
+                <div class="content-area">
+                    <h3>Import</h3>
+                    <input type="file" class="import-input">
+                    <button class="import-button">Load text file</button>
+                    <h3>Export</h3>
+                    <input class="export-input" type="text" placeholder="filters.txt">
+                    <button class="export-button">Save to text file</button>
+                </div>
+                <div class="action-area">
+                    <div class="action-area-right">
+                        <div class="button-strip">
+                            <button class="cancel-button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </body>
+</html>

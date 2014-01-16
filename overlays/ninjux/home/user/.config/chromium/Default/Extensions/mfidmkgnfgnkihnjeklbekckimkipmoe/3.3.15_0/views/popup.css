@@ -1,0 +1,79 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: #606060;
+  font: 13px Helvetica, Arial, sans-serif;
+  min-height: 110px;
+  min-width: 187px;
+}
+#main {
+  display: -webkit-box;
+  position: absolute;
+  width: 100%;
+  -webkit-box-orient: vertical;
+}
+#main hr {
+  border: none;
+  margin: 4px;
+  padding: 0;
+}
+#main > hr {
+  height: 0;
+  border-top: solid 1px #525252;
+  border-bottom: solid 1px dimGray;
+}
+#main > .menuitem:last-child {
+  margin-bottom: 2px;
+}
+#main.decor {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.18);
+}
+#main .menuitem {
+  display: -webkit-box;
+  color: #fff;
+  margin: 0;
+  padding: 4px 18px;
+  white-space: nowrap;
+  height: 16px;
+  -webkit-user-select: none;
+  -webkit-box-pack: center;
+  -webkit-box-orient: vertical;
+}
+#main .menuitem.disabled {
+  color: #4d4d4d;
+  cursor: default;
+  text-shadow: 1px 1px 1px #707070;
+}
+#main .menuitem:not(.disabled):hover {
+  background: -webkit-linear-gradient(#e13333, #ba2626);
+  cursor: pointer;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 0 3px, rgba(255, 255, 255, 0.7) 0 0 1px inset;
+}
+#main .hbox {
+  display: -webkit-box;
+}
+#main .hbox hr {
+  height: auto;
+  margin-right: 0;
+  margin-left: 0;
+  border-left: solid 1px #525252;
+  border-right: solid 1px dimGray;
+}
+#main .hbox .menuitem {
+  width: 50%;
+  text-align: center;
+  -webkit-box-pack: center;
+  -webkit-box-flex: 1;
+}
+.glasspane {
+  cursor: wait;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 1;
+  -webkit-user-select: none;
+}

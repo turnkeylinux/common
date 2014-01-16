@@ -1,0 +1,71 @@
+{
+   "browser": {
+      "last_redirect_origin": ""
+   },
+   "gl_renderer_string": "GeForce GT 520/PCIe/SSE2",
+   "gl_vendor_string": "NVIDIA Corporation",
+   "gl_version_string": "4.2.0 NVIDIA 304.88",
+   "hardware_acceleration_mode_previous": true,
+   "local_state": {
+      "multiple_profile_prefs_version": 7
+   },
+   "ntp": {
+      "promo_resource_cache_update": "1387192053.061775"
+   },
+   "policy": {
+      "last_statistics_update": "13031665455773843"
+   },
+   "profile": {
+      "info_cache": {
+         "Default": {
+            "avatar_icon": "chrome://theme/IDR_PROFILE_AVATAR_0",
+            "background_apps": false,
+            "managed_user_id": "",
+            "name": "First user",
+            "user_name": ""
+         }
+      },
+      "last_used": "Default"
+   },
+   "shutdown": {
+      "num_processes": 5,
+      "num_processes_slow": 0,
+      "type": 1
+   },
+   "uninstall_metrics": {
+      "installation_date2": "1387191855",
+      "launch_count": "28"
+   },
+   "user_experience_metrics": {
+      "low_entropy_source": 4502,
+      "session_id": 27,
+      "stability": {
+         "breakpad_registration_fail": 28,
+         "breakpad_registration_ok": 0,
+         "crash_count": 0,
+         "debugger_not_present": 28,
+         "debugger_present": 0,
+         "exited_cleanly": true,
+         "incomplete_session_end_count": 0,
+         "last_timestamp_sec": "1387192799",
+         "launch_count": 28,
+         "launch_time_sec": "1387192797",
+         "page_load_count": 0,
+         "plugin_stats2": [ {
+            "crashes": 0,
+            "instances": 25,
+            "launches": 25,
+            "loading_errors": 0,
+            "name": "Screen Capture"
+         } ],
+         "renderer_crash_count": 0,
+         "renderer_hang_count": 0,
+         "session_end_completed": true,
+         "stats_buildtime": "1386353296",
+         "stats_version": "31.0.1650.63-64-devel"
+      }
+   },
+   "was": {
+      "restarted": false
+   }
+}

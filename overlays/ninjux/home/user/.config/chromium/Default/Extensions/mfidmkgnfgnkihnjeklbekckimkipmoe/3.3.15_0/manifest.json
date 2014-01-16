@@ -1,0 +1,33 @@
+{
+   "background": {
+      "scripts": [ "lib/utils.js", "lib/paths.js", "lib/regexp.js", "lib/color.js", "lib/properties.js", "background/utils.js", "background/style.js", "background/filters.js", "background/data.js", "background/sync.js", "background/profile.js", "background/tabs.js", "background/background.js" ]
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "content.js" ],
+      "matches": [ "http://*/*", "https://*/*" ],
+      "run_at": "document_start"
+   } ],
+   "description": "Flash content filter for Chrome.",
+   "icons": {
+      "128": "graph/icon128.png",
+      "16": "graph/icon16.png",
+      "48": "graph/icon48.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCn+9sWtNAr67qK2Ybh50R8JiYhMfKITff8t4QFCylt0qvyy6Nmmx1uHTVhjiJCzCMYXYnYoAHpv8eN4stdtHl1pJW0nIgv6jbT29Yd24lqSovDlAmxfctJHJWtY0AMk6CyxpeTHlVWkzT5LJoUh12skIGjxxclY6qaR1LmqWcx9wIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "26",
+   "name": "FlashControl",
+   "options_page": "views/options.html",
+   "page_action": {
+      "default_icon": {
+         "19": "graph/icon19.png",
+         "38": "graph/icon32.png"
+      },
+      "default_popup": "views/popup.html"
+   },
+   "permissions": [ "http://*/*", "https://*/*", "tabs", "idle", "storage", "webNavigation" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "3.3.15",
+   "web_accessible_resources": [ "graph/icon16.png", "graph/icon24.png", "graph/icon32.png", "graph/icon48.png", "graph/icon24d.png", "graph/icon32d.png", "graph/icon48d.png", "graph/icon24f.png", "graph/icon32f.png", "graph/icon48f.png" ]
+}

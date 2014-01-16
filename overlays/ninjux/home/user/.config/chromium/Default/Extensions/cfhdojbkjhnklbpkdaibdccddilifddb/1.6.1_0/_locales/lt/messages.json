@@ -1,0 +1,222 @@
+{
+   "add": {
+      "message": "Prid\u0117ti"
+   },
+   "add_domain_button": {
+      "message": "Prid\u0117ti domen\u0105"
+   },
+   "add_filter_button": {
+      "message": "Prid\u0117ti filtr\u0105"
+   },
+   "add_filters_msg": {
+      "message": "Prid\u0117ti filtrus(-\u0105)?"
+   },
+   "add_your_own_filters": {
+      "message": "Prid\u0117kite savo filtrus"
+   },
+   "apply_changes": {
+      "message": "Pritaikyti pakeitimus"
+   },
+   "block_element": {
+      "message": "Blokuoti element\u0105"
+   },
+   "cancel": {
+      "message": "Atsisakyti"
+   },
+   "clickhide_instructions": {
+      "message": "U\u017Ev\u0117rus \u0161\u012F i\u0161\u0161okant\u012F lang\u0105, paspauskite (arba de\u0161iniu mygtuku) ant elemento esan\u010Dio puslapyje."
+   },
+   "description": {
+      "message": "Blokuoja erzinan\u010Dias reklamas YouTube tinklapyje,  Facebook reklamas, banerius ir dar daugiau."
+   },
+   "disable_inline": {
+      "message": "I\u0161jungti vietines teksto reklamas"
+   },
+   "disabled_for_these_domains": {
+      "message": "Adblock Plus \u017Eemiau i\u0161vardytiems domenams i\u0161jungtas. Prid\u0117ti domen\u0105 galite paspaud\u0119 Adblock Plus piktogram\u0105, adreso juostoje arba \u012Fvesdami domen\u0105 (ne URL) ir paspausdami \u201EPrid\u0117ti domen\u0105\u201C mygtuk\u0105."
+   },
+   "easy_create_filter": {
+      "message": "Lengvai sukuriamas filtras"
+   },
+   "edit_filters_raw": {
+      "message": "Redaguoti filtrus kaip gryn\u0105 teskt\u0105"
+   },
+   "enable_only_the": {
+      "message": "\u012Ejunkite tik reikalingus filtr\u0173 s\u0105ra\u0161us. Per daug gali paversti Chrome neatsakan\u010Dia."
+   },
+   "enabled_for_site": {
+      "message": "\u012Ejungta \u0161iam tinklapiui"
+   },
+   "filter_lists": {
+      "message": "Filtr\u0173 s\u0105ra\u0161ai"
+   },
+   "filter_must_follow_syntax": {
+      "message": "J\u016Bs\u0173 filtras turi atitikti \u003Ca\u003EAdblock Plus filtr\u0173 sintaks\u0119\u003C/a\u003E."
+   },
+   "filters_acceptableAds2_label": {
+      "message": "Leisti ne\u012Fkyrias reklamas"
+   },
+   "filters_addSubscriptionAdd_label": {
+      "message": "Prid\u0117ti"
+   },
+   "filters_addSubscriptionOther_label": {
+      "message": "Prid\u0117ti kit\u0105 prenumerat\u0105"
+   },
+   "filters_addSubscription_label": {
+      "message": "Prid\u0117ti filtro prenumerat\u0105"
+   },
+   "filters_readMore_label": {
+      "message": "Pla\u010Diau"
+   },
+   "filters_subscription_delete_label": {
+      "message": "I\u0161trinti"
+   },
+   "filters_subscription_enabled_label": {
+      "message": "\u012Ejungta"
+   },
+   "filters_subscription_lastDownload_checksumMismatch": {
+      "message": "Nepavyko, bloga kontrolin\u0117 suma"
+   },
+   "filters_subscription_lastDownload_connectionError": {
+      "message": "Nepavyko, atsiuntimo klaida"
+   },
+   "filters_subscription_lastDownload_inProgress": {
+      "message": "Atsiun\u010Diama..."
+   },
+   "filters_subscription_lastDownload_invalidData": {
+      "message": "Nepavyko, netinkamas filtr\u0173 s\u0105ra\u0161as"
+   },
+   "filters_subscription_lastDownload_invalidURL": {
+      "message": "Nepavyko, netinkamas adresas"
+   },
+   "filters_viewList_label": {
+      "message": "Per\u017Ei\u016Br\u0117ti s\u0105ra\u0161\u0105"
+   },
+   "firstRun_acceptableAdsExplanation": {
+      "message": "Mes nor\u0117tume paskatinti svetaines naudoti paprastas, nekrentan\u010Dias \u012F akis reklamas. Tod\u0117l nustat\u0117me \u003Ca\u003Egrie\u017Etas gaires\u003C/a\u003E priimtin\u0173 reklam\u0173 nustatymui, jos bus rodomos pagal nutyl\u0117jim\u0105. Jei vis tiek norite visas reklamas galite \u003Ca\u003Ei\u0161jungti\u003C/a\u003E \u0161i\u0105 galimyb\u0119 per kelias sekundes."
+   },
+   "firstRun_acceptableAdsHeadline": {
+      "message": "Nuo \u0161iol erzinan\u010Dios reklamos bus u\u017Eblokuotos"
+   },
+   "firstRun_contributor_credits": {
+      "message": "Pad\u0117kos prisid\u0117jusiems"
+   },
+   "firstRun_dataCorruptionWarning": {
+      "message": "Ar \u0161is puslapis pastoviai rodomas? \u003Ca\u003EPaspauskite \u010Dia\u003C/a\u003E"
+   },
+   "firstRun_donate": {
+      "message": "paaukoti"
+   },
+   "firstRun_donate_label": {
+      "message": "Paremkite m\u016Bs\u0173 projekt\u0105"
+   },
+   "firstRun_feature_malware": {
+      "message": "Kenk\u0117ji\u0161k\u0173 program\u0173 blokavimas"
+   },
+   "firstRun_feature_malware_description": {
+      "message": "Padarykite savo nar\u0161ym\u0105 saugesniu u\u017Eblokuodami \u017Einomas kenk\u0117ji\u0161kas svetaines."
+   },
+   "firstRun_feature_show_expanded": {
+      "message": "\u012Fgalinti funkcijas"
+   },
+   "firstRun_feature_show_overview": {
+      "message": "rodyti per\u017Ei\u016Br\u0105"
+   },
+   "firstRun_feature_social": {
+      "message": "Pa\u0161alinti socialini\u0173 puslapi\u0173 mygtukus"
+   },
+   "firstRun_feature_social_description": {
+      "message": "Automati\u0161kai pa\u0161alinkite socialini\u0173 tinkl\u0173 mygtukus, tokius kaip \u201EFacebook Like\u201C, kurie seka j\u016Bs\u0173 elges\u012F."
+   },
+   "firstRun_feature_tracking": {
+      "message": "I\u0161jungti sekim\u0105"
+   },
+   "firstRun_feature_tracking_description": {
+      "message": "I\u0161junkite sekim\u0105 ir paverskite savo nar\u0161ym\u0105 priva\u010Diu - pasl\u0117pkite savo p\u0117dsakus nuo reklamos \u012Fmoni\u0173 kurios galb\u016Bt seka kiekvien\u0105 j\u016Bs\u0173 \u017Eingsn\u012F."
+   },
+   "firstRun_features": {
+      "message": "Adblock Plus gali daugiau nei tik blokuoti reklamas"
+   },
+   "firstRun_share": {
+      "message": "Papasakokite savo draugams"
+   },
+   "firstRun_share_headline": {
+      "message": "\u003Ca\u003EPad\u0117kite mums\u003C/a\u003E paversti internet\u0105 geresne vieta"
+   },
+   "firstRun_title": {
+      "message": "AdBlock Plus s\u0117kmingai \u012Fdiegta"
+   },
+   "firstRun_toggle_off": {
+      "message": "I\u0160J."
+   },
+   "firstRun_toggle_on": {
+      "message": "\u012Ej."
+   },
+   "found_a_bug": {
+      "message": "Radote klaid\u0105? Norite i\u0161versti Adblock Plus \u012F savo kalb\u0105? U\u017Epildykite \u003Ca\u003Epra\u0161ym\u0105 \u010Dia\u003C/a\u003E."
+   },
+   "general": {
+      "message": "Bendra"
+   },
+   "global_remove_subscription_warning": {
+      "message": "Ar tikrai norite atsisakyti \u0161ios prenumeratos?"
+   },
+   "global_subscription_invalid_location": {
+      "message": "Filtr\u0173 s\u0105ra\u0161o adresas n\u0117ra taisyklingas URL ar failo vardas."
+   },
+   "last_updated_at": {
+      "message": "Paskutin\u012F kart\u0105 atnaujinta $date $time",
+      "placeholders": {
+         "date": {
+            "content": "$2"
+         },
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "last_updated_at_today": {
+      "message": "Paskutin\u012F kart\u0105 atnaujinta \u0161iandien $time$",
+      "placeholders": {
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "name": {
+      "message": "Adblock Plus"
+   },
+   "options": {
+      "message": "Adblock Plus parinktys"
+   },
+   "out_of_date_lists": {
+      "message": "Pasen\u0119 s\u0105ra\u0161ai periodi\u0161kai atnaujinami."
+   },
+   "overlay_hideplaceholders_label": {
+      "message": "Sl\u0117pti u\u017Eblokuot\u0173 element\u0173 vietos laikiklius"
+   },
+   "remove_button": {
+      "message": "Pa\u0161alinti pasirinkt\u0105"
+   },
+   "show_block_element_menu": {
+      "message": "De\u0161inio mygtuko meniu rodyti \u201EBlokuoti element\u0105\u201C"
+   },
+   "show_icon": {
+      "message": "Adreso juostoje rodyti piktogram\u0105"
+   },
+   "subscriptionSelection_location_label": {
+      "message": "Filtr\u0173 s\u0105ra\u0161o vieta:"
+   },
+   "subscriptionSelection_subscriptionSelector_label": {
+      "message": "Pasirinkite filtro prenumerat\u0105 i\u0161 \u0161io s\u0105ra\u0161o:"
+   },
+   "subscriptionSelection_title_label": {
+      "message": "Prenumeratos pavadinimas:"
+   },
+   "update_now": {
+      "message": "Atnaujinti"
+   },
+   "whitelisted_domains": {
+      "message": "Domenai baltajame s\u0105ra\u0161e"
+   }
+}

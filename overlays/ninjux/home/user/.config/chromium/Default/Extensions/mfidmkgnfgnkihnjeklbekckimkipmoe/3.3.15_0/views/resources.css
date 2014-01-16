@@ -1,0 +1,505 @@
+body {
+  font-family: "DejaVu Sans", "Segoe UI", Calibri, "Myriad Pro", Myriad, "Trebuchet MS", Helvetica, Arial, sans-serif;
+  font-size: 75%;
+  cursor: default;
+  margin: 0;
+  color: #303942;
+  overflow: hidden;
+  -webkit-user-select: none;
+}
+body.platform-mac .monospace,
+body.platform-mac .source-code {
+  font-size: 11px !important;
+  font-family: Menlo, monospace;
+}
+body.platform-windows .monospace,
+body.platform-windows .source-code {
+  font-size: 12px !important;
+  font-family: Consolas, Lucida Console, monospace;
+}
+body.platform-linux .monospace,
+body.platform-linux .source-code {
+  font-size: 11px !important;
+  font-family: dejavu sans mono, monospace;
+}
+.frame .navigation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background-color: #dfdfdf;
+  border-bottom: 1px solid #6e6e6e;
+  padding: 0 5px;
+  box-sizing: border-box;
+}
+.frame .navigation ul.menu {
+  display: -webkit-box;
+  height: 100%;
+}
+.frame .navigation ul.menu li {
+  display: -webkit-box;
+  padding: 4px 6px;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: center;
+}
+.frame .navigation ul.menu li a {
+  color: inherit;
+  font-size: 11px;
+  text-decoration: none;
+  pointer-events: none;
+}
+.frame .navigation ul.menu li.selected {
+  padding: 4px 4px;
+  border-width: 0 2px;
+  -webkit-border-image: url(../graph/toolbarItemSelected.png) 0 2 0 2;
+}
+.frame .navigation ul.menu li::before {
+  background-image: url(../graph/toolbarIcons.png);
+  display: -webkit-box;
+  width: 32px;
+  height: 32px;
+  content: ' ';
+}
+.frame .navigation ul.menu li.resources-menu-item::before {
+  background-position-x: 0;
+}
+.frame .navigation ul.menu li.whitelist-menu-item::before {
+  background-position-x: -32px;
+}
+.frame .navigation ul.menu li.blacklist-menu-item::before {
+  background-position-x: -64px;
+}
+.frame .navigation ul.menu li.menu-item:active::before {
+  background-position-y: 32px;
+}
+.frame .mainview {
+  position: absolute;
+  top: 56px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.frame .mainview > * {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.frame .mainview > *.selected {
+  display: block;
+}
+.frame .mainview > *:not(.selected) {
+  display: none;
+}
+ul,
+ol {
+  padding: 0;
+  margin: 0;
+}
+li {
+  list-style-type: none;
+}
+#patternlistB .content,
+#patternlistD .content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+#patternlistB .content .view,
+#patternlistD .content .view {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+#patternlistB .content .view:first-child,
+#patternlistD .content .view:first-child {
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+  margin-bottom: 12px;
+}
+#patternlistB .content .view:first-child .list-item,
+#patternlistD .content .view:first-child .list-item {
+  display: -webkit-box;
+  -webkit-box-align: center;
+}
+#patternlistB .content .view:first-child .list-item:nth-child(odd),
+#patternlistD .content .view:first-child .list-item:nth-child(odd) {
+  background-color: #f5f5f5;
+}
+#patternlistB .content .view:first-child .list-item:hover .delete:before,
+#patternlistD .content .view:first-child .list-item:hover .delete:before {
+  visibility: visible;
+}
+#patternlistB .content .view:first-child .list-item .delete,
+#patternlistD .content .view:first-child .list-item .delete {
+  display: -webkit-box;
+}
+#patternlistB .content .view:first-child .list-item .delete:before,
+#patternlistD .content .view:first-child .list-item .delete:before {
+  visibility: hidden;
+  display: block;
+  background-position: 0 0;
+}
+#patternlistB .content .view:first-child .list-item .text,
+#patternlistD .content .view:first-child .list-item .text {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-flex: 1;
+}
+#patternlistB .content .view:first-child .list-item a,
+#patternlistD .content .view:first-child .list-item a {
+  pointer-events: none;
+}
+#patternlistB .content .view:first-child .list-item input[type="checkbox"],
+#patternlistD .content .view:first-child .list-item input[type="checkbox"] {
+  margin: 0 6px;
+  display: -webkit-box;
+}
+#patternlistB .content .view:last-child,
+#patternlistD .content .view:last-child {
+  bottom: 0;
+}
+#resources h3 {
+  margin: 0;
+  font-size: 11px;
+  line-height: 22px;
+  border-bottom: 1px solid #a3a3a3;
+  padding-left: 6px;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ececec), to(#d9d9d9));
+}
+#resources .view {
+  position: absolute;
+  top: 0;
+  bottom: 23px;
+}
+#resources .view:first-child {
+  left: 0;
+  right: 74%;
+  background-color: #d6dde5;
+}
+#resources .view:first-child .list-item.selected {
+  color: #fff;
+  text-shadow: rgba(0, 0, 0, 0.33) 1px 1px 0;
+  background: -webkit-gradient(linear, left top, left bottom, from(#a2b1cf), to(#788ab1));
+}
+#resources .view:first-child .list-item:hover:not(.active) {
+  background-color: #cdd5e5;
+}
+#resources .view:last-child {
+  right: 0;
+  width: 74%;
+}
+#resources .view:last-child .list-item {
+  white-space: nowrap;
+  cursor: pointer;
+}
+#resources .view:last-child .list-item:hover {
+  text-decoration: underline;
+}
+#resources .view:last-child .list-item:nth-child(odd) {
+  background-color: #f5f5f5;
+}
+#resources .view:last-child .list-item.status-blocked {
+  border-left: solid 10px #ffcb00;
+}
+#resources .view:last-child .list-item.status-blacklisted {
+  border-left: solid 10px #ef5858;
+}
+#resources .view:last-child .list-item.status-whitelisted {
+  border-left: solid 10px #84e05d;
+}
+#resources .view:last-child .list-item.status-gblacklisted {
+  border-left: solid 10px #a071e0;
+}
+#resources .view:last-child .list-item.status-gwhitelisted {
+  border-left: solid 10px #2ACAEB;
+}
+#referrer,
+#request {
+  overflow-y: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 23px;
+  bottom: 0;
+}
+.console {
+  position: absolute;
+  top: 0;
+  bottom: 23px;
+  left: 0;
+  right: 0;
+  padding-top: 4px;
+  margin-left: 5px;
+  overflow-y: auto;
+  display: -webkit-box;
+}
+.console .console-input,
+.console .console-messages .command,
+.console .console-messages .invalid,
+.console .console-messages .error {
+  min-height: 16px;
+  -webkit-user-select: text;
+}
+.console .console-input::before,
+.console .console-messages .command::before,
+.console .console-messages .invalid::before,
+.console .console-messages .error::before {
+  content: '';
+  width: 10px;
+  height: 1em;
+  display: block;
+  position: absolute;
+  left: 0;
+}
+.console .console-messages {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-flex: 1;
+}
+.console .console-messages .text {
+  word-wrap: break-word;
+  display: block;
+}
+.console .console-messages .text.command {
+  color: #0080ff;
+}
+.console .console-messages .text.command::before {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAFxJREFUGFedzzEKQCEMA1Av3amL4K6iVnFz8J4R3bWfH8j2IMSYPymlYFdzJucMIoKIfMPMjN67jltrcM5hzvnGe9paizHGHcYYz3St9Y689+dMSuk9GULA7hNpWbhUOoRdmyHFAAAAAElFTkSuQmCC) no-repeat 0 center;
+}
+.console .console-messages .text.command.invalid {
+  color: red;
+}
+.console .console-messages .text.error {
+  color: red;
+}
+.console .console-messages .text.error::before {
+  visibility: hidden;
+}
+.console .console-input {
+  display: -webkit-box;
+  word-wrap: break-word;
+  -webkit-box-flex: 1;
+}
+.console .console-input::before {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAHdJREFUGJVjYCAHJE378D9x2sf/BBUmTP3wX6f0/f/k6Z8JK06c+um/UfWn/+mzvxFWnD7z63+75l//S5f9xq84acaH/zaN3/4XLvqOW2HspHf/zao//k+b8Qm3ougJr//rlb77nzj5PX4r4ya++h878Q1hT+ADANDMPnWjsvWLAAAAAElFTkSuQmCC) no-repeat 0 2px;
+}
+.console .console-input .input {
+  border: none;
+  white-space: pre-wrap;
+  color: inherit;
+  cursor: inherit;
+  -webkit-box-flex: 1;
+  -webkit-user-modify: read-write-plaintext-only;
+}
+.console .console-input .input:focus {
+  outline: none;
+}
+.console .console-input .input,
+.console .console-messages .text {
+  margin-left: 15px;
+  padding: 1px 22px 1px 0;
+}
+.status-bar {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ebebeb url(../graph/statusbarBackgroundChromium.png) repeat-x;
+  white-space: nowrap;
+  height: 23px;
+  overflow: hidden;
+  z-index: 10;
+}
+.status-bar .statusbar-item {
+  position: relative;
+  float: left;
+  width: 32px;
+  height: 24px;
+  background: transparent url(../graph/statusbarButtonsChromium.png) 0 0;
+  display: inline-block;
+  padding: 0;
+  margin-left: -1px;
+  margin-right: 0;
+  vertical-align: top;
+  border: none;
+}
+.status-bar .statusbar-item:active {
+  background-position: 32px 0;
+}
+.status-bar .statusbar-item.statusbar-console .glyph {
+  -webkit-mask-position: -64px 48px;
+}
+.status-bar .statusbar-item.statusbar-delete .glyph {
+  -webkit-mask-position: -128px 48px;
+}
+.status-bar .statusbar-item.statusbar-live .glyph {
+  -webkit-mask-position: -32px 24px;
+}
+.status-bar .statusbar-item.active .glyph {
+  background-color: #4281eb;
+}
+.status-bar .statusbar-item .glyph {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.75);
+  -webkit-mask-image: url(../graph/statusbarButtonGlyphs.png);
+}
+.status-bar .statusbar-item .glyph.shadow {
+  z-index: 0;
+  top: 1px;
+  background-color: rgba(255, 255, 255, 0.33);
+}
+.splitter {
+  z-index: 2;
+  position: absolute;
+  box-sizing: border-box;
+}
+.splitter.vertical-split {
+  border-right: solid 1px #a3a3a3;
+  cursor: ew-resize;
+  width: 8px;
+  top: 0;
+  right: 74%;
+  bottom: 23px;
+}
+.splitter.vertical-split::before {
+  content: ' ';
+  position: absolute;
+  background: transparent url(../graph/griph.png) no-repeat center;
+  width: 32px;
+  height: 22px;
+  margin-left: -24px;
+  /* -1 * width + splitter width */
+
+}
+.splitter.horizontal-split {
+  height: 12px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: ns-resize;
+  border-top: 1px solid #e2e2e2;
+  border-bottom: 1px solid #cacaca;
+  background: #f5f5f5 url(../graph/gripv.png) no-repeat center;
+}
+.listbox .list-item {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 11px;
+  padding-left: 10px;
+  padding-right: 10px;
+  -webkit-user-select: text;
+}
+.message-panel {
+  background-color: white;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5px;
+  overflow-y: auto;
+  z-index: 5;
+  -webkit-user-select: text;
+}
+.message-panel ol {
+  margin-left: 20px;
+  margin-top: 5px;
+}
+.message-panel .text {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #a8a8a8;
+  display: -webkit-box;
+  -webkit-box-pack: center;
+  -webkit-box-orient: vertical;
+}
+.message-panel .prop-info-name {
+  display: inline-block;
+  margin-right: .5em;
+  font-weight: bold;
+  text-indent: -12px;
+}
+.message-panel .prop-info-value {
+  display: inline;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.message-panel .prop-info-value.status-icon:before {
+  content: "";
+  background-image: url(../graph/statusdots.png);
+  background-position-y: center;
+  background-repeat: no-repeat;
+  margin-right: 2px;
+  padding-left: 16px;
+}
+.message-panel .prop-info-value.status-blocked:before {
+  background-position-x: -32px;
+}
+.message-panel .prop-info-value.status-blacklisted:before {
+  background-position-x: -16px;
+}
+.message-panel .prop-info-value.status-whitelisted:before {
+  background-position-x: 0;
+}
+.message-panel .prop-info-value.status-gblacklisted:before {
+  background-position-x: -64px;
+}
+.message-panel .prop-info-value.status-gwhitelisted:before {
+  background-position-x: -48px;
+}
+.collapsed {
+  display: none;
+}
+.delete {
+  visibility: hidden;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+.delete::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  background-image: url(../graph/extButtons.png);
+  background-position: 0 -14px;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  visibility: visible;
+  display: block;
+}
+.glass-pane {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 10;
+  -webkit-user-select: none;
+}
+.glass-pane.resize-x {
+  cursor: ew-resize;
+}
+.glass-pane.resize-y {
+  cursor: ns-resize;
+}

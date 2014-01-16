@@ -1,0 +1,222 @@
+{
+   "add": {
+      "message": "Pievienot"
+   },
+   "add_domain_button": {
+      "message": "Pievienot dom\u0113nu"
+   },
+   "add_filter_button": {
+      "message": "Pievienot filtru"
+   },
+   "add_filters_msg": {
+      "message": "Pievienot filtru(s)?"
+   },
+   "add_your_own_filters": {
+      "message": "Pievieno savus filtrus"
+   },
+   "apply_changes": {
+      "message": "Pielietot izmai\u0146as"
+   },
+   "block_element": {
+      "message": "Blo\u0137\u0113t elementu"
+   },
+   "cancel": {
+      "message": "Atcelt"
+   },
+   "clickhide_instructions": {
+      "message": "P\u0113c \u0161\u012B aizv\u0113r\u0161anas, noklik\u0161\u0137iniet (vai noklik\u0161\u0137iniet ar labo pogu) uz elementa \u0161aj\u0101 lap\u0101."
+   },
+   "description": {
+      "message": "Blo\u0137\u0113 kaitino\u0161os YouTube rekl\u0101mu video rull\u012B\u0161us, Facebook rekl\u0101mas, rekl\u0101mkarogus un daudz ko citu."
+   },
+   "disable_inline": {
+      "message": "Atsp\u0113jot iek\u0161-rindu teksta rekl\u0101mas"
+   },
+   "disabled_for_these_domains": {
+      "message": "Adblock Plus J\u016Bsu izv\u0113l\u0113tajos dom\u0113nos ir atsl\u0113gts. J\u016Bs varat pievienot dom\u0113nu izmantojot Adblock Plus, kas atrodas adreses josl\u0101, vai ievadot dom\u0113nu (nevis URL) kast\u0113 un noklik\u0161\u0137inot uz pogas \"Pievienot dom\u0113nu\"."
+   },
+   "easy_create_filter": {
+      "message": "Viegli izveidot filtru"
+   },
+   "edit_filters_raw": {
+      "message": "Labot filtrus k\u0101 j\u0113lu tekstu"
+   },
+   "enable_only_the": {
+      "message": "Iesp\u0113jo tikai vajadz\u012Bgos filtru sarakstus. P\u0101r\u0101k daudzi var padar\u012Bt Chrome nerea\u0123\u0113jo\u0161u."
+   },
+   "enabled_for_site": {
+      "message": "Iesp\u0113jots \u0161aj\u0101 vietn\u0113"
+   },
+   "filter_lists": {
+      "message": "Filtru saraksts"
+   },
+   "filter_must_follow_syntax": {
+      "message": "Filtram j\u0101atbilst \u003Ca\u003EAdblock Plus filtru sintaksei\u003C/a\u003E."
+   },
+   "filters_acceptableAds2_label": {
+      "message": "At\u013Caut da\u017Eas neuzb\u0101z\u012Bgas rekl\u0101mas"
+   },
+   "filters_addSubscriptionAdd_label": {
+      "message": "Pievienot"
+   },
+   "filters_addSubscriptionOther_label": {
+      "message": "Pievienot citu abonementu"
+   },
+   "filters_addSubscription_label": {
+      "message": "Pievienot filtra abon\u0113\u0161anu"
+   },
+   "filters_readMore_label": {
+      "message": "Las\u012Bt vair\u0101k"
+   },
+   "filters_subscription_delete_label": {
+      "message": "Dz\u0113st"
+   },
+   "filters_subscription_enabled_label": {
+      "message": "Iesp\u0113jota"
+   },
+   "filters_subscription_lastDownload_checksumMismatch": {
+      "message": "Neizdev\u0101s, kontrolsummas neatbilst\u012Bba"
+   },
+   "filters_subscription_lastDownload_connectionError": {
+      "message": "Neizdev\u0101s, lejupiel\u0101de neizdev\u0101s"
+   },
+   "filters_subscription_lastDownload_inProgress": {
+      "message": "Lejupiel\u0101d\u0113..."
+   },
+   "filters_subscription_lastDownload_invalidData": {
+      "message": "Neizdev\u0101s, nav der\u012Bgs filtru saraksts"
+   },
+   "filters_subscription_lastDownload_invalidURL": {
+      "message": "Neizdev\u0101s, nav der\u012Bga adrese"
+   },
+   "filters_viewList_label": {
+      "message": "Skat\u012Bt sarakstu"
+   },
+   "firstRun_acceptableAdsExplanation": {
+      "message": "M\u0113s v\u0113l\u0113tos veicin\u0101t vienk\u0101r\u0161u, neuzb\u0101z\u012Bgu rekl\u0101mu lieto\u0161anu vietn\u0113s. T\u0101p\u0113c esam izveidoju\u0161i \u003Ca\u003Estingras vadl\u012Bnijas\u003C/a\u003E pie\u0146emamo rekl\u0101mu noteik\u0161anai, kuras par\u0101d\u012Btas noklus\u0113juma iestat\u012Bjumos. Ja J\u016Bs joproj\u0101m v\u0113laties blo\u0137\u0113t piln\u012Bgi visas rekl\u0101mas, J\u016Bs varat \u003Ca\u003Eatsp\u0113jot\u003C/a\u003E \u0161o p\u0113c da\u017E\u0101m sekund\u0113m."
+   },
+   "firstRun_acceptableAdsHeadline": {
+      "message": "Uzm\u0101c\u012Bgas rekl\u0101mas turpm\u0101k tiks blo\u0137\u0113tas"
+   },
+   "firstRun_contributor_credits": {
+      "message": "Ziedot\u0101ju saraksts"
+   },
+   "firstRun_dataCorruptionWarning": {
+      "message": "Vai \u0161\u012B lapa turpina att\u0113loties? \u003Ca\u003ESpied \u0161eit!\u003C/a\u003E"
+   },
+   "firstRun_donate": {
+      "message": "ziedot"
+   },
+   "firstRun_donate_label": {
+      "message": "Atbalst\u012Bt m\u016Bsu projektu"
+   },
+   "firstRun_feature_malware": {
+      "message": "Blo\u0137\u0113t \u013Caundab\u012Bgas programmas"
+   },
+   "firstRun_feature_malware_description": {
+      "message": "Padar\u012Bt J\u016Bsu p\u0101rl\u016Bko\u0161anu dro\u0161\u0101k, blo\u0137\u0113jot zin\u0101mos \u013Caundab\u012Bgo programmu avotus."
+   },
+   "firstRun_feature_show_expanded": {
+      "message": "aktiviz\u0113t funkcijas"
+   },
+   "firstRun_feature_show_overview": {
+      "message": "r\u0101d\u012Bt p\u0101rskatu"
+   },
+   "firstRun_feature_social": {
+      "message": "No\u0146emt soci\u0101lo mediju pogas"
+   },
+   "firstRun_feature_social_description": {
+      "message": "Autom\u0101tiski atbr\u012Bvot J\u016Bsu p\u0101rl\u016Bko\u0161anas procesu no t\u0101d\u0101m soci\u0101lo mediju pog\u0101m k\u0101 Facebook Live, kas par\u0101d\u0101s interneta lap\u0101s un izseko J\u016Bsu uzved\u012Bbu."
+   },
+   "firstRun_feature_tracking": {
+      "message": "Atsp\u0113jot izseko\u0161anu"
+   },
+   "firstRun_feature_tracking_description": {
+      "message": "P\u0101rl\u016Bkot priv\u0101ti, atsp\u0113jojot izseko\u0161anu - sl\u0113pjot J\u016Bsu p\u0113das no rekl\u0101mas komp\u0101nij\u0101m, kuras var\u0113tu izsekot katru J\u016Bsu kust\u012Bbu."
+   },
+   "firstRun_features": {
+      "message": "AdblockPlus var izdar\u012Bt vair\u0101k, ne tikai blo\u0137\u0113t rekl\u0101mas"
+   },
+   "firstRun_share": {
+      "message": "Past\u0101sti saviem draugiem"
+   },
+   "firstRun_share_headline": {
+      "message": "\u003Ca\u003EPal\u012Bdzi mums\u003C/a\u003E padar\u012Bt t\u012Bklu par lab\u0101ku vietu"
+   },
+   "firstRun_title": {
+      "message": "AdblockPlus ir uzst\u0101d\u012Bts"
+   },
+   "firstRun_toggle_off": {
+      "message": "IZSL\u0112GTS"
+   },
+   "firstRun_toggle_on": {
+      "message": "IESL\u0112GTS"
+   },
+   "found_a_bug": {
+      "message": "Atradi defektu? V\u0113lies iztulkot Adblock Plus sav\u0101 valod\u0101? L\u016Bdzu \u003Ca\u003Eiesniedz piepras\u012Bjumu \u0161eit\u003C/a\u003E."
+   },
+   "general": {
+      "message": "Visp\u0101r\u012Bgi"
+   },
+   "global_remove_subscription_warning": {
+      "message": "Vai J\u016Bs tie\u0161\u0101m v\u0113laties no\u0146emt \u0161o abonementu?"
+   },
+   "global_subscription_invalid_location": {
+      "message": "Filtru saraksta atra\u0161an\u0101s vieta nav ne der\u012Bgs URL ne ar\u012B der\u012Bgs faila nosaukums."
+   },
+   "last_updated_at": {
+      "message": "P\u0113d\u0113jo reiz atjaunin\u0101ts $time$ $date$",
+      "placeholders": {
+         "date": {
+            "content": "$2"
+         },
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "last_updated_at_today": {
+      "message": "P\u0113d\u0113jo reiz atjaunin\u0101ts \u0161odien plkst. $time$",
+      "placeholders": {
+         "time": {
+            "content": "$1"
+         }
+      }
+   },
+   "name": {
+      "message": "Adblock Plus"
+   },
+   "options": {
+      "message": "Adblock Plus Opcijas"
+   },
+   "out_of_date_lists": {
+      "message": "Novecoju\u0161ie saraksti tiek periodiski atjaunin\u0101ti."
+   },
+   "overlay_hideplaceholders_label": {
+      "message": "Nosl\u0113pt blo\u0137\u0113to elementu vietturus"
+   },
+   "remove_button": {
+      "message": "No\u0146emt izv\u0113l\u0113to"
+   },
+   "show_block_element_menu": {
+      "message": "R\u0101d\u012Bt 'Blo\u0137\u0113t elementu''lab\u0101 klik\u0161\u0137a izv\u0113ln\u0113"
+   },
+   "show_icon": {
+      "message": "R\u0101d\u012Bt ikonu adreses josl\u0101"
+   },
+   "subscriptionSelection_location_label": {
+      "message": "Filtru saraksta atra\u0161an\u0101s vieta:"
+   },
+   "subscriptionSelection_subscriptionSelector_label": {
+      "message": "L\u016Bdzu, izv\u0113lieties filtru abonementu no saraksta:"
+   },
+   "subscriptionSelection_title_label": {
+      "message": "Abonementa nosaukums:"
+   },
+   "update_now": {
+      "message": "Atjaunin\u0101t tagad"
+   },
+   "whitelisted_domains": {
+      "message": "Dom\u0113ni baltaj\u0101 sarakst\u0101"
+   }
+}

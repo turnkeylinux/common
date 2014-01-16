@@ -1,0 +1,92 @@
+
+** LOGGING STARTED AT Sat Jan 26 00:50:22 2013
+
+Initializing Gtk+
+Loading configuration
+Initializing signal handlers
+Handling commandline options, part #1
+Initializing D-Bus
+Trying to initialize D-Bus
+D-Bus RC
+Registering remote D-Bus interfaces
+D-Bus MPRIS root
+D-Bus MPRIS player
+in mpris_player_init object->proxy == NULL, not adding some signals.
+result=0xd53f80
+D-Bus MPRIS tracklist
+D-Bus support has been activated
+Initializing plugin subsystems...
+Loaded plugin (/usr/lib/audacious/Transport/gio.so)
+Loaded plugin (/usr/lib/audacious/Transport/mms.so)
+Loaded plugin (/usr/lib/audacious/Transport/neon.so)
+Loaded plugin (/usr/lib/audacious/Transport/unix-io.so)
+Loaded plugin (/usr/lib/audacious/Input/wavpack.so)
+Loaded plugin (/usr/lib/audacious/Input/metronom.so)
+Loaded plugin (/usr/lib/audacious/Input/modplug.so)
+Loaded plugin (/usr/lib/audacious/Input/sid.so)
+Loaded plugin (/usr/lib/audacious/Input/ffaudio.so)
+Loaded plugin (/usr/lib/audacious/Input/flacng.so)
+Loaded plugin (/usr/lib/audacious/Input/adplug.so)
+Loaded plugin (/usr/lib/audacious/Input/madplug.so)
+Loaded plugin (/usr/lib/audacious/Input/vtx.so)
+Loaded plugin (/usr/lib/audacious/Input/vorbis.so)
+Loaded plugin (/usr/lib/audacious/Input/cdaudio-ng.so)
+Loaded plugin (/usr/lib/audacious/Input/sndfile.so)
+Loaded plugin (/usr/lib/audacious/Input/aac.so)
+Loaded plugin (/usr/lib/audacious/Input/console.so)
+Loaded plugin (/usr/lib/audacious/Input/tonegen.so)
+Loaded plugin (/usr/lib/audacious/Input/xsf.so)
+Loaded plugin (/usr/lib/audacious/Input/amidi-plug.so)
+Loaded plugin (/usr/lib/audacious/Output/filewriter.so)
+Loaded plugin (/usr/lib/audacious/Output/crossfade.so)
+Loaded plugin (/usr/lib/audacious/Output/OSS.so)
+Loaded plugin (/usr/lib/audacious/Output/alsa.so)
+Loaded plugin (/usr/lib/audacious/Output/jackout.so)
+Loaded plugin (/usr/lib/audacious/Output/icecast.so)
+Loaded plugin (/usr/lib/audacious/Output/pulse_audio.so)
+Loaded plugin (/usr/lib/audacious/Output/ESD.so)
+Loaded plugin (/usr/lib/audacious/Output/null.so)
+Loaded plugin (/usr/lib/audacious/Effect/voice_removal.so)
+Loaded plugin (/usr/lib/audacious/Effect/crystalizer.so)
+Loaded plugin (/usr/lib/audacious/Effect/echo.so)
+Loaded plugin (/usr/lib/audacious/Effect/sndstretch.so)
+Loaded plugin (/usr/lib/audacious/Effect/ladspa.so)
+Loaded plugin (/usr/lib/audacious/Effect/stereo.so)
+Loaded plugin (/usr/lib/audacious/Effect/compressor.so)
+Loaded plugin (/usr/lib/audacious/Effect/resample.so)
+Loaded plugin (/usr/lib/audacious/General/cd-menu-items.so)
+Loaded plugin (/usr/lib/audacious/General/statusicon.so)
+Loaded plugin (/usr/lib/audacious/General/lirc.so)
+Loaded plugin (/usr/lib/audacious/General/song_change.so)
+Loaded plugin (/usr/lib/audacious/General/gtkui.so)
+Loaded plugin (/usr/lib/audacious/General/gnomeshortcuts.so)
+Loaded plugin (/usr/lib/audacious/General/mtp_up.so)
+Loaded plugin (/usr/lib/audacious/General/aosd.so)
+Loaded plugin (/usr/lib/audacious/General/alarm.so)
+Loaded plugin (/usr/lib/audacious/General/streambrowser.so)
+Loaded plugin (/usr/lib/audacious/General/evdev-plug.so)
+Loaded plugin (/usr/lib/audacious/General/hotkey.so)
+Loaded plugin (/usr/lib/audacious/General/vfstrace.so)
+Loaded plugin (/usr/lib/audacious/General/skins.so)
+Loaded plugin (/usr/lib/audacious/Visualization/rocklight.so)
+Loaded plugin (/usr/lib/audacious/Visualization/spectrum.so)
+Loaded plugin (/usr/lib/audacious/Visualization/blur_scope.so)
+Loaded plugin (/usr/lib/audacious/Visualization/paranormal.so)
+Loaded plugin (/usr/lib/audacious/Container/pls.so)
+Loaded plugin (/usr/lib/audacious/Container/xspf.so)
+Loaded plugin (/usr/lib/audacious/Container/m3u.so)
+Loaded plugin (/usr/lib/audacious/Container/cue.so)
+playback_get_title: assertion `playback != NULL' failed
+Populating included interfaces
+Handling commandline options, part #2
+Registering interface hooks
+Selecting interface skinned
+Running interface skinned@0x7fa51f1ebb00
+playlist_get_position: assertion `playlist != NULL' failed
+Received SaveYourself(SmSaveLocal, !Shutdown, SmInteractStyleNone, !Fast) in state start
+Setting initial properties
+Sending SaveYourselfDone(True) for initial SaveYourself
+Received SaveComplete message in state interact
+
+** LOGGING STOPPED AT Sat Jan 26 01:00:43 2013
+
