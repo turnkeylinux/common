@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=WinWrangler
+GenericName=Window Layout Manager
+Comment=Perform advanced window layout
+Exec=winwrangler -d
+Icon=winwrangler
+Terminal=false
+Type=Application
+Categories=Utility;
+
