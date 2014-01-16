@@ -7,6 +7,9 @@ cp -TdR /etc/skel /home/user
 chown -R user:user /home/user
 chmod 0700 /home/user
 
+# configure login defaults so login managers include the user
+sed -i "s|^UID_MIN.*|UID_MIN\t\t\t  999|" /etc/login.defs
+
 # disable hub-services inithook
 chmod -x /usr/lib/inithooks/firstboot.d/80hub-services
 
