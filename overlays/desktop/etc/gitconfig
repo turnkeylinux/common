@@ -1,0 +1,14 @@
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+
+[color "status"]
+	updated = green
+
+[color "diff"]
+	commit = green bold
+	meta = white dim
+
+[diff]
+	renames = true

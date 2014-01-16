@@ -1,0 +1,3 @@
+if [ -z "$DISPLAY" ]; then
+    TMOUT=300
+fi

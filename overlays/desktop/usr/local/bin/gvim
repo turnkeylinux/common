@@ -1,0 +1,12 @@
+#!/usr/bin/python
+
+GEOMETRY="85x25"
+
+import os
+from os.path import *
+import sys
+
+args = [ basename(sys.argv[0]), "-geometry=" + GEOMETRY ]
+args += sys.argv[1:]
+
+os.execvp("/usr/bin/gvim", args)

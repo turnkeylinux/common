@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+# create and configure graphical user
+GROUPS="sudo,users,cdrom,video,audio,netdev"
+useradd --shell=/bin/bash --groups=$GROUPS --uid=999 user
+cp -TdR /etc/skel /home/user
+chown -R user:user /home/user
+chmod 0700 /home/user
+
+# disable hub-services inithook
+chmod -x /usr/lib/inithooks/firstboot.d/80hub-services
+

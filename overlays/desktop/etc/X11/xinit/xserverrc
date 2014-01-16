@@ -1,0 +1,4 @@
+#!/bin/sh
+
+exec /usr/bin/X11/X -br -nolisten tcp
+

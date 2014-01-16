@@ -1,0 +1,82 @@
+#include <x11>
+#include <wifi>
+#include <boot>
+#include <power>
+#include <sound>
+#include <laptop>
+#include <hwdetect>
+
+di-live
+file                    /* di-live recommends */
+lvm2                    /* di-live recommends */
+eject                   /* di-live recommends */
+whiptail                /* di-live recommends */
+console-tools           /* di-live recommends */
+
+inithooks
+python-dialog
+turnkey-pylib
+turnkey-sysinfo
+
+/* network */
+
+ethtool
+netbase
+iproute
+ifupdown
+net-tools
+bind9-host
+traceroute
+iputils-ping
+wget
+curl
+whois
+rsync
+tcpdump
+autossh
+openssh-client
+isc-dhcp-client
+
+/* system */
+
+firmware-linux-free
+firmware-linux-nonfree
+firmware-iwlwifi
+
+gnupg
+gnupg-agent
+pinentry-gtk2
+
+cron
+cron-apt
+rsyslog
+ntpdate
+iptables
+
+bzip2
+unzip
+
+info
+man-db
+manpages-dev
+
+sudo
+gksu
+ncdu
+less
+screen
+psmisc
+procps
+whiptail
+localepurge
+lsb-release
+console-tools
+console-setup
+bash-completion
+libperl4-corelibs-perl  /* lsof dep instead of old perl version */
+lsof
+
+/* apps */
+
+vim-gtk
+

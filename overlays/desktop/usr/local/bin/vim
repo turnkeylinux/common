@@ -1,0 +1,6 @@
+#!/bin/sh
+
+saved=$(stty -g)
+stty -ixon
+/usr/bin/vim $@
+stty $saved

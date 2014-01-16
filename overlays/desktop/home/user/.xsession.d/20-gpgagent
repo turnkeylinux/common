@@ -1,0 +1,11 @@
+# sets up environment before X session starts, so it will be inherited
+# by all subsequently executed X programs. (eg. mozilla-thunderbird 
+# enigmail can be configured to use gpg-agent instead of invoking its 
+# own passphrase dialog)
+
+ENVFILE=$HOME/.gnupg/gpg-agent-info$DISPLAY
+
+if [ -n "$DISPLAY" ] && [ -e /usr/bin/gpg-agent ]; then 
+    eval "$(gpg-agent --display $DISPLAY --daemon --write-env-file $ENVFILE)"
+fi
+
