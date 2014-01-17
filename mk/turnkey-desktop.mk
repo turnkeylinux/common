@@ -6,14 +6,15 @@ CDROOT ?= gfxboot-turnkey
 HOSTNAME ?= $(shell basename $(shell pwd))
 CONF_VARS += HOSTNAME ROOT_PASS NONFREE
 
-COMMON_OVERLAYS := $(COMMON_OVERLAYS)
-COMMON_OVERLAYS += turnkey.d/apt
+COMMON_OVERLAYS_TMP := $(COMMON_OVERLAYS)
+COMMON_OVERLAYS := turnkey.d/apt
 COMMON_OVERLAYS += turnkey.d/bashrc
 COMMON_OVERLAYS += turnkey.d/grub
 COMMON_OVERLAYS += turnkey.d/profile
+COMMON_OVERLAYS += $(COMMON_OVERLAYS_TMP)
 
-COMMON_CONF := $(COMMON_CONF)
-COMMON_CONF += turnkey.d/apt
+COMMON_CONF_TMP := $(COMMON_CONF)
+COMMON_CONF := turnkey.d/apt
 COMMON_CONF += turnkey.d/busybox
 COMMON_CONF += turnkey.d/console-setup
 COMMON_CONF += turnkey.d/cronapt
@@ -24,6 +25,7 @@ COMMON_CONF += turnkey.d/persistent-net
 COMMON_CONF += turnkey.d/roothome
 COMMON_CONF += turnkey.d/rootpass
 COMMON_CONF += turnkey.d/sysctl
+COMMON_CONF += $(COMMON_CONF_TMP)
 
 COMMON_REMOVELISTS += turnkey
 
