@@ -67,6 +67,7 @@ less
 screen
 psmisc
 procps
+git-core
 whiptail
 localepurge
 lsb-release
