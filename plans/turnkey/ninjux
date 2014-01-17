@@ -12,6 +12,7 @@ xdotool
 redshift
 xbindkeys
 xbindkeys-config
+autokey-gtk
 winwrangler
 
 audacious
