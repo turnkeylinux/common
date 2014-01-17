@@ -180,6 +180,31 @@
     m:0x48 + c:22
     Alt+Mod4 + BackSpace 
 
+#minimize
+"~/.config/bin/quicktile minimize"
+    m:0x8 + c:75
+    Alt + F9 
+
+#maximize
+"~/.config/bin/quicktile maximize"
+    m:0x8 + c:76
+    Alt + F10 
+
+#show-desktop
+"~/.config/bin/quicktile show-desktop"
+    m:0xc + c:40
+    Control+Alt + d 
+
+#window-stretch
+"~/.config/bin/quicktile vertical-maximize"
+    m:0x40 + c:39
+    Mod4 + s 
+
+#window-stretch2
+"~/.config/bin/quicktile vertical-maximize"
+    m:0x8 + c:39
+    Alt + s 
+
 #volume_up
 "amixer sset Master,0 7%+"
     m:0x4 + c:111
