@@ -6,5 +6,5 @@ Hidden=false
 X-GNOME-Autostart-enabled=true
 Name[en_GB]=xbindkeys
 Name=xbindkeys
-Comment[en_GB]=Bind commands to arbitrary key and mouse events
-Comment=Bind commands to arbitrary key and mouse events
+Comment[en_GB]=Bind shell commands to keyboard shortcuts
+Comment=Bind shell commands to keyboard shortcuts
