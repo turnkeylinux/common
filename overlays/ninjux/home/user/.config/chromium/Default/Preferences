@@ -3,7 +3,7 @@
       "shortcuts_have_been_created": true
    },
    "bookmark_bar": {
-      "show_on_all_tabs": false
+      "show_on_all_tabs": true
    },
    "browser": {
       "check_default_browser": false,
@@ -21,14 +21,14 @@
       "pepper_flash_settings_enabled": false,
       "show_home_button": true,
       "window_placement": {
-         "bottom": 1080,
-         "left": 1970,
+         "bottom": 1021,
+         "left": 50,
          "maximized": false,
-         "right": 3250,
+         "right": 1052,
          "top": 0,
-         "work_area_bottom": 1080,
-         "work_area_left": 1920,
-         "work_area_right": 3840,
+         "work_area_bottom": 1053,
+         "work_area_left": 0,
+         "work_area_right": 1920,
          "work_area_top": 0
       }
    },
@@ -67,8 +67,8 @@
       "skip_first_run_ui": true
    },
    "dns_prefetching": {
-      "host_referral_list": [ 2 ],
-      "startup_list": [ 1, "https://easylist-downloads.adblockplus.org/", "https://ssl.google-analytics.com/" ]
+      "host_referral_list": [ 2, [ "http://extensions.gnome.org/", [ "https://extensions.gnome.org/", 1.7371285392759315 ] ], [ "https://extensions.gnome.org/", [ "https://extensions.gnome.org/", 48.358175295199246, "https://fonts.googleapis.com/", 2.1547609380458064, "https://themes.googleusercontent.com/", 2.832696840169498 ] ] ],
+      "startup_list": [ 1, "https://extensions.gnome.org/", "https://fonts.googleapis.com/", "https://themes.googleusercontent.com/" ]
    },
    "download": {
       "directory_upgrade": true
@@ -79,7 +79,7 @@
       },
       "autoupdate": {
          "last_check": "13031305073229777",
-         "next_check": "13031668490448577"
+         "next_check": "13032443207245823"
       },
       "chrome_url_overrides": {
          "bookmarks": [ "chrome-extension://eemcgdkfndhakfknompkggombfjjjeno/main.html" ]
@@ -419,6 +419,38 @@
    },
    "net": {
       "http_server_properties": {
+         "servers": {
+            "fonts.googleapis.com:443": {
+               "alternate_protocol": {
+                  "port": 443,
+                  "protocol_str": "quic"
+               },
+               "settings": {
+                  "4": 100
+               },
+               "supports_spdy": true
+            },
+            "themes.googleusercontent.com:443": {
+               "alternate_protocol": {
+                  "port": 443,
+                  "protocol_str": "quic"
+               },
+               "settings": {
+                  "4": 100
+               },
+               "supports_spdy": true
+            },
+            "www.google.com:443": {
+               "alternate_protocol": {
+                  "port": 443,
+                  "protocol_str": "quic"
+               },
+               "settings": {
+                  "4": 100
+               },
+               "supports_spdy": true
+            }
+         },
          "version": 2
       }
    },
