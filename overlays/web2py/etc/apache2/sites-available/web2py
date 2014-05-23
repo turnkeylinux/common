@@ -19,7 +19,7 @@ WSGIProcessGroup web2py
     ServerAdmin webmaster@localhost
 </VirtualHost>
 
-AliasMatch ^/([^/]+)/static/(.*) /var/www/web2py/applications/$1/static/$2
+AliasMatch ^/([^/]+)/static/(?:_[\d]+.[\d]+.[\d]+/)?(.*) /var/www/web2py/applications/$1/static/$2
 <Directory /var/www/web2py/applications/*/static/>
     Order Allow,Deny
     Allow from all
