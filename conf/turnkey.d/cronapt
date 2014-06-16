@@ -1,5 +1,7 @@
 #!/bin/sh -e
 
+[ -e /etc/cron-apt ] || exit 0
+
 cd /etc/cron-apt
 
 cat >> config << EOF
