@@ -1,0 +1,11 @@
+# logrotate config for Rails apps
+# http://stackoverflow.com/a/4883967
+/var/log/@APPNAME@/*.log {
+  weekly
+  missingok
+  rotate 52
+  compress
+  delaycompress
+  notifempty
+  copytruncate
+}

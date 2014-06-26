@@ -11,6 +11,7 @@ fi
 DB_USER=$APPNAME
 DB_PASS=$(mcookie)
 WEBROOT=/var/www/$APPNAME
+LOGSDIR=/var/log/$APPNAME
 
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 GEMOPTS="--no-rdoc --no-ri"
@@ -54,10 +55,14 @@ CONF=$WEBROOT/config/database.yml
 sed -i "s|username:.*|username: $DB_USER|g" $CONF
 sed -i "s|password:.*|password: $DB_PASS|g" $CONF
 
+# move logs to proper place
+mv $WEBROOT/log $LOGSDIR
+ln -s $LOGSDIR $WEBROOT/log
+
 # configure permissions
 chown -R root:www-data $WEBROOT
 chown -R www-data:www-data $WEBROOT/tmp
-chown -R www-data:www-data $WEBROOT/log
+chown -R www-data:www-data $LOGSDIR
 
 # apache configuration
 a2enmod rewrite
@@ -73,6 +78,9 @@ sed -i "s|@APPNAME@|$APPNAME|g" /etc/apache2/conf/$APPNAME.conf
 
 mv /etc/apache2/sites-available/rails /etc/apache2/sites-available/$APPNAME
 sed -i "s|@APPNAME@|$APPNAME|g" /etc/apache2/sites-available/$APPNAME
+
+mv /etc/logrotate.d/rails /etc/logrotate.d/$APPNAME
+sed -i "s|@APPNAME@|$APPNAME|g" /etc/logrotate.d/$APPNAME
 
 a2ensite $APPNAME
 
