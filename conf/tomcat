@@ -5,7 +5,7 @@ fatal() { echo "FATAL [$(basename $0)]: $@" 1>&2; exit 1; }
 # identify JVM to use
 [ -e /usr/lib/jvm/java-1.5.0-sun ] && JVM=java-1.5.0-sun
 [ -e /usr/lib/jvm/java-6-sun ] && JVM=java-6-sun
-[ -e /usr/lib/jvm/java-6-openjdk ] && JVM=java-6-openjdk
+[ -e /usr/lib/jvm/java-6-openjdk-i386 ] && JVM=java-6-openjdk-i386
 [ -e /usr/lib/jvm/java-6-openjdk-amd64 ] && JVM=java-6-openjdk-amd64
 
 [ -z "$JVM" ] && fatal "JVM to use could not be identified"
