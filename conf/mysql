@@ -1,16 +1,25 @@
 #!/bin/sh -e
 
-set ${FAB_HOSTNAME:=backstage}
-
 [ "$MYSQL_PASS" ] && /usr/lib/inithooks/bin/mysqlconf.py --pass="$MYSQL_PASS"
 
 # start mysql server
 /etc/init.d/mysql start
 
-# remove fabricating systems hostname from user table
+# secure mysql installation
 mysql --defaults-extra-file=/etc/mysql/debian.cnf <<EOF
 USE mysql;
-DELETE FROM user WHERE Host = '$FAB_HOSTNAME';
+# remove anonymous users
+DELETE FROM user WHERE User='';
+
+# remove remote root
+DELETE FROM user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+
+# remove test database
+DROP DATABASE IF EXISTS test;
+DELETE FROM db WHERE Db='test' OR Db='test\\_%';
+
+# reload privilege tables
+FLUSH PRIVILEGES;
 EOF
 
 # stop mysql server
