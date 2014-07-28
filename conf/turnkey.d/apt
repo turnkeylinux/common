@@ -15,7 +15,7 @@ SOURCES_LIST=/etc/apt/sources.list.d
 mkdir -p $SOURCES_LIST
 
 cat >$SOURCES_LIST/sources.list<<EOF
-deb http://mirror.turnkeylinux.org/turnkeylinux/apt/debian $CODENAME main
+deb http://archive.turnkeylinux.org/debian $CODENAME main
 
 deb http://cdn.debian.net/debian $CODENAME main
 deb http://cdn.debian.net/debian $CODENAME contrib
@@ -23,7 +23,7 @@ deb http://cdn.debian.net/debian $CODENAME contrib
 EOF
 
 cat >$SOURCES_LIST/security.sources.list<<EOF
-deb http://mirror.turnkeylinux.org/turnkeylinux/apt/debian $CODENAME-security main
+deb http://archive.turnkeylinux.org/debian $CODENAME-security main
 
 deb http://security.debian.org/ $CODENAME/updates main
 deb http://security.debian.org/ $CODENAME/updates contrib
