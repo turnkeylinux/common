@@ -199,6 +199,11 @@ do
     error_exit "Output file already exists: $cert";
   fi
 
+  # remove old cert files
+  if [[ $default == true ]] && [[ $overwrite == true ]]; then
+    rm -f $cert_dir/cert.+(crt|key|pem)
+  fi
+
   # create the certificate.
   if ! openssl req -config $TMPFILE -new -x509 -days $days -nodes \
     -out $cert -keyout $cert > $TMPOUT 2>&1
