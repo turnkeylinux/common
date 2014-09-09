@@ -4,29 +4,23 @@
 . /etc/default/inithooks
 
 updateconf() {
-    if [ -e $INITHOOKS_CONF ]; then
-        sed -i 's/$1=\(.*\)/$1="$2"/' $INITHOOKS_CONF
-    else
-        echo "$1=\"$2\"" > $INITHOOKS_CONF
+    if [ -z $1 ]; then
+        echo "$1=\"$2\"" >> $INITHOOKS_CONF
     fi
 }
 
 [ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
 
 if [ -z $APP_FQDN ]; then
-    # Find the interface used for the default route
-    APP_IFACE=${APP_IFACE:-$(ip route list | sed -rn '/^default/{ s/.*dev ([^ ]+) .*/\1/p }')}
-
     # Find the app ip address
-    APP_IP=${APP_IP:-$(ip -f inet -o addr show label $APP_IFACE | sed -rn '{ s/.*inet ([^ ]+)\/.*/\1/p }')}
+    APP_IP=${APP_IP:-$(ip route get "$(ip route show to 0/0 | grep -m1 -oP '(?<=via )\S+')" | grep -oP '(?<=src )\S+')}
+    updateconf('APP_IP' "$APP_IP")
 
     # Find the app fully qualified domain name
-    APP_FQDN=${APP_FQDN:-$(host $APP_IP | cut -d ' ' -f5 | sed 's/\.$//g')}
+    APP_FQDN=${APP_FQDN:-$(getent hosts $APP_IP | awk '{ print $2 }')}
+    updateconf('APP_FQDN' "$APP_FQDN")
 
     # Ask user to verify FQDN
-    APP_FQDN=$( $INITHOOKS_PATH/bin/ask-fqdn.py --fqdn="$APP_FQDN" )
+    $INITHOOKS_PATH/bin/ask-fqdn.py --fqdn="$APP_FQDN"
 fi
-
-# Update inithooks.conf so later scripts can use value
-updateconf('APP_FQDN' "$APP_FQDN")
 
