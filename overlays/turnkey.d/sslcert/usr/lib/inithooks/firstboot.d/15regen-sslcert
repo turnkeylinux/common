@@ -14,5 +14,9 @@ fatal() {
 # Exit if openssl is not available
 which openssl >/dev/null || fatal "openssl is not installed"
 
+# Grant read permission for ssl private keys to certssl group
+chgrp certssl /etc/ssl/private
+chmod g+x /etc/ssl/private
+
 # Generate a new default certificate
 tkl-make-ssl-cert --default --force-overwrite $APP_FQDN

@@ -214,7 +214,8 @@ do
     error_exit "Could not create certificate. Openssl output was:" $TMPOUT;
   fi
 
-  chmod 600 $cert
+  chgrp certssl $cert
+  chmod 640 $cert
 
   if [[ $request == true ]]; then
     csr=${cert%.*}.csr
