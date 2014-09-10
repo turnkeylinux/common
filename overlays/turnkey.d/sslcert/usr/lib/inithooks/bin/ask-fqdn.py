@@ -8,6 +8,8 @@ Options:
     -d --fqdn=    default value for dialog
 """
 
+import os
+import fileinput
 import sys
 import getopt
 import signal
@@ -56,6 +58,25 @@ def usage(s=None):
     print >> sys.stderr, __doc__
     sys.exit(1)
 
+def updateconf(var, val):
+    config = os.environ['INITHOOKS_CONF']
+    for line in fileinput.input(config, inplace=1):
+        this = line
+        if "#" in this:
+            this, comment = this.split("#",1)
+        this = this.strip()
+        if "=" in this:
+            this_var,this_val = this.split("=",1)
+            this_var = this_var.strip()
+            this_val = this_val.strip()
+            if this_var == var:
+                if this[-1] is not "=":
+                    line = line.replace(this_val, val, 1)
+                else:
+                    line = line.replace("=", "=" + val, 1)
+        sys.stdout.write(line)
+
+
 def main():
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     try:
@@ -79,7 +100,7 @@ def main():
         retcode, fqdn = d.inputbox("Assign TurnKey DNS domain name", ERR_TEXT,
                                    fqdn, "Apply", "")
     
-    print fqdn
+    updateconf('APP_FQDN', fqdn)
 
 if __name__ == "__main__":
     main()

@@ -146,6 +146,9 @@ create_temporary_cnf() {
   sed -i "s#@HostName@#\"$commonName\"#" $TMPFILE
 }
 
+# Exit if OpenSSL is not available
+which openssl >/dev/null || error_exit "OpenSSL is not installed."
+
 # Trap signals
 trap "signal_exit TERM" TERM HUP
 trap "signal_exit INT"  INT
@@ -201,7 +204,7 @@ do
 
   # remove old cert files
   if [[ $default == true ]] && [[ $overwrite == true ]]; then
-    rm -f $cert_dir/cert.+(crt|key|pem)
+    rm -f $cert_dir/cert.crt $cert_dir/cert.key $cert_dir/cert.pem
   fi
 
   # create the certificate.
