@@ -87,11 +87,12 @@ usage() {
 }
 
 help_message() {
-    cat <<- _EOF_
-    $PROGNAME ver. $VERSION
-    "Make server cert for TurnKey GNU/Linux appliance"
+cat <<- _EOF_
 
-    $(usage)
+$PROGNAME ver. $VERSION
+"Make server cert for TurnKey GNU/Linux appliance"
+
+$(usage)
 
     Options:
     -h, --help              Display this help message and exit.
