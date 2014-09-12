@@ -28,10 +28,11 @@
 
 # Revision history:
 # 2014-08-28 Created by new-script ver. 3.0
+# 2014-09-12 Released tkl-make-ssl-cert ver. 1.0
 # ---------------------------------------------------------------------------
 
 PROGNAME=${0##*/}
-VERSION="0.1"
+VERSION="1.0"
 
 # set defaults
   cert_dir="/etc/ssl/certs"
@@ -76,73 +77,81 @@ signal_exit() { # Handle trapped signals
 }
 
 usage() {
-  echo -e "Usage: $PROGNAME [-o|--out file] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] [-r|--csr] FQDN"
-  echo -e "Generate a certificate with the fully qualified domain name, FQDN.\n"
-  echo -e "Usage: $PROGNAME [-d|--default] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] [-r|--csr] FQDN"
-  echo -e "Generate the default certificate, cert.pem, with the fully qualified domain name, FQDN.\n"
-  echo -e "Usage: $PROGNAME [-o|--out file] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] [-r|--csr] [-w|--wild] domainName"
-  echo -e "Generate a wildcard certificate with the domain name.\n"
-  echo -e "Usage: $PROGNAME [-h|--help]"
-  echo -e "Display the help message and exit.\n"
+	cat <<- _EOF_
+	Usage: $PROGNAME [-o|--out file] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] FQDN
+	Generate a certificate with the fully qualified domain name, FQDN.
+
+	Usage: $PROGNAME [-d|--default] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] FQDN
+	Generate the default certificate, cert.pem, with the fully qualified domain name, FQDN.
+
+	Usage: $PROGNAME [-o|--out file] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] [-w|--wild] domainName
+	Generate a wildcard certificate for the domain.
+
+	Usage: $PROGNAME [-d|--default] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] [-r|--csr] FQDN
+	Generate an optional certificate signing request for FQDN.
+
+	Usage: $PROGNAME [-h|--help]
+	Display the help message and exit.
+
+	_EOF_
+	return
 }
 
 help_message() {
-cat <<- _EOF_
+	cat <<- _EOF_
 
-$PROGNAME ver. $VERSION
-"Make server cert for TurnKey GNU/Linux appliance"
+	$PROGNAME ver. $VERSION
+	"Make server cert for TurnKey GNU/Linux appliance"
 
-$(usage)
+	$(usage)
 
-    Options:
-    -h, --help              Display this help message and exit.
-    -o, --out [/path/]file  Write certificate to alternate location
-    -d, --default           Generate default certificate
-                              /etc/ssl/private/cert.pem
-    -r, --csr               Generate a certificate signing request
-    -w, --wild              Generate wildcard certificate
-    -t, --template file     Use alternate template file
-                              default: /etc/ssl/turnkey.cnf
-    -v, --verbose           Display generated certificate
-    -f, --force-overwrite   Overwrite existing certificate
+	    Options:
+	    -h, --help              Display this help message and exit
+	    -o, --out [/path/]file  Write certificate to alternate location
+	    -d, --default           Generate default certificate
+	                              /etc/ssl/private/cert.pem
+	    -r, --csr               Generate a certificate signing request
+	    -w, --wild              Generate wildcard certificate
+	    -t, --template file     Use alternate template file
+	                              default: /etc/ssl/turnkey.cnf
+	    -v, --verbose           Display generated certificate
+	    -f, --force-overwrite   Overwrite existing certificate
 
-    NOTE: You must be the superuser to run this script.
+	    NOTE: You must be the superuser to run this script.
 
-_EOF_
-return
+	_EOF_
+	return
 }
 
 create_temporary_cnf() {
-  hostName="$(hostname -f)";
-  n=1;
+	if [ $(hostname --fqdn > /dev/null 2>&1) ]; then
+	  hostName="$(hostname --fqdn)"
+	else
+		hostName="$(hostname)"
+	fi
 
+  n=1; i=1;
   sed -e '/^\[\s*alt_names\s*\]/q' $template > $TMPFILE
 
   if [ ! $fqdn == "" ]; then
     commonName=$fqdn;
     if [[ $wild == true ]]; then
-      echo "DNS.$n = *.$fqdn" >> $TMPFILE;
-      ((n++));
-      echo "DNS.$n = $fqdn" >> $TMPFILE;
-      ((n++));
+      echo "DNS.$((n++)) = *.$fqdn" >> $TMPFILE;
+      echo "DNS.$((n++)) = $fqdn" >> $TMPFILE;
     else
-      echo "DNS.$n = $fqdn" >> $TMPFILE;
-      ((n++));
-      echo "DNS.$n = ${fqdn#*.}" >> $TMPFILE;
-      ((n++));
+      echo "DNS.$((n++)) = $fqdn" >> $TMPFILE;
+      echo "DNS.$((n++)) = ${fqdn#*.}" >> $TMPFILE;
     fi
   fi
 
   if [ ! "$hostName" == "$fqdn" ]; then
     commonName=${commonName:-$hostName};
-    echo "DNS.$n = $hostName" >> $TMPFILE;
-    ((n++));
+    echo "DNS.$((n++)) = $hostName" >> $TMPFILE;
   fi
 
-  echo "DNS.$n = localhost" >> $TMPFILE;
-  ((n++));
-  echo "DNS.$n = 127.0.0.1" >> $TMPFILE;
-  echo "IP.1 = 127.0.0.1" >> $TMPFILE;
+  echo "DNS.$((n++)) = localhost" >> $TMPFILE;
+  echo "DNS.$((n++)) = 127.0.0.1" >> $TMPFILE;
+	echo "IP.$((i++)) = 127.0.0.1" >> $TMPFILE;
 
   sed -i "s#@HostName@#\"$commonName\"#" $TMPFILE
 }
@@ -221,14 +230,14 @@ do
   if [[ $request == true ]]; then
     csr=${cert%.*}.csr
     if [[ $(grep "TurnKey GNU/Linux" $template) ]]; then
-cat <<- EOF >&2
+			cat <<- _EOF_ >&2
 
-${PROGNAME}: WARNING: organizationName = "TurnKey GNU/Linux"
-Unless you work for TurnKey, you probably want to edit the
-template file, /etc/ssl/turnkey.cnf or create a custom copy
-and use the [-t|--template] option.
+			${PROGNAME}: WARNING: organizationName = "TurnKey GNU/Linux"
+			Unless you work for TurnKey, you probably want to edit the
+			template file, /etc/ssl/turnkey.cnf or create a custom copy
+			and use the [-t|--template] option.
 
-EOF
+			_EOF_
     fi
     # create the certificate signing request.
     if ! openssl req -config $TMPFILE -new -key $cert -out $csr > $TMPOUT 2>&1
@@ -248,9 +257,9 @@ EOF
     ln -sf -T $cert "$cert_dir/$(openssl x509 -hash -noout -in $cert).0"
   fi
 
-  # Create a symlink for shellinabox
+  # Remove symlink for shellinabox
   if [[ $default == true ]] && [[ -L $shellinabox ]]; then
-    ln -sf -T $cert $shellinabox  # link for shellinabox
+    rm -f $shellinabox  # let shellinabox make it's own certificates
   fi
 
   if [[ $verbose == true ]]; then
