@@ -134,7 +134,7 @@ create_temporary_cnf() {
   sed -e '/^\[\s*alt_names\s*\]/q' $template > $TMPFILE
 
   if [ ! $fqdn == "" ]; then
-    commonName=$fqdn;
+    commonName=${commonName:-$fqdn};
     if [[ $wild == true ]]; then
       echo "DNS.$((n++)) = *.$fqdn" >> $TMPFILE;
       echo "DNS.$((n++)) = $fqdn" >> $TMPFILE;
