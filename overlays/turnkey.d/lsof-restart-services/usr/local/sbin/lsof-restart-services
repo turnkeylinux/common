@@ -1,0 +1,46 @@
+#!/bin/bash
+# Author: Liraz Siri <liraz@turnkeylinux.org> 2015 - GPL3 licensed
+
+if [ -z "$1" ] || [ "$1" = "-h" ]; then
+cat<<EOF
+Syntax: $0 lsof-pattern
+Restarts running Debian services that match lsof-pattern (e.g., libc)"
+
+Environment variables:
+
+	DRYRUN=y	If set, don't actually restart services, just echo
+
+Usage example:
+
+	DRYRUN=y $0 libc
+	$0 libc
+
+EOF
+	exit 1
+fi
+
+PAT=$1
+
+BLACKLIST="
+screen-cleanup
+udev-mtab
+udev
+"
+
+if [ -n "$DRYRUN" ]; then
+	prefix="echo"
+else
+	prefix=""
+fi
+
+which lsof > /dev/null || apt-get -f install lsof
+
+RE_BLACKLIST="$(echo $BLACKLIST |sed 's/ /\\|/g; s|^|^\\(|; s|$|\\)$|')"
+
+lsof | grep "$PAT" | awk '{print $2}' | sort -u |            # detect processes that use libc
+  xargs -n 1 -I  {} readlink /proc/{}/exe |                  # lookup executable paths
+  xargs -n 1 dpkg -S 2>/dev/null | sed 's/:.*//' | sort -u | # lookup packages
+  xargs -n 1 dpkg -L | grep /etc/init.d/ | sed 's|.*/||' |   # lookup services
+  grep -v $RE_BLACKLIST | grep -v '.sh' | 				     # filter blacklist
+  xargs -n 1 -I {} /bin/sh -c "c='/etc/init.d/{} restart'; echo \$c; [ -z '$DRYRUN' ] && exec \$c"
+
