@@ -1,0 +1,22 @@
+#!/bin/bash -e
+# set FQDN - fully qualified domain name
+
+. /etc/default/inithooks
+
+[ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
+
+export INITHOOKS_CONF
+
+if [ -z "$APP_FQDN" ]; then
+    # Find the app ip address
+    APP_IP=${APP_IP:-$(ip route get "$(ip route show to 0/0 | sed -rn 's/.*via\s(\S+).*/\1/p')" | sed -rn 's/.*src\s(\S+).*/\1/p')}
+    echo "APP_IP=\"$APP_IP\"" >> $INITHOOKS_CONF
+
+    # Find the app fully qualified domain name
+    APP_FQDN=${APP_FQDN:-$(getent hosts $APP_IP | awk '{ print $2 }')}
+    echo "APP_FQDN=\"$APP_FQDN\"" >> $INITHOOKS_CONF
+
+    # Ask user to verify FQDN
+    $INITHOOKS_PATH/bin/ask-fqdn.py --fqdn="$APP_FQDN"
+fi
+

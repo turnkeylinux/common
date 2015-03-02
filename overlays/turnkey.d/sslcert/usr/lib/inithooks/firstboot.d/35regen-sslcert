@@ -1,0 +1,22 @@
+#!/bin/bash -e
+# Generate SSL certificate
+# Note: daemons using certificate need to be restarted for changes to take effect
+
+. /etc/default/inithooks
+
+[ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
+
+fatal() {
+    echo "fatal: $@" 1>&2
+    exit 1
+}
+
+# Exit if openssl is not available
+which openssl >/dev/null || fatal "openssl is not installed"
+
+# Grant read permission for ssl private keys to certssl group
+chgrp certssl /etc/ssl/private
+chmod g+x /etc/ssl/private
+
+# Generate a new default certificate
+tkl-make-ssl-cert --default --force-overwrite $APP_FQDN

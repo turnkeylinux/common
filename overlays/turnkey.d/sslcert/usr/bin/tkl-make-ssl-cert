@@ -1,0 +1,271 @@
+#! /bin/bash -e
+# ---------------------------------------------------------------------------
+# tkl-make-ssl-cert - "Make server cert for TurnKey GNU/Linux appliance"
+
+# Copyright 2014, John Carver <dude4linux@gmail.com>
+  
+  # This program is free software: you can redistribute it and/or modify
+  # it under the terms of the GNU General Public License as published by
+  # the Free Software Foundation, either version 3 of the License, or
+  # (at your option) any later version.
+
+  # This program is distributed in the hope that it will be useful,
+  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  # GNU General Public License at (http://www.gnu.org/licenses/) for
+  # more details.
+
+# Usage: tkl-make-ssl-cert [-h|--help] [-o|--out file] [-d|--default] [-w|--wild] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] [-r|--csr] FQDN
+
+# Purpose:
+
+  # - Make default certificate for TurnKey GNU/Linux appliance [-d|--default]
+  # - Make server certificates for Apache/Nginx virtual hosts
+  # - Make wildcard certificate for entire domain [-w|--wild]
+  # - Optionally generate a certificate signing request [-r|--csr]
+  # - Store certificates in /etc/ssl/private because they contain a key
+  # - Create symlinks in /etc/ssl/certs for backward compatibility
+
+# Revision history:
+# 2014-08-28 Created by new-script ver. 3.0
+# 2014-09-12 Released tkl-make-ssl-cert ver. 1.0
+# ---------------------------------------------------------------------------
+
+PROGNAME=${0##*/}
+VERSION="1.0"
+
+# set defaults
+  cert_dir="/etc/ssl/certs"
+  priv_dir="/etc/ssl/private"
+  template="/etc/ssl/turnkey.cnf"
+  shellinabox="/var/lib/shellinabox/certificate.pem"
+  default=false
+  out=false
+  verbose=false
+  request=false
+  wild=false
+  overwrite=false
+
+# set expiration for 10 years (including leap years)
+  days=$((($(date -d '+10 year' +%s) - $(date +%s))/86400))
+
+clean_up() { # Perform pre-exit housekeeping
+  rm -f $TMPFILE $TMPOUT
+  return
+}
+
+error_exit() {
+  echo -e "${PROGNAME}: ${1:-"Unknown Error"}" >&2
+  if [ $2 ] && [ -f $2 ]; then
+    cat $2 >&2
+  fi
+  clean_up
+  exit 1
+}
+
+graceful_exit() {
+  clean_up
+  exit
+}
+
+signal_exit() { # Handle trapped signals
+  case $1 in
+    INT)    error_exit "Program interrupted by user" ;;
+    TERM)   echo -e "\n$PROGNAME: Program terminated" >&2 ; graceful_exit ;;
+    *)      error_exit "Terminating on unknown signal" ;;
+  esac
+}
+
+usage() {
+	cat <<- _EOF_
+	Usage: $PROGNAME [-o|--out file] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] FQDN
+	Generate a certificate with the fully qualified domain name, FQDN.
+
+	Usage: $PROGNAME [-d|--default] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] FQDN
+	Generate the default certificate, cert.pem, with the fully qualified domain name, FQDN.
+
+	Usage: $PROGNAME [-o|--out file] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] [-w|--wild] domainName
+	Generate a wildcard certificate for the domain.
+
+	Usage: $PROGNAME [-d|--default] [-t|--template file] [-v|--verbose] [-f|--force-overwrite] [-r|--csr] FQDN
+	Generate an optional certificate signing request for FQDN.
+
+	Usage: $PROGNAME [-h|--help]
+	Display the help message and exit.
+
+	_EOF_
+	return
+}
+
+help_message() {
+	cat <<- _EOF_
+
+	$PROGNAME ver. $VERSION
+	"Make server cert for TurnKey GNU/Linux appliance"
+
+	$(usage)
+
+	    Options:
+	    -h, --help              Display this help message and exit
+	    -o, --out [/path/]file  Write certificate to alternate location
+	    -d, --default           Generate default certificate
+	                              /etc/ssl/private/cert.pem
+	    -r, --csr               Generate a certificate signing request
+	    -w, --wild              Generate wildcard certificate
+	    -t, --template file     Use alternate template file
+	                              default: /etc/ssl/turnkey.cnf
+	    -v, --verbose           Display generated certificate
+	    -f, --force-overwrite   Overwrite existing certificate
+
+	    NOTE: You must be the superuser to run this script.
+
+	_EOF_
+	return
+}
+
+create_temporary_cnf() {
+	if [ $(hostname --fqdn > /dev/null 2>&1) ]; then
+	  hostName="$(hostname --fqdn)"
+	else
+		hostName="$(hostname)"
+	fi
+
+  n=1; i=1;
+  sed -e '/^\[\s*alt_names\s*\]/q' $template > $TMPFILE
+
+  if [ $fqdn != "" ]; then
+    commonName=${commonName:-$fqdn};
+    if [[ $wild == true ]]; then
+      echo "DNS.$((n++)) = *.$fqdn" >> $TMPFILE;
+      echo "DNS.$((n++)) = $fqdn" >> $TMPFILE;
+    else
+      echo "DNS.$((n++)) = $fqdn" >> $TMPFILE;
+      echo "DNS.$((n++)) = ${fqdn#*.}" >> $TMPFILE;
+    fi
+  fi
+
+  if [ "$hostName" != "$fqdn" ]; then
+    commonName=${commonName:-$hostName};
+    echo "DNS.$((n++)) = $hostName" >> $TMPFILE;
+  fi
+
+  echo "DNS.$((n++)) = localhost" >> $TMPFILE;
+  echo "DNS.$((n++)) = 127.0.0.1" >> $TMPFILE;
+	echo "IP.$((i++)) = 127.0.0.1" >> $TMPFILE;
+
+  sed -i "s#@HostName@#\"$commonName\"#" $TMPFILE
+}
+
+# Exit if OpenSSL is not available
+which openssl >/dev/null || error_exit "OpenSSL is not installed."
+
+# Trap signals
+trap "signal_exit TERM" TERM HUP
+trap "signal_exit INT"  INT
+
+# Check for root UID
+if [[ $(id -u) != 0 ]]; then
+  error_exit "You must be the superuser to run this script."
+fi
+
+# Parse command-line
+while [[ -n $1 ]]; do
+  case $1 in
+    -h | --help)              help_message; graceful_exit ;;
+    -o | --out)               shift; cert="$1"; out=true ;;
+    -d | --default)           default=true ;;
+    -r | --csr)               request=true ;;
+    -w | --wild)              wild=true ;;
+    -t | --template)          shift; template="$1" ;;
+    -v | --verbose)           verbose=true ;;
+    -f | --force-overwrite)   overwrite=true ;;
+    -* | --*)                 usage; error_exit "Unknown option $1" ;;
+    *)                        args+="$1 " ;;
+  esac
+  shift
+done
+
+# template file must exist
+if [[ ! -f $template ]]; then
+  error_exit "Could not open template file: $template";
+fi
+
+for fqdn in $args
+do
+  # Main logic
+  TMPFILE="$(mktemp)" || error_exit "Can't create temporary file";
+  TMPOUT="$(mktemp)"  || error_exit "Can't create temporary file";
+
+  create_temporary_cnf
+
+  if [[ $default == true ]]; then
+    out=false
+    cert="$priv_dir/cert.pem"
+  else
+    if [[ $out == false ]]; then
+      cert="$priv_dir/$commonName.pem"
+    fi
+  fi
+
+  # don't overwrite existing file without permission
+  if [[ -f $cert ]] && [[ $overwrite == false ]]; then
+    error_exit "Output file already exists: $cert";
+  fi
+
+  # remove old cert files
+  if [[ $default == true ]] && [[ $overwrite == true ]]; then
+    rm -f $cert_dir/cert.crt $cert_dir/cert.key $cert_dir/cert.pem
+  fi
+
+  # create the certificate.
+  if ! openssl req -config $TMPFILE -new -x509 -days $days -nodes \
+    -out $cert -keyout $cert > $TMPOUT 2>&1
+  then
+    error_exit "Could not create certificate. Openssl output was:" $TMPOUT;
+  fi
+
+  chgrp certssl $cert
+  chmod 640 $cert
+
+  if [[ $request == true ]]; then
+    csr=${cert%.*}.csr
+    if [[ $(grep "TurnKey GNU/Linux" $template) ]]; then
+			cat <<- _EOF_ >&2
+
+			${PROGNAME}: WARNING: organizationName = "TurnKey GNU/Linux"
+			Unless you work for TurnKey, you probably want to edit the
+			template file, /etc/ssl/turnkey.cnf or create a custom copy
+			and use the [-t|--template] option.
+
+			_EOF_
+    fi
+    # create the certificate signing request.
+    if ! openssl req -config $TMPFILE -new -key $cert -out $csr > $TMPOUT 2>&1
+    then
+      error_exit "Could not create CSR. Openssl output was:" $TMPOUT;
+    else
+      if [[ $verbose == true ]]; then
+        # display the certificate signing request.
+        openssl req -noout -text -in $csr
+      fi
+    fi
+  fi
+
+  if [[ $out == false ]]; then
+    ln -sf -t $cert_dir $cert       # link for backward compatibility
+    # hash symlink
+    ln -sf -T $cert "$cert_dir/$(openssl x509 -hash -noout -in $cert).0"
+  fi
+
+  # Remove symlink for shellinabox
+  if [[ $default == true ]] && [[ -L $shellinabox ]]; then
+    rm -f $shellinabox  # let shellinabox make it's own certificates
+  fi
+
+  if [[ $verbose == true ]]; then
+    # display the certificate
+    openssl x509 -in $cert -noout -text
+  fi
+done
+
+graceful_exit
