@@ -1,6 +1,6 @@
 #!/bin/sh
 
 VIMTINY=$(which vim.tiny)
-[ "$VIMTINY" ] && ln -s $VIMTINY /usr/local/bin/vim
+[ "$VIMTINY" ] && update-alternatives --install /usr/bin/vim vim /usr/bin/vim.tiny 10
 
 exit 0
