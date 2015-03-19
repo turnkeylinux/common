@@ -65,6 +65,7 @@ RDN="/"
 
 # create key and password protected cert
 openssl req -x509 \
+    -sha256 \
     -newkey rsa:$BITS \
     -keyout $TMPKEY -out $TMPCRT \
     -passout pass:$KEYPASS \
