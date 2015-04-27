@@ -1,6 +1,8 @@
 #ifndef CHROOT_ONLY
 
-syslinux             # Bootloader for linux/i386 using ms-dos floppies
+syslinux             # Collection of bootloaders
+syslinux-common      # Collection of bootloaders (common)
+isolinux             # Collection of bootloaders (ISO 9960 bootloader)
 casper               # Run a "live" preinstalled system from read-only media
 hdparm               # Tune hard disk parameters for high performance
 
