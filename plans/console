@@ -5,7 +5,7 @@ whiptail        /* used by package scripts to create user-friendly dialogs */
 
 psmisc          # Utilities for /proc such as killall, pstree, fuser
 procps          # Provides sysctl.conf and utils such as top, free, vmstat
-console-tools   # Linux console and font utilities
+kbd             # Linux console font and keytable utilities
 
 #ifdef DEBUG
 strace          

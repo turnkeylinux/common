@@ -11,7 +11,7 @@ file                    /* di-live recommends */
 lvm2                    /* di-live recommends */
 eject                   /* di-live recommends */
 whiptail                /* di-live recommends */
-console-tools           /* di-live recommends */
+kbd                     /* di-live recommends */
 
 inithooks
 python-dialog
@@ -71,7 +71,6 @@ git-core
 whiptail
 localepurge
 lsb-release
-console-tools
 console-setup
 bash-completion
 libperl4-corelibs-perl  /* lsof dep instead of old perl version */
