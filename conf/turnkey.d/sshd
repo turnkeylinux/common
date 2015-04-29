@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+# permit root ssh login with password
+sed -i "/^PermitRootLogin/ s/without-password/yes/" /etc/ssh/sshd_config
+
 # disable sshd dns checks (if resolution fails will prevent logins)
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
