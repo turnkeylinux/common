@@ -1,0 +1,7 @@
+#!/bin/sh
+
+mkdir -p /etc/webmin/system-status
+cat >/etc/webmin/system-status/.gitignore<<EOF
+info
+history
+EOF
