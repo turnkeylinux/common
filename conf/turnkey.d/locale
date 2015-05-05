@@ -31,6 +31,11 @@ en_US
 en_US.UTF-8
 EOF
 
-locale-gen en_US.UTF-8
+debconf-set-selections <<END
+locales locales/locales_to_be_generated multiselect en_US.UTF-8 UTF-8
+locales locales/default_environment_locale select en_US.UTF-8
+END
+DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+
 localepurge
 
