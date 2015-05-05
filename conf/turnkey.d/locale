@@ -31,6 +31,9 @@ en_US
 en_US.UTF-8
 EOF
 
+# hack: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=684134
+sed -i '/en_US.UTF-8 UTF-8/ s/# //' /etc/locale.gen
+
 debconf-set-selections <<END
 locales locales/locales_to_be_generated multiselect en_US.UTF-8 UTF-8
 locales locales/default_environment_locale select en_US.UTF-8
