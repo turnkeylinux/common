@@ -1,23 +1,21 @@
 #!/bin/bash -e
 
-CERT_DIR=/etc/ssl/certs
-CERT_GRP=certssl
-
-# create symlink for shellinabox (why can't we just specify the certificate?)
-rm -f /var/lib/shellinabox/certificate.pem
-ln -s $CERT_DIR/cert.pem /var/lib/shellinabox/certificate.pem
-
-# set permissions for certssl group
-addgroup $CERT_GRP
-chgrp $CERT_GRP $CERT_DIR/cert.pem
-chmod 640 $CERT_DIR/cert.pem
-
 # create default configuration
 cat >/etc/default/shellinabox<<EOF
 SHELLINABOX_DAEMON_START=1
-SHELLINABOX_PORT=12320
-SHELLINABOX_GROUP=$CERT_GRP
-SHELLINABOX_ARGS=--no-beep
+SHELLINABOX_PORT=12319
+SHELLINABOX_ARGS="--no-beep --disable-ssl --localhost-only"
+EOF
+
+# enable stunnel to automatically start services
+sed -i "s|ENABLED=0|ENABLED=1|" /etc/default/stunnel4
+
+# configure stunnel to provide ssl support
+cat >>/etc/stunnel/stunnel.conf<<EOF
+[shellinabox]
+accept  = 12320
+connect = 127.0.0.1:12319
+
 EOF
 
 # update securetty (for root login)

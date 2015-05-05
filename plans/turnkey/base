@@ -40,7 +40,7 @@ nano
 ntp
 
 shellinabox
-openssl         /* shellinabox recommends */
+stunnel4        /* provide ssl to shellinabox */
 
 webmin
 webmin-theme-stressfree
