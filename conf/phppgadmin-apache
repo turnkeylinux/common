@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
 echo Listen 12322 >> /etc/apache2/ports.conf
-ln -s /etc/phppgadmin/apache.conf /etc/apache2/sites-available/phppgadmin
+ln -s /etc/phppgadmin/apache.conf /etc/apache2/sites-available/phppgadmin.conf
 a2ensite phppgadmin
 

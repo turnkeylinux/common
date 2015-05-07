@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 echo Listen 12322 >> /etc/apache2/ports.conf
-ln -s /etc/phpmyadmin/apache.conf /etc/apache2/sites-available/phpmyadmin
+ln -s /etc/phpmyadmin/apache.conf /etc/apache2/sites-available/phpmyadmin.conf
 a2ensite phpmyadmin
 
 # add mcrypt support to apache2 (if not already configured)
