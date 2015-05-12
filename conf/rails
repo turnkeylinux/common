@@ -26,7 +26,7 @@ gem install $GEMOPTS therubyracer
 # build and configure passenger
 passenger-install-apache2-module --auto
 PASSENGER_ROOT=$(echo $(ls -d /var/lib/gems/*/gems/passenger*))
-sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/conf.d/passenger
+sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/mods-available/passenger.*
 
 # convenience execution variables
 MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
@@ -70,6 +70,7 @@ a2enmod proxy_balancer
 a2enmod proxy_http
 a2enmod proxy
 a2enmod headers
+a2enmod passenger
 
 a2dissite 000-default
 
