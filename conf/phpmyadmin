@@ -43,3 +43,8 @@ EOF
 CONF=/etc/phpmyadmin/config.inc.php
 sed -i "s|\['controlpass'\]\(.*\)|\['controlpass'\] = '$PMA_PASS';|" $CONF
 
+# set the proper URI
+echo "\$cfg['PmaAbsoluteUri'] = 'https://0.0.0.0:12322/';" >> $CONF
+
+# change the announced web access port
+sed -i 's|80|12322|' /etc/phpmyadmin/phpmyadmin.service
