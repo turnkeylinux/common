@@ -54,7 +54,7 @@ set ${CREDIT_LOCATION:=/}
 cat > /etc/apache2/mods-available/substitute.conf<<EOF
 # Support TurnKey Linux by adding credit to footer
 <Location $CREDIT_LOCATION>
-    AddOutputFilterByType SUBSTITUTE text/html
+    AddOutputFilterByType INFLATE;SUBSTITUTE;DEFLATE text/html
     Substitute "s|</head>|$(strip "$HEAD")</head>|i"
     Substitute "s|</body>|$(strip "$BODY")</body>|i"
 </Location>
