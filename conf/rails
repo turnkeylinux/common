@@ -21,12 +21,11 @@ gem install $GEMOPTS rails
 gem install $GEMOPTS bundler
 gem install $GEMOPTS mysql -- --with-mysql-config='/usr/bin/mysql_config'
 gem install $GEMOPTS execjs
-gem install $GEMOPTS therubyracer
 
 # build and configure passenger
 passenger-install-apache2-module --auto
 PASSENGER_ROOT=$(echo $(ls -d /var/lib/gems/*/gems/passenger*))
-sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/conf.d/passenger
+sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/mods-available/passenger.*
 
 # convenience execution variables
 MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
@@ -70,14 +69,15 @@ a2enmod proxy_balancer
 a2enmod proxy_http
 a2enmod proxy
 a2enmod headers
+a2enmod passenger
 
-a2dissite default
+a2dissite 000-default
 
 mv /etc/apache2/conf/rails.conf /etc/apache2/conf/$APPNAME.conf
 sed -i "s|@APPNAME@|$APPNAME|g" /etc/apache2/conf/$APPNAME.conf
 
-mv /etc/apache2/sites-available/rails /etc/apache2/sites-available/$APPNAME
-sed -i "s|@APPNAME@|$APPNAME|g" /etc/apache2/sites-available/$APPNAME
+mv /etc/apache2/sites-available/rails.conf /etc/apache2/sites-available/$APPNAME.conf
+sed -i "s|@APPNAME@|$APPNAME|g" /etc/apache2/sites-available/$APPNAME.conf
 
 mv /etc/logrotate.d/rails /etc/logrotate.d/$APPNAME
 sed -i "s|@APPNAME@|$APPNAME|g" /etc/logrotate.d/$APPNAME

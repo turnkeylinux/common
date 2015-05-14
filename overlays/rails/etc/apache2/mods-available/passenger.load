@@ -1,0 +1,1 @@
+LoadModule passenger_module PASSENGER_ROOT/buildout/apache2/mod_passenger.so
