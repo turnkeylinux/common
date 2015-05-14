@@ -21,7 +21,6 @@ gem install $GEMOPTS rails
 gem install $GEMOPTS bundler
 gem install $GEMOPTS mysql -- --with-mysql-config='/usr/bin/mysql_config'
 gem install $GEMOPTS execjs
-gem install $GEMOPTS therubyracer
 
 # build and configure passenger
 passenger-install-apache2-module --auto

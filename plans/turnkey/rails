@@ -21,5 +21,7 @@ libssl-dev                 /* needed to build passenger gem */
 libxml2-dev                /* common dep for gem building, e.g., sanitize */
 libxslt1-dev               /* common dep for gem building, e.g., sanitize */
 
+nodejs
+
 postfix
 webmin-postfix
