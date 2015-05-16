@@ -1,7 +1,0 @@
-#!/bin/sh -e
-
-# start mysql
-/etc/init.d/mysql start
-
-/etc/init.d/mysql stop
-
