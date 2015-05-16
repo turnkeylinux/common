@@ -9,7 +9,7 @@ php5-mysql             # MySQL module for php5
 libapache2-mod-php5    # server-side, HTML-embedded scripting language (apache 2 module)
 webmin-phpini
 
-phpmyadmin
+adminer
 php5-xcache
 php5-cli
 
