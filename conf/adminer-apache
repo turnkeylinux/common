@@ -1,0 +1,12 @@
+#!/bin/sh -e
+
+echo Listen 12322 >> /etc/apache2/ports.conf
+ln -s /etc/adminer/apache.conf /etc/apache2/sites-available/adminer.conf
+a2ensite adminer
+
+# add mcrypt support to apache2 (if not already configured)
+#debconf-set-selections << END
+#php5-mcrypt php5/extension_mcrypt_apache2 boolean true
+#END
+
+#DEBIAN_FRONTEND=noninteractive dpkg-reconfigure php5-mcrypt
