@@ -30,7 +30,7 @@
     <Connector port="443" protocol="HTTP/1.1" SSLEnabled="true"
                maxThreads="150" scheme="https" secure="true" URIEncoding="UTF-8"
                clientAuth="false" sslProtocol="TLS" keystoreType="PKCS12"
-               keystoreFile="/etc/tomcat6/cert.p12" keystorePass="turnkey" />
+               keystoreFile="/etc/tomcat7/cert.p12" keystorePass="turnkey" />
 
     <!-- Define an AJP 1.3 Connector on port 8009 -->
     <!--
