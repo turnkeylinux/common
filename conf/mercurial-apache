@@ -5,7 +5,7 @@ set ${MERCURIAL_PORT:=8080}
 echo Listen $MERCURIAL_PORT >> /etc/apache2/ports.conf
 
 cat >/etc/mercurial/apache.conf<<EOF
-NameVirtualHost *:$MERCURIAL_PORT
+ServerName localhost
 
 <VirtualHost *:$MERCURIAL_PORT>
     UseCanonicalName Off
@@ -15,6 +15,6 @@ NameVirtualHost *:$MERCURIAL_PORT
 </VirtualHost>
 EOF
 
-ln -s /etc/mercurial/apache.conf /etc/apache2/sites-available/mercurial
+ln -s /etc/mercurial/apache.conf /etc/apache2/sites-available/mercurial.conf
 a2ensite mercurial
 
