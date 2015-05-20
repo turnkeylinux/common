@@ -3,23 +3,26 @@
 fatal() { echo "FATAL [$(basename $0)]: $@" 1>&2; exit 1; }
 
 # identify JVM to use
-[ -e /usr/lib/jvm/java-1.5.0-sun ] && JVM=java-1.5.0-sun
+##We have to check 5 conditions, Sun6, Oracle 6 and 7, openjdk 6 and 7
 [ -e /usr/lib/jvm/java-6-sun ] && JVM=java-6-sun
-[ -e /usr/lib/jvm/java-6-openjdk-i386 ] && JVM=java-6-openjdk-i386
-[ -e /usr/lib/jvm/java-6-openjdk-amd64 ] && JVM=java-6-openjdk-amd64
+[ -e /usr/lib/jvm/java-6-oracle ] && JVM=java-6-oracle
+[ -e /usr/lib/jvm/java-7-oracle ] && JVM=java-7-oracle
+
+[ -e /usr/lib/jvm/java-7-openjdk-i386 ] && JVM=java-7-openjdk-i386
+[ -e /usr/lib/jvm/java-7-openjdk-amd64 ] && JVM=java-7-openjdk-amd64
 
 [ -z "$JVM" ] && fatal "JVM to use could not be identified"
 
 # configure java/tomcat environment
 cat >> /etc/environment<<EOF
-CATALINA_HOME="/usr/share/tomcat6"
-CATALINA_BASE="/var/lib/tomcat6"
+CATALINA_HOME="/usr/share/tomcat7"
+CATALINA_BASE="/var/lib/tomcat7"
 CATALINA_OPTS="-server -Xms384M -Xmx512M -XX:MaxPermSize=256M"
 JAVA_HOME="/usr/lib/jvm/${JVM}"
 EOF
 
 update-java-alternatives -s $JVM || true
-echo JAVA_HOME=\"/usr/lib/jvm/${JVM}\" >> /etc/default/tomcat6
+echo JAVA_HOME=\"/usr/lib/jvm/${JVM}\" >> /etc/default/tomcat7
 
 # configure Apache if needed (Jk connector to Tomcat)
 if [ -e /etc/apache2/sites-available/jktomcat ]; then
