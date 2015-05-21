@@ -27,7 +27,7 @@ sed -i "s|import git|# import git\n    raise ImportError('$ERR')|" $CONF
 /usr/lib/inithooks/bin/web2py.py --pass=$W2PPASS
 
 # configure apache
-a2dissite default
+a2dissite 000-default
 a2ensite web2py
 a2enmod rewrite
 
