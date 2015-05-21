@@ -15,8 +15,8 @@ from dialog_wrapper import Dialog
 
 import signal
 
-TOMCAT_INIT="/etc/init.d/tomcat6"
-TOMCAT_USERS="/etc/tomcat6/tomcat-users.xml"
+TOMCAT_INIT="/etc/init.d/tomcat7"
+TOMCAT_USERS="/etc/tomcat7/tomcat-users.xml"
 
 def usage(s=None):
     if s:
