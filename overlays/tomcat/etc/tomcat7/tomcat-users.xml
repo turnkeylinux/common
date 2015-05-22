@@ -6,5 +6,5 @@
   <role rolename="manager-script"/>
   <role rolename="manager-jmx"/>
   <role rolename="manager-status"/>
-  <user username="admin" password="turnkey" roles=admin-gui,admin-script,manager-gui,manager-script,manager-jmx,manager-status"/>
+  <user username="admin" password="turnkey" roles="admin-gui,admin-script,manager-gui,manager-script,manager-jmx,manager-status"/>
 </tomcat-users>
