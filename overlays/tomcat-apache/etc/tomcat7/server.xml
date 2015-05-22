@@ -27,16 +27,8 @@
     <Executor name="tomcatThreadPool" namePrefix="catalina-exec-"
         maxThreads="150" minSpareThreads="4"/>
 
-    <Connector port="80" protocol="HTTP/1.1"
-               connectionTimeout="20000"
-               URIEncoding="UTF-8"
-               redirectPort="8443" />
-
-    <Connector port="443" protocol="HTTP/1.1" SSLEnabled="true"
-               maxThreads="150" scheme="https" secure="true" URIEncoding="UTF-8"
-               clientAuth="false" sslProtocol="TLS" keystoreType="PKCS12"
-               keystoreFile="/etc/tomcat7/cert.p12" keystorePass="turnkey" />
-
+    <Connector port="8009" address="127.0.0.1" redirectPort="8443" 
+	protocol="AJP/1.3" URIEncoding="UTF-8"/>
 
     <!--v
     <Connector executor="tomcatThreadPool"
