@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Server port="8005" shutdown="SHUTDOWN">
-  
+
   <!-- Security listener. Documentation at /docs/config/listeners.html
   <Listener className="org.apache.catalina.security.SecurityListener" />
   -->
@@ -37,8 +37,7 @@
                clientAuth="false" sslProtocol="TLS" keystoreType="PKCS12"
                keystoreFile="/etc/tomcat7/cert.p12" keystorePass="turnkey" />
 
-
-    <!--v
+    <!--
     <Connector executor="tomcatThreadPool"
                port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
@@ -63,7 +62,6 @@
     <!-- You should set jvmRoute to support load-balancing via AJP ie :
     <Engine name="Catalina" defaultHost="localhost" jvmRoute="jvm1">
     -->
-
     <Engine name="Catalina" defaultHost="localhost">
 
       <!--
@@ -71,13 +69,16 @@
       -->
 
       <Realm className="org.apache.catalina.realm.LockOutRealm">
-
         <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
                resourceName="UserDatabase"/>
       </Realm>
 
       <Host name="localhost"  appBase="webapps"
             unpackWARs="true" autoDeploy="true">
+
+        <!--
+        <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
+        -->
 
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log." suffix=".txt"
