@@ -21,8 +21,9 @@ CATALINA_OPTS="-server -Xms384M -Xmx512M -XX:MaxPermSize=256M"
 JAVA_HOME="/usr/lib/jvm/${JVM}"
 EOF
 
-update-java-alternatives -s $JVM || true
-echo JAVA_HOME=\"/usr/lib/jvm/${JVM}\" >> /etc/default/tomcat7
+# This is never going to work. But do we even need this?
+#update-java-alternatives --jre-headless -s $JVM || true
+sed -i "s/^#JAVA_HOME.*/JAVA_HOME=\/usr\/lib\/jvm\/${JVM}/" /etc/default/tomcat7
 
 # configure Apache if needed (Jk connector to Tomcat)
 if [ -e /etc/apache2/sites-available/jktomcat.conf ]; then
