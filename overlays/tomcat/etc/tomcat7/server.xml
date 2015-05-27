@@ -6,8 +6,6 @@
   -->
   <Listener className="org.apache.catalina.core.JasperListener" />
   <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
-  <!-- Listener className="org.apache.catalina.mbeans.ServerLifecycleListener" / -->
-  <!-- Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" / -->
 
   <GlobalNamingResources>
     <Resource name="UserDatabase" auth="Container"
@@ -44,8 +42,7 @@
              resourceName="UserDatabase"/>
 
       <Host name="localhost"  appBase="webapps"
-            unpackWARs="true" autoDeploy="true"
-            xmlValidation="false" xmlNamespaceAware="false">
+            unpackWARs="true" autoDeploy="true">
       </Host>
 
     </Engine>
