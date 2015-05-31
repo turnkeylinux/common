@@ -21,8 +21,13 @@ CATALINA_OPTS="-server -Xms384M -Xmx512M -XX:MaxPermSize=256M"
 JAVA_HOME="/usr/lib/jvm/${JVM}"
 EOF
 
-update-java-alternatives -s $JVM || true
-echo JAVA_HOME=\"/usr/lib/jvm/${JVM}\" >> /etc/default/tomcat7
+# this may not be 100% safe
+JINFO=`ls /usr/lib/jvm/.*java*7*jinfo`
+JINFO=${JINFO%.jinfo}
+JINFO=${JINFO#*.}
+# not sure if this is actually needed
+update-java-alternatives --jre-headless -s $JINFO
+sed -i "s/^#JAVA_HOME.*/JAVA_HOME=\/usr\/lib\/jvm\/${JVM}/" /etc/default/tomcat7
 
 # configure Apache if needed (Jk connector to Tomcat)
 if [ -e /etc/apache2/sites-available/jktomcat.conf ]; then
