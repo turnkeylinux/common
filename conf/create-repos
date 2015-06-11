@@ -28,7 +28,7 @@ export GIT_AUTHOR_EMAIL=root@localhost
 dvcs_repo git
 
 touch $REPOS/git/helloworld/.git/git-daemon-export-ok
-GITPUB=/var/cache/git
+GITPUB=/var/lib/git
 ln -s $REPOS/git/helloworld/.git $GITPUB/helloworld.git
 ln -s $GITPUB $REPOS/git/public
 echo "Hello World" > $REPOS/git/helloworld/.git/description
