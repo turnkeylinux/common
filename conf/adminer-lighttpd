@@ -1,0 +1,24 @@
+#!/bin/sh -e
+
+# Enable redirection so we can force adminer to use ssl via redirect mod
+sed -i "/^#.*\"mod_redirect\"/ s/#/ /" /etc/lighttpd/lighttpd.conf
+
+# Change default port to 8888
+sed -i "/^server.port.*=.*80/ s/80/8888/" /etc/lighttpd/lighttpd.conf
+
+# Disable default SSL site
+lighty-disable-mod ssl || true
+
+# Enable fast-cgi and php
+lighty-enable-mod fastcgi || true
+lighty-enable-mod fastcgi-php || true
+
+# Link conf file to available-sites, and enable it
+ln -s /etc/adminer/lighttpd.conf /etc/lighttpd/conf-available/50-adminer.conf
+lighty-enable-mod adminer || true
+
+# Minimize fastcgi children
+sed -i '/max-procs/ s/=>.*/=> 1,/; /PHP_FCGI_CHILDREN/ s/=>.*/=> "1",/g' /etc/lighttpd/conf-available/*fastcgi*
+
+# Remove default index.html file
+rm /var/www/html/index.lighttpd.html
