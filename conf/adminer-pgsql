@@ -1,0 +1,25 @@
+#!/bin/sh -e
+
+# adminer-pgsql
+#
+#   common conf script to configure adminer to only show pgsql
+#   database option and localhost for server.
+#   Also removes version checking code
+
+ADMINER_DIR=/usr/share/adminer/adminer/include
+ADMINER_BOOTSTRAP=$ADMINER_DIR/bootstrap.inc.php
+
+
+# Comment out uneeded db options
+sed -i '/^include "..\/adminer\/drivers\/sqlite.inc.php"/ s|include|\/\/ include|' $ADMINER_BOOTSTRAP
+sed -i '/^include "..\/adminer\/drivers\/oracle.inc.php"/ s|include|\/\/ include|' $ADMINER_BOOTSTRAP
+sed -i '/^include "..\/adminer\/drivers\/mssql.inc.php"/ s|include|\/\/ include|' $ADMINER_BOOTSTRAP
+sed -i '/^include "..\/adminer\/drivers\/mysql.inc.php"/ s|include|\/\/ include|' $ADMINER_BOOTSTRAP
+
+
+# Set localhost as default database
+sed -i '/^define("SERVER", \$_GET\[DRIVER\])/ s|\$_GET\[DRIVER\]|"localhost"|' $ADMINER_BOOTSTRAP
+
+
+# Remove version checking
+sed -i '/^<a href="http:\/\/www.adminer.org\/#download" id="version">/ s|.*||' $ADMINER_DIR/adminer.inc.php
