@@ -1,0 +1,15 @@
+#!/bin/bash -e
+# Generate unique Diffie-Hellman group
+# Note: daemons using dhparams need to be restarted for changes to take effect
+
+fatal() {
+    echo "fatal: $@" 1>&2
+    exit 1
+}
+
+# Exit if openssl is not available
+which openssl >/dev/null || fatal "openssl is not installed"
+
+openssl dhparam -out /etc/ssl/private/dhparams.pem 2048
+chmod 600 /etc/ssl/private/dhparams.pem
+
