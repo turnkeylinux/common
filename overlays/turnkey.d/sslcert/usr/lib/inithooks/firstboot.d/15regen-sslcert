@@ -24,6 +24,7 @@ set ${KEYPASS:=<blank>}           # workaround: no way of passing a blank pass
 set ${CERTFILE:="/etc/ssl/certs/cert.pem"}
 set ${CRTFILE:="/etc/ssl/certs/cert.crt"}
 set ${KEYFILE:="/etc/ssl/certs/cert.key"}
+set ${DHPARAMS:="/etc/ssl/private/dhparams.pem"}
 
 if [ $HELP ]; then
     echo "Generate SSL certificate"
@@ -84,6 +85,9 @@ fi
 # create crt and add it to certfile (key + crt)
 cp $TMPCRT $CRTFILE
 cat $TMPCRT >> $CERTFILE
+
+# add dhparams to certfile (required by openssl < 1.0.2)
+cat $DHPARAMS >> $CERTFILE
 
 # set permissions
 if grep -q ^certssl: /etc/group; then

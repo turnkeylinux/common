@@ -10,6 +10,11 @@ fatal() {
 # Exit if openssl is not available
 which openssl >/dev/null || fatal "openssl is not installed"
 
-openssl dhparam -out /etc/ssl/private/dhparams.pem 2048
+# A DH group of 2048 bits is recommended to combat FREAK and Logjam, but
+# Java 7 clients only support a group size of 1024 bits. A compromise is
+# to generate a unique 1024 bit group for each server. This should be 
+# changed to 2048 when Java 7 support is not needed.
+
+openssl dhparam -out /etc/ssl/private/dhparams.pem 1024 > /dev/null 2>&1
 chmod 600 /etc/ssl/private/dhparams.pem
 
