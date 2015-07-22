@@ -13,3 +13,8 @@
 # console default_message minimum_console default_console
 sed -i "s|#kernel.printk\(.*\)|kernel.printk = 1 4 1 7|" /etc/sysctl.conf
 
+cat >> /etc/sysctl.conf << EOF
+# Disable TCP timestamps
+net.ipv4.tcp_timestamps = 0
+#
+EOF
