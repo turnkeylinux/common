@@ -22,6 +22,12 @@ if [ -e $CONF ]; then
     rm -f /etc/webmin/miniserv.pem
 fi
 
+# patch webmin - set cookie httpOnly
+CGI=/usr/share/webmin/session_login.cgi
+if [ -e $CGI ]; then
+    sed -i "/Set-Cookie/ s/sec/sec; httpOnly/g" $CGI
+fi
+
 # apache2 (virtualhosts needs to be configured to use the cert)
 if [ -e /etc/apache2/mods-available/ssl.conf ]; then
     a2enmod ssl
