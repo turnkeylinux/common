@@ -1,0 +1,7 @@
+#!/bin/bash -ex
+
+# Set apache production security
+sed -i "s|^ServerTokens\(.*\)|ServerTokens Prod|" /etc/apache2/conf-available/security.conf
+sed -i "s|^ServerSignature\(.*\)|ServerSignature Off|" /etc/apache2/conf-available/security.conf
+
+a2enconf security
