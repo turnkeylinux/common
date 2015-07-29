@@ -68,6 +68,10 @@ webmin-firewall
 ssh
 webmin-sshd
 
+bsd-mailx
+postfix
+webmin-postfix
+
 #ifndef CHROOT_ONLY
 acpi-support-base
 #endif

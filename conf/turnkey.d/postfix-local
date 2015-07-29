@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+if [ ! $HOSTNAME ]; then
+    echo "'$(basename $0)' error: hostname not defined"
+    return 1
+fi
+
+postconf -e inet_interfaces=localhost
+postconf -e myhostname=$HOSTNAME
+
+/etc/init.d/postfix start
+/etc/init.d/postfix stop
+
