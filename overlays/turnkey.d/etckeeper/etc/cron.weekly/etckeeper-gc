@@ -1,0 +1,9 @@
+#!/bin/bash -e
+#
+# weekly cron job to do garebage collection for etckeeper 
+
+# only run if git is installed & /etc is git repo
+if [ -f /usr/bin/git ] && [ -d /etc/.git ]; then
+    cd /etc
+    /usr/bin/git gc --auto --quiet
+fi
