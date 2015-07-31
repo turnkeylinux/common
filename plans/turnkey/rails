@@ -23,5 +23,3 @@ libxslt1-dev               /* common dep for gem building, e.g., sanitize */
 
 nodejs
 
-postfix
-webmin-postfix

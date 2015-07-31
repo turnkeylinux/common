@@ -7,8 +7,5 @@ mysql-server
 webmin-mysql
 python-mysqldb
 
-postfix
-webmin-postfix
-
 unzip
 ipython
