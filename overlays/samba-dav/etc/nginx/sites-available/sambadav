@@ -1,0 +1,36 @@
+server {
+	listen 443 ssl default_server;
+	listen [::]:443 ssl default_server;
+
+        ssl_certificate /etc/ssl/certs/cert.crt;
+        ssl_certificate_key /etc/ssl/certs/cert.key;
+
+	server_name localhost;
+	root /var/www/sambadav;
+	index server.php;
+
+	location / {
+                try_files $uri $uri/ server.php =404;
+
+		rewrite ^/(.*)$ /server.php;
+	}
+
+	location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                try_files $fastcgi_script_name =404;
+                set $path_info $fastcgi_path_info;
+                fastcgi_param PATH_INFO $path_info;
+
+                fastcgi_index server.php;
+                include fastcgi.conf;
+
+		fastcgi_pass unix:/var/run/php5-fpm.sock;
+	}
+
+        location ~* \.(css|js|gif|jpe?g|png)$ {
+                          expires 1y;
+                          add_header Pragma public;
+                          add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+                          fastcgi_hide_header Set-Cookie;
+        }
+}

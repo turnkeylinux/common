@@ -1,0 +1,31 @@
+#!/bin/sh -ex
+
+SRC=/usr/local/src
+WEBROOT=/var/www/sambadav
+
+curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/local/bin
+
+git clone https://github.com/1afa/sambadav.git $SRC/sambadav
+cp -a $SRC/sambadav/src $WEBROOT
+
+cd $WEBROOT
+composer --optimize-autoloader install
+cd -
+
+for i in log data; do
+	chown www-data:root /var/www/sambadav/$i
+	chmod 0750 /var/www/sambadav/$i
+done
+
+rm -f /etc/nginx/sites-enabled/default
+ln -s /etc/nginx/sites-available/sambadav /etc/nginx/sites-enabled/sambadav
+ln -s /etc/nginx/sites-available/tkl-webcp /etc/nginx/sites-enabled/tkl-webcp
+
+# add Unix pre-auth
+mv $SRC/Auth.php $WEBROOT/lib/SambaDAV/Auth.php
+
+# open shares
+sed -i "s|array()|array('share_root' => array(array('localhost')))|" $WEBROOT/config/share_root.inc.php
+
+# change base URL
+sed -i "s|webfolders/||" $WEBROOT/config/config.inc.php
