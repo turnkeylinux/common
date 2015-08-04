@@ -1,0 +1,16 @@
+#!/bin/bash -e
+#
+# turnkey-restart-ssl
+# 
+# Purpose: Restart all applications which use SSL/TLS
+#
+# Example: After changing server cert/key
+#
+SSL_APPS="apache2 lighttpd nginx tomcat webmin stunnel4 postfix dovecot"
+
+for s in $SSL_APPS; do
+  if [ -e "/etc/init.d/$s" ]; then
+    service $s restart
+  fi
+done
+

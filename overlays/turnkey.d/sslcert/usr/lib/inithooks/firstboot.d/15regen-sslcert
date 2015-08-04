@@ -103,6 +103,9 @@ else
     chmod 600 $CERTFILE
 fi
 
+# restart ssl applications
+turnkey-restart-ssl
+
 # cleanup
 rm -f $TMPCRT $TMPKEY
 
