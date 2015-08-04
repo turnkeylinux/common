@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 
+# configure apache security
 CONF="/etc/apache2/conf-available/security.conf"
-
 if [ -e $CONF ]; then
     # Set apache production security
     sed -i "s|^ServerTokens\(.*\)|ServerTokens Prod|" $CONF
@@ -18,3 +18,10 @@ if [ -e $CONF ]; then
 
     a2enconf security
 fi
+
+# configure nginx security
+
+	# place nginx security updates here
+
+# configure lighttpd security
+
