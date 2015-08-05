@@ -1,0 +1,69 @@
+#!/bin/bash -e
+
+fatal() {
+    echo "fatal: $@" 1>&2
+    exit 1
+}
+
+DHPARAMS="/etc/ssl/private/dhparams.pem"
+SECURE_CIPHER_LIST="ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:!DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"
+
+# configure apache security
+CONF="/etc/apache2/conf-available/security.conf"
+if [ -e $CONF ]; then
+    # Set apache production security
+    sed -i "s|^ServerTokens\(.*\)|ServerTokens Prod|" $CONF
+    sed -i "s|^ServerSignature\(.*\)|ServerSignature Off|" $CONF
+
+    # Disable HTTP compression when using SSL to protect against BREACH
+    sed -i '/<\/Directory>/ a \
+\
+# Disable HTTP compression when using SSL to protect against BREACH\
+<Location />\
+  SetEnvIfExpr "%{HTTPS} == '"'"'on'"'"'" no-gzip\
+</Location>
+' $CONF
+
+    a2enconf security
+fi
+
+# Configure nginx security
+
+  # placeholder for nginx security updates
+
+# Configure lighttpd security
+
+secure_lighttpd() {
+  CONF=$1
+  if [ -e $CONF ]; then
+    # Remove ssl params to prevent duplicates
+    SSL_PARAMS="ssl.use-sslv2 ssl.use-sslv3 ssl.use-compression ssl.honor-cipher-order ssl.dh-file ssl.ec-curve"
+    for p in $SSL_PARAMS; do
+      sed -i "/^\s*$p/ d" $CONF
+    done
+
+    # Replace ssl.cipher-list
+    sed -i "/^\s*ssl.cipher-list/ s|\".*\"|\"$SECURE_CIPHER_LIST\"|g" $CONF    
+
+    # Insert additional params
+    sed -i '/^\s*ssl.cipher-list/ i \
+    ssl.use-sslv2 = "disable"\
+    ssl.use-sslv3 = "disable"\
+    ssl.dh-file = '"\"$DHPARAMS\""'\
+    ssl.ec-curve = "secp384r1"\
+    ssl.use-compression = "disable"\
+    ssl.honor-cipher-order = "enable"
+  ' $CONF
+  fi
+}
+
+# Find and secure all lighttpd.conf files
+
+if [ -e "/etc/init.d/lighttpd" ]; then
+  [[ ":$PATH:" =~ ":.:" ]] && fatal "Insecure use of '.' in PATH: $PATH"
+  find /etc -name "lighttpd.conf" | while read conf; do secure_lighttpd "$conf"; done
+
+  service lighttpd restart
+fi
+
+# vim: syntax=bash ts=2 sw=2 sts=2 sr noet
