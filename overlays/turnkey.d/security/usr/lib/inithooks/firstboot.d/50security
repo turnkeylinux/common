@@ -25,6 +25,7 @@ if [ -e $CONF ]; then
 ' $CONF
 
     a2enconf security
+    service apache2 restart
 fi
 
 # Configure nginx security
