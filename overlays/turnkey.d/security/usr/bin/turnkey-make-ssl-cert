@@ -1,0 +1,311 @@
+#! /bin/bash -e
+# ---------------------------------------------------------------------------
+# turnkey-make-ssl-cert - "Make server cert for TurnKey GNU/Linux appliance"
+
+# Copyright 2014,2015, John Carver <dude4linux@gmail.com>
+  
+  # This program is free software: you can redistribute it and/or modify
+  # it under the terms of the GNU General Public License as published by
+  # the Free Software Foundation, either version 3 of the License, or
+  # (at your option) any later version.
+
+  # This program is distributed in the hope that it will be useful,
+  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  # GNU General Public License at (http://www.gnu.org/licenses/) for
+  # more details.
+
+# Usage: turnkey-make-ssl-cert [-h|--help] [-o|--out file] [-d|--default] [-w|--wild] [-t|--template file] [-i|--ip] [-v|--verbose] [-f|--force-overwrite] [-r|--csr] FQDN .. [FQDN]
+
+# Purpose:
+
+  # - Make default certificate for TurnKey GNU/Linux appliance [-d|--default]
+  # - Make server certificates for Apache/Nginx virtual hosts
+  # - Make wildcard certificate for one or more domains [-w|--wild]
+  # - Use sha256 and aes128 for additional security "Bulletproof SSL and TLS"
+  # - Use Subject Alternate Names (SAN) for host and domain names
+  # - Optionally generate a certificate signing request (csr)
+  # - Optionally include ip addresses in SAN list [-i|--ip]
+  # - Store keys in /etc/ssl/private for security
+  # - Follow Debian conventions and best practices
+
+# Revision history:
+# 2014-08-28 Created by new-script ver. 3.0
+# 2014-09-12 Released tkl-make-ssl-cert ver. 1.0
+# 2014-10-02 Released tkl-make-ssl-cert ver. 1.1
+# 2015-08-06 Released turnkey-make-ssl-cert ver. 1.2
+# ---------------------------------------------------------------------------
+
+PROGNAME=${0##*/}
+VERSION="1.2"
+
+# use extended globbing
+  shopt -s extglob
+
+# set defaults
+  CERT_DIR="/usr/local/share/ca-certificates"
+  KEY_DiR="/etc/ssl/private"
+  TEMPLATE="/etc/ssl/turnkey.cnf"
+  DEFAULT=false
+  IP=false
+  OUT=false
+  VERBOSE=false
+  REQUEST=false
+  WILD=false
+  OVERWRITE=false
+
+# set expiration for 10 years (including leap years)
+  days=$((($(date -d '+10 year' +%s) - $(date +%s))/86400))
+
+clean_up() { # Perform pre-exit housekeeping
+  rm -f $TMPFILE $TMPOUT
+  return
+}
+
+error_exit() {
+  echo -e "${PROGNAME}: ${1:-"Unknown Error"}" >&2
+  if [ $2 ] && [ -f $2 ]; then
+    cat $2 >&2
+  fi
+  clean_up
+  exit 1
+}
+
+graceful_exit() {
+  clean_up
+  exit
+}
+
+signal_exit() { # Handle trapped signals
+  case $1 in
+    INT)    error_exit "Program interrupted by user" ;;
+    TERM)   echo -e "\n$PROGNAME: Program terminated" >&2 ; graceful_exit ;;
+    *)      error_exit "Terminating on unknown signal" ;;
+  esac
+}
+
+usage() {
+
+cat << _EOF_
+Usage: $PROGNAME [-o|--out file] [-t|--template file] [-i|--ip] [-v|--verbose] [-f|--force-overwrite] FQDN .. [FQDN]
+  Generate a certificate/key pair using the list of FQDNs.
+
+Usage: $PROGNAME [-d|--default] [-t|--template file] [-i|--ip] [-v|--verbose] [-f|--force-overwrite]
+  Generate the default certificate/key pair, cert.crt, cert.key, using the hostname.
+
+Usage: $PROGNAME [-o|--out file] [-t|--template file] [-i|--ip] [-v|--verbose] [-f|--force-overwrite] [-w|--wild] domainName .. [domainName]
+  Generate a wildcard certificate for the list of domains.
+
+Usage: $PROGNAME [-d|--default] [-t|--template file] [-i|--ip] [-v|--verbose] [-f|--force-overwrite] [-r|--csr] FQDN .. [FQDN]
+  Generate an optional certificate signing request for the list of FQDNs.
+
+Usage: $PROGNAME [-h|--help]
+  Display the help message and exit.
+
+_EOF_
+
+  return
+}
+
+help_message() {
+
+cat << _EOF_
+
+$PROGNAME ver. $VERSION
+"Make server cert for TurnKey GNU/Linux appliance"
+
+$(usage)
+
+      Options:
+      -h, --help              Display this help message and exit
+      -o, --out [/path/]file  Write certificate to alternate location
+      -d, --default           Generate default certificate
+                                /etc/ssl/certs/cert.pem
+      -r, --csr               Generate a certificate signing request
+      -w, --wild              Generate wildcard certificate
+      -t, --template file     Use alternate template file
+                                default: /etc/ssl/turnkey.cnf
+      -i, --ip                Optionally include host ip addresses
+      -v, --verbose           Display generated certificate
+      -f, --force-overwrite   Overwrite existing certificate
+
+      NOTE: You must be the superuser to run this script.
+
+_EOF_
+
+return
+}
+
+add_san() {
+  if [[ ! "$sans" =~ " $1 " ]]; then         # skip duplicates
+    echo "DNS.$((n++)) = $1" >> $TMPFILE;    # add subject alternate name
+    sans+="$1 ";
+  fi
+}
+
+add_ip() {
+  echo "IP.$((i++)) = $1" >> $TMPFILE;
+}
+
+create_temporary_cnf() {
+  n=1; i=1; sans=" ";
+
+  # remove alt_names from template
+  sed -e '/^\[\s*alt_names\s*\]/q' $TEMPLATE > $TMPFILE
+
+  if [[ $WILD == true ]]; then
+    [[ "$args" == "" ]] && args="$(hostname -Ad)"
+    for domain in $args
+    do
+      add_san "$domain";                    # domain
+      commonName=${commonName:-$domain};    # use first match
+    done
+    for domain in $args
+    do
+      add_san "*.$domain";                  # wildcard
+    done
+  else
+    [[ "$args" == "" ]] && args="$(hostname -A) $(hostname)"
+    for fqdn in $args
+    do
+      add_san "$fqdn";                      # fqdn
+      commonName=${commonName:-$fqdn};      # use first match
+    done
+    for fqdn in $args
+    do
+      add_san "${fqdn#*.}";                 # domain
+    done
+    for fqdn in $args
+    do
+      add_san "${fqdn%%.*}";                # host
+    done
+    add_san "localhost";                    # localhost
+  fi
+
+  if [[ $IP == true ]]; then
+    for addr in $(hostname -I); do add_san "$addr"; done
+    add_san "127.0.0.1";
+    for addr in $(hostname -I); do add_ip "$addr"; done
+    add_ip  "127.0.0.1";
+  fi
+
+  sed -i "s#@HostName@#\"$commonName\"#" $TMPFILE
+}
+
+# Trap signals
+trap "signal_exit TERM" TERM HUP
+trap "signal_exit INT"  INT
+
+# Parse command-line
+while [[ -n $1 ]]; do
+  case $1 in
+    -h | --help)              help_message; graceful_exit ;;
+    -o | --out)               shift; CERT="$1"; OUT=true ;;
+    -d | --default)           DEFAULT=true ;;
+    -r | --csr)               REQUEST=true ;;
+    -w | --wild)              WILD=true ;;
+    -t | --template)          shift; TEMPLATE="$1" ;;
+    -i | --ip)                IP=true ;;
+    -v | --verbose)           VERBOSE=true ;;
+    -f | --force-overwrite)   OVERWRITE=true ;;
+    -* | --*)                 usage; error_exit "Unknown option $1" ;;
+    *)                        args+="$1 " ;;
+  esac
+  shift
+done
+
+# Exit if OpenSSL is not available
+which openssl > /dev/null || error_exit "OpenSSL is not installed."
+
+# Check for root UID
+if [[ $(id -u) != 0 ]]; then
+  error_exit "You must be the superuser to run this script."
+fi
+
+# Template file must exist
+if [[ ! -f $TEMPLATE ]]; then
+  error_exit "Could not open template file: $TEMPLATE";
+fi
+
+## Main logic ##
+TMPFILE="$(mktemp)" || error_exit "Can't create temporary file";
+TMPOUT="$(mktemp)"  || error_exit "Can't create temporary file";
+
+create_temporary_cnf
+
+# assign file names
+if [[ $DEFAULT == true ]]; then
+  OUT=false    # ignore output file
+  CERT="$CERT_DIR/cert.crt"
+  KEY="$KEY_DiR/cert.key"
+  CSR="$KEY_DiR/cert.csr"
+elif [[ $OUT == false ]]; then
+  CERT="$CERT_DIR/$commonName.crt"
+  KEY="$KEY_DiR/$commonName.key"
+  CSR="$KEY_DiR/$commonName.csr"
+else
+	# ensure user input cert name has extension pem or crt
+  shopt -s nocasematch
+  [[ ${CERT##*.} =~ (pem|crt) ]] || CERT+=".crt"
+  shopt -u nocasematch
+  KEY="${CERT%.*}.key"
+  CSR="${CERT%.*}.csr"
+fi
+
+# don't overwrite existing file without permission
+if [[ -f $CERT ]] && [[ $OVERWRITE == false ]]; then
+  error_exit "Output file already exists: $CERT";
+fi
+
+# create the key and certificate.
+if ! openssl req -sha256 -config $TMPFILE -new -x509 -days $days -nodes \
+  -out $CERT -keyout $KEY > $TMPOUT 2>&1
+then
+  error_exit "Could not create certificate. Openssl output was:" $TMPOUT;
+fi
+
+# set file permissions
+chmod 400 "$KEY"
+chmod 644 "$CERT"
+
+# create the certificate signing request.
+if [[ $REQUEST == true ]]; then
+  # warn if organizationName is "TurnKey GNU/Linux"
+  if [[ $(grep '^organizationName\s*=\s*"TurnKey GNU/Linux"' $TEMPLATE) ]]; then
+
+cat << _EOF_ >&2
+
+${PROGNAME}: WARNING: organizationName = "TurnKey GNU/Linux"
+    Unless you work for TurnKey, you probably want to edit the
+    template file, /etc/ssl/turnkey.cnf or create a custom copy
+    and use the [-t|--template] option.
+
+_EOF_
+
+  fi
+  # create the certificate signing request.
+  if ! openssl req -sha256 -config $TMPFILE -new -key $KEY -out $CSR > $TMPOUT 2>&1
+  then
+    error_exit "Could not create CSR. Openssl output was:" $TMPOUT;
+  fi
+  chmod 600 $CSR
+fi
+
+# rehash symlinks in /etc/ssl/certs
+if [[ $OUT == false ]]; then
+  update-ca-certificates
+fi
+
+# handle verbose
+if [[ $VERBOSE == true ]]; then
+  # display the certificate
+  openssl x509 -noout -text -in $CERT
+  if [[ $REQUEST == true ]]; then
+    # display the certificate signing request.
+    openssl req -noout -text -in $CSR
+  fi
+fi
+
+clean_up
+
+graceful_exit

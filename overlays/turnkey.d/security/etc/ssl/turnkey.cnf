@@ -1,0 +1,52 @@
+#
+# SSL template for TurnKey GNU/Linux appliances
+# Based on the SSLeay example configuration file.
+#
+
+RANDFILE                = /dev/urandom
+
+[ req ]
+default_bits            = 2048
+default_keyfile         = cert.pem
+distinguished_name      = req_distinguished_name
+prompt                  = no
+policy			= policy_anything
+req_extensions          = v3_req
+x509_extensions         = v3_req
+
+[ req_distinguished_name ]
+## Uncomment and add site specific information below, then run tkl-make-ssl-cert again.
+
+## Country Name (2 letter code)
+# countryName             = 
+
+## State or Province Name (full name)
+# stateOrProvinceName     = 
+
+## Locality Name (eg, city)
+# localityName            = 
+
+## Organization Name (eg, company)
+organizationName        = "TurnKey GNU/Linux"
+
+## Organizational Unit Name (eg, section)
+organizationalUnitName  = "Software appliances"
+
+## Common Name (e.g. server FQDN or HostName)
+# @HostName@ will be replaced by script. Override by defining commonName below.
+commonName              = @HostName@
+# commonName              = 
+
+## Email Address
+# emailAddress            = 
+
+[ v3_req ]
+basicConstraints        = CA:FALSE
+extendedKeyUsage        = serverAuth, clientAuth
+
+
+## Do not edit the lines below.  Changes will be ignored.
+## ------------------------------------------------------
+subjectAltName          = @alt_names
+
+[ alt_names ]
