@@ -11,23 +11,26 @@ SECURE_CIPHER_LIST="ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:
 # Compatible Cipher List recommended for older clients - reduced security score
 COMPATIBLE_CIPHER_LIST="ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"
 
+APACHE_SSL_PARAMS="SSLProtocol SSLHonorCipherOrder SSLCompression SSLCipherSuite SSLCertificateFile SSLCertificateKeyFile"
+NGINX_SSL_PARAMS="ssl_protocols ssl_prefer_server_ciphers ssl_ciphers ssl_certificate ssl_certificate_key ssl_session_timeout ssl_session_cache"
+
 fatal() {
     echo "fatal: $@" 1>&2
     exit 1
 }
 
-# Configure Apache security
-
 remove_ssl_params() {
-  # Remove extra ssl params from apache.conf files
+  # Remove extra ssl params from .conf files
   CONF=$1
+  SSL_PARAMS=$2
   if [ -e $CONF ]; then
-    SSL_PARAMS="SSLProtocol SSLHonorCipherOrder SSLCompression SSLCipherSuite SSLCertificateFile SSLCertificateKeyFile"
     for p in $SSL_PARAMS; do
       sed -i "/^\s*$p/ d" $CONF
     done
   fi
 }
+
+# Configure Apache security
 
 # Is Apache installed?
 if [ -d "/etc/apache2" ]; then
@@ -35,13 +38,13 @@ if [ -d "/etc/apache2" ]; then
   CONF="/etc/apache2/mods-available/ssl.conf"
   if [ -e $CONF ]; then
     # Replace SSLCipherSuite
-    sed -i "s|^\(\s*SSLCipherSuite\s*\).*$|\1$SECURE_CIPHER_LIST|g" $CONF    
+    sed -i "s|^\(\s*SSLCipherSuite\s\+\).*$|\1$SECURE_CIPHER_LIST|g" $CONF    
 
     # Enable honor cipher order
-    sed -i "s|^\(\s*SSLHonorCipherOrder\s*\).*$|\1on|g" $CONF    
+    sed -i "s|^\(\s*SSLHonorCipherOrder\s\+\).*$|\1on|g" $CONF    
 
     # Enable only secure protocols
-    sed -i "s|^\(\s*SSLProtocol\s*\).*$|\1all -SSLv2 -SSLv3|g" $CONF    
+    sed -i "s|^\(\s*SSLProtocol\s\+\).*$|\1all -SSLv2 -SSLv3|g" $CONF    
 
     # Disable ssl compression
     # Add default certificate and key files
@@ -63,8 +66,8 @@ SSLCertificateFile '"$CERTFILE"'\
   CONF="/etc/apache2/conf-available/security.conf"
   if [ -e $CONF ]; then
     # Set apache production security
-    sed -i "s|^ServerTokens\(.*\)|ServerTokens Prod|" $CONF
-    sed -i "s|^ServerSignature\(.*\)|ServerSignature Off|" $CONF
+    sed -i "s|^ServerTokens.*|ServerTokens Prod|" $CONF
+    sed -i "s|^ServerSignature.*|ServerSignature Off|" $CONF
 
     # Disable HTTP compression when using SSL to protect against BREACH
     sed -i '/<\/Directory>/ a \
@@ -79,10 +82,10 @@ SSLCertificateFile '"$CERTFILE"'\
   fi
 
   # Remove SSL params from all apache.conf
-  find /etc -name "apache.conf" | while read conf; do remove_ssl_params "$conf"; done
+  find /etc -name "apache.conf" | while read conf; do remove_ssl_params "$conf" "$APACHE_SSL_PARAMS"; done
 
   # Remove SSL params from all sites-available
-  for conf in /etc/apache2/sites-available/*; do remove_ssl_params "$conf"; done
+  for conf in /etc/apache2/sites-available/*; do remove_ssl_params "$conf" "$APACHE_SSL_PARAMS"; done
 
   a2enconf security
   service apache2 restart
@@ -90,7 +93,43 @@ fi
 
 # Configure nginx security
 
-  # placeholder for nginx security updates
+if [ -d '/etc/nginx' ]; then
+  CONF="/etc/nginx/include/ssl"
+  if [ -e $CONF ]; then
+    sed -i "\
+      s|^\(\s\*ssl_ciphers\s\+\).*$|\1${SECURE_CIPHER_LIST};|g;\
+      s|^\(\s\*ssl_prefer_server_ciphers\s\+\).*$|\1on;|g;\
+      s|^\(\s\*ssl_protocols\s\+\).*$|\1TLSv1 TLSv1.1 TLSv1.2;|g;\
+      s|^\(\s\*ssl_session_timeout\s\+\).*$|\110m;|g;\
+      s|^\(\s\*ssl_session_cache\s\+\).*$|\1shared:SSL:50m;|g;\
+      s|^\(\s\*ssl_certificate_key\s\+\).*$|\1${KEYFILE};|g;\
+      s|^\(\s\*ssl_certificate\s\+\).*$|\1${CERTFILE};|g;\
+    " $CONF
+
+    # Additional settings
+    cat << EOF >> $CONF
+
+ssl_dhparam ${DHPARAMS};
+add_header X-Content-Type-Options nosniff;
+
+server_tokens off;
+EOF
+
+    # Do not enable SSL everywhere
+    sed -i '/ssl\s\+/ d' $CONF
+
+    # Include in nginx.conf by default
+    ln -sf $CONF /etc/nginx/conf.d/ssl.conf
+  else
+    fatal "No ssl conf file available"
+  fi
+
+  find /etc -name 'nginx.conf' | while read conf; do remove_ssl_params "$conf" "$NGINX_SSL_PARAMS"; done
+
+  for conf in /etc/nginx/sites-available/*; do remove_ssl_params "$conf" "$NGINX_SSL_PARAMS"; done
+
+  service nginx restart
+fi
 
 # Configure lighttpd security
 
