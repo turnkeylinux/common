@@ -30,7 +30,7 @@ remove_ssl_params() {
 }
 
 # Is Apache installed?
-if [ -e "/etc/init.d/apache2" ]; then
+if [ -d "/etc/apache2" ]; then
 
   CONF="/etc/apache2/mods-available/ssl.conf"
   if [ -e $CONF ]; then
@@ -45,15 +45,16 @@ if [ -e "/etc/init.d/apache2" ]; then
 
     # Disable ssl compression
     # Add default certificate and key files
-    sed -i '/^\s*SSLProtocol/ i \
+    sed -i '/^\s*SSLProtocol/ a \
 \
 #   Disable ssl compression\
 SSLCompression off\
 \
 #   Default certificate file\
-SSLCertificateFile $CERTFILE\
+SSLCertificateFile '"$CERTFILE"'\
+\
 #   Default key file\
-#SSLCertificateKeyFile $KEYFILE
+#SSLCertificateKeyFile '"$KEYFILE"'
 '   $CONF
   else
     fatal "No ssl.conf available"	# Bailout without changing anything
@@ -119,7 +120,8 @@ secure_lighttpd() {
 
 # Find and secure all lighttpd.conf files
 
-if [ -e "/etc/init.d/lighttpd" ]; then
+# Is lighty installed?
+if [ -d "/etc/lighttpd" ]; then
   find /etc -name "lighttpd.conf" | while read conf; do secure_lighttpd "$conf"; done
 
   service lighttpd restart
