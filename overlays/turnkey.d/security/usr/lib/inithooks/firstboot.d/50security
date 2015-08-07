@@ -1,16 +1,66 @@
 #!/bin/bash -e
 
+set ${CERTFILE:="/etc/ssl/certs/cert.pem"}
+set ${CRTFILE:="/usr/local/share/ca-certificates/cert.crt"}
+set ${KEYFILE:="/etc/ssl/private/cert.key"}
+set ${DHPARAMS:="/etc/ssl/private/dhparams.pem"}
+
+# Secure Cipher List recommended Ivan Ristic in Bulletproof SSL and TLS
+SECURE_CIPHER_LIST="ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:EDH-RSA-DES-CBC3-SHA"
+
+# Compatible Cipher List recommended for older clients - reduced security score
+COMPATIBLE_CIPHER_LIST="ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"
+
 fatal() {
     echo "fatal: $@" 1>&2
     exit 1
 }
 
-DHPARAMS="/etc/ssl/private/dhparams.pem"
-SECURE_CIPHER_LIST="ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:!DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"
+# Configure Apache security
 
-# configure apache security
-CONF="/etc/apache2/conf-available/security.conf"
-if [ -e $CONF ]; then
+remove_ssl_params() {
+  # Remove extra ssl params from apache.conf files
+  CONF=$1
+  if [ -e $CONF ]; then
+    SSL_PARAMS="SSLProtocol SSLHonorCipherOrder SSLCompression SSLCipherSuite SSLCertificateFile SSLCertificateKeyFile"
+    for p in $SSL_PARAMS; do
+      sed -i "/^\s*$p/ d" $CONF
+    done
+  fi
+}
+
+# Is Apache installed?
+if [ -e "/etc/init.d/apache2" ]; then
+
+  CONF="/etc/apache2/mods-available/ssl.conf"
+  if [ -e $CONF ]; then
+    # Replace SSLCipherSuite
+    sed -i "s|^\(\s*SSLCipherSuite\s*\).*$|\1$SECURE_CIPHER_LIST|g" $CONF    
+
+    # Enable honor cipher order
+    sed -i "s|^\(\s*SSLHonorCipherOrder\s*\).*$|\1on|g" $CONF    
+
+    # Enable only secure protocols
+    sed -i "s|^\(\s*SSLProtocol\s*\).*$|\1all -SSLv2 -SSLv3|g" $CONF    
+
+    # Disable ssl compression
+    # Add default certificate and key files
+    sed -i '/^\s*SSLProtocol/ i \
+\
+#   Disable ssl compression\
+SSLCompression off\
+\
+#   Default certificate file\
+SSLCertificateFile $CERTFILE\
+#   Default key file\
+#SSLCertificateKeyFile $KEYFILE
+'   $CONF
+  else
+    fatal "No ssl.conf available"	# Bailout without changing anything
+  fi
+
+  CONF="/etc/apache2/conf-available/security.conf"
+  if [ -e $CONF ]; then
     # Set apache production security
     sed -i "s|^ServerTokens\(.*\)|ServerTokens Prod|" $CONF
     sed -i "s|^ServerSignature\(.*\)|ServerSignature Off|" $CONF
@@ -22,10 +72,19 @@ if [ -e $CONF ]; then
 <Location />\
   SetEnvIfExpr "%{HTTPS} == '"'"'on'"'"'" no-gzip\
 </Location>
-' $CONF
+    ' $CONF
+  else
+    fatal "No security.conf available"	# Bailout without changing anything
+  fi
 
-    a2enconf security
-    service apache2 restart
+  # Remove SSL params from all apache.conf
+  find /etc -name "apache.conf" | while read conf; do remove_ssl_params "$conf"; done
+
+  # Remove SSL params from all sites-available
+  for conf in /etc/apache2/sites-available/*; do remove_ssl_params "$conf"; done
+
+  a2enconf security
+  service apache2 restart
 fi
 
 # Configure nginx security
@@ -61,7 +120,6 @@ secure_lighttpd() {
 # Find and secure all lighttpd.conf files
 
 if [ -e "/etc/init.d/lighttpd" ]; then
-  [[ ":$PATH:" =~ ":.:" ]] && fatal "Insecure use of '.' in PATH: $PATH"
   find /etc -name "lighttpd.conf" | while read conf; do secure_lighttpd "$conf"; done
 
   service lighttpd restart
