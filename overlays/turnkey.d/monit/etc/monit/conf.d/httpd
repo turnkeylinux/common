@@ -1,4 +1,0 @@
-set httpd port 12323
-  ssl enable
-  pemfile /etc/ssl/certs/cert.pem
-  allow @root
