@@ -38,13 +38,13 @@ if [ -d "/etc/apache2" ]; then
   CONF="/etc/apache2/mods-available/ssl.conf"
   if [ -e $CONF ]; then
     # Replace SSLCipherSuite
-    sed -i "s|^\(\s*SSLCipherSuite\s*\).*$|\1$SECURE_CIPHER_LIST|g" $CONF    
+    sed -i "s|^\(\s*SSLCipherSuite\s\+\).*$|\1$SECURE_CIPHER_LIST|g" $CONF    
 
     # Enable honor cipher order
-    sed -i "s|^\(\s*SSLHonorCipherOrder\s*\).*$|\1on|g" $CONF    
+    sed -i "s|^\(\s*SSLHonorCipherOrder\s\+\).*$|\1on|g" $CONF    
 
     # Enable only secure protocols
-    sed -i "s|^\(\s*SSLProtocol\s*\).*$|\1all -SSLv2 -SSLv3|g" $CONF    
+    sed -i "s|^\(\s*SSLProtocol\s\+\).*$|\1all -SSLv2 -SSLv3|g" $CONF    
 
     # Disable ssl compression
     # Add default certificate and key files
@@ -66,8 +66,8 @@ SSLCertificateFile '"$CERTFILE"'\
   CONF="/etc/apache2/conf-available/security.conf"
   if [ -e $CONF ]; then
     # Set apache production security
-    sed -i "s|^ServerTokens\(.*\)|ServerTokens Prod|" $CONF
-    sed -i "s|^ServerSignature\(.*\)|ServerSignature Off|" $CONF
+    sed -i "s|^ServerTokens.*|ServerTokens Prod|" $CONF
+    sed -i "s|^ServerSignature.*|ServerSignature Off|" $CONF
 
     # Disable HTTP compression when using SSL to protect against BREACH
     sed -i '/<\/Directory>/ a \
