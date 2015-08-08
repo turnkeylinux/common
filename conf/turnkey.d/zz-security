@@ -21,7 +21,7 @@ fatal() {
 
 remove_ssl_params() {
   # Remove extra ssl params from .conf files
-  CONF=$1
+  CONF="$1"
   if [ -f $CONF ]; then
     SSL_PARAMS="SSLProtocol SSLHonorCipherOrder SSLCompression SSLCipherSuite SSLCertificateFile SSLCertificateKeyFile"
     for p in $SSL_PARAMS; do
@@ -31,6 +31,7 @@ remove_ssl_params() {
 }
 
 # Configure Apache security
+# apache2 (virtualhosts need to be configured to enable SSL/TLS)
 
 # Is Apache installed?
 if [ -d "/etc/apache2" ]; then
@@ -88,6 +89,7 @@ SSLCertificateFile '"$CERTFILE"'\
   # Remove SSL params from all sites-available
   for conf in /etc/apache2/sites-available/*; do remove_ssl_params "$conf" "$APACHE_SSL_PARAMS"; done
 
+  a2enmod ssl
   a2enconf security
   service apache2 restart
 fi
@@ -135,7 +137,7 @@ fi
 # Configure lighttpd security
 
 secure_lighttpd() {
-  CONF=$1
+  CONF="$1"
   if [ -f $CONF ]; then
     # Remove ssl params to prevent duplicates
     SSL_PARAMS="ssl.use-sslv2 ssl.use-sslv3 ssl.use-compression ssl.honor-cipher-order ssl.dh-file ssl.ec-curve"
@@ -162,8 +164,13 @@ secure_lighttpd() {
 
 # Is lighty installed?
 if [ -d "/etc/lighttpd" ]; then
-  find /etc -name "lighttpd.conf" | while read conf; do secure_lighttpd "$conf"; done
+  CONF="/etc/lighttpd/conf-available/10-ssl.conf"
+  if [ -f $CONF ]; then
+    sed -i "s|/etc/lighttpd/server.pem|$CERTFILE|" $CONF
+    secure_lighttpd $CONF
+  fi
 
+  lighty-enable-mod ssl
   service lighttpd restart
 fi
 
@@ -213,11 +220,11 @@ fi
 # Secure webmin
 if [ -d "/etc/webmin" ]; then
 
-#  CONF=/etc/webmin/miniserv.conf
-#  if [ -f $CONF ]; then
-#    sed -i "s/^keyfile=.*/keyfile=$(escape_path $CERTFILE)/" $CONF
-#    rm -f /etc/webmin/miniserv.pem
-#  fi
+  CONF="/etc/webmin/miniserv.conf"
+  if [ -f $CONF ]; then
+    sed -i "s|^keyfile=.*|keyfile=$CERTFILE|" $CONF
+    rm -f /etc/webmin/miniserv.pem
+  fi
 
   # patch webmin - set cookie httpOnly
   CGI=/usr/share/webmin/session_login.cgi
