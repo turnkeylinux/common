@@ -6,7 +6,7 @@ set ${KEYFILE:="/etc/ssl/private/cert.key"}
 set ${DHPARAMS:="/etc/ssl/private/dhparams.pem"}
 
 # Secure Cipher List recommended Ivan Ristic in Bulletproof SSL and TLS
-SECURE_CIPHER_LIST="ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:EDH-RSA-DES-CBC3-SHA"
+SECURE_CIPHER_LIST="ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256"
 
 # Compatible Cipher List recommended for older clients - reduced security score
 COMPATIBLE_CIPHER_LIST="ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"
@@ -21,7 +21,7 @@ fatal() {
 remove_ssl_params() {
   # Remove extra ssl params from apache.conf files
   CONF=$1
-  if [ -e $CONF ]; then
+  if [ -f $CONF ]; then
     SSL_PARAMS="SSLProtocol SSLHonorCipherOrder SSLCompression SSLCipherSuite SSLCertificateFile SSLCertificateKeyFile"
     for p in $SSL_PARAMS; do
       sed -i "/^\s*$p/ d" $CONF
@@ -33,7 +33,7 @@ remove_ssl_params() {
 if [ -d "/etc/apache2" ]; then
 
   CONF="/etc/apache2/mods-available/ssl.conf"
-  if [ -e $CONF ]; then
+  if [ -f $CONF ]; then
     # Replace SSLCipherSuite
     sed -i "s|^\(\s*SSLCipherSuite\s*\).*$|\1$SECURE_CIPHER_LIST|g" $CONF    
 
@@ -54,6 +54,7 @@ SSLCompression off\
 SSLCertificateFile '"$CERTFILE"'\
 \
 #   Default key file\
+# uncomment if using turnkey-make-ssl-cert
 #SSLCertificateKeyFile '"$KEYFILE"'
 '   $CONF
   else
@@ -61,7 +62,7 @@ SSLCertificateFile '"$CERTFILE"'\
   fi
 
   CONF="/etc/apache2/conf-available/security.conf"
-  if [ -e $CONF ]; then
+  if [ -f $CONF ]; then
     # Set apache production security
     sed -i "s|^ServerTokens\(.*\)|ServerTokens Prod|" $CONF
     sed -i "s|^ServerSignature\(.*\)|ServerSignature Off|" $CONF
@@ -96,7 +97,7 @@ fi
 
 secure_lighttpd() {
   CONF=$1
-  if [ -e $CONF ]; then
+  if [ -f $CONF ]; then
     # Remove ssl params to prevent duplicates
     SSL_PARAMS="ssl.use-sslv2 ssl.use-sslv3 ssl.use-compression ssl.honor-cipher-order ssl.dh-file ssl.ec-curve"
     for p in $SSL_PARAMS; do
@@ -125,6 +126,49 @@ if [ -d "/etc/lighttpd" ]; then
   find /etc -name "lighttpd.conf" | while read conf; do secure_lighttpd "$conf"; done
 
   service lighttpd restart
+fi
+
+# Secure stunnel
+# check and set options in stunnel.conf
+# TODO: Handle non-options properly i.e. cert, key, renegotation, ciphers
+set_option() {
+# syntax: set_option option value file description
+
+  COM=";"	# comment delimiter
+  SEP="="	# value separator
+
+  # check if option value is already set
+  if [[ $(grep -c "^\s*$1\s*$SEP\s*$2" $3) = 0 ]]; then  # not found
+
+    # check if option value is commented
+    if [[ $(grep -c "^\s*$COM\s*$1\s*$SEP\s*$2" $3) > 0 ]]; then
+      # remove the comment
+      sed -ri "s|^\s*$COM\s*($1)(\s*$SEP\s*)($2)(.*$)|\1\2\3\4|" $3
+    else
+      # append the description and option value
+      echo "" >> $3  # start with new line
+      [[ "$4" != "" ]] && echo "$COM $4" >> $3
+      echo "$1 $SEP $2" >> $3
+    fi
+  fi
+}
+
+# Is stunnel installed?
+if [ -d "/etc/stunnel" ]; then
+  CONF="/etc/stunnel/stunnel.conf"
+
+  # set options
+  set_option cert "$CERTFILE" $CONF
+# uncomment if using turnkey-make-ssl-cert
+#  set_option key "$KEYFILE"   $CONF
+  set_option options NO_SSLv2 $CONF
+  set_option options NO_SSLv3 $CONF
+  set_option options CIPHER_SERVER_PREFERENCE $CONF
+  set_option renegotiation no $CONF
+  set_option ciphers "$SECURE_CIPHER_LIST" $CONF
+
+  service stunnel4 restart
+
 fi
 
 # vim: syntax=bash ts=2 sw=2 sts=2 sr noet
