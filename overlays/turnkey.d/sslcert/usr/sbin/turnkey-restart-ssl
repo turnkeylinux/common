@@ -9,7 +9,7 @@
 SSL_APPS="apache2 lighttpd nginx tomcat webmin stunnel4 postfix dovecot"
 
 for s in $SSL_APPS; do
-  if [ -e "/etc/init.d/$s" ]; then
+  if [ -d "/etc/$s" ]; then
     service $s restart
   fi
 done

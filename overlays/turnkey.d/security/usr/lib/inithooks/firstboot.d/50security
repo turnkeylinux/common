@@ -96,7 +96,7 @@ fi
 
 if [ -d '/etc/nginx' ]; then
   CONF="/etc/nginx/include/ssl"
-  if [ -e $CONF ]; then
+  if [ -f $CONF ]; then
     sed -i "\
       s|^\(\s\*ssl_ciphers\s\+\).*$|\1${SECURE_CIPHER_LIST};|g;\
       s|^\(\s\*ssl_prefer_server_ciphers\s\+\).*$|\1on;|g;\

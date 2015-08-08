@@ -17,25 +17,25 @@ fi
 
 # webmin
 CONF=/etc/webmin/miniserv.conf
-if [ -e $CONF ]; then
+if [ -f $CONF ]; then
     sed -i "s/^keyfile=.*/keyfile=$(escape_path $CERTFILE)/" $CONF
     rm -f /etc/webmin/miniserv.pem
 fi
 
 # patch webmin - set cookie httpOnly
 CGI=/usr/share/webmin/session_login.cgi
-if [ -e $CGI ]; then
+if [ -f $CGI ]; then
     sed -i "/Set-Cookie/ s/sec/sec; httpOnly/g" $CGI
 fi
 
 # apache2 (virtualhosts needs to be configured to use the cert)
-if [ -e /etc/apache2/mods-available/ssl.conf ]; then
+if [ -f /etc/apache2/mods-available/ssl.conf ]; then
     a2enmod ssl
 fi
 
 # lighttpd
 CONF=/etc/lighttpd/conf-available/10-ssl.conf
-if [ -e $CONF ]; then
+if [ -f $CONF ]; then
     lighty-enable-mod ssl
     sed -i "s/\/etc\/lighttpd\/server.pem/$(escape_path $CERTFILE)/" $CONF
 fi
