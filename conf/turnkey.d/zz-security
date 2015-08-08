@@ -91,7 +91,6 @@ SSLCertificateFile '"$CERTFILE"'\
 
   a2enmod ssl
   a2enconf security
-  service apache2 restart
 fi
 
 # Configure nginx security
@@ -131,7 +130,6 @@ EOF
 
   for conf in /etc/nginx/sites-available/*; do remove_ssl_params "$conf" "$NGINX_SSL_PARAMS"; done
 
-  service nginx restart
 fi
 
 # Configure lighttpd security
@@ -145,6 +143,9 @@ secure_lighttpd() {
       sed -i "/^\s*$p/ d" $CONF
     done
 
+    # Replace ssl.pemfile
+    sed -i "/^\s*ssl.pemfile/ s|\".*\"|\"$CERTFILE\"|g" $CONF    
+    
     # Replace ssl.cipher-list
     sed -i "/^\s*ssl.cipher-list/ s|\".*\"|\"$SECURE_CIPHER_LIST\"|g" $CONF    
 
@@ -164,14 +165,13 @@ secure_lighttpd() {
 
 # Is lighty installed?
 if [ -d "/etc/lighttpd" ]; then
-  CONF="/etc/lighttpd/conf-available/10-ssl.conf"
+  CONF="/etc/lighttpd/lighttpd.conf"
   if [ -f $CONF ]; then
     sed -i "s|/etc/lighttpd/server.pem|$CERTFILE|" $CONF
     secure_lighttpd $CONF
   fi
 
   lighty-enable-mod ssl
-  service lighttpd restart
 fi
 
 # Secure stunnel
@@ -212,8 +212,6 @@ if [ -d "/etc/stunnel" ]; then
   set_option options CIPHER_SERVER_PREFERENCE $CONF
   set_option renegotiation no $CONF
   set_option ciphers "$SECURE_CIPHER_LIST" $CONF
-
-  service stunnel4 restart
 
 fi
 
