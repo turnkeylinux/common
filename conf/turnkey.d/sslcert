@@ -1,16 +1,15 @@
 #!/bin/sh -e
 # configure the system for our certificate
 
-escape_path() {
-    echo $1 | sed "s/\//\\\\\//g"
-}
-
-CERTFILE=/etc/ssl/certs/cert.pem
+set ${CERTFILE:="/etc/ssl/private/cert.pem"}
+set ${CRTFILE:="/usr/local/share/ca-certificates/cert.crt"}
+set ${KEYFILE:="/etc/ssl/private/cert.key"}
+set ${DHPARAMS:="/etc/ssl/private/dhparams.pem"}
 
 # set certificate permissions
-if grep -q ^certssl: /etc/group; then
-    chgrp certssl $CERTFILE
-    chmod 640 $CERTFILE
-else
-    chmod 600 $CERTFILE
+if [ -d "/etc/ssl" ]; then
+    chmod 400 $KEYFILE
+    chmod 400 $CERTFILE
+    chmod 400 $DHPARAMS
+    chmod 644 $CRTFILE
 fi
