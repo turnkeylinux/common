@@ -120,7 +120,7 @@ $(usage)
       -h, --help              Display this help message and exit
       -o, --out [/path/]file  Write certificate to alternate location
       -d, --default           Generate default certificate
-                                /etc/ssl/certs/cert.pem
+                                /etc/ssl/private/cert.pem
       -r, --csr               Generate a certificate signing request
       -w, --wild              Generate wildcard certificate
       -t, --template file     Use alternate template file
