@@ -58,7 +58,7 @@ SSLCompression off\
 SSLCertificateFile '"$CERTFILE"'\
 \
 #   Default key file\
-# uncomment if using turnkey-make-ssl-cert
+# uncomment if using turnkey-make-ssl-cert\
 #SSLCertificateKeyFile '"$KEYFILE"'
 '   $CONF
   else
