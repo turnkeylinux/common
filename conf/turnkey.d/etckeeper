@@ -1,5 +1,6 @@
 #!/bin/sh -e
 # un-initialize etckeeper
 
+echo "/etc/inithooks.conf" >> /etc/.gitignore
 etckeeper uninit -f
 
