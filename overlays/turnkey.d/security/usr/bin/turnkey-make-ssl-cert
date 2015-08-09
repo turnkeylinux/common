@@ -44,7 +44,7 @@ VERSION="1.2"
 
 # set defaults
   CERT_DIR="/usr/local/share/ca-certificates"
-  KEY_DiR="/etc/ssl/private"
+  KEY_DIR="/etc/ssl/private"
   TEMPLATE="/etc/ssl/turnkey.cnf"
   DEFAULT=false
   IP=false
@@ -237,14 +237,14 @@ create_temporary_cnf
 if [[ $DEFAULT == true ]]; then
   OUT=false    # ignore output file
   CERT="$CERT_DIR/cert.crt"
-  KEY="$KEY_DiR/cert.key"
-  CSR="$KEY_DiR/cert.csr"
+  KEY="$KEY_DIR/cert.key"
+  CSR="$KEY_DIR/cert.csr"
 elif [[ $OUT == false ]]; then
   CERT="$CERT_DIR/$commonName.crt"
-  KEY="$KEY_DiR/$commonName.key"
-  CSR="$KEY_DiR/$commonName.csr"
+  KEY="$KEY_DIR/$commonName.key"
+  CSR="$KEY_DIR/$commonName.csr"
 else
-	# ensure user input cert name has extension pem or crt
+  # ensure user input cert name has extension pem or crt
   shopt -s nocasematch
   [[ ${CERT##*.} =~ (pem|crt) ]] || CERT+=".crt"
   shopt -u nocasematch
@@ -267,6 +267,12 @@ fi
 # set file permissions
 chmod 400 "$KEY"
 chmod 644 "$CERT"
+
+# create default cert.pem file, include dhparams
+if [[ $DEFAULT == true ]]; then
+  cat "$CERT" "$KEY" "$KEY_DIR/dhparams.pem" > "$KEY_DIR/cert.pem"
+  chmod 400 "$KEY_DIR/cert.pem"
+fi
 
 # create the certificate signing request.
 if [[ $REQUEST == true ]]; then
