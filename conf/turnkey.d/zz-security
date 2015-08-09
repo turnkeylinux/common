@@ -144,13 +144,13 @@ secure_lighttpd() {
     done
 
     # Replace ssl.pemfile
-    sed -i "/^\s*ssl.pemfile/ s|\".*\"|\"$CERTFILE\"|g" $CONF    
+    sed -i "s|^\(\s*ssl.pemfile\s*=\s*\).*$|\1\"$CERTFILE\"|g" $CONF    
     
     # Replace ssl.cipher-list
-    sed -i "/^\s*ssl.cipher-list/ s|\".*\"|\"$SECURE_CIPHER_LIST\"|g" $CONF    
+    sed -i "s|^\(\s*ssl.cipher-list\s*=\s*\).*$|\1\"$SECURE_CIPHER_LIST\"|g" $CONF    
 
     # Insert additional params
-    sed -i '/^\s*ssl.cipher-list/ i \
+    sed -i '/^\s*ssl.cipher-list/ a \
     ssl.use-sslv2 = "disable"\
     ssl.use-sslv3 = "disable"\
     ssl.dh-file = '"\"$DHPARAMS\""'\
@@ -167,7 +167,7 @@ secure_lighttpd() {
 if [ -d "/etc/lighttpd" ]; then
   CONF="/etc/lighttpd/lighttpd.conf"
   if [ -f $CONF ]; then
-    sed -i "s|/etc/lighttpd/server.pem|$CERTFILE|" $CONF
+
     secure_lighttpd $CONF
   fi
 
@@ -189,7 +189,7 @@ set_option() {
     # check if option value is commented
     if [[ $(grep -c "^\s*$COM\s*$1\s*$SEP\s*$2" $3) > 0 ]]; then
       # remove the comment
-      sed -ri "s|^\s*$COM\s*($1)(\s*$SEP\s*)($2)(.*$)|\1\2\3\4|" $3
+      sed -ri "s|^\s*$COM\s*\($1\)\(\s*$SEP\s*\)\($2\)\(.*$\)|\1\2\3\4|" $3
     else
       # append the description and option value
       echo "" >> $3  # start with new line
