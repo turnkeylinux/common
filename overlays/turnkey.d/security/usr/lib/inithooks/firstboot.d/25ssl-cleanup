@@ -1,0 +1,102 @@
+#!/bin/bash -e
+#
+# This script acts as a backstop and allows testing to continue
+# while appliance overlays are revised and updated
+# cleanup code may later be removed, but the service restarts should be retained
+
+# List of apache params to be removed from appliance configured VM's
+APACHE_SSL_PARAMS="SSLProtocol SSLHonorCipherOrder SSLCompression SSLCipherSuite SSLCertificateFile SSLCertificateKeyFile"
+
+# List of nginx params to be removed from appliance configured VM's
+NGINX_SSL_PARAMS="ssl_protocols ssl_prefer_server_ciphers ssl_ciphers ssl_certificate ssl_certificate_key ssl_session_timeout ssl_session_cache"
+
+# List of lighttpd params to be removed from appliance configured VM's
+LIGHTY_SSL_PARAMS="ssl.cipher-list ssl.use-sslv2 ssl.use-sslv3 ssl.use-compression ssl.honor-cipher-order ssl.dh-file ssl.ec-curve"
+
+fatal() {
+    echo "fatal: $@" 1>&2
+    exit 1
+}
+
+remove_ssl_params() {
+  # Remove extra ssl params from .conf files
+  CONF="$1"
+  SSL_PARAMS="$2"
+
+  if [ -f $CONF ]; then
+    for p in $SSL_PARAMS; do
+      sed -i "/^\s*$p/ d" $CONF
+    done
+  fi
+}
+
+# apache2
+if [ -d "/etc/apache2" ]; then
+
+  # Remove SSL params from all apache.conf
+  find /etc -name "apache.conf" | while read conf; do remove_ssl_params "$conf" "$APACHE_SSL_PARAMS"; done
+
+  # Remove SSL params from all sites-available
+  for conf in /etc/apache2/sites-available/*; do remove_ssl_params "$conf" "$APACHE_SSL_PARAMS"; done
+
+  service apache2 restart
+fi
+
+# nginx
+if [ -d '/etc/nginx' ]; then
+
+  # Remove SSL params from all nginx.conf
+  find /etc -name 'nginx.conf' | while read conf; do remove_ssl_params "$conf" "$NGINX_SSL_PARAMS"; done
+
+  # Remove SSL params from all sites-available
+  for conf in /etc/nginx/sites-available/*; do remove_ssl_params "$conf" "$NGINX_SSL_PARAMS"; done
+
+  service nginx restart
+fi
+
+# lighttpd
+if [ -d "/etc/lighttpd" ]; then
+
+# TODO:
+# add any code needed to replace the ssl params in an appliance overlay with an include
+
+
+  service lighttpd restart
+fi
+
+# stunnel
+if [ -d "/etc/stunnel" ]; then
+
+# No cleanup needed, just restart
+  service stunnel4 restart
+fi
+
+# webmin
+if [ -d "/etc/webmin" ]; then
+
+# No cleanup needed, just restart
+  service webmin restart
+fi
+
+# tomcat
+if [ -d "/etc/tomcat" ]; then
+# TODO: add and code needed to remove ssl params from appliance overlays
+# may be handled by apache above
+
+  service tomcat restart
+fi
+
+# turnkey-init-fence
+# this must be done before turnkey-init-fence tries to start
+if [ -f "/etc/default/turnkey-init-fence" ]; then
+  CONF="/etc/default/turnkey-init-fence"
+
+  sed -i "s|/etc/ssl/certs/cert.pem|/etc/ssl/private/cert.pem|" $CONF
+fi
+
+# general
+# change any remaining '/etc/ssl/certs/cert.pem' to '/etc/ssl/private/cert.pem'
+# TODO: write the code
+
+# put this last so it won't affect the above
+update-ca-certificates

@@ -12,5 +12,7 @@ which openssl >/dev/null || fatal "openssl is not installed"
 
 # Use turnkey-make-ssl-cert to generate default server cert
 turnkey-make-ssl-cert -d
-update-ca-certificates
+
+# moved update-ca-certificates to 50ssl-cleanup so it runs last
+#update-ca-certificates
 

@@ -1,4 +1,11 @@
 #!/bin/bash -e
+#
+# zz-security
+#
+# This script is meant to provide a central place for managing
+# and applying security configurations. Currently only SSL/TLS
+# applications are included here, but in the future other protocols
+# such as ssh may be added.
 
 set ${CERTFILE:="/etc/ssl/private/cert.pem"}
 set ${CRTFILE:="/usr/local/share/ca-certificates/cert.crt"}
@@ -10,12 +17,6 @@ SECURE_CIPHER_LIST="ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:
 
 # Compatible Cipher List recommended for older clients - reduced security score
 COMPATIBLE_CIPHER_LIST="ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"
-
-# List of apache params to be removed from appliance configured VM's
-APACHE_SSL_PARAMS="SSLProtocol SSLHonorCipherOrder SSLCompression SSLCipherSuite SSLCertificateFile SSLCertificateKeyFile"
-
-# List of nginx params to be removed from appliance configured VM's
-NGINX_SSL_PARAMS="ssl_protocols ssl_prefer_server_ciphers ssl_ciphers ssl_certificate ssl_certificate_key ssl_session_timeout ssl_session_cache"
 
 fatal() {
     echo "fatal: $@" 1>&2
@@ -88,6 +89,7 @@ set_param() {
 
 # Configure Apache security
 # apache2 (virtualhosts need to be configured to enable SSL/TLS)
+# TODO: use set_param and set_option to manage params and options
 
 # Is Apache installed?
 if [ -d "/etc/apache2" ]; then
@@ -136,17 +138,12 @@ SSLCertificateFile '"$CERTFILE"'
     fatal "No security.conf available"	# Bailout without changing anything
   fi
 
-  # Remove SSL params from all apache.conf
-  find /etc -name "apache.conf" | while read conf; do remove_ssl_params "$conf" "$APACHE_SSL_PARAMS"; done
-
-  # Remove SSL params from all sites-available
-  for conf in /etc/apache2/sites-available/*; do remove_ssl_params "$conf" "$APACHE_SSL_PARAMS"; done
-
   a2enmod ssl
   a2enconf security
 fi
 
 # Configure nginx security
+# TODO: use set_param and set_option to manage params and options
 
 if [ -d '/etc/nginx' ]; then
   CONF="/etc/nginx/include/ssl"
@@ -178,14 +175,10 @@ EOF
   else
     fatal "No ssl conf file available"
   fi
-
-  find /etc -name 'nginx.conf' | while read conf; do remove_ssl_params "$conf" "$NGINX_SSL_PARAMS"; done
-
-  for conf in /etc/nginx/sites-available/*; do remove_ssl_params "$conf" "$NGINX_SSL_PARAMS"; done
-
 fi
 
 # Configure lighttpd security
+# TODO: use set_param and set_option to manage params and options
 
 secure_lighttpd() {
   CONF="$1"
@@ -252,6 +245,7 @@ if [ -d "/etc/stunnel" ]; then
 fi
 
 # Secure webmin
+# TODO: use set_param and set_option to manage params and options
 if [ -d "/etc/webmin" ]; then
 
   CONF="/etc/webmin/miniserv.conf"
@@ -267,4 +261,3 @@ if [ -d "/etc/webmin" ]; then
   fi
 fi
 
-# vim: syntax=bash ts=2 sw=2 sts=2 sr noet
