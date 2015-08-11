@@ -11,7 +11,10 @@ SECURE_CIPHER_LIST="ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:
 # Compatible Cipher List recommended for older clients - reduced security score
 COMPATIBLE_CIPHER_LIST="ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"
 
+# List of apache params to be removed from appliance configured VM's
 APACHE_SSL_PARAMS="SSLProtocol SSLHonorCipherOrder SSLCompression SSLCipherSuite SSLCertificateFile SSLCertificateKeyFile"
+
+# List of nginx params to be removed from appliance configured VM's
 NGINX_SSL_PARAMS="ssl_protocols ssl_prefer_server_ciphers ssl_ciphers ssl_certificate ssl_certificate_key ssl_session_timeout ssl_session_cache"
 
 fatal() {
@@ -29,6 +32,58 @@ remove_ssl_params() {
       sed -i "/^\s*$p/ d" $CONF
     done
   fi
+}
+
+set_option() {
+# syntax: set_option option value label
+# 
+# requires the following variables to be set before call
+#   $CONF   - the config file to be processed
+#   $COM    - the comment delimiter e.g. ';' or '#'
+#   $SEP    - the value separator e.g. '=' or ' '
+#   $NEXT   - line number to add new option
+
+  # check if option value is already set
+  if [[ $(grep -c "^\s*$1\s*$SEP\s*$2" $CONF) = 0 ]]; then  # not found
+    # check if option value is commented
+    if [[ $(grep -c "^\s*$COM\s*$1\s*$SEP\s*$2" $CONF) > 0 ]]; then
+      # remove the comment
+      sed -i "s|^\s*$COM\(\s*$1\s*$SEP\s*$2.*$\)|\1|" $CONF
+    else
+      # append the label and option value
+      if [[ "$3" != "" ]]; then
+        sed -i "$NEXT a \\\n$COM $3" $CONF; ((NEXT+=2));
+      fi
+      sed -i "$NEXT a $1 $SEP $2" $CONF; ((NEXT+=1));
+    fi
+  fi
+}
+
+set_param() {
+# syntax: set_param param value label
+# 
+# requires the following variables to be set before call
+#   $CONF   - the config file to be processed
+#   $COM    - the comment delimiter e.g. ';' or '#'
+#   $SEP    - the value separator e.g. '=' or ' '
+#   $NEXT   - line number to add new param
+
+  # check if param is already set (any value)
+  if [[ $(grep -c "^\s*$1\s*$SEP\s*" $CONF) = 0 ]]; then  # not found
+    # check if param is commented
+    if [[ $(grep -c "^\s*$COM\s*$1\s*$SEP\s*" $CONF) > 0 ]]; then
+      # remove the first comment
+      sed -i "s|^\s*$COM\(\s*$1\s*$SEP\s*.*$\)|\1|" $CONF
+    else
+      # append the label and option value
+      if [[ "$3" != "" ]]; then
+        sed -i "$NEXT a \\\n$COM $3" $CONF; ((NEXT+=2));
+      fi
+      sed -i "$NEXT a $1 $SEP $2" $CONF; ((NEXT+=1));
+    fi
+  fi
+  # replace all param value pairs while preserving comments
+  sed -i "s|^\(\s*$1\s*$SEP\s*\)\S*|\1$2|" $CONF
 }
 
 # Configure Apache security
@@ -173,41 +228,27 @@ if [ -d "/etc/lighttpd" ]; then
 fi
 
 # Secure stunnel
-# check and set options in stunnel.conf
-# TODO: Handle non-options properly i.e. cert, key, renegotation, ciphers
-set_option() {
-# syntax: set_option option value file description
-
-  COM=";"	# comment delimiter
-  SEP="="	# value separator
-
-  # check if option value is already set
-  if [[ $(grep -c "^\s*$1\s*$SEP\s*$2" $3) = 0 ]]; then  # not found
-
-    # check if option value is commented
-    if [[ $(grep -c "^\s*$COM\s*$1\s*$SEP\s*$2" $3) > 0 ]]; then
-      # remove the comment
-      sed -ri "s|^\s*$COM\s*\($1\)\(\s*$SEP\s*\)\($2\)\(.*$\)|\1\2\3\4|" $3
-    else
-      # append the description and option value
-      echo "" >> $3  # start with new line
-      [[ "$4" != "" ]] && echo "$COM $4" >> $3
-      echo "$1 $SEP $2" >> $3
-    fi
-  fi
-}
-
 # Is stunnel installed?
 if [ -d "/etc/stunnel" ]; then
   CONF="/etc/stunnel/stunnel.conf"
+  COM=";"               # comment delimiter
+  SEP="="               # value separator
+  ANCHOR="options"      # pattern to match for next insert
+
+  # return line number of last option or end of file
+  unset NEXT
+  set ${NEXT=$( sed -n "/$ANCHOR/=" $CONF | tail -1 )}  # find anchor, or
+  set ${NEXT:=$( sed -n "$=" $CONF )}                   # end of file
 
   # set options
-  set_option cert "$CERTFILE" $CONF
-  set_option options NO_SSLv2 $CONF
-  set_option options NO_SSLv3 $CONF
-  set_option options CIPHER_SERVER_PREFERENCE $CONF
-  set_option renegotiation no $CONF
-  set_option ciphers "$SECURE_CIPHER_LIST" $CONF
+  set_option options NO_SSLv2
+  set_option options NO_SSLv3
+  set_option options CIPHER_SERVER_PREFERENCE
+
+  # set params
+  set_param cert "$CERTFILE"
+  set_param renegotiation no
+  set_param ciphers "$SECURE_CIPHER_LIST"
 fi
 
 # Secure webmin
