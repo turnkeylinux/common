@@ -22,6 +22,8 @@ fatal() {
 remove_ssl_params() {
   # Remove extra ssl params from .conf files
   CONF="$1"
+  SSL_PARAMS="$2"
+
   if [ -f $CONF ]; then
     for p in $SSL_PARAMS; do
       sed -i "/^\s*$p/ d" $CONF
