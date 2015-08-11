@@ -1,0 +1,10 @@
+#!/bin/bash -e
+# Generate tomcat keystore from default SSL certificate
+
+KEY_TYPE=pkcs12
+KEY_PASS=turnkey
+KEY_SRC=/etc/ssl/private/cert.pem
+KEY_DST=/etc/tomcat7/cert.p12
+
+openssl $KEY_TYPE -export -in $KEY_SRC -out $KEY_DST -passout pass:$KEY_PASS
+
