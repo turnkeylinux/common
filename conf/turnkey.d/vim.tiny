@@ -3,4 +3,7 @@
 VIMTINY=$(which vim.tiny)
 [ "$VIMTINY" ] && update-alternatives --install /usr/bin/vim vim /usr/bin/vim.tiny 10
 
+# fix vim arrow keys that display A B C D on remote shell
+sed -i "s/ compatible/ nocompatible/" /etc/vim/vimrc.tiny
+
 exit 0
