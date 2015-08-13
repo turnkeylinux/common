@@ -92,54 +92,19 @@ set_param() {
 # TODO: use set_param and set_option to manage params and options
 
 # Is Apache installed?
-if [ -d "/etc/apache2" ]; then
+if [ -f "/etc/apache2/apache2.conf" ]; then
 
   CONF="/etc/apache2/mods-available/ssl.conf"
   if [ -f $CONF ]; then
     # Replace SSLCipherSuite
     sed -i "s|^\(\s*SSLCipherSuite\s\+\).*$|\1$SECURE_CIPHER_LIST|g" $CONF    
-
-    # Enable honor cipher order
-    sed -i "s|^\(\s*SSLHonorCipherOrder\s\+\).*$|\1on|g" $CONF    
-
-    # Enable only secure protocols
-    sed -i "s|^\(\s*SSLProtocol\s\+\).*$|\1all -SSLv2 -SSLv3|g" $CONF    
-
-    # Disable ssl compression
-    # Add default certificate and key files
-    sed -i '/^\s*SSLProtocol/ a \
-\
-#   Disable ssl compression\
-SSLCompression off\
-\
-#   Default certificate file\
-SSLCertificateFile '"$CERTFILE"'
-
-'   $CONF
   else
     fatal "No ssl.conf available"	# Bailout without changing anything
   fi
 
-  CONF="/etc/apache2/conf-available/security.conf"
-  if [ -f $CONF ]; then
-    # Set apache production security
-    sed -i "s|^ServerTokens.*|ServerTokens Prod|" $CONF
-    sed -i "s|^ServerSignature.*|ServerSignature Off|" $CONF
-
-    # Disable HTTP compression when using SSL to protect against BREACH
-    sed -i '/<\/Directory>/ a \
-\
-# Disable HTTP compression when using SSL to protect against BREACH\
-<Location />\
-  SetEnvIfExpr "%{HTTPS} == '"'"'on'"'"'" no-gzip\
-</Location>
-    ' $CONF
-  else
-    fatal "No security.conf available"	# Bailout without changing anything
-  fi
-
   a2enmod ssl
   a2enconf security
+
 fi
 
 # Configure nginx security
