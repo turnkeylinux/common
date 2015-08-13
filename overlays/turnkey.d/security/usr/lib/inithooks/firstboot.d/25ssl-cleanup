@@ -99,4 +99,4 @@ fi
 # TODO: write the code
 
 # put this last so it won't affect the above
-update-ca-certificates
+# update-ca-certificates

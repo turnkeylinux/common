@@ -8,8 +8,6 @@ set ${DHPARAMS:="/etc/ssl/private/dhparams.pem"}
 
 # set certificate permissions
 if [ -d "/etc/ssl" ]; then
-    chmod 400 $KEYFILE
-    chmod 400 $CERTFILE
-    chmod 400 $DHPARAMS
-    chmod 644 $CRTFILE
+    chmod 400 ${CERTFILE}
+    chmod 400 ${DHPARAMS}
 fi
