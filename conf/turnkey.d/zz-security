@@ -174,7 +174,7 @@ secure_lighttpd() {
 
 # Find and secure all lighttpd.conf files
 
-CONF="/etc/lighttpd/lighttpd.conf"
+CONF="/etc/lighttpd/ssl-params.conf"
 if [ -f "$CONF" ]; then
   
     # Replace ssl.cipher-list
