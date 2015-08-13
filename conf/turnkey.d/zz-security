@@ -220,15 +220,7 @@ if [ -d "/etc/stunnel" ]; then
 fi
 
 # Secure webmin
-# TODO: use set_param and set_option to manage params and options
 if [ -d "/etc/webmin" ]; then
-
-  CONF="/etc/webmin/miniserv.conf"
-  if [ -f $CONF ]; then
-    sed -i "s|^keyfile=.*|keyfile=$CERTFILE|" $CONF
-    rm -f /etc/webmin/miniserv.pem
-  fi
-
   # patch webmin - set cookie httpOnly
   CGI=/usr/share/webmin/session_login.cgi
   if [ -f $CGI ]; then
