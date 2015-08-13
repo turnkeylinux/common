@@ -174,39 +174,40 @@ secure_lighttpd() {
 
 # Find and secure all lighttpd.conf files
 
-# Is lighty installed?
-if [ -d "/etc/lighttpd" ]; then
-  CONF="/etc/lighttpd/lighttpd.conf"
-  if [ -f $CONF ]; then
+CONF="/etc/lighttpd/lighttpd.conf"
+if [ -f "$CONF" ]; then
+  
+    # Replace ssl.cipher-list
+    sed -i "s|^\(\s*ssl.cipher-list\s*=\s*\).*$|\1\"$SECURE_CIPHER_LIST\"|g" $CONF 
+    lighty-enable-mod ssl
 
-    secure_lighttpd $CONF
-  fi
-
-  lighty-enable-mod ssl
 fi
 
 # Secure stunnel
-# Is stunnel installed?
-if [ -d "/etc/stunnel" ]; then
-  CONF="/etc/stunnel/stunnel.conf"
-  COM=";"               # comment delimiter
-  SEP="="               # value separator
-  ANCHOR="options"      # pattern to match for next insert
+CONF="/etc/stunnel/stunnel.conf"
+if [ -f "$CONF" ]; then
 
-  # return line number of last option or end of file
-  unset NEXT
-  set ${NEXT=$( sed -n "/$ANCHOR/=" $CONF | tail -1 )}  # find anchor, or
-  set ${NEXT:=$( sed -n "$=" $CONF )}                   # end of file
+#  COM=";"               # comment delimiter
+#  SEP="="               # value separator
+#  ANCHOR="options"      # pattern to match for next insert
+
+#  # return line number of last option or end of file
+#  unset NEXT
+#  set ${NEXT=$( sed -n "/$ANCHOR/=" $CONF | tail -1 )}  # find anchor, or
+#  set ${NEXT:=$( sed -n "$=" $CONF )}                   # end of file
 
   # set options
-  set_option options NO_SSLv2
-  set_option options NO_SSLv3
-  set_option options CIPHER_SERVER_PREFERENCE
+#  set_option options NO_SSLv2
+#  set_option options NO_SSLv3
+#  set_option options CIPHER_SERVER_PREFERENCE
 
   # set params
-  set_param cert "$CERTFILE"
-  set_param renegotiation no
-  set_param ciphers "$SECURE_CIPHER_LIST"
+#  set_param cert "$CERTFILE"
+#  set_param renegotiation no
+#  set_param ciphers "$SECURE_CIPHER_LIST"
+
+    sed -i "s|ciphers=.*|ciphers=$SECURE_CIPHER_LIST\n|" $CONF
+
 fi
 
 # Secure webmin
