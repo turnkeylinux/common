@@ -35,6 +35,9 @@ remove_ssl_params() {
   fi
 }
 
+# TODO: modify set_option and set_param to handle quoted values and
+#       leading white space (indents).
+
 set_option() {
 # syntax: set_option option value label
 # 
@@ -97,7 +100,7 @@ if [ -d "/etc/apache2" ]; then
   CONF="/etc/apache2/mods-available/ssl.conf"
   if [ -f $CONF ]; then
     # Replace SSLCipherSuite
-    sed -i "s|^\(\s*SSLCipherSuite\s\+\).*$|\1$SECURE_CIPHER_LIST|g" $CONF    
+    sed -i "s|^\(\s*SSLCipherSuite\s\+\).*$|\1${SECURE_CIPHER_LIST}|g" $CONF    
 
     # Enable honor cipher order
     sed -i "s|^\(\s*SSLHonorCipherOrder\s\+\).*$|\1on|g" $CONF    
@@ -113,7 +116,7 @@ if [ -d "/etc/apache2" ]; then
 SSLCompression off\
 \
 #   Default certificate file\
-SSLCertificateFile '"$CERTFILE"'
+SSLCertificateFile '"${CERTFILE}"'
 
 '   $CONF
   else
@@ -214,9 +217,9 @@ if [ -d "/etc/stunnel" ]; then
   set_option options CIPHER_SERVER_PREFERENCE
 
   # set params
-  set_param cert "$CERTFILE"
+  set_param cert "${CERTFILE}"
   set_param renegotiation no
-  set_param ciphers "$SECURE_CIPHER_LIST"
+  set_param ciphers "${SECURE_CIPHER_LIST}"
 fi
 
 # Secure webmin
