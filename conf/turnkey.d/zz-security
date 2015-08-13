@@ -228,7 +228,7 @@ if [ -d "/etc/webmin" ]; then
 
   CONF="/etc/webmin/miniserv.conf"
   if [ -f $CONF ]; then
-    sed -i "s|^keyfile=.*|keyfile=${CERTFILE}|" $CONF
+    sed -i "s|^keyfile=.*|keyfile=$CERTFILE|" $CONF
     rm -f /etc/webmin/miniserv.pem
   fi
 
