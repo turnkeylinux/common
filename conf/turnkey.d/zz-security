@@ -189,7 +189,6 @@ cat << _EOF_ > $CONF
     ssl.pemfile = "/etc/ssl/private/cert.pem"
     ssl.use-sslv2 = "disable"
     ssl.use-sslv3 = "disable"
-    ssl.use-compression = "disable"
     ssl.dh-file = "/etc/ssl/private/dhparams.pem"
     ssl.ec-curve = "secp384r1"
     ssl.honor-cipher-order = "enable"
