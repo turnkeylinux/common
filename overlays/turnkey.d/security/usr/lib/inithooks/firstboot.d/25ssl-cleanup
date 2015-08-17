@@ -80,9 +80,8 @@ fi
 
 # tomcat
 if [ -d "/etc/tomcat" ]; then
-# TODO: add and code needed to remove ssl params from appliance overlays
-# may be handled by apache above
 
+# No cleanup needed, just restart
   service tomcat restart
 fi
 
