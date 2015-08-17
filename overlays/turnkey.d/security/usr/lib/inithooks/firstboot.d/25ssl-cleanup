@@ -96,7 +96,11 @@ fi
 
 # general
 # change any remaining '/etc/ssl/certs/cert.pem' to '/etc/ssl/private/cert.pem'
-# TODO: write the code
+
+grep -rl '/etc/ssl/certs/cert.pem' /etc/* | while read conf; do sed -ie "s|/etc/ssl/certs/cert.pem|/etc/ssl/private/cert.pem|g"  "$conf"; done
 
 # put this last so it won't affect the above
+# commented out for testing if this caused double hashed symlinks to cert.pem
+# found out it was not, but also not needed since turnkey-make-ssl-cert also
+# runs update-ca-certificates
 # update-ca-certificates
