@@ -152,58 +152,20 @@ fi
 # Secure lighttpd
 CONF="/etc/lighttpd/ssl-params.conf"
 if [ -f $CONF ]; then
-    
-   
-    # Replace ssl.cipher-list
     sed -i "s|^\(\s*ssl.cipher-list\s*=\s*\).*$|\1\"$SECURE_CIPHER_LIST\"|g" $CONF    
     lighty-enable-mod ssl
 fi
 
 # Configure Tomcat security
-
-if [ -d "/etc/tomcat7" ]; then
-  CONF="/etc/tomcat7/server.xml"
-  if [ -f $CONF ]; then
-    sed -i "\
-      /redirectPort=\"8443\"/ { s|/>||; a \\
-               server=\"Secret\" />
-      };\
-      /port=\"443\"/ s|\(protocol=\)\".*\" |\1\"org.apache.coyote.http11.Http11NioProtocol\" |;\
-      s|\(sslProtocol=\)\".*\" |\1\"TLSv1.2\" |g;\
-      /keystorePass/ { s|/>||; a \\
-               sslEnabledProtocols=\"TLSv1.2,TLSv1.1,TLSv1\"\\
-               server=\"Secret\"\\
-               ciphers=\"${RFC_CIPHER_LIST}\" />
-      }\
-    " $CONF
-  fi
+CONF="/etc/tomcat7/server.xml"
+if [ -f $CONF ]; then
+    sed -i "s|ciphers=|ciphers=\"${RFC_CIPHER_LIST}\"|" $CONF
 fi
 
 # Secure stunnel
 CONF="/etc/stunnel/stunnel.conf"
 if [ -f "$CONF" ]; then
-
-#  COM=";"               # comment delimiter
-#  SEP="="               # value separator
-#  ANCHOR="options"      # pattern to match for next insert
-
-#  # return line number of last option or end of file
-#  unset NEXT
-#  set ${NEXT=$( sed -n "/$ANCHOR/=" $CONF | tail -1 )}  # find anchor, or
-#  set ${NEXT:=$( sed -n "$=" $CONF )}                   # end of file
-
-  # set options
-#  set_option options NO_SSLv2
-#  set_option options NO_SSLv3
-#  set_option options CIPHER_SERVER_PREFERENCE
-
-  # set params
-#  set_param cert "$CERTFILE"
-#  set_param renegotiation no
-#  set_param ciphers "$SECURE_CIPHER_LIST"
-
     sed -i "s|ciphers=.*|ciphers=$SECURE_CIPHER_LIST\n|" $CONF
-
 fi
 
 # Secure webmin
