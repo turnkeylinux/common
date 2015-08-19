@@ -115,38 +115,9 @@ if [ -f "/etc/apache2/apache2.conf" ]; then
 fi
 
 # Configure nginx security
-# TODO: use set_param and set_option to manage params and options
-
-if [ -d '/etc/nginx' ]; then
-  CONF="/etc/nginx/include/ssl"
-  if [ -f $CONF ]; then
-    sed -i "\
-      s|^\(\s\*ssl_ciphers\s\+\).*$|\1${SECURE_CIPHER_LIST};|g;\
-      s|^\(\s\*ssl_prefer_server_ciphers\s\+\).*$|\1on;|g;\
-      s|^\(\s\*ssl_protocols\s\+\).*$|\1TLSv1 TLSv1.1 TLSv1.2;|g;\
-      s|^\(\s\*ssl_session_timeout\s\+\).*$|\110m;|g;\
-      s|^\(\s\*ssl_session_cache\s\+\).*$|\1shared:SSL:50m;|g;\
-      s|^\(\s\*ssl_certificate_key\s\+\).*$|\1${KEYFILE};|g;\
-      s|^\(\s\*ssl_certificate\s\+\).*$|\1${CERTFILE};|g;\
-    " $CONF
-
-    # Additional settings
-    cat << EOF >> $CONF
-
-ssl_dhparam ${DHPARAMS};
-add_header X-Content-Type-Options nosniff;
-
-server_tokens off;
-EOF
-
-    # Do not enable SSL everywhere
-    sed -i '/ssl\s\+/ d' $CONF
-
-    # Include in nginx.conf by default
-    ln -sf $CONF /etc/nginx/conf.d/ssl.conf
-  else
-    fatal "No ssl conf file available"
-  fi
+CONF="/etc/nginx/include/ssl"
+if [ -f "$CONF" ]; then
+    sed -i "s|ssl_ciphers '.*|ssl_ciphers '${SECURE_CIPHER_LIST}';|" $CONF
 fi
 
 # Secure lighttpd
