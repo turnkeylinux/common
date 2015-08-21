@@ -3,6 +3,8 @@ server {
 	listen [::]:443 ssl default_server;
 
     include /etc/nginx/include/ssl;
+    
+    client_max_body_size 20M;
 
 	server_name localhost;
 	root /var/www/sambadav;
