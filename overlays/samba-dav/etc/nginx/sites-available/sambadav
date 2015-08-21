@@ -2,8 +2,7 @@ server {
 	listen 443 ssl default_server;
 	listen [::]:443 ssl default_server;
 
-        ssl_certificate /etc/ssl/certs/cert.crt;
-        ssl_certificate_key /etc/ssl/certs/cert.key;
+    include /etc/nginx/include/ssl;
 
 	server_name localhost;
 	root /var/www/sambadav;
