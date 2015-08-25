@@ -1,6 +1,5 @@
 #!/bin/bash -e
 # Generate SSL certificate
-# Note: daemons using certificate need to be restarted for changes to take effect
 
 fatal() {
     echo "fatal: $@" 1>&2
@@ -13,6 +12,13 @@ which openssl >/dev/null || fatal "openssl is not installed"
 # Use turnkey-make-ssl-cert to generate default server cert
 turnkey-make-ssl-cert -d
 
-# moved update-ca-certificates to 50ssl-cleanup so it runs last
-#update-ca-certificates
+# Restart relevant installed services
+which apache2 >/dev/null && service apache2 restart
+which nginx >/dev/null && service nginx restart
+which lighttpd >/dev/null && service nginx restart
+which stunnel4 >/dev/null && service stunnel4 restart
+which tomcat7 >/dev/null && service tomcat7 restart 
+
+# final tidy up
+update-ca-certificates
 
