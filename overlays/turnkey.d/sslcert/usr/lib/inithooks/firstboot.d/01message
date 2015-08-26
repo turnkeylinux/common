@@ -1,0 +1,4 @@
+#!/bin/bash -e
+# simple please wait message
+
+echo "Please wait while security keys are regenerated..."
