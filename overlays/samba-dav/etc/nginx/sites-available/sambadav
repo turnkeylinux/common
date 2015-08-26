@@ -2,36 +2,23 @@ server {
 	listen 443 ssl default_server;
 	listen [::]:443 ssl default_server;
 
-    include /etc/nginx/include/ssl;
+        include /etc/nginx/include/ssl;
     
-    client_max_body_size 20M;
-
 	server_name localhost;
 	root /var/www/sambadav;
 	index server.php;
 
-	location / {
-                try_files $uri $uri/ server.php =404;
+        client_max_body_size 20M;
 
-		rewrite ^/(.*)$ /server.php;
+	location / {
+                try_files $uri $uri/ /server.php$uri;
+		rewrite ^/.*/.*$ /server.php;
 	}
 
-	location ~ \.php$ {
-                fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                try_files $fastcgi_script_name =404;
-                set $path_info $fastcgi_path_info;
-                fastcgi_param PATH_INFO $path_info;
-
+	location = /server.php {
                 fastcgi_index server.php;
                 include fastcgi.conf;
 
 		fastcgi_pass unix:/var/run/php5-fpm.sock;
 	}
-
-        location ~* \.(css|js|gif|jpe?g|png)$ {
-                          expires 1y;
-                          add_header Pragma public;
-                          add_header Cache-Control "public, must-revalidate, proxy-revalidate";
-                          fastcgi_hide_header Set-Cookie;
-        }
 }
