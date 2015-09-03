@@ -5,7 +5,7 @@ ssl_session_cache shared:SSL:50m;
 
 ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
 
-# ciphers added by conf/turnkey.d/zz-security script
+# ciphers added by conf/turnkey.d/zz-ssl-ciphers script
 ssl_ciphers '';
 
 ssl_prefer_server_ciphers   on;

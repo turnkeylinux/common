@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# zz-security
+# zz-ssl-ciphers
 #
 # This script was instigated by John Carver 
 # It provides a common set of hardened SSL/TLS ciphers fo all webserver apps
