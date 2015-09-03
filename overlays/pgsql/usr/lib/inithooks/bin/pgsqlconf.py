@@ -17,7 +17,7 @@ import subprocess
 
 from subprocess import Popen, PIPE
 from dialog_wrapper import Dialog
-from executil import ExecError, system
+from executil import ExecError, system, getoutput
 
 class Error(Exception):
     pass
@@ -46,9 +46,8 @@ class PostgreSQL:
 
     def _is_alive(self):
         try:
-            out = subprocess.check_output(['/etc/init.d/postgresql', 'status'])
-            if out.find('main') == -1:
-                return False
+            getoutput('/etc/init.d/postgresql', 'status')
+            
         except ExecError, e:
             if e.exitcode == 3: #ie. stopped
                 return False

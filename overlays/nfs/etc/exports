@@ -1,0 +1,6 @@
+# export to all known non-routable (local) networks
+
+/srv 10.0.0.0/8(rw,fsid=0,no_subtree_check) 172.16.0.0/12(rw,fsid=0,no_subtree_check) 192.168.0.0/16(rw,fsid=0,no_subtree_check)
+/srv/storage 10.0.0.0/8(rw,fsid=1,no_subtree_check) 172.16.0.0/12(rw,fsid=1,no_subtree_check) 192.168.0.0/16(rw,fsid=1,no_subtree_check)
+/srv/homes 10.0.0.0/8(rw,fsid=2,no_subtree_check) 172.16.0.0/12(rw,fsid=2,no_subtree_check) 192.168.0.0/16(rw,fsid=2,no_subtree_check)
+
