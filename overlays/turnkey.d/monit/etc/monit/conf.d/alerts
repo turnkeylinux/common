@@ -1,0 +1,1 @@
+set alert root@localhost not on { instance, action }

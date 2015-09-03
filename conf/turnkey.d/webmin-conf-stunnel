@@ -1,0 +1,23 @@
+#!/bin/sh -e
+
+set ${WEBMIN_PORT:=12321}
+
+# configure stunnel to provide ssl support
+cat >>/etc/stunnel/stunnel.conf<<EOF
+[webmin]
+accept  = $WEBMIN_PORT
+connect = 127.0.0.1:10000
+EOF
+
+CONF=/etc/webmin/miniserv.conf
+
+sed -i 's|ssl=.*|ssl=|' $CONF
+
+cat >> $CONF <<EOF
+inetd_ssl=1
+preroot=theme-stressfree
+bind=127.0.0.1
+sockets=
+no_resolv_myname=0
+ipv6=0
+EOF

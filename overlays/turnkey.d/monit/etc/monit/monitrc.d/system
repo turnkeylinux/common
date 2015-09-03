@@ -1,0 +1,11 @@
+check system $HOST
+  if memory usage       > 75% for 5 cycles then alert
+  if swap usage         > 25% for 5 cycles then alert
+  if cpu usage          > 90% for 5 cycles then alert
+  if cpu usage (user)   > 70% for 5 cycles then alert
+  if cpu usage (system) > 30% for 5 cycles then alert
+  if cpu usage (wait)   > 20% for 5 cycles then alert
+
+check filesystem rootfs with path /
+  if space usage > 90% then alert
+  if inode usage > 90% then alert
