@@ -1,3 +1,5 @@
+systemd              # even in CHROOT_ONLY we need systemctl to configure systemd services
+
 #ifndef CHROOT_ONLY
 
 syslinux             # Collection of bootloaders
