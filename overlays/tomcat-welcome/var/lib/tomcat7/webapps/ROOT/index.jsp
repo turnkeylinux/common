@@ -52,7 +52,7 @@
                     <h2>Resources and references</h2>
                     <ul>
                         <li>Tomcat administrative account: <b>admin</b></li>
-                        <li>TurnKey HOSTNAME_DESC <a href="http://www.turnkeylinux.org/HOSTNAME">release notes</a></li>
+                        <li>TurnKey HOSTNAME_DESC <a href="https://www.turnkeylinux.org/HOSTNAME">release notes</a></li>
                         <li>Apache Tomcat Documentation (<a href="/docs">offline</a>, <a href="http://tomcat.apache.org/tomcat-7.0-doc/">online</a>)</li>
                     </ul>
 

@@ -9,7 +9,7 @@ chown root:users $STORAGE
 
 cat >$STORAGE/README.txt<<EOF
 TurnKey Linux $CREDIT_ANCHORTEXT
-http://www.turnkeylinux.org/$HOSTNAME
+https://www.turnkeylinux.org/$HOSTNAME
 EOF
 
 flip -m $STORAGE/README.txt
