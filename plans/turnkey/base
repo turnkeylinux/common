@@ -38,6 +38,7 @@ lsb-release
 localepurge
 man-db
 screen
+dtach
 nano
 ntp
 ncurses-term    /* support additional $TERM values */
