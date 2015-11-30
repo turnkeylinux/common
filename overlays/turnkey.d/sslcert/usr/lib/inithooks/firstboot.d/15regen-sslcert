@@ -23,7 +23,7 @@ turnkey-make-ssl-cert -d
 which nginx >/dev/null && service nginx restart
 which tomcat7 >/dev/null && service tomcat7 restart 
 which apache2 >/dev/null && service apache2 restart
-which lighttpd >/dev/null && service nginx restart
+which lighttpd >/dev/null && service lighttpd restart
 which stunnel4 >/dev/null && service stunnel4 restart
 
 # final tidy up
