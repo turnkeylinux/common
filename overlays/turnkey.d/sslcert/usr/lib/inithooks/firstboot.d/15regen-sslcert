@@ -17,7 +17,7 @@ openssl dhparam -out /etc/ssl/private/dhparams.pem 1024 > /dev/null 2>&1
 chmod 400 /etc/ssl/private/dhparams.pem
 
 # Use turnkey-make-ssl-cert to generate default server cert
-turnkey-make-ssl-cert --default --force-overwrite
+/usr/local/bin/turnkey-make-ssl-cert --default --force-overwrite
 
 # Restart relevant installed services
 which nginx >/dev/null && service nginx restart
