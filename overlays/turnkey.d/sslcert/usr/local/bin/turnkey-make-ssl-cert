@@ -171,7 +171,7 @@ create_temporary_cnf() {
       add_san "*.$domain";                  # wildcard
     done
   else
-    [[ "$args" == "" ]] && args="$(hostname -A) $(hostname)"
+    [[ "$args" == "" ]] && args="$(hostname -A)"
     for fqdn in $args
     do
       add_san "$fqdn";                      # fqdn
