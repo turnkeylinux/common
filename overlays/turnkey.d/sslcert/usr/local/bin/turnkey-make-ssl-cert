@@ -20,6 +20,12 @@
 # Purpose:
 
   # - Make default certificate for TurnKey GNU/Linux appliance [-d|--default]
+  #
+  #     cat \
+  #       /usr/local/share/ca-certificates/cert.crt \
+  #       /etc/ssl/private/cert.key \
+  #       /etc/ssl/private/dhparams.pem > /etc/ssl/private/cert.pem
+  #
   # - Make server certificates for Apache/Nginx virtual hosts
   # - Make wildcard certificate for one or more domains [-w|--wild]
   # - Use sha256 and aes128 for additional security "Bulletproof SSL and TLS"
