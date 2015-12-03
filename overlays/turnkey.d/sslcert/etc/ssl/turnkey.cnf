@@ -27,10 +27,10 @@ x509_extensions         = v3_req
 # localityName            = 
 
 ## Organization Name (eg, company)
-organizationName        = "TurnKey GNU/Linux"
+# organizationName        = "TurnKey GNU/Linux"
 
 ## Organizational Unit Name (eg, section)
-organizationalUnitName  = "Software appliances"
+# organizationalUnitName  = "Software appliances"
 
 ## Common Name (e.g. server FQDN or HostName)
 # @HostName@ will be replaced by script. Override by defining commonName below.
