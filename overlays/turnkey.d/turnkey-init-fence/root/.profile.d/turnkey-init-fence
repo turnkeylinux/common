@@ -1,1 +1,1 @@
-/usr/bin/dtach -A /root/.inithooks.dtach -Ez /bin/bash -c "TERM=xterm; turnkey-init && (chmod -x /root/.profile.d/turnkey-init-fence; [ -x /etc/init.d/turnkey-init-fence ] && (update-rc.d turnkey-init-fence remove; /etc/init.d/turnkey-init-fence stop))"
+/usr/bin/dtach -A /root/.inithooks.dtach -Ez /bin/bash -c "TERM=xterm; turnkey-init"
