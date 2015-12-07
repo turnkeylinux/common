@@ -1,6 +1,8 @@
 #!/bin/bash -e
 # Regenerate SSL keys and certificates
 
+[ -n "$_TURNKEY_INIT" ] && exit 0
+
 fatal() {
     echo "fatal: $@" 1>&2
     exit 1
