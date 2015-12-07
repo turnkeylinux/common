@@ -2,6 +2,8 @@
 # initialize etckeeper and perform initial commit
 # ETCKEEPER_COMMIT: SKIP (if skip specified, exit)
 
+[ -n "$_TURNKEY_INIT" ] && exit 0
+
 . /etc/default/inithooks
 [ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
 
