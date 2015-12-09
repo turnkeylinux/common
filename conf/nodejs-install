@@ -7,16 +7,16 @@ dl() {
     cd $2; curl -L -f -O $PROXY $1; cd -
 }
 
-dl http://nodejs.org/dist/latest/SHASUMS.txt $SRC
+dl http://nodejs.org/dist/latest/SHASUMS256.txt $SRC
 
-TARBALL_RE="linux-x${FAB_ARCH: -2:2}"
-TARBALL=$(grep $TARBALL_RE $SRC/SHASUMS.txt | cut -d " " -f 3)
+TARBALL_RE="linux-x${FAB_ARCH: -2:2}.tar.gz"
+TARBALL=$(grep $TARBALL_RE $SRC/SHASUMS256.txt | awk '{ print $2 }')
 dl http://nodejs.org/dist/latest/${TARBALL} $SRC
 
-grep $TARBALL $SRC/SHASUMS.txt > $SRC/$TARBALL.sha1
+grep $TARBALL $SRC/SHASUMS256.txt > $SRC/$TARBALL.sha256
 cd $SRC
-sha1sum -c $TARBALL.sha1
-rm SHASUMS.txt $TARBALL.sha1
+sha256sum -c $TARBALL.sha256
+rm SHASUMS256.txt $TARBALL.sha256
 
 tar -zxf $SRC/$TARBALL -C $SRC
 rm $SRC/$TARBALL
