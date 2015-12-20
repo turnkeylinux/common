@@ -15,6 +15,7 @@ LOGSDIR=/var/log/$APPNAME
 
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 GEMOPTS="--no-rdoc --no-ri"
+gem install $GEMOPTS rack -v=1.6.4 # last version to support Jessie Ruby 2.1.5
 gem install $GEMOPTS passenger
 gem install $GEMOPTS rake
 gem install $GEMOPTS rails
