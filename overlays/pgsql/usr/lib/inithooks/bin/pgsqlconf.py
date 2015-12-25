@@ -67,7 +67,7 @@ class PostgreSQL:
         self._stop()
 
     def execute(self, query):
-        p = Popen("su postgres -c 'psql -q %s'" % self.database, shell=True, stdin=PIPE)
+        p = Popen("su postgres -lc 'psql -q %s'" % self.database, shell=True, stdin=PIPE)
         p.communicate(query)
         if p.returncode != 0:
             raise ExecError("postgres command failed")
