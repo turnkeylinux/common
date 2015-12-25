@@ -172,6 +172,7 @@ create_temporary_cnf() {
     done
   else
     [[ "$args" == "" ]] && args="$(hostname -A)"
+    [[ "$args" == "" ]] && args="$(hostname)"
     for fqdn in $args
     do
       add_san "$fqdn";                      # fqdn
