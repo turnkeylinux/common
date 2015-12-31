@@ -23,78 +23,7 @@ ln -s $PM2_LOG/pm2.log $PM2_PATH/pm2.log
 
 chown -R $USER:$USER $PM2_PATH $PM2_LOG
 
-cat > /etc/init.d/pm2-$USER << EOF
-#!/bin/bash -e
-
-### BEGIN INIT INFO
-# Provides:          pm2-node
-# Required-Start:    \$local_fs \$remote_fs \$network \$syslog
-# Required-Stop:     \$local_fs \$remote_fs \$network \$syslog
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Short-Description: starts PM2 Node.js app manager
-### END INIT INFO
-
-NAME="pm2-node"
-DESC="PM2 service"
-
-. /lib/lsb/init-functions
-
-ulimit -n unlimited
-
-pm2_exec () {
-    su $USER -lc "$PM2_BIN \${1}"
-}
-
-case "\$1" in
-    start)
-        pm2_exec resurrect
-        pm2_exec reload all
-        log_action_end_msg \$?
-        ;;
-    stop)
-        pm2_exec dump
-        pm2_exec delete all
-        pm2_exec kill
-        log_action_end_msg \$?
-        ;;
-    restart)
-        \$0 stop
-        \$0 start
-        ;;
-    *)
-        echo "Usage: \$NAME {start|stop|restart}" >&2
-        exit 1
-        ;;
-esac
-
-exit 0
-EOF
-
-cat > /etc/systemd/system/pm2-$USER.service << EOF
-[Unit]
-Description=PM2 next gen process manager for Node.js
-After=network.target remote-fs.target
-
-[Service]
-Type=forking
-User=$USER
-
-LimitNOFILE=infinity
-
-ExecStart=$PM2_BIN resurrect
-ExecReload=$PM2_BIN reload all
-
-ExecStop=$PM2_BIN dump
-ExecStop=$PM2_BIN delete all
-ExecStop=$PM2_BIN kill
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-chmod +x /etc/init.d/pm2-$USER
-systemctl enable pm2-$USER
+pm2 startup ubuntu -u node
 
 rm -rf /tmp/npm*
 
