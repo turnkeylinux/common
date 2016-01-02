@@ -25,5 +25,8 @@ chown -R $USER:$USER $PM2_PATH $PM2_LOG
 
 pm2 startup ubuntu -u node
 
+rm -f /etc/nginx/sites-enabled/default
+ln -s /etc/nginx/sites-available/nodejs /etc/nginx/sites-enabled/nodejs
+
 rm -rf /tmp/npm*
 
