@@ -1,14 +1,19 @@
 server {
-    listen 0.0.0.0:80;
+    listen 0.0.0.0:80 default_server;
+    server_name _;
+
+    set $nodeapp_port 8000;
     include /etc/nginx/include/nodejs-proxy;
 }
 
 server {
-    listen 0.0.0.0:443 ssl;
+    listen 0.0.0.0:443 ssl default_server;
+    server_name _;
 
     proxy_set_header X-Forwarded-Proto https;
-
     include /etc/nginx/include/ssl;
+
+    set $nodeapp_port 8000;
     include /etc/nginx/include/nodejs-proxy;
 }
 

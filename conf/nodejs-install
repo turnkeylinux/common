@@ -1,33 +1,28 @@
 #!/bin/bash -ex
 
-SRC=/usr/local/src
+# install n node version manager
+cd /usr/local/src
+git clone https://github.com/tj/n
+cd n && make install
 
-dl() {
-    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
-    cd $2; curl -L -f -O $PROXY $1; cd -
-}
+# install latest stable node
+n stable
 
-dl http://nodejs.org/dist/latest/SHASUMS.txt $SRC
+# user-global npm installation: we don't need root for npm global installs
 
-TARBALL_RE="linux-x${FAB_ARCH: -2:2}"
-TARBALL=$(grep $TARBALL_RE $SRC/SHASUMS.txt | cut -d " " -f 3)
-dl http://nodejs.org/dist/latest/${TARBALL} $SRC
+cat > /etc/skel/.bashrc.d/nodejs <<'EOF'
+export NPM_PACKAGES="$HOME/.npm-packages"
+export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
+export PATH="$NPM_PACKAGES/bin:$PATH"
+EOF
 
-grep $TARBALL $SRC/SHASUMS.txt > $SRC/$TARBALL.sha1
-cd $SRC
-sha1sum -c $TARBALL.sha1
-rm SHASUMS.txt $TARBALL.sha1
+chmod +x /etc/skel/.bashrc.d/nodejs
 
-tar -zxf $SRC/$TARBALL -C $SRC
-rm $SRC/$TARBALL
-ln -s $SRC/node-v* $SRC/node
-
-for f in $(ls $SRC/node/bin); do
-    ln -s $SRC/node/bin/$f /usr/local/bin/$f
-done
+echo 'prefix=${HOME}/.npm-packages' > /etc/skel/.npmrc
 
 # npm completion
 npm completion > /etc/skel/.bashrc.d/npm
 chmod +x /etc/skel/.bashrc.d/npm
 cp /etc/skel/.bashrc.d/npm /root/.bashrc.d/npm
+
 
