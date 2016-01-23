@@ -1,0 +1,16 @@
+#!/bin/bash -e
+# adapt samba to admin user
+
+[ -n "$_TURNKEY_INIT" ] && exit 0
+
+. /etc/default/inithooks
+
+if [ "$(echo $SUDOADMIN | tr [A-Z] [a-z] )" = "true" ]; then
+    USERNAME=admin
+    sed -i "s/\(admin users =\) .*/\1 $USERNAME/" /etc/samba/smb.conf
+
+    (echo "$ROOT_PASS" ; echo "$ROOT_PASS" ) | smbpasswd -a -s $USERNAME
+    smbpasswd -d root
+    service samba reload
+fi
+
