@@ -6,3 +6,11 @@ sed -i "/^PermitRootLogin/ s/without-password/yes/" /etc/ssh/sshd_config
 # disable sshd dns checks (if resolution fails will prevent logins)
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
+# configure root login banner directive (enabled by inithooks#sudoadmin)
+cat >> /etc/ssh/sshd_config <<EOF
+
+Match user root
+Banner /root/.ssh/banner
+Match user *
+EOF
+
