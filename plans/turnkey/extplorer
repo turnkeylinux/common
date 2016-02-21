@@ -1,3 +1,0 @@
-lighttpd        /* we use lighty to power extplorer */
-php5-cgi        /* needed for lighty cgi */
-vsftpd          /* backend for extplorer net2ftp */

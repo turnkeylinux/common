@@ -1,8 +1,0 @@
-#!/bin/bash -e
-# set ajaxplorer local admin password
-
-. /etc/default/inithooks
-
-[ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
-$INITHOOKS_PATH/bin/ajaxplorer.py --pass="$APP_PASS"
-
