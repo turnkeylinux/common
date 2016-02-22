@@ -59,6 +59,7 @@ webmin-text-editor
 webmin-lvm
 webmin-tklbam
 webmin-updown
+webmin-filemin
 unzip           /* webmin-updown recommends */
 
 logrotate
