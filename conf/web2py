@@ -13,15 +13,23 @@ W2PROOT=/var/www/web2py
 dl http://www.web2py.com/examples/static/web2py_src.zip $SRC
 unzip $SRC/web2py_src.zip -d $(dirname $W2PROOT)
 rm $SRC/web2py_src.zip
+
+# Install GitPython in virtualenv to workaround turnkey-pylib
+# git.py conflict
+virtualenv $W2PROOT/venv
+$W2PROOT/venv/bin/pip install GitPython
+
 chown -R www-data:www-data $W2PROOT
 
 # copy wsgihandler to web2py root
 cp $W2PROOT/handlers/wsgihandler.py $W2PROOT/wsgihandler.py
 
-# workaround turnkey-pylib git.py conflict
-CONF=$W2PROOT/applications/admin/controllers/default.py
-ERR="disabled git import due to turnkey-pylib conflict"
-sed -i "s|import git|# import git\n    raise ImportError('$ERR')|" $CONF
+# Code for entering virtualenv after wsgihandler is started
+VIRTUALENV_ACTIVATE_PATH='/var/www/web2py/venv/bin/activate_this.py'
+VIRTUALENV_ACTIVATE="activate_this = '$VIRTUALENV_ACTIVATE_PATH'\nexecfile(activate_this, dict(__file__=activate_this))"
+
+# Insert code just below initial imports
+sed -i "s|import os|import os\n\n$VIRTUALENV_ACTIVATE|" $W2PROOT/wsgihandler.py
 
 # create web2py admin interface password
 /usr/lib/inithooks/bin/web2py.py --pass=$W2PPASS
