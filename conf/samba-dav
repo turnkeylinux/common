@@ -1,31 +1,27 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
 SRC=/usr/local/src
-WEBROOT=/var/www/sambadav
+WEBROOT=/var/www/webdavcgi
 
-curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/local/bin
+dl() {
+    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
+    cd $2; curl -L -f -O $PROXY $1; cd -
+}
 
-git clone https://github.com/1afa/sambadav.git $SRC/sambadav
-cp -a $SRC/sambadav/src $WEBROOT
+dl http://downloads.sourceforge.net/project/webdavcgi/webdavcgi-latest.tar.bz2 $SRC
 
-cd $WEBROOT
-composer --optimize-autoloader install
-cd -
+tar --no-same-owner -xjf $SRC/webdavcgi-*.tar.bz2 -C $(dirname $WEBROOT)
+rm $SRC/webdavcgi-*.tar.bz2
 
-for i in log data; do
-	chown www-data:root /var/www/sambadav/$i
-	chmod 0750 /var/www/sambadav/$i
-done
+mv $(dirname $WEBROOT)/webdavcgi-* $WEBROOT
+mv $SRC/webdav.conf $WEBROOT
 
-rm -f /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sites-available/sambadav /etc/nginx/sites-enabled/sambadav
-ln -s /etc/nginx/sites-available/tkl-webcp /etc/nginx/sites-enabled/tkl-webcp
+chmod a+rx $WEBROOT $WEBROOT/cgi-bin $WEBROOT/cgi-bin/webdav.pl $WEBROOT/cgi-bin/afswrapper $WEBROOT/cgi-bin/smbwrapper
+chmod -R a+r $WEBROOT
 
-# add Unix pre-auth
-mv $SRC/Auth.php $WEBROOT/lib/SambaDAV/Auth.php
+echo yes | perl -MCPAN -e 'install DateTime::Format::Human::Duration'
 
-# open shares
-sed -i "s|array()|array('share_root' => array(array('localhost')))|" $WEBROOT/config/share_root.inc.php
+a2enmod rewrite
+a2enmod cgi
+a2enmod authnz_external
 
-# change base URL
-sed -i "s|webfolders/||" $WEBROOT/config/config.inc.php
