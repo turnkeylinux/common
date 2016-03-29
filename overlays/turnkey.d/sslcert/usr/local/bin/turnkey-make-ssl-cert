@@ -177,7 +177,6 @@ create_temporary_cnf() {
       add_san "${fqdn#*.}"                 # domain
       add_san "${fqdn%%.*}"                # host
     done
-    add_san "localhost";                    # localhost
   fi
 
   if [[ $IP == true ]]; then
