@@ -23,7 +23,7 @@ linux-image-generic
 #endif
 #ifdef DEBIAN
 #ifdef I386
-linux-image-686
+linux-image-686-pae
 #endif
 #ifdef AMD64
 linux-image-amd64
