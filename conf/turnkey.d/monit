@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ln -s /etc/monit/monitrc.d/system /etc/monit/conf.d/system
