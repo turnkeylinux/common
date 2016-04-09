@@ -1,6 +1,10 @@
 #!/bin/bash -ex
 
-GLOBALS='bower pm2 forever node-inspector grunt grunt-cli nsp'
+# hack for node-inspector
+# https://github.com/node-inspector/node-inspector/issues/777
+npm install -g --unsafe-perm node-inspector
+
+GLOBALS='bower pm2 forever grunt grunt-cli nsp'
 
 for package in $GLOBALS; do
 	npm install -g $package
