@@ -13,18 +13,11 @@ set ${PHP_MEMORY_LIMIT:=32M}
 set ${PHP_POST_MAX_SIZE:=16M}
 set ${PHP_UPLOAD_MAX_FILESIZE:=8M}
 
-set ${XCACHE_SIZE:=32M}
-
 for f in /etc/php?/*/php.ini; do
     [ -f $f ] || continue
     setini $f memory_limit $PHP_MEMORY_LIMIT
     setini $f post_max_size $PHP_POST_MAX_SIZE
     setini $f upload_max_filesize $PHP_UPLOAD_MAX_FILESIZE
-done
-
-for f in /etc/php?/*/xcache.ini; do
-    [ -f $f ] || continue
-    setini $f xcache.size $XCACHE_SIZE
 done
 
 # '#' is depreciated in php5.3
