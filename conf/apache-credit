@@ -34,7 +34,7 @@ _CREDIT_STYLE="
 set ${CREDIT_STYLE:=$_CREDIT_STYLE}
 
 HEAD="
-<style type='text/css'>
+<style type=\\\"text/css\\\">
 $CREDIT_STYLE
 $CREDIT_STYLE_EXTRA
 </style>
@@ -42,10 +42,10 @@ $CREDIT_STYLE_EXTRA
 set ${CREDIT_ANCHORTEXT:=$(capitalize "$HOSTNAME") Appliance}
 
 BODY="
-<div id='turnkey-credit'>
-    <div style='clear: both;'>
-    <a href='https://www.turnkeylinux.org/$HOSTNAME'>$CREDIT_ANCHORTEXT</a> -
-    Powered by <a href='https://www.turnkeylinux.org'>TurnKey Linux</a>
+<div id=\\\"turnkey-credit\\\">
+    <div style=\\\"clear: both;\\\">
+    <a href=\\\"https://www.turnkeylinux.org/$HOSTNAME\\\">$CREDIT_ANCHORTEXT</a> -
+    Powered by <a href=\\\"https://www.turnkeylinux.org\\\">TurnKey Linux</a>
     </div>
 </div>
 "
