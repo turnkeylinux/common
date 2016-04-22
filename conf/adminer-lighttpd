@@ -3,9 +3,6 @@
 # Enable redirection so we can force adminer to use ssl via redirect mod
 sed -i "/^#.*\"mod_redirect\"/ s/#/ /" /etc/lighttpd/lighttpd.conf
 
-# Change default port to 8888
-sed -i "/^server.port.*=.*80/ s/80/8888/" /etc/lighttpd/lighttpd.conf
-
 # Disable default SSL site
 lighty-disable-mod ssl || true
 
