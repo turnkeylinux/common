@@ -3,6 +3,5 @@ xorg                     # X.org x window system
 xterm                    # X terminal emulator
 xkb-data                 # X keyboard extension (xkb) configuration data
 x11-common               # X window system (x.org) infrastructure
-xresprobe                # X resolution probe
 read-edid                # Hardware information-gathering tool for vesa pnp monitors
 dbus-x11
