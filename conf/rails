@@ -16,16 +16,22 @@ LOGSDIR=/var/log/$APPNAME
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 GEMOPTS="--no-rdoc --no-ri"
 
+gem update --system
+
 # install proper Rack version
 if [ "$CODENAME" = 'jessie' ]; then
-    gem install $GEMOPTS rack -v=1.6.4 # last version to support Jessie Ruby 2.1.5
+    # last versions to support Jessie Ruby 2.1.5
+    gem install $GEMOPTS rack -v 1.6.4
+    gem install $GEMOPTS activesupport -v 4.2.7.1
+    gem install $GEMOPTS rails -v 4.2.7.1
 else
-    gem install $GEMOPTS rack # latest available
+    # latest available
+    gem install $GEMOPTS rack
+    gem install $GEMOPTS rails
 fi
 
 gem install $GEMOPTS passenger
 gem install $GEMOPTS rake
-gem install $GEMOPTS rails
 gem install $GEMOPTS bundler
 gem install $GEMOPTS mysql -- --with-mysql-config='/usr/bin/mysql_config'
 gem install $GEMOPTS execjs
