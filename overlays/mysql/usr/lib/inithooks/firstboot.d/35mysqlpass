@@ -4,5 +4,11 @@
 . /etc/default/inithooks
 
 [ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
-$INITHOOKS_PATH/bin/mysqlconf.py --user=root --pass="$DB_PASS"
+if [ -z "${DB_PASS}" ]; then
+	DB_PASS=$(mcookie);
+	$INITHOOKS_PATH/bin/mysqlconf.py --user=root --pass="$DB_PASS";
+	echo $DB_PASS > ~/mysql_pass;
+else
+	$INITHOOKS_PATH/bin/mysqlconf.py --user=root --pass="$DB_PASS";
+fi
 

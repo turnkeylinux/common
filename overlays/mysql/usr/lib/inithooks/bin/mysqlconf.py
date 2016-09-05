@@ -12,6 +12,8 @@ Options:
 
 """
 
+from os import remove
+from os.path import realpath, expanduser, isfile
 import re
 import sys
 import time
@@ -122,6 +124,9 @@ def main():
     # execute any adhoc specified queries
     for query in queries:
         m.execute(query)
+
+    if isfile(realpath(expanduser('~/mysql_pass'))):
+	remove(realpath(expanduser('~/mysql_pass')))
 
 if __name__ == "__main__":
     main()
