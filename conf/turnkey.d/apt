@@ -17,9 +17,9 @@ mkdir -p $SOURCES_LIST
 cat >$SOURCES_LIST/sources.list<<EOF
 deb http://archive.turnkeylinux.org/debian $CODENAME main
 
-deb http://http.debian.net/debian $CODENAME main
-deb http://http.debian.net/debian $CODENAME contrib
-# deb http://http.debian.net/debian $CODENAME non-free
+deb http://httpredir.debian.org/debian $CODENAME main
+deb http://httpredir.debian.org/debian $CODENAME contrib
+# deb http://httpredir.debian.org/debian $CODENAME non-free
 EOF
 
 cat >$SOURCES_LIST/security.sources.list<<EOF
