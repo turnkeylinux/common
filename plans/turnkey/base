@@ -76,6 +76,8 @@ bsd-mailx
 postfix
 webmin-postfix
 
+tmux /* requested addition */
+
 #ifndef CHROOT_ONLY
 acpi-support-base
 #endif
