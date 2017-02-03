@@ -15,10 +15,10 @@ function adminer_object() {
                 include_once $filename;
         }
 
-        // Array of servers, defaults to MySQL
-        // We can use the below to customize this file later with conf script
-        $tkl_servers = array("localhost" => "MySQL on " . gethostname());
-        $tkl_database = "server";
+        // Array of servers
+        // We will use the below to customize this file later with conf script
+        $tkl_servers = array("localhost" => "DB_DESC on " . gethostname());
+        $tkl_database = "DRIVER";
 
         // Plugins we want to use, disable version checking and lock server to
         // localhost and database type
