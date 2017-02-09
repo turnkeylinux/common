@@ -21,7 +21,7 @@ PLUGINS_DIR=$ADMINER_DIR/plugins
 STATIC_DIR=$ADMINER_DIR/adminer/static
 THEME_FILE=$STATIC_DIR/default.css
 TKL_INDEX=$ADMINER_DIR/adminer/tkl-index.php
-TKL_THEME=$ADMINER_DIR/designs/nette/default.css
+TKL_THEME=$ADMINER_DIR/designs/nette/adminer.css
 
 
 # Enable nette theme 
