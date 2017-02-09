@@ -1,2 +1,2 @@
 # Add jessie-backports so we can use Adminer v4.x 
-deb http://httpredir.debian.org/debian jessie-backports
+deb http://httpredir.debian.org/debian jessie-backports main
