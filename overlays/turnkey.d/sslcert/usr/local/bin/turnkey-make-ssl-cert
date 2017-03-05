@@ -40,28 +40,28 @@
 # 2014-09-12 Released tkl-make-ssl-cert ver. 1.0
 # 2014-10-02 Released tkl-make-ssl-cert ver. 1.1
 # 2015-08-06 Released turnkey-make-ssl-cert ver. 1.2
+# 2017-03-06 Released turnkey-make-ssl-cert ver. 1.3
 # ---------------------------------------------------------------------------
 
 PROGNAME=${0##*/}
-VERSION="1.2"
+VERSION="1.3"
 
 # use extended globbing
-  shopt -s extglob
+shopt -s extglob
 
 # set defaults
-  CERT_DIR="/usr/local/share/ca-certificates"
-  KEY_DIR="/etc/ssl/private"
-  TEMPLATE="/etc/ssl/turnkey.cnf"
-  DEFAULT=false
-  IP=false
-  OUT=false
-  VERBOSE=false
-  REQUEST=false
-  WILD=false
-  OVERWRITE=false
-
-# set expiration for 10 years (including leap years)
-  days=$((($(date -d '+10 year' +%s) - $(date +%s))/86400))
+CERT_DIR="/usr/local/share/ca-certificates"
+KEY_DIR="/etc/ssl/private"
+TEMPLATE="/etc/ssl/turnkey.cnf"
+DEFAULT=false
+LE=false
+IP=false
+OUT=false
+VERBOSE=false
+REQUEST=false
+WILD=false
+OVERWRITE=false
+EXPIRY=10y
 
 clean_up() { # Perform pre-exit housekeeping
   rm -f $TMPFILE $TMPOUT
@@ -127,6 +127,8 @@ $(usage)
       -o, --out [/path/]file  Write certificate to alternate location
       -d, --default           Generate default certificate
                                 /etc/ssl/private/cert.pem
+      -e, --expiry            Set certificate expiry date
+                                default: 10y
       -r, --csr               Generate a certificate signing request
       -w, --wild              Generate wildcard certificate
       -t, --template file     Use alternate template file
@@ -143,60 +145,66 @@ return
 }
 
 add_san() {
-  if [[ ! "$sans" =~ " $1 " ]]; then         # skip duplicates
-    echo "DNS.$((n++)) = $1" >> $TMPFILE;    # add subject alternate name
-    sans+="$1 ";
+  if [[ ! "$sans" =~ " $1 " ]]; then        # skip duplicates
+    echo "DNS.$((n++)) = $1" >> $TMPFILE    # add subject alternate name
+    sans+="$1 "
   fi
 }
 
 add_ip() {
-  echo "IP.$((i++)) = $1" >> $TMPFILE;
+  echo "IP.$((i++)) = $1" >> $TMPFILE
 }
 
 create_temporary_cnf() {
-  n=1; i=1; sans=" ";
+  n=1; i=1; sans=" "
 
   # remove alt_names from template
   sed -e '/^\[\s*alt_names\s*\]/q' $TEMPLATE > $TMPFILE
 
   if [[ $WILD == true ]]; then
     [[ "$args" == "" ]] && args="$(hostname -Ad)"
-    for domain in $args
-    do
-      add_san "$domain";                    # domain
+    for domain in $args; do
       commonName=${commonName:-$domain};    # use first match
-    done
-    for domain in $args
-    do
+      add_san "$domain";                    # domain
       add_san "*.$domain";                  # wildcard
     done
   else
     [[ "$args" == "" ]] && args="$(hostname -A)"
     [[ "$args" == "" ]] && args="$(hostname)"
-    for fqdn in $args
-    do
-      add_san "$fqdn";                      # fqdn
-      commonName=${commonName:-$fqdn};      # use first match
+    for fqdn in $args; do
+      commonName=${commonName:-$fqdn}      # use first match
+
+      add_san "$fqdn"                      # fqdn
+      add_san "${fqdn#*.}"                 # domain
+      add_san "${fqdn%%.*}"                # host
     done
-    for fqdn in $args
-    do
-      add_san "${fqdn#*.}";                 # domain
-    done
-    for fqdn in $args
-    do
-      add_san "${fqdn%%.*}";                # host
-    done
-    add_san "localhost";                    # localhost
   fi
 
   if [[ $IP == true ]]; then
-    for addr in $(hostname -I); do add_san "$addr"; done
-    add_san "127.0.0.1";
-    for addr in $(hostname -I); do add_ip "$addr"; done
-    add_ip  "127.0.0.1";
+    for addr in $(hostname -I) '127.0.0.1'; do add_san "$addr"; add_ip "$addr"; done
   fi
 
   sed -i "s#@HostName@#\"$commonName\"#" $TMPFILE
+}
+
+expiry_days() {
+  [ -z "$1" ] && error_exit "Expiry date not set"
+
+  number="${1//[a-z]}"
+  [[ "$number" =~ ^[0-9]+$ ]] || error_exit "$number in Expiry is not a valid integer"
+  ([ "$number" -lt 1 ] || [ "$number" -gt 10957 ]) \
+    && error_exit "$number in Expiry is out of bounds. Must be between 1 and 10957"
+
+  interval="${1//[0-9]}"
+  case "$interval" in
+    y) days=$((($(date -d "+$number year" +%s) - $(date +%s))/86400)) ;;
+    m) days=$((($(date -d "+$number month" +%s) - $(date +%s))/86400)) ;;
+    d) days=$((($(date -d "+$number day" +%s) - $(date +%s))/86400)) ;;
+    *) error_exit "$interval in Expiry not supported; use only d|m|y (days|months|years)."
+  esac
+
+  [ ! "$days" -lt 1 ] && [ ! "$days" -gt 10957 ] \
+    || error_exit "Expiry must be between 1 day (1d) and 30 years (10957d)"
 }
 
 # Trap signals
@@ -209,6 +217,7 @@ while [[ -n $1 ]]; do
     -h | --help)              help_message; graceful_exit ;;
     -o | --out)               shift; CERT="$1"; OUT=true ;;
     -d | --default)           DEFAULT=true ;;
+    -e | --expiry)            shift; EXPIRY="$1" ;;
     -r | --csr)               REQUEST=true ;;
     -w | --wild)              WILD=true ;;
     -t | --template)          shift; TEMPLATE="$1" ;;
@@ -221,6 +230,8 @@ while [[ -n $1 ]]; do
   shift
 done
 
+expiry_days $EXPIRY
+
 # Exit if OpenSSL is not available
 which openssl > /dev/null || error_exit "OpenSSL is not installed."
 
@@ -231,12 +242,12 @@ fi
 
 # Template file must exist
 if [[ ! -f $TEMPLATE ]]; then
-  error_exit "Could not open template file: $TEMPLATE";
+  error_exit "Could not open template file: $TEMPLATE"
 fi
 
 ## Main logic ##
-TMPFILE="$(mktemp)" || error_exit "Can't create temporary file";
-TMPOUT="$(mktemp)"  || error_exit "Can't create temporary file";
+TMPFILE="$(mktemp)" || error_exit "Can't create temporary file"
+TMPOUT="$(mktemp)"  || error_exit "Can't create temporary file"
 
 create_temporary_cnf
 
@@ -261,7 +272,7 @@ fi
 
 # don't overwrite existing file without permission
 if [[ -f $CERT ]] && [[ $OVERWRITE == false ]]; then
-  error_exit "Output file already exists: $CERT";
+  error_exit "Output file already exists: $CERT"
 fi
 
 # create the key and certificate.
@@ -299,7 +310,7 @@ _EOF_
   # create the certificate signing request.
   if ! openssl req -sha256 -config $TMPFILE -new -key $KEY -out $CSR > $TMPOUT 2>&1
   then
-    error_exit "Could not create CSR. Openssl output was:" $TMPOUT;
+    error_exit "Could not create CSR. Openssl output was:" $TMPOUT
   fi
   chmod 600 $CSR
 fi
