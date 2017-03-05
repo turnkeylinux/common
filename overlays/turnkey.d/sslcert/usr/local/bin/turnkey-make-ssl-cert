@@ -40,10 +40,11 @@
 # 2014-09-12 Released tkl-make-ssl-cert ver. 1.0
 # 2014-10-02 Released tkl-make-ssl-cert ver. 1.1
 # 2015-08-06 Released turnkey-make-ssl-cert ver. 1.2
+# 2017-03-06 Released turnkey-make-ssl-cert ver. 1.3
 # ---------------------------------------------------------------------------
 
 PROGNAME=${0##*/}
-VERSION="1.2"
+VERSION="1.3"
 
 # use extended globbing
 shopt -s extglob
@@ -60,9 +61,7 @@ VERBOSE=false
 REQUEST=false
 WILD=false
 OVERWRITE=false
-
-# set expiration for 10 years (including leap years)
-days=$((($(date -d '+10 year' +%s) - $(date +%s))/86400))
+EXPIRY=10y
 
 clean_up() { # Perform pre-exit housekeeping
   rm -f $TMPFILE $TMPOUT
@@ -128,6 +127,8 @@ $(usage)
       -o, --out [/path/]file  Write certificate to alternate location
       -d, --default           Generate default certificate
                                 /etc/ssl/private/cert.pem
+      -e, --expiry            Set certificate expiry date
+                                default: 10y
       -r, --csr               Generate a certificate signing request
       -w, --wild              Generate wildcard certificate
       -t, --template file     Use alternate template file
@@ -186,6 +187,26 @@ create_temporary_cnf() {
   sed -i "s#@HostName@#\"$commonName\"#" $TMPFILE
 }
 
+expiry_days() {
+  [ -z "$1" ] && error_exit "Expiry date not set"
+
+  number="${1//[a-z]}"
+  [[ "$number" =~ ^[0-9]+$ ]] || error_exit "$number in Expiry is not a valid integer"
+  ([ "$number" -lt 1 ] || [ "$number" -gt 10957 ]) \
+    && error_exit "$number in Expiry is out of bounds. Must be between 1 and 10957"
+
+  interval="${1//[0-9]}"
+  case "$interval" in
+    y) days=$((($(date -d "+$number year" +%s) - $(date +%s))/86400)) ;;
+    m) days=$((($(date -d "+$number month" +%s) - $(date +%s))/86400)) ;;
+    d) days=$((($(date -d "+$number day" +%s) - $(date +%s))/86400)) ;;
+    *) error_exit "$interval in Expiry not supported; use only d|m|y (days|months|years)."
+  esac
+
+  [ ! "$days" -lt 1 ] && [ ! "$days" -gt 10957 ] \
+    || error_exit "Expiry must be between 1 day (1d) and 30 years (10957d)"
+}
+
 # Trap signals
 trap "signal_exit TERM" TERM HUP
 trap "signal_exit INT"  INT
@@ -196,6 +217,7 @@ while [[ -n $1 ]]; do
     -h | --help)              help_message; graceful_exit ;;
     -o | --out)               shift; CERT="$1"; OUT=true ;;
     -d | --default)           DEFAULT=true ;;
+    -e | --expiry)            shift; EXPIRY="$1" ;;
     -r | --csr)               REQUEST=true ;;
     -w | --wild)              WILD=true ;;
     -t | --template)          shift; TEMPLATE="$1" ;;
@@ -207,6 +229,8 @@ while [[ -n $1 ]]; do
   esac
   shift
 done
+
+expiry_days $EXPIRY
 
 # Exit if OpenSSL is not available
 which openssl > /dev/null || error_exit "OpenSSL is not installed."
