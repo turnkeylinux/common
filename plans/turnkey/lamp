@@ -12,3 +12,4 @@ webmin-phpini
 adminer
 php5-cli
 
+libperl4-corelibs-perl # php5-common depends on lsof; which depends on this
