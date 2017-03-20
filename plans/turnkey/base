@@ -76,6 +76,9 @@ bsd-mailx
 postfix
 webmin-postfix
 
+authbind       /* add-water (confconsole lets encrypt) depends */
+python-bottle  /* add-water (confconsole lets encrypt) depends */
+
 #ifndef CHROOT_ONLY
 acpi-support-base
 #endif
