@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+# Adminer Nginx Confg Script
+
+# Link conf file to available-sites, and enable it
+ln -s /etc/adminer/nginx.conf /etc/nginx/sites-available/50-adminer.conf
+
