@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+apt-get update -q
+apt-get install dehydrated -y
+

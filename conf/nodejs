@@ -27,13 +27,10 @@ ln -s $PM2_LOG/pm2.log $PM2_PATH/pm2.log
 
 chown -R $USER:$USER $PM2_PATH $PM2_LOG
 
-pm2 startup ubuntu -u $USER
-pm2 startup systemd -u $USER
-
-sed -i "/PM2_HOME/ s#root#home/$USER#" /etc/init.d/pm2-init.sh
-
 rm -f /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/nodejs /etc/nginx/sites-enabled/nodejs
+
+update-rc.d pm2 defaults
 
 rm -rf /tmp/npm*
 

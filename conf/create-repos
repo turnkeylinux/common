@@ -29,11 +29,12 @@ dvcs_repo git
 
 touch $REPOS/git/helloworld/.git/git-daemon-export-ok
 GITPUB=/var/lib/git
-ln -s $REPOS/git/helloworld/.git $GITPUB/helloworld.git
+git clone --bare $REPOS/git/helloworld $GITPUB/helloworld.git
 ln -s $GITPUB $REPOS/git/public
 echo "Hello World" > $REPOS/git/helloworld/.git/description
 
 sed -i "/GIT_DAEMON_ENABLE/ s/false/true/" /etc/default/git-daemon
+chown -R www-data:root $GITPUB
 
 # configure bzr repo
 export BZR_EMAIL=root@localhost

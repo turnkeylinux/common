@@ -1,0 +1,5 @@
+#!/bin/bash -e
+OLD=usr/lib/cgi-bin
+NEW=var/www/cgi-bin
+FILE=/etc/apache2/conf-available/serve-cgi-bin.conf
+sed -i "s|$OLD|$NEW|g" $FILE
