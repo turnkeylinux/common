@@ -15,6 +15,7 @@ cat >>/etc/stunnel/stunnel.conf<<EOF
 [shellinabox]
 accept  = 12320
 connect = 127.0.0.1:12319
+TIMEOUTclose = 0
 
 EOF
 

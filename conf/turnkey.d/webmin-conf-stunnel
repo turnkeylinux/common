@@ -7,6 +7,7 @@ cat >>/etc/stunnel/stunnel.conf<<EOF
 [webmin]
 accept  = $WEBMIN_PORT
 connect = 127.0.0.1:10000
+TIMEOUTclose = 0
 EOF
 
 CONF=/etc/webmin/miniserv.conf
