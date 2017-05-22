@@ -1,5 +1,10 @@
 #!/bin/bash -e
 
 apt-get update -q
-apt-get install dehydrated -y
+
+# OTRS appliance fails to build without forcing non-interactive install
+# but still fails because when Dehydrated is installed apt returns a non-zero
+# exit code (because OTRS still not configured properly)
+
+DEBIAN_FRONTEND=noninteractive apt-get install dehydrated -y || true
 
