@@ -16,7 +16,7 @@ libimage-exiftool-perl
 libdbd-mysql-perl
 libfilesys-smbclient-perl
 liburi-perl
-
+libcgi-pm-perl
 apache2                
 webmin-apache
 

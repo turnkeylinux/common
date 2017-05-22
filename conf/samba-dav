@@ -2,8 +2,9 @@
 
 SRC=/usr/local/src
 WEBROOT=/var/www/webdavcgi
+RELEASE=release-1.1.1
 
-git clone https://github.com/DanRohde/webdavcgi.git $WEBROOT
+git clone -b $RELEASE --depth 1 https://github.com/DanRohde/webdavcgi.git $WEBROOT 
 
 mv $SRC/webdav.conf $WEBROOT
 mv $SRC/logout $WEBROOT/cgi-bin
