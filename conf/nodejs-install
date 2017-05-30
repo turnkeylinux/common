@@ -25,4 +25,5 @@ npm completion > /etc/skel/.bashrc.d/npm
 chmod +x /etc/skel/.bashrc.d/npm
 cp /etc/skel/.bashrc.d/npm /root/.bashrc.d/npm
 
-
+# node user
+adduser --system --group --shell /bin/bash node
