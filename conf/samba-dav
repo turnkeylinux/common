@@ -2,22 +2,28 @@
 
 SRC=/usr/local/src
 WEBROOT=/var/www/webdavcgi
-# SOURCE=https://github.com/DanRohde/webdavcgi.git
-# RELEASE=release-1.1.1
+GIT_SOURCE=https://github.com/DanRohde/webdavcgi.git
+TAG_RELEASE=40a9e02694ad8c554307250e51d64d1cce7bb76d
 
-# Due to an upstream bug we are using a fixed fork
-SOURCE=https://github.com/DocCyblade/webdavcgi.git
-RELEASE=1.1.1-smb-fix
+git clone $GIT_SOURCE $WEBROOT
 
-git clone --depth 1 --branch $RELEASE $SOURCE $WEBROOT 
+cd $WEBROOT
+git checkout $TAG_RELEASE
+rm -R $WEBROOT/.git
 
 mv $SRC/webdav.conf $WEBROOT
 mv $SRC/logout $WEBROOT/cgi-bin
 
-chmod a+rx $WEBROOT $WEBROOT/cgi-bin $WEBROOT/cgi-bin/webdav.pl $WEBROOT/cgi-bin/afswrapper $WEBROOT/cgi-bin/smbwrapper
+chmod a+rx $WEBROOT $WEBROOT/cgi-bin
 chmod -R a+r $WEBROOT
 
 echo yes | perl -MCPAN -e 'install DateTime::Format::Human::Duration'
+
+cpan install IO::Compress::Brotli
+
+apt-get -y remove build-essential
+apt-get -y autoremove
+
 
 a2enmod rewrite
 a2enmod cgi
