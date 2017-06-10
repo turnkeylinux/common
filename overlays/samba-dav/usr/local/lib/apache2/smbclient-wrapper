@@ -1,0 +1,5 @@
+#!/bin/bash
+# a simple wrapper script to allow external auth via Samba auth DB
+
+read username
+smbclient -U $username -L localhost 2>&1 >/dev/null

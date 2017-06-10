@@ -1,31 +1,31 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
 SRC=/usr/local/src
-WEBROOT=/var/www/sambadav
+WEBROOT=/var/www/webdavcgi
+GIT_SOURCE=https://github.com/DanRohde/webdavcgi.git
+TAG_RELEASE=40a9e02694ad8c554307250e51d64d1cce7bb76d
 
-curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/local/bin
-
-git clone https://github.com/1afa/sambadav.git $SRC/sambadav
-cp -a $SRC/sambadav/src $WEBROOT
+git clone $GIT_SOURCE $WEBROOT
 
 cd $WEBROOT
-composer --optimize-autoloader install
-cd -
+git checkout $TAG_RELEASE
+rm -R $WEBROOT/.git
 
-for i in log data; do
-	chown www-data:root /var/www/sambadav/$i
-	chmod 0750 /var/www/sambadav/$i
-done
+mv $SRC/webdav.conf $WEBROOT
+mv $SRC/logout $WEBROOT/cgi-bin
 
-rm -f /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sites-available/sambadav /etc/nginx/sites-enabled/sambadav
-ln -s /etc/nginx/sites-available/tkl-webcp /etc/nginx/sites-enabled/tkl-webcp
+chmod a+rx $WEBROOT $WEBROOT/cgi-bin
+chmod -R a+r $WEBROOT
 
-# add Unix pre-auth
-mv $SRC/Auth.php $WEBROOT/lib/SambaDAV/Auth.php
+echo yes | perl -MCPAN -e 'install DateTime::Format::Human::Duration'
 
-# open shares
-sed -i "s|array()|array('share_root' => array(array('localhost')))|" $WEBROOT/config/share_root.inc.php
+cpan install IO::Compress::Brotli
 
-# change base URL
-sed -i "s|webfolders/||" $WEBROOT/config/config.inc.php
+apt-get -y remove build-essential
+apt-get -y autoremove
+
+
+a2enmod rewrite
+a2enmod cgi
+a2enmod authnz_external
+
