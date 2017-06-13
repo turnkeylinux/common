@@ -16,20 +16,14 @@ LOGSDIR=/var/log/$APPNAME
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 GEMOPTS="--no-rdoc --no-ri"
 
+git clone https://github.com/rbenv/ruby-build.git /usr/local/src/ruby-build
+/usr/local/src/ruby-build/install.sh
+ruby-build 2.3.3 /usr
+
 gem update --system
 
-# install proper Rack version
-if [ "$CODENAME" = 'jessie' ]; then
-    # last versions to support Jessie Ruby 2.1.5
-    gem install $GEMOPTS rack -v 1.6.4
-    gem install $GEMOPTS activesupport -v 4.2.7.1
-    gem install $GEMOPTS rails -v 4.2.7.1
-else
-    # latest available
-    gem install $GEMOPTS rack
-    gem install $GEMOPTS rails
-fi
-
+gem install $GEMOPTS rack
+gem install $GEMOPTS rails
 gem install $GEMOPTS passenger
 gem install $GEMOPTS rake
 gem install $GEMOPTS bundler
@@ -38,7 +32,7 @@ gem install $GEMOPTS execjs
 
 # build and configure passenger
 passenger-install-apache2-module --auto
-PASSENGER_ROOT=$(echo $(ls -d /var/lib/gems/*/gems/passenger*))
+PASSENGER_ROOT=$(echo $(ls -d /usr/lib/ruby/gems/*/gems/passenger*))
 sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/mods-available/passenger.*
 
 # convenience execution variables
