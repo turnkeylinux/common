@@ -5,9 +5,6 @@ apache2-mpm-prefork
 mysql-server
 webmin-mysql
 
-ruby
-ruby-dev
-
 build-essential            /* needed to build gems */
 libmysqlclient-dev         /* needed to build mysql gem */
 libcurl4-openssl-dev       /* needed to build passenger apache2 module */
