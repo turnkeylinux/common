@@ -21,14 +21,27 @@ git clone https://github.com/rbenv/ruby-build.git /usr/local/rbenv/plugins/ruby-
 /usr/local/rbenv/plugins/ruby-build/install.sh
 
 # configuration for rbenv
-cat << 'EOF' >> ~/.bashrc.d/rbenv
+cat << 'EOF' >> /root/.bashrc.d/rbenv
 export RBENV_ROOT=/usr/local/rbenv
 export PATH="$RBENV_ROOT/bin:$PATH"
 eval "$(rbenv init -)"
 EOF
 # source rbenv.conf into shell
-chmod +x ~/.bashrc.d/rbenv
-. ~/.bashrc.d/rbenv
+chmod +x /root/.bashrc.d/rbenv
+. /root/.bashrc.d/rbenv
+
+mkdir -p /usr/local/rbenv/rbenv.d/rehash
+cat << 'EOF' >> /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
+#!/bin/bash
+
+SHIM_PATH='/usr/local/rbenv/shims'
+
+for shim in ${SHIM_PATH}/*; do
+    ln -sf "${shim}" "/usr/local/bin/$( basename ${shim} )"
+done
+EOF
+
+chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
 RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install 2.3.3
 rbenv global 2.3.3
