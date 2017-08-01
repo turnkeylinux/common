@@ -5,9 +5,6 @@ apache2-mpm-prefork
 postgresql
 webmin-postgresql
 
-ruby
-ruby-dev
-
 build-essential            /* needed to build gems */
 libcurl4-openssl-dev       /* needed to build passenger apache2 module */
 libreadline-gplv2-dev      /* needed for rails console */

@@ -16,28 +16,51 @@ LOGSDIR=/var/log/$APPNAME
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 GEMOPTS="--no-rdoc --no-ri"
 
+git clone https://github.com/rbenv/rbenv.git /usr/local/rbenv --depth=1
+git clone https://github.com/rbenv/ruby-build.git /usr/local/rbenv/plugins/ruby-build --depth=1
+/usr/local/rbenv/plugins/ruby-build/install.sh
+
+# configuration for rbenv
+cat << 'EOF' >> /root/.bashrc.d/rbenv
+export RBENV_ROOT=/usr/local/rbenv
+export PATH="$RBENV_ROOT/bin:$PATH"
+eval "$(rbenv init -)"
+EOF
+# source rbenv.conf into shell
+chmod +x /root/.bashrc.d/rbenv
+. /root/.bashrc.d/rbenv
+
+mkdir -p /usr/local/rbenv/rbenv.d/rehash
+cat << 'EOF' >> /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
+#!/bin/bash
+
+SHIM_PATH='/usr/local/rbenv/shims'
+
+for shim in ${SHIM_PATH}/*; do
+    ln -sf "${shim}" "/usr/local/bin/$( basename ${shim} )"
+done
+EOF
+
+chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
+
+MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install 2.4.0
+rbenv global 2.4.0
+
 gem update --system
 
-if [ "$CODENAME" = 'jessie' ]; then
-    # last versions to support Jessie Ruby 2.1.5
-    gem install $GEMOPTS rack -v 1.6.4
-    gem install $GEMOPTS activesupport -v 4.2.7.1
-    gem install $GEMOPTS rails -v 4.2.7.1
-else
-    # latest available
-    gem install $GEMOPTS rack
-    gem install $GEMOPTS rails
-fi
-
+gem install $GEMOPTS rack
+gem install $GEMOPTS rails
 gem install $GEMOPTS passenger
 gem install $GEMOPTS rake
 gem install $GEMOPTS bundler
 gem install $GEMOPTS pg
 gem install $GEMOPTS execjs
 
+rbenv rehash
+
 # build and configure passenger
 passenger-install-apache2-module --auto
-PASSENGER_ROOT=$(echo $(ls -d /var/lib/gems/*/gems/passenger*))
+PASSENGER_ROOT=$(echo $(ls -d /usr/local/rbenv/versions/*/lib/ruby/gems/*/gems/passenger*))
 sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/mods-available/passenger.*
 
 # start mysql server
