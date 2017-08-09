@@ -12,7 +12,7 @@ hdparm               # Tune hard disk parameters for high performance
 upstart
 #endif
 #ifdef DEBIAN
-sysvinit
+systemd-sysv
 #endif
 
 #ifdef KERNEL
