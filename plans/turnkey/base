@@ -49,34 +49,34 @@ stunnel4        /* provide ssl to shellinabox */
 perl-openssl-defaults /* libnet-ssleay-perl depends (webmin depends) */
 libnet-ssleay-perl    /* webmin depends  */
 webmin
-webmin-theme-stressfree
-webmin-net
-webmin-software
-webmin-useradmin
-webmin-passwd
-webmin-shell
-webmin-custom
-webmin-file
-webmin-text-editor
-webmin-lvm
-webmin-tklbam
-webmin-updown
-webmin-filemin
+//webmin-theme-stressfree
+//webmin-net
+//webmin-software
+//webmin-useradmin
+//webmin-passwd
+//webmin-shell
+//webmin-custom
+//webmin-file
+//webmin-text-editor
+//webmin-lvm
+//webmin-tklbam
+//webmin-updown
+//webmin-filemin
 unzip           /* webmin-updown recommends */
 
 logrotate
 rsyslog
-webmin-syslog
+//webmin-syslog
 
 iptables
-webmin-firewall
+//webmin-firewall
 
 ssh
-webmin-sshd
+//webmin-sshd
 
 bsd-mailx
 postfix
-webmin-postfix
+//webmin-postfix
 
 authbind       /* add-water (confconsole lets encrypt) depends */
 dehydrated     /* add-water (confconsole lets encrypt) recommends (actually depends) */
