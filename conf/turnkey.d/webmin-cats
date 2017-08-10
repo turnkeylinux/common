@@ -7,4 +7,4 @@ echo phpini=system >> /etc/webmin/webmin.cats
 # rename "Others" => "Tools" (webmin is weird)
 echo =Tools >> /etc/webmin/webmin.catnames
 
-rm /etc/webmin/*.cache
+rm -f /etc/webmin/*.cache
