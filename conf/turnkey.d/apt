@@ -19,7 +19,7 @@ deb http://archive.turnkeylinux.org/debian $CODENAME main
 
 deb http://deb.debian.org/debian $CODENAME main
 deb http://deb.debian.org/debian $CODENAME contrib
-# deb http://deb.debian.org/debian $CODENAME non-free
+#deb http://deb.debian.org/debian $CODENAME non-free
 EOF
 
 cat >$SOURCES_LIST/security.sources.list<<EOF
@@ -27,10 +27,10 @@ deb http://archive.turnkeylinux.org/debian $CODENAME-security main
 
 deb http://security.debian.org/ $CODENAME/updates main
 deb http://security.debian.org/ $CODENAME/updates contrib
-# deb http://security.debian.org/ $CODENAME/updates non-free
+#deb http://security.debian.org/ $CODENAME/updates non-free
 EOF
 
 if [ "$NONFREE" ]; then
-    sed -i "/non-free/ s/# //" $SOURCES_LIST/sources.list
-    sed -i "/non-free/ s/# //" $SOURCES_LIST/security.sources.list
+    sed -i "/non-free/ s|^#||" $SOURCES_LIST/sources.list
+    sed -i "/non-free/ s|^#||" $SOURCES_LIST/security.sources.list
 fi
