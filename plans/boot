@@ -8,6 +8,10 @@ isolinux             # Collection of bootloaders (ISO 9960 bootloader)
 casper               # Run a "live" preinstalled system from read-only media
 hdparm               # Tune hard disk parameters for high performance
 
+aufs-dkms                       /* aufs support for stretch  */
+dkms                            /* aufs depends */
+linux-headers-4.9.0-3-amd64     /* aufs depends */
+
 #ifdef UBUNTU
 upstart
 #endif
