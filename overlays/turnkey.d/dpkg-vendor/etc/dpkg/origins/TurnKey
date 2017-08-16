@@ -1,0 +1,4 @@
+Vendor: TurnKey
+Vendor-URL: https://www.turnkeylinux.org/
+Bugs: https://github.com/turnkeylinux/tracker/issues
+Parent: Debian
