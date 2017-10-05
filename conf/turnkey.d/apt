@@ -30,6 +30,20 @@ deb http://security.debian.org/ $CODENAME/updates contrib
 #deb http://security.debian.org/ $CODENAME/updates non-free
 EOF
 
+if [ "$DEV_TEST" ]; then
+    cat >$SOURCES_LIST/dev-apt.list<<EOF
+# WARNING - this repo should only be enabled for dev testing!!!
+
+deb http://dev-apt.jeremydavis.org $CODENAME main
+EOF
+    cat > /etc/apt/preferences.d/tkl-dev-test.pref <<EOF
+Package: *
+Pin: origin "dev-apt.jeremydavis.org"
+Pin-Priority: 900
+EOF
+    sed -i "s|900|850|" /etc/apt/preferences
+fi
+
 if [ "$NONFREE" ]; then
     sed -i "/non-free/ s|^#||" $SOURCES_LIST/sources.list
     sed -i "/non-free/ s|^#||" $SOURCES_LIST/security.sources.list
