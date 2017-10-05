@@ -1,13 +1,13 @@
 apache2                
-webmin-apache
+//webmin-apache
 
 apache2-mpm-prefork    
 mysql-server           
-webmin-mysql
+//webmin-mysql
 
 php5-mysql             # MySQL module for php5
 libapache2-mod-php5    # server-side, HTML-embedded scripting language (apache 2 module)
-webmin-phpini
+//webmin-phpini
 
 adminer
 php5-cli

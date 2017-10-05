@@ -1,12 +1,12 @@
 apache2
 apache2-mpm-prefork
 libapache2-mod-php5
-webmin-apache
-webmin-phpini
+//webmin-apache
+//webmin-phpini
 
 postgresql
 php5-pgsql
-webmin-postgresql
+//webmin-postgresql
 
 adminer
 php5-cli
