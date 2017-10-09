@@ -1,14 +1,13 @@
 apache2
-apache2-mpm-prefork
-libapache2-mod-php5
+libapache2-mod-php
 //webmin-apache
 //webmin-phpini
 
 postgresql
-php5-pgsql
+php-pgsql
 //webmin-postgresql
 
 adminer
-php5-cli
+php-cli
 
-libperl4-corelibs-perl # php5-common depends on lsof; which depends on this
+//libperl4-corelibs-perl # php5-common depends on lsof; which depends on this
