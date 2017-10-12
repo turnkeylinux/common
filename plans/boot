@@ -10,7 +10,7 @@ hdparm               # Tune hard disk parameters for high performance
 
 aufs-dkms                       /* aufs support for stretch  */
 dkms                            /* aufs depends */
-linux-headers-4.9.0-3-amd64     /* aufs depends */
+linux-headers-4.9.0-4-amd64     /* aufs depends */
 
 #ifdef UBUNTU
 upstart
