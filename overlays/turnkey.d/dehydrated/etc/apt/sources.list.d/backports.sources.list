@@ -1,6 +1,0 @@
-# Jessie Backports repo
-
-deb http://httpredir.debian.org/debian jessie-backports main
-
-# deb http://httpredir.debian.org/debian jessie-backports contrib 
-# deb http://httpredir.debian.org/debian jessie-backports non-free
