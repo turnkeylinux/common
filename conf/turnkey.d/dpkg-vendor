@@ -1,0 +1,7 @@
+#!/bin/bash -e
+#
+# Creates required symlink so dpkg-vendor --query vendor 
+# returns the correct string
+
+rm -rf /etc/dpkg/origins/default
+ln -s /etc/dpkg/origins/TurnKey /etc/dpkg/origins/default
