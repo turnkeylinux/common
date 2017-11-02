@@ -1,11 +1,11 @@
 apache2
 libapache2-mod-php
-//webmin-apache
-//webmin-phpini
+webmin-apache
+webmin-phpini
 
 postgresql
 php-pgsql
-//webmin-postgresql
+webmin-postgresql
 
 adminer
 php-cli

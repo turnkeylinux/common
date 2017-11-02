@@ -1,9 +1,9 @@
 apache2
-//webmin-apache
+webmin-apache
 apache2-mpm-prefork
 
 postgresql
-//webmin-postgresql
+webmin-postgresql
 
 build-essential            /* needed to build gems */
 libcurl4-openssl-dev       /* needed to build passenger apache2 module */

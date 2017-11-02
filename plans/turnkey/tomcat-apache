@@ -1,7 +1,7 @@
 #include "tomcat"
 
 apache2
-//webmin-apache
+webmin-apache
 apache2-mpm-worker
 libapache2-mod-jk
 

@@ -18,7 +18,7 @@ libfilesys-smbclient-perl
 liburi-perl
 libcgi-pm-perl
 apache2                
-//webmin-apache
+webmin-apache
 
 apache2-mpm-prefork    
 libapache2-mod-authnz-external

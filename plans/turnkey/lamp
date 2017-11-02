@@ -1,12 +1,12 @@
 apache2                
-//webmin-apache
+webmin-apache
 
 mysql-server           
-//webmin-mysql
+webmin-mysql
 
 php-mysql             # MySQL module for php
 libapache2-mod-php    # server-side, HTML-embedded scripting language (apache 2 module)
-//webmin-phpini
+webmin-phpini
 
 adminer
 php-cli
