@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [[ $1 == "apache2" ]]; then
+    APACHE_STARTED_BY_SYSTEMD=y /usr/sbin/apache2ctl $2
+else
+    /usr/sbin/service $@
+fi
