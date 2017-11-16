@@ -56,7 +56,6 @@ webmin-useradmin
 webmin-passwd
 webmin-shell
 webmin-custom
-webmin-file
 webmin-text-editor
 webmin-lvm
 webmin-tklbam
