@@ -1,8 +1,7 @@
 #!/bin/bash -ex
 
 dl() {
-    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
-    cd $2; curl -L -f -O $PROXY $1; cd -
+    cd $2; curl -L -f -O $1; cd -
 }
 
 VERSION="4.0.2"
