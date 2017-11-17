@@ -5,7 +5,7 @@ dl() {
 }
 
 VERSION="4.0.2"
-URL="http://download.cksource.com/CKEditor/CKEditor/CKEditor%20${VERSION}/ckeditor_${VERSION}_standard.tar.gz"
+URL="https://download.cksource.com/CKEditor/CKEditor/CKEditor%20${VERSION}/ckeditor_${VERSION}_standard.tar.gz"
 
 dl $URL /usr/local/src
 
