@@ -2,19 +2,7 @@
 
 # adminer-mysql
 #
-#   common conf script to upgrade adminer (assumes backports and pinning),
 #   configure adminer to only show mysql, and to link the common theme
-
-
-# Update repos and upgrade adminer
-apt-get update
-echo "Before Adminer Update"
-apt-cache policy adminer
-apt-get -y upgrade adminer
-echo "AFTER Adminer Update"
-apt-cache policy adminer  
-
-
 
 ADMINER_DIR=/usr/share/adminer
 PLUGINS_DIR=$ADMINER_DIR/plugins
