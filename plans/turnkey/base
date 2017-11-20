@@ -19,6 +19,7 @@ di-live         /* confconsole recommends */
 resolvconf      /* confconsole recommends */
 
 tklbam
+gnupg           /* tklbam depends - new for Stretch */
 hubdns
 inithooks
 python-dialog
