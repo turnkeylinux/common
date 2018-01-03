@@ -2,20 +2,23 @@
 
 fatal() { echo "FATAL [$(basename $0)]: $@" 1>&2; exit 1; }
 
-TOMCAT=tomcat7
+TOMCAT=tomcat8
 
 CATALINA_HOME="/usr/share/$TOMCAT"
 CATALINA_BASE="/var/lib/$TOMCAT"
 CATALINA_TMPDIR="$CATALINA_BASE/temp"
 
 # identify JVM to use
-##We have to check 5 conditions, Sun6, Oracle 6 and 7, openjdk 6 and 7
+##We have to check Sun6, Oracle 6 and 7, openjdk 6, 7 and 8
 [ -e /usr/lib/jvm/java-6-sun ] && JVM=java-6-sun
 [ -e /usr/lib/jvm/java-6-oracle ] && JVM=java-6-oracle
 [ -e /usr/lib/jvm/java-7-oracle ] && JVM=java-7-oracle
 
 [ -e /usr/lib/jvm/java-7-openjdk-i386 ] && JVM=java-7-openjdk-i386
 [ -e /usr/lib/jvm/java-7-openjdk-amd64 ] && JVM=java-7-openjdk-amd64
+
+[ -e /usr/lib/jvm/java-8-openjdk-i386 ] && JVM=java-8-openjdk-i386
+[ -e /usr/lib/jvm/java-8-openjdk-amd64 ] && JVM=java-8-openjdk-amd64
 
 [ -z "$JVM" ] && fatal "JVM to use could not be identified"
 
@@ -28,7 +31,7 @@ JAVA_HOME="/usr/lib/jvm/${JVM}"
 EOF
 
 # this may not be 100% safe
-JINFO=`ls /usr/lib/jvm/.*java*7*jinfo`
+JINFO=`ls /usr/lib/jvm/.*java*8*jinfo`
 JINFO=${JINFO%.jinfo}
 JINFO=${JINFO#*.}
 # not sure if this is actually needed
