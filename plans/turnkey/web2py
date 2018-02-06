@@ -1,6 +1,5 @@
 apache2
 webmin-apache
-apache2-mpm-worker
 libapache2-mod-wsgi
 
 mysql-server
