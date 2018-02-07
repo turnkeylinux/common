@@ -1,3 +1,16 @@
 #!/bin/bash
 
+
+# Because of GitHub's rate limits on their API it can happen that Composer prompts for authentication asking your username and password
+# so it can go ahead with its work.
+# You can manually create a token [https://github.com/settings/tokens] and set it to the GITHUB_TOKEN variable.
+
+GITHUB_TOKEN=""
+
 curl -sS https://getcomposer.org/installer | php -- --filename='composer' --install-dir='/usr/local/bin'
+
+if [ $GITHUB_TOKEN ]; then
+    composer config -g github-oauth.github.com $GITHUB_TOKEN
+fi
+
+
