@@ -2,7 +2,7 @@
 
 set ${PGSQL_PASS:=postgres}
 
-PGSQL_VER=$(ls /etc/postgresql/)
+PGSQL_VER=$(ls /usr/lib/postgresql/)
 CONF_DIR=/etc/postgresql/${PGSQL_VER}/main
 
 # Recreate postgres and templates using UTF-8
