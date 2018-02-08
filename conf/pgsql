@@ -6,7 +6,6 @@ PGSQL_VER=$(ls /usr/lib/postgresql/)
 CONF_DIR=/etc/postgresql/${PGSQL_VER}/main
 
 # Recreate postgres and templates using UTF-8
-pg_dropcluster --stop ${PGSQL_VER} main
 pg_createcluster --start -e UTF-8 ${PGSQL_VER} main
 /etc/init.d/postgresql stop
 
