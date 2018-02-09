@@ -1,6 +1,7 @@
 apache2
 webmin-apache
 libapache2-mod-wsgi
+apache2-dev
 
 mysql-server
 webmin-mysql
