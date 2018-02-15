@@ -41,13 +41,12 @@ def main():
         password = d.get_password(
             "web2py password",
             "Enter new password for the web2py admin console.")
-
-    hashpass = hashlib.md5(password).hexdigest()
-
+    
     fpath = "/var/www/web2py/parameters_443.py"
-    fh = open(fpath, 'w')
-    fh.write("password=\"%s\"\n" % hashpass)
-    fh.close()
+
+    password_script = "python -c 'from gluon.main import save_password; save_password(\"%s\", 443)'" % password
+    system("cd /var/www/web2py && %s" % password_script)
+
     system("chown www-data:www-data %s" % fpath)
     system("chmod 640 %s" % fpath)
 
