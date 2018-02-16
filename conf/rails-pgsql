@@ -37,22 +37,22 @@ cat << 'EOF' >> /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 SHIM_PATH='/usr/local/rbenv/shims'
 
 for shim in ${SHIM_PATH}/*; do
-    ln -sf "${shim}" "/usr/local/bin/$( basename ${shim} )"
+  ln -sf "${shim}" "/usr/local/bin/$( basename ${shim} )"
 done
 EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install 2.4.0
-rbenv global 2.4.0
+MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install 2.4.3
+rbenv global 2.4.3
 
 gem update --system
 
 gem install $GEMOPTS rack
 gem install $GEMOPTS rails
+gem install $GEMOPTS bundler --force
 gem install $GEMOPTS passenger
 gem install $GEMOPTS rake
-gem install $GEMOPTS bundler
 gem install $GEMOPTS pg
 gem install $GEMOPTS execjs
 
