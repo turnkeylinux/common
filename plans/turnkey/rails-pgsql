@@ -1,6 +1,6 @@
 apache2
 webmin-apache
-apache2-dev
+apache2-mpm-prefork
 
 postgresql
 webmin-postgresql
@@ -9,9 +9,10 @@ build-essential            /* needed to build gems */
 libcurl4-openssl-dev       /* needed to build passenger apache2 module */
 libreadline-gplv2-dev      /* needed for rails console */
 
+apache2-prefork-dev        /* needed to build passenger gem */
 libapr1-dev                /* needed to build passenger gem */
 libaprutil1-dev            /* needed to build passenger gem */
-libssl1.1                  /* needed to build passenger gem */
+libssl-dev                 /* needed to build passenger gem */
 
 libxml2-dev                /* common dep for gem building, e.g., sanitize */
 libxslt1-dev               /* common dep for gem building, e.g., sanitize */
