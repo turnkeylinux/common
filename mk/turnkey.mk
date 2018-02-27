@@ -3,7 +3,7 @@ RELEASE ?= debian/$(shell lsb_release -s -c)
 CDROOT ?= gfxboot-turnkey
 HOSTNAME ?= $(shell basename $(shell pwd))
 
-CONF_VARS += HOSTNAME ROOT_PASS NONFREE DEV_TEST
+CONF_VARS += HOSTNAME ROOT_PASS NONFREE DEV_TEST PHP56
 CONF_VARS += WEBMIN_THEME WEBMIN_FW_TCP_INCOMING WEBMIN_FW_TCP_INCOMING_REJECT WEBMIN_FW_UDP_INCOMING WEBMIN_FW_NAT_EXTRA WEBMIN_FW_MANGLE_EXTRA
 # these are needed to control styling of credits (e.g., conf/apache-credit)
 CONF_VARS += CREDIT_STYLE CREDIT_STYLE_EXTRA CREDIT_ANCHORTEXT CREDIT_LOCATION
@@ -20,6 +20,10 @@ ifdef DEV_TEST
 APT_OVERLAY += fab-apply-overlay $(COMMON_OVERLAYS_PATH)/dev-test $O/bootstrap;
 endif
 
+ifdef PHP56
+APT_OVERLAY += fab-apply-overlay $(COMMON_OVERLAYS_PATH)/php-alt $O/bootstrap;
+endif
+
 # below hacks allow inheritors to define their own hooks, which will be
 # prepended. warning: first line *needs* to be empty for this to work
 
@@ -27,9 +31,9 @@ endif
 define _bootstrap/post
 
 	$(APT_OVERLAY)
-	fab-chroot $O/bootstrap --script $(COMMON_CONF_PATH)/turnkey.d/apt;
 	fab-chroot $O/bootstrap "echo nameserver 8.8.8.8 > /etc/resolv.conf";
 	fab-chroot $O/bootstrap "echo nameserver 8.8.4.4 >> /etc/resolv.conf";
+	fab-chroot $O/bootstrap --script $(COMMON_CONF_PATH)/turnkey.d/apt;
 endef
 bootstrap/post += $(_bootstrap/post)
 

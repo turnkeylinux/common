@@ -12,9 +12,10 @@ fatal() {
 [ -n "$CODENAME" ] || fatal "CODENAME is not set"
 
 SOURCES_LIST=/etc/apt/sources.list.d
-mkdir -p $SOURCES_LIST
+PREFS_LIST=/etc/apt/preferences.d
+mkdir -p $SOURCES_LIST $PREFS_LIST
 
-cat >$SOURCES_LIST/sources.list<<EOF
+cat > $SOURCES_LIST/sources.list <<EOF
 deb http://archive.turnkeylinux.org/debian $CODENAME main
 
 deb http://deb.debian.org/debian $CODENAME main
@@ -22,7 +23,7 @@ deb http://deb.debian.org/debian $CODENAME contrib
 #deb http://deb.debian.org/debian $CODENAME non-free
 EOF
 
-cat >$SOURCES_LIST/security.sources.list<<EOF
+cat > $SOURCES_LIST/security.sources.list <<EOF
 deb http://archive.turnkeylinux.org/debian $CODENAME-security main
 
 deb http://security.debian.org/ $CODENAME/updates main
@@ -30,12 +31,40 @@ deb http://security.debian.org/ $CODENAME/updates contrib
 #deb http://security.debian.org/ $CODENAME/updates non-free
 EOF
 
+if [ "$PHP56" ]; then
+    # install support for https repo
+    PKGS="apt-transport-https lsb-release ca-certificates"
+    apt update
+    DEBIAN_FRONTEND=noninteractive apt install -y $PKGS
+
+    cat > $SOURCES_LIST/php.list <<EOF
+# DEB.SURY.ORG repo for php
+
+deb https://packages.sury.org/php/ stretch main
+EOF
+
+    cat > /etc/apt/preferences.d/php56.pref <<EOF
+Package: *
+Pin: origin packages.sury.org
+Pin-Priority: 100
+
+Package: php5.6-*
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: libapache2-mod-php5.6
+Pin: origin packages.sury.org
+Pin-Priority: 550
+EOF
+fi
+
 if [ "$DEV_TEST" ]; then
-    cat >$SOURCES_LIST/dev-apt.list<<EOF
+    cat > $SOURCES_LIST/dev-apt.list <<EOF
 # WARNING - this repo should only be enabled for dev testing!!!
 
 deb http://dev-apt.jeremydavis.org $CODENAME main
 EOF
+
     cat > /etc/apt/preferences.d/tkl-dev-test.pref <<EOF
 Package: *
 Pin: origin "dev-apt.jeremydavis.org"
