@@ -50,7 +50,7 @@ stunnel4        /* provide ssl to shellinabox */
 perl-openssl-defaults /* libnet-ssleay-perl depends (webmin depends) */
 libnet-ssleay-perl    /* webmin depends  */
 webmin
-webmin-theme-stressfree
+webmin-authentic-theme
 webmin-net
 webmin-software
 webmin-useradmin

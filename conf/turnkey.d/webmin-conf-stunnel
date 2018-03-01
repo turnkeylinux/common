@@ -16,7 +16,7 @@ sed -i 's|ssl=.*|ssl=|' $CONF
 
 cat >> $CONF <<EOF
 inetd_ssl=1
-preroot=theme-stressfree
+preroot=authentic-theme
 bind=127.0.0.1
 sockets=
 no_resolv_myname=0
