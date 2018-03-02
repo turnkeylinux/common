@@ -1,5 +1,10 @@
 #!/bin/bash -e
 
+# harden ssh client directories
+mkdir -m 0700 /etc/skel/.ssh
+umask 0077 && touch /etc/skel/.ssh/.anchor
+cp -dRn /etc/skel/.ssh /root
+
 cp /etc/skel/.bashrc /root
 [ -d /etc/skel/.bashrc.d ] && cp -dRn /etc/skel/.bashrc.d /root
 
