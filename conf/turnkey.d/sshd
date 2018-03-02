@@ -14,3 +14,17 @@ Banner /root/.ssh/banner
 Match user *
 EOF
 
+# harden ssh daemon
+sed -i '{
+  /^UsePrivilegeSeparation/ s/yes/sandbox/
+  /^X11Forwarding/ s/yes/no/
+  /^TCPKeepAlive/ s/yes/no/
+  /^UsePrivilegeSeparation/ a\
+\
+# SSH hardening recommended by lynis\
+AllowTcpForwarding no\
+ClientAliveCountMax 2\
+MaxAuthTries 2\
+MaxSessions 2
+}' /etc/ssh/sshd_config
+
