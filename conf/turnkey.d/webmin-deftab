@@ -1,4 +1,0 @@
-#!/bin/sh -e
-
-# set the default tab on login to "System"
-echo deftab=system >> /etc/webmin/config
