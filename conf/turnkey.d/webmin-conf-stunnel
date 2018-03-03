@@ -12,13 +12,12 @@ EOF
 
 CONF=/etc/webmin/miniserv.conf
 
-sed -i 's|ssl=.*|ssl=|' $CONF
+sed -i '/^ssl=/ s|=.*|=|' $CONF
+sed -i '/^ipv6=/ s|=.*|=0|' $CONF
 
 cat >> $CONF <<EOF
 inetd_ssl=1
-preroot=theme-stressfree
 bind=127.0.0.1
 sockets=
 no_resolv_myname=0
-ipv6=0
 EOF
