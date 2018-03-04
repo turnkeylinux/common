@@ -6,6 +6,29 @@ sed -i "/^PermitRootLogin/ s/without-password/yes/" /etc/ssh/sshd_config
 # disable sshd dns checks (if resolution fails will prevent logins)
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
+# harden ssh daemon
+sed -i '{
+  /^UsePrivilegeSeparation/ d
+  /^X11Forwarding/ d
+  /^TCPKeepAlive/ d
+  /^AllowTcpForwarding/ d
+  /^ClientAliveCountMax/ d
+  /^MaxAuthTries/ d
+  /^MaxSessions/ d
+}' /etc/ssh/sshd_config
+
+cat >> /etc/ssh/sshd_config <<EOF
+
+# SSH hardening recommended by lynis
+UsePrivilegeSeparation sandbox
+X11Forwarding no
+TCPKeepAlive no
+AllowTcpForwarding no
+ClientAliveCountMax 2
+MaxAuthTries 2
+MaxSessions 2
+EOF
+
 # configure root login banner directive (enabled by inithooks#sudoadmin)
 cat >> /etc/ssh/sshd_config <<EOF
 
@@ -13,18 +36,4 @@ Match user root
 Banner /root/.ssh/banner
 Match user *
 EOF
-
-# harden ssh daemon
-sed -i '{
-  /^UsePrivilegeSeparation/ s/yes/sandbox/
-  /^X11Forwarding/ s/yes/no/
-  /^TCPKeepAlive/ s/yes/no/
-  /^UsePrivilegeSeparation/ a\
-\
-# SSH hardening recommended by lynis\
-AllowTcpForwarding no\
-ClientAliveCountMax 2\
-MaxAuthTries 2\
-MaxSessions 2
-}' /etc/ssh/sshd_config
 
