@@ -70,6 +70,7 @@ webmin-syslog
 
 iptables
 webmin-firewall
+fail2ban
 
 ssh
 webmin-sshd
