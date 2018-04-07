@@ -20,7 +20,6 @@ libcgi-pm-perl
 apache2                
 webmin-apache
 
-apache2-mpm-prefork    
 libapache2-mod-authnz-external
 
 build-essential
