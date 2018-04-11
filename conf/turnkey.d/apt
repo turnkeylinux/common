@@ -69,8 +69,12 @@ EOF
 Package: *
 Pin: origin "dev-apt.jeremydavis.org"
 Pin-Priority: 900
+
+Package: di-live
+Pin: origin "dev-apt.jeremydavis.org"
+Pin-Priority: 999
 EOF
-    sed -i "s|900|850|" /etc/apt/preferences
+
 fi
 
 if [ "$NONFREE" ]; then
