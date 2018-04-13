@@ -40,7 +40,7 @@ if [ "$PHP56" ]; then
     cat > $SOURCES_LIST/php.list <<EOF
 # DEB.SURY.ORG repo for php
 
-deb https://packages.sury.org/php/ stretch main
+deb [signed-by=/usr/share/keyrings/php-sury.org.gpg] https://packages.sury.org/php/ stretch main
 EOF
 
     cat > /etc/apt/preferences.d/php56.pref <<EOF
