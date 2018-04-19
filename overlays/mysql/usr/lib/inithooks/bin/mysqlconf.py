@@ -5,7 +5,7 @@
 Configure MySQL (sets MySQL password and optionally executes query)
 
 Options:
-    -u --user=    mysql username (default: admin)
+    -u --user=    mysql username (default: adminer)
     -p --pass=    unless provided, will ask interactively
 
     --query=      optional query to execute after setting password
@@ -88,7 +88,7 @@ def main():
     except getopt.GetoptError, e:
         usage(e)
 
-    username="admin"
+    username="adminer"
     password=""
     queries=[]
 
