@@ -1,5 +1,17 @@
 #!/bin/sh -e
 
+# download mysqltuner
+dl() {
+    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
+    cd $2; curl -L -f -O $PROXY $1; cd -
+}
+
+URL="https://raw.githubusercontent.com/major/MySQLTuner-perl/master/mysqltuner.pl"
+dl $URL /usr/local/bin
+mv /usr/local/bin/mysqltuner.pl /usr/local/bin/mysqltuner
+chmod +x /usr/local/bin/mysqltuner 
+
+# set password
 [ "$MYSQL_PASS" ] && /usr/lib/inithooks/bin/mysqlconf.py --pass="$MYSQL_PASS"
 
 # start mysql server
