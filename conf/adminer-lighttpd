@@ -19,3 +19,6 @@ sed -i '/max-procs/ s/=>.*/=> 1,/; /PHP_FCGI_CHILDREN/ s/=>.*/=> "1",/g' /etc/li
 
 # Remove default index.html file
 rm /var/www/html/index.lighttpd.html
+
+# load mod_setenv
+sed -i '/server.modules = (/a \\t"mod_setenv",' /etc/lighttpd/lighttpd.conf
