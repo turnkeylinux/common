@@ -1,5 +1,0 @@
-Explanation: Pin dehydrated from backports
-Package: dehydrated
-Pin: release a=jessie-backports
-Pin-Priority: 500
-

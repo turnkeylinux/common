@@ -1,0 +1,10 @@
+#!/bin/sh -e
+
+# Webmin now has a dashboard by default, so instead make
+# tklbam the default module. Users can adjust.
+
+cat >> /etc/webmin/config <<EOF
+gotoone=0
+nomoduleup=1
+gotomodule=tklbam
+EOF

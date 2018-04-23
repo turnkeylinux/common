@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+# Mibew appliance (inithook) depends on this!
+
 PHPSH=/usr/local/src/phpsh
 
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
