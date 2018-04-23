@@ -4,5 +4,5 @@
 . /etc/default/inithooks
 
 [ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
-$INITHOOKS_PATH/bin/mysqlconf.py --user=root --pass="$DB_PASS"
+$INITHOOKS_PATH/bin/mysqlconf.py --user=adminer --pass="$DB_PASS"
 
