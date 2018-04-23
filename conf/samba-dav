@@ -19,6 +19,7 @@ chmod -R a+r $WEBROOT
 
 echo yes | perl -MCPAN -e 'install DateTime::Format::Human::Duration'
 
+cpan install List::MoreUtils
 cpan install IO::Compress::Brotli
 
 apt-get -y remove build-essential
