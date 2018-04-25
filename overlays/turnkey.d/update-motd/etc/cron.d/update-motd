@@ -1,4 +1,0 @@
-# cron job for updating motd
-*/10 * * * * root run-parts /etc/update-motd.d > /etc/motd
-
-
