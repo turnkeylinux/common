@@ -1,6 +1,3 @@
 git-core
 git-daemon-sysvinit
-bzr
-python-paramiko     # required to bzr-push
-mercurial
 subversion
