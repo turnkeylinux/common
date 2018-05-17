@@ -57,6 +57,8 @@ webmin-useradmin
 webmin-passwd
 webmin-shell
 webmin-custom
+webmin-fdisk
+webmin-raid
 webmin-lvm
 webmin-tklbam
 webmin-updown
