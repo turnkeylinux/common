@@ -28,3 +28,9 @@ while [ $COUNT -le 40 ]; do
     ((COUNT=$COUNT+1))
 done
 
+# set default theme as white on black - closes #1060
+CONF_ENABL=/etc/shellinabox/options-enabled
+CONF_AVAIL=/etc/shellinabox/options-available
+rm $CONF_ENABL/00*
+ln -s $CONF_AVAIL/00_White\ On\ Black.css $CONF_ENABL/00+White\ On\ Black.css
+ln -s $CONF_AVAIL/00+Black\ on\ White.css $CONF_ENABL/00_Black\ on\ White.css
