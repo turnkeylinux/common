@@ -19,10 +19,12 @@ sed -i '{
 
 cat >> /etc/ssh/sshd_config <<EOF
 
+# https://github.com/turnkeylinux/tracker/issues/1092
+TCPKeepAlive yes
+
 # SSH hardening recommended by lynis
 UsePrivilegeSeparation sandbox
 X11Forwarding no
-TCPKeepAlive no
 AllowTcpForwarding no
 ClientAliveCountMax 2
 MaxAuthTries 2
