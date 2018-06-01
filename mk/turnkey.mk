@@ -1,7 +1,7 @@
 RELEASE ?= debian/$(shell lsb_release -s -c)
 
 CDROOT ?= gfxboot-turnkey
-HOSTNAME ?= $(shell basename $(shell pwd))
+HOSTNAME ?= $(shell basename "$(shell pwd)")
 
 CONF_VARS += HOSTNAME ROOT_PASS NONFREE PHP56
 CONF_VARS += WEBMIN_THEME WEBMIN_FW_TCP_INCOMING WEBMIN_FW_TCP_INCOMING_REJECT WEBMIN_FW_UDP_INCOMING WEBMIN_FW_NAT_EXTRA WEBMIN_FW_MANGLE_EXTRA
