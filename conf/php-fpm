@@ -1,0 +1,3 @@
+a2enconf php7.0-fpm 
+a2dismod php7.0 
+a2enmod proxy_fcgi
