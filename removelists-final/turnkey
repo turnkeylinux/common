@@ -1,1 +1,5 @@
+# rm composer auth token
 /root/.composer/auth.json
+
+# rm apache systemd not working in chroot workaround
+/usr/local/bin/service
