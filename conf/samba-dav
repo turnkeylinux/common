@@ -3,7 +3,11 @@
 SRC=/usr/local/src
 WEBROOT=/var/www/webdavcgi
 GIT_SOURCE=https://github.com/DanRohde/webdavcgi.git
-TAG_RELEASE=40a9e02694ad8c554307250e51d64d1cce7bb76d
+TAG_RELEASE=5569b51
+
+# Note: latest release is v1.1.2 - 5 Oct 2017; however, most commits since then
+# appear to be bugfixes and basic testing suggests all is well in master. So
+# cloning to latest commit at time of testing.
 
 git clone $GIT_SOURCE $WEBROOT
 
@@ -21,11 +25,9 @@ echo yes | perl -MCPAN -e 'install DateTime::Format::Human::Duration'
 
 cpan install IO::Compress::Brotli
 
-apt-get -y remove build-essential
-apt-get -y autoremove
-
+apt purge -y build-essential
+apt autoremove -y
 
 a2enmod rewrite
 a2enmod cgi
 a2enmod authnz_external
-
