@@ -17,6 +17,8 @@ libdbd-mysql-perl
 libfilesys-smbclient-perl
 liburi-perl
 libcgi-pm-perl
+liblist-moreutils-perl
+
 apache2                
 webmin-apache
 
