@@ -48,3 +48,6 @@ update-rc.d svnserve defaults
 # cleanup
 rm -rf $HELLOWORLD
 
+# create vcs user
+useradd -d /srv/repos vcs
+chown -R vcs:vcs /srv/repos
