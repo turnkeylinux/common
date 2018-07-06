@@ -1,0 +1,16 @@
+/* normal lamp components */
+apache2
+webmin-apache
+
+mysql-server
+webmin-mysql
+
+webmin-phpini
+
+adminer
+
+/* PHP 5.6 specific */
+
+php5.6-mysql
+libapache2-mod-php5.6
+php5.6-cli
