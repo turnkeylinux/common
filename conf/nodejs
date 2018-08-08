@@ -1,5 +1,5 @@
 #!/bin/bash -ex
-GLOBALS='bower grunt grunt-cli nsp'
+GLOBALS='grunt grunt-cli'
 
 for package in $GLOBALS; do
 	npm install -g $package
