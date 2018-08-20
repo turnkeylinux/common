@@ -47,8 +47,8 @@ ncurses-term    /* support additional $TERM values */
 shellinabox
 stunnel4        /* provide ssl to shellinabox */
 
-perl-openssl-defaults /* libnet-ssleay-perl depends (webmin depends) */
-libnet-ssleay-perl    /* webmin depends  */
+perl-openssl-defaults   /* libnet-ssleay-perl depends (webmin depends) */
+libnet-ssleay-perl      /* webmin depends  */
 webmin
 webmin-authentic-theme
 webmin-net
@@ -63,7 +63,8 @@ webmin-lvm
 webmin-tklbam
 webmin-updown
 webmin-filemin
-unzip           /* webmin-updown recommends */
+unzip                   /* webmin-updown recommends */
+libfile-mimeinfo-perl   /* webmin-filemin requires to extract archives */
 
 logrotate
 rsyslog
