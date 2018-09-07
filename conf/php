@@ -44,3 +44,17 @@ for f in /etc/php/?.?/*/php.ini; do
         setini $f opcache.revalidate_freq $OPCACHE_REVALIDATE_FREQ
     fi
 done
+
+# auto adjust webmin default php.ini path to default php
+WEBMIN_PHP_CONF=/etc/webmin/phpini/config
+if [ -f "${WEBMIN_PHP_CONF}" ]; then
+    CLI_INI="$(php -i | sed -n '\|Loaded Configuration File|s|^.*=> ||'p)"
+    CGI_INI="$(echo $CLI_INI | sed 's|cli|cgi|')"
+    APACHE_INI="$(echo $CLI_INI | sed 's|cli|apache2|')"
+    TAB="$(printf '\t')"
+    cat > ${WEBMIN_PHP_CONF} <<EOF
+php_ini=${APACHE_INI}=Configuration for mod_php${TAB}\
+${CGI_INI}=Configuration for scripts run via CGI${TAB}\
+${CLI_INI}=Configuration for command-line scripts
+EOF
+fi
