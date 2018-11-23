@@ -43,8 +43,8 @@ EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install 2.4.3
-rbenv global 2.4.3
+MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install 2.4.5
+rbenv global 2.4.5
 
 gem update --system
 
