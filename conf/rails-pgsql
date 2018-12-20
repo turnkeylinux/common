@@ -14,7 +14,7 @@ WEBROOT=/var/www/$APPNAME
 LOGSDIR=/var/log/$APPNAME
 
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
-GEMOPTS="--no-rdoc --no-ri"
+GEMOPTS="--no-document"
 
 git clone https://github.com/rbenv/rbenv.git /usr/local/rbenv --depth=1
 git clone https://github.com/rbenv/ruby-build.git /usr/local/rbenv/plugins/ruby-build --depth=1
