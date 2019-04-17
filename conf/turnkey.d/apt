@@ -31,7 +31,7 @@ deb http://security.debian.org/ $CODENAME/updates contrib
 #deb http://security.debian.org/ $CODENAME/updates non-free
 EOF
 
-if [ "$PHP56" ]; then
+if [ "$PHP_ALT" ]; then
     # install support for https repo
     PKGS="apt-transport-https lsb-release ca-certificates"
     apt update
@@ -42,7 +42,9 @@ if [ "$PHP56" ]; then
 
 deb [signed-by=/usr/share/keyrings/php-sury.org.gpg] https://packages.sury.org/php/ stretch main
 EOF
+fi
 
+if [ "$PHP56" ]; then
     cat > /etc/apt/preferences.d/php56.pref <<EOF
 Package: *
 Pin: origin packages.sury.org
@@ -53,6 +55,22 @@ Pin: origin packages.sury.org
 Pin-Priority: 550
 
 Package: libapache2-mod-php5.6
+Pin: origin packages.sury.org
+Pin-Priority: 550
+EOF
+fi
+
+if [ "$PHP56" ]; then
+    cat > /etc/apt/preferences.d/php72.pref <<EOF
+Package: *
+Pin: origin packages.sury.org
+Pin-Priority: 100
+
+Package: php7.2-*
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: libapache2-mod-php7.2
 Pin: origin packages.sury.org
 Pin-Priority: 550
 EOF
