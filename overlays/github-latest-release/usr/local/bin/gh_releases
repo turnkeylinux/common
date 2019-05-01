@@ -3,7 +3,7 @@
 repo_path="$1" # user/repo_name
 
 fatal() {
-    echo $1 1>&2
+    echo "$1" 1>&2
     exit 1
 }
 usage() {
@@ -38,15 +38,14 @@ get_all_pages() {
     url=$1
     key=$2
     declare -i page=0
-    data=""
-    last_page="$(get_page $url $key $page)"
+    last_page="$(get_page "$url" "$key" "$page")"
     touch /tmp/gh_releases
 
     while [[ -n "$last_page" ]]
     do
         echo "$last_page" >> /tmp/gh_releases
         page+=1
-        last_page="$(get_page $url $key $page)"
+        last_page="$(get_page "$url" "$key" "$page")"
     done
 }
 
