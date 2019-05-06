@@ -54,7 +54,7 @@ rm -f /tmp/gh_releases
 get_all_pages "https://api.github.com/repos/${repo_path}/releases" "tag_name"
 get_all_pages "https://api.github.com/repos/${repo_path}/tags" "name"
 
-echo "Done!"
+echo "Done!" 1>&2
 cat /tmp/gh_releases
 rm /tmp/gh_releases
 
