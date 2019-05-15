@@ -31,7 +31,7 @@ deb http://security.debian.org/ $CODENAME/updates contrib
 #deb http://security.debian.org/ $CODENAME/updates non-free
 EOF
 
-if [ "$PHP56" ]; then
+if [ -n "$PHP_VERSION" ]; then
     # install support for https repo
     PKGS="apt-transport-https lsb-release ca-certificates"
     apt update
@@ -43,19 +43,36 @@ if [ "$PHP56" ]; then
 deb [signed-by=/usr/share/keyrings/php-sury.org.gpg] https://packages.sury.org/php/ stretch main
 EOF
 
-    cat > /etc/apt/preferences.d/php56.pref <<EOF
+    cat > /etc/apt/preferences.d/php-sury.pref <<EOF
 Package: *
 Pin: origin packages.sury.org
 Pin-Priority: 100
 
-Package: php5.6-*
+Package: php${PHP_VERSION}-*
 Pin: origin packages.sury.org
 Pin-Priority: 550
 
-Package: libapache2-mod-php5.6
+Package: php-pear
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: libapache2-mod-php${PHP_VERSION}
 Pin: origin packages.sury.org
 Pin-Priority: 550
 EOF
+    if [[ "$(awk 'BEGIN{ print 7.0<'${PHP_VERSION}' }')" == '1' ]]; then
+        cat >> /etc/apt/preferences.d/php-sury.pref <<EOF
+
+Package: libpcre3
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: libzip4
+Pin: origin packages.sury.org
+Pin-Priority: 550
+EOF
+    fi
+
 fi
 
 if [ "$NONFREE" ]; then
