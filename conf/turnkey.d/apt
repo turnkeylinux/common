@@ -56,6 +56,10 @@ Package: php-pear
 Pin: origin packages.sury.org
 Pin-Priority: 550
 
+Package: php-imagick
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
 Package: libapache2-mod-php${PHP_VERSION}
 Pin: origin packages.sury.org
 Pin-Priority: 550
