@@ -3,7 +3,7 @@ RELEASE ?= debian/$(shell lsb_release -s -c)
 CDROOT ?= gfxboot-turnkey
 HOSTNAME ?= $(shell basename "$(shell pwd)")
 
-CONF_VARS += HOSTNAME ROOT_PASS NONFREE PHP56 PHP72
+CONF_VARS += HOSTNAME ROOT_PASS NONFREE PHP_VERSION
 CONF_VARS += WEBMIN_THEME WEBMIN_FW_TCP_INCOMING WEBMIN_FW_TCP_INCOMING_REJECT WEBMIN_FW_UDP_INCOMING WEBMIN_FW_NAT_EXTRA WEBMIN_FW_MANGLE_EXTRA
 # these are needed to control styling of credits (e.g., conf/apache-credit)
 CONF_VARS += CREDIT_STYLE CREDIT_STYLE_EXTRA CREDIT_ANCHORTEXT CREDIT_LOCATION
@@ -19,16 +19,11 @@ FAB_SHARE_PATH ?= /usr/share/fab
 
 APT_OVERLAY = fab-apply-overlay $(COMMON_OVERLAYS_PATH)/turnkey.d/apt $O/bootstrap;
 
-ifdef PHP56
-PHP_ALT=y
-endif
-
-ifdef PHP72
-PHP_ALT=y
-endif
-
-ifdef PHP_ALT
-APT_OVERLAY += fab-apply-overlay $(COMMON_OVERLAYS_PATH)/php-alt $O/bootstrap;
+ifdef PHP_VERSION
+    ifneq ($(PHP_VERSION),)
+        # only executed if PHP_VERSION is defined and is non-empty
+        APT_OVERLAY += fab-apply-overlay $(COMMON_OVERLAYS_PATH)/php-sury $O/bootstrap;
+    endif
 endif
 
 # below hacks allow inheritors to define their own hooks, which will be
