@@ -46,13 +46,29 @@ EOF
     cat > /etc/apt/preferences.d/php-sury.pref <<EOF
 Package: *
 Pin: origin packages.sury.org
-Pin-Priority: 100
+Pin-Priority: 10
 
 Package: php${PHP_VERSION}-*
 Pin: origin packages.sury.org
 Pin-Priority: 550
 
+Package: php-common
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
 Package: php-pear
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: php-imagick
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: php-redis
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: php-igbinary
 Pin: origin packages.sury.org
 Pin-Priority: 550
 
