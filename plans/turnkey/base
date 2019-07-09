@@ -30,8 +30,6 @@ turnkey-version
 cron
 cron-apt
 
-monit
-
 etckeeper
 git-core
 
