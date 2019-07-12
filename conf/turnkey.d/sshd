@@ -8,7 +8,6 @@ echo "UseDNS no" >> /etc/ssh/sshd_config
 
 # harden ssh daemon
 sed -i '{
-  /^UsePrivilegeSeparation/ d
   /^X11Forwarding/ d
   /^TCPKeepAlive/ d
   /^AllowTcpForwarding/ d
@@ -23,7 +22,6 @@ cat >> /etc/ssh/sshd_config <<EOF
 TCPKeepAlive yes
 
 # SSH hardening recommended by lynis
-UsePrivilegeSeparation sandbox
 X11Forwarding no
 AllowTcpForwarding no
 ClientAliveCountMax 2
@@ -38,4 +36,3 @@ Match user root
 Banner /root/.ssh/banner
 Match user *
 EOF
-
