@@ -12,7 +12,7 @@ EOF
 cat >$MOTD_DIR/10-nonpersistent-mode<<'EOF'
 #!/bin/sh
 
-if grep -q boot=casper /proc/cmdline; then
+if grep -q boot=casper /proc/cmdline || grep -q boot=live /proc/cmdline; then
     echo "  Warning: Non-persistent mode"
     echo
     echo "    The system is running in live non-persistent mode. Changes will"

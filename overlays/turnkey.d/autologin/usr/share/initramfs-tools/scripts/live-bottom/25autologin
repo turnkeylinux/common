@@ -10,7 +10,7 @@ for x in $(cat /proc/cmdline); do
     fi
 done
 
-. /scripts/casper-functions
+. /scripts/functions
 
 prereqs()
 {
