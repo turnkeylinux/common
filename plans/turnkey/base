@@ -22,8 +22,9 @@ tklbam
 gnupg           /* tklbam depends - new for Stretch */
 hubdns
 inithooks
-python-dialog
-turnkey-pylib
+python3-dialog
+//python-dialog
+//turnkey-pylib
 turnkey-sysinfo
 turnkey-version
 
