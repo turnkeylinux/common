@@ -7,31 +7,31 @@ curl
 rsync
 
 di-live
-whiptail        /* di-live recommends */
-kbd             /* di-live recommends */
-lvm2            /* di-live recommends */
-file            /* di-live recommends */
-eject           /* di-live recommends */
+whiptail                /* di-live recommends */
+kbd                     /* di-live recommends */
+lvm2                    /* di-live recommends */
+file                    /* di-live recommends */
+eject                   /* di-live recommends */
 
 confconsole
-kbd             /* confconsole recommends */
-di-live         /* confconsole recommends */
-resolvconf      /* confconsole recommends */
+kbd                     /* confconsole recommends */
+di-live                 /* confconsole recommends */
+resolvconf              /* confconsole recommends */
 
-tklbam
-gnupg           /* tklbam depends - new for Stretch */
+//tklbam - still depends on py2; so leaving out for now...
+gnupg                   /* tklbam depends - new for Stretch */
 hubdns
 inithooks
-python3-dialog
-//python-dialog
-//turnkey-pylib
+python3-dialog          /* tkl tools depends */
 turnkey-sysinfo
 turnkey-version
 
 cron
 cron-apt
 
-etckeeper
+/* etckeeper pkg has hard depends on py2; so we hack it to install without */
+/* py2 in conf/turnkey.d/etckeeper - hack to be removed in v17.0           */
+//etckeeper
 git-core
 
 lsb-release
@@ -41,10 +41,10 @@ screen
 dtach
 nano
 ntp
-ncurses-term    /* support additional $TERM values */
+ncurses-term            /* support additional $TERM values */
 
 shellinabox
-stunnel4        /* provide ssl to shellinabox */
+stunnel4                /* provide ssl to shellinabox */
 
 perl-openssl-defaults   /* libnet-ssleay-perl depends (webmin depends) */
 libnet-ssleay-perl      /* webmin depends  */
@@ -81,10 +81,10 @@ bsd-mailx
 postfix
 webmin-postfix
 
-authbind        /* add-water (confconsole lets encrypt) depends */
-dehydrated      /* add-water (confconsole lets encrypt) recommends (actually depends) */
-python-bottle   /* add-water (confconsole lets encrypt) depends */
-python-requests /* confconsole lets encrypt recommends (actually depends) */
+authbind                /* add-water (confconsole lets encrypt) depends */
+dehydrated              /* add-water (confconsole lets encrypt) recommends (actually depends) */
+python3-bottle          /* add-water (confconsole lets encrypt) depends */
+python3-requests        /* confconsole lets encrypt recommends (actually depends) */
 
 #ifndef CHROOT_ONLY
 acpi-support-base
