@@ -32,7 +32,7 @@ cron-apt
 /* etckeeper pkg has hard depends on py2; so we hack it to install without */
 /* py2 in conf/turnkey.d/etckeeper - hack to be removed in v17.0           */
 //etckeeper
-git-core
+git
 
 lsb-release
 localepurge
