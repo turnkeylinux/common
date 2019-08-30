@@ -3,6 +3,7 @@
 # environment variables:
 #   - required: CODENAME
 #   - optional: NONFREE
+#   - optional: PHP_VERSION
 
 fatal() {
     echo "fatal: $@" 1>&2
