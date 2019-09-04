@@ -1,0 +1,16 @@
+#!/bin/bash -e
+# Regenerate self-signed TLS (aka SSL) keys and certificates
+
+[ -n "$_TURNKEY_INIT" ] && exit 0
+
+# dhparams generation moved to separate firstboot script
+
+echo "Regenerating self-signed TLS (aka SSL) keys and certificates..."
+
+# Use turnkey-make-ssl-cert to generate default server cert
+/usr/local/bin/turnkey-make-ssl-cert --default --force-overwrite
+
+# webserver restart moved to $INITHOOKS_PATH/firstboot.d/90restart-webservers
+
+# final tidy up
+update-ca-certificates
