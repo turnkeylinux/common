@@ -1,7 +1,0 @@
-#!/bin/bash -e
-
-# fail2ban fix - as per Debian bug #902413
-# See also overlays/turnkey.d/fail2ban-fix/etc/systemd/system/fail2ban.service
-
-sed -i "s|/var/run/fail2ban|/run/fail2ban|" \
-    /usr/lib/tmpfiles.d/fail2ban-tmpfiles.conf
