@@ -1,8 +1,9 @@
 #!/bin/sh -e
 
 # Stunnel TLS/SSL support for Webmin is now configured via a stunnel.conf file
-# - see webmin and/or stunnel common overlays for details; sevice is enabled here:
-systemctl enable stunnel4@webmin.service
+# - see webmin and/or stunnel common overlays for details; sevice is enabled
+# here (note systemctl exits with non-zero exit code, but it does work):
+systemctl enable stunnel4@webmin.service || true
 
 WEBMIN_PORT=${WEBMIN_PORT:=12321}
 
