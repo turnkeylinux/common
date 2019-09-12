@@ -1,5 +1,6 @@
 # SystemD service file provided by TurnKey GNU/Linux
 # (Debian only provides init.d script)
+# Linked to (TurnKey provided) stunnel4@shellinabox.service
 
 [Unit]
 SourcePath=/etc/init.d/shellinabox
@@ -7,6 +8,7 @@ Description=Shell In A Box Daemon (aka WebShell)
 Before=multi-user.target
 Before=graphical.target
 After=network-online.target remote-fs.target stunnel4@shellinabox.service
+Requires=stunnel4@shellinabox.service
 BindsTo=stunnel4@shellinabox.service
 Wants=network-online.target
 
