@@ -3,7 +3,7 @@
 # If DEBUG=y add debug options to grub; else disable Journalctl logging to console
 
 if [[ $DEBUG = 'y' ]]; then
-    sed -i '/GRUB_CMDLINE_LINUX=/ s|="|="debug ignore_loglevel |' /etc/default/grub
+    sed -i '/^GRUB_CMDLINE_LINUX=/ s|"\(.*\)"|"\1 debug ignore_loglevel"|' /etc/default/grub
 else
     sed -i "\|ForwardToWall|s|#\([a-zA-Z]*=\).*|\1no|" /etc/systemd/journald.conf
 fi
