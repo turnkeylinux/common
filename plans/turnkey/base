@@ -22,7 +22,7 @@ resolvconf              /* confconsole recommends */
 /* seed entropy in early boot (especially useful when live booting).       */
 jitterentropy-rngd
 
-//tklbam - still depends on py2; so leaving out for now...
+tklbam                  /* still depends on py2 for now */
 gnupg                   /* tklbam depends - new for Stretch */
 hubdns
 inithooks
@@ -33,9 +33,7 @@ turnkey-version
 cron
 cron-apt
 
-/* etckeeper pkg has hard depends on py2; so we hack it to install without */
-/* py2 in conf/turnkey.d/etckeeper - hack to be removed in v17.0           */
-//etckeeper
+etckeeper               /* still depends on py2 for now */
 git
 
 lsb-release
