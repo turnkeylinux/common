@@ -25,7 +25,7 @@ TCPKeepAlive yes
 X11Forwarding no
 AllowTcpForwarding no
 ClientAliveCountMax 2
-MaxAuthTries 2
+MaxAuthTries 3
 MaxSessions 2
 EOF
 
