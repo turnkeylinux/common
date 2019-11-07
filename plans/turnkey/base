@@ -27,8 +27,7 @@ gnupg                   /* tklbam depends - new for Stretch */
 hubdns
 inithooks
 python3-dialog          /* tkl tools depends */
-turnkey-sysinfo
-turnkey-version
+turnkey-sysinfo         /* As of v16.0, includes turnkey-version executable */
 
 cron
 cron-apt
