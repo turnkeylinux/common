@@ -3,7 +3,7 @@
 PREREQ=""
 DESCRIPTION="Configuring single user shell respawning..."
 
-. /scripts/casper-functions
+. /scripts/functions
 
 prereqs()
 {

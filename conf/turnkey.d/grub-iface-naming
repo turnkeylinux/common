@@ -4,5 +4,4 @@
 # Interface Names" - see 
 # https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
 
-# assumes that the grub line is empty (current default)
-sed -i '/GRUB_CMDLINE_LINUX=/ s|=""|="net.ifnames=0"|' /etc/default/grub
+sed -i '/GRUB_CMDLINE_LINUX=/ s|="|="net.ifnames=0 |' /etc/default/grub

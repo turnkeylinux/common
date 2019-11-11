@@ -1,0 +1,6 @@
+#!/bin/bash -e
+
+# disable (mask) vanilla stunnel service - stunnel now managed via individual
+# stunnel@APP_NAME.service(s)
+
+systemctl mask stunnel4.service

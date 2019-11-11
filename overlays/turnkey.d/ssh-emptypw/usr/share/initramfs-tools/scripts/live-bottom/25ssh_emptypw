@@ -3,7 +3,7 @@
 PREREQ=""
 DESCRIPTION="Configuring sshd to permit empty passwords..."
 
-. /scripts/casper-functions
+. /scripts/functions
 
 prereqs()
 {

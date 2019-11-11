@@ -7,33 +7,33 @@ curl
 rsync
 
 di-live
-whiptail        /* di-live recommends */
-kbd             /* di-live recommends */
-lvm2            /* di-live recommends */
-file            /* di-live recommends */
-eject           /* di-live recommends */
+whiptail                /* di-live recommends */
+kbd                     /* di-live recommends */
+lvm2                    /* di-live recommends */
+file                    /* di-live recommends */
+eject                   /* di-live recommends */
 
 confconsole
-kbd             /* confconsole recommends */
-di-live         /* confconsole recommends */
-resolvconf      /* confconsole recommends */
+kbd                     /* confconsole recommends */
+di-live                 /* confconsole recommends */
+resolvconf              /* confconsole recommends */
 
-tklbam
-gnupg           /* tklbam depends - new for Stretch */
+/* jiiterentropy-rngd provides entropy from cpu jitter; req'd in buster to */
+/* seed entropy in early boot (especially useful when live booting).       */
+jitterentropy-rngd
+
+tklbam                  /* still depends on py2 for now */
+gnupg                   /* tklbam depends - new for Stretch */
 hubdns
 inithooks
-python-dialog
-turnkey-pylib
-turnkey-sysinfo
-turnkey-version
+python3-dialog          /* tkl tools depends */
+turnkey-sysinfo         /* As of v16.0, includes turnkey-version executable */
 
 cron
 cron-apt
 
-monit
-
-etckeeper
-git-core
+etckeeper               /* still depends on py2 for now */
+git
 
 lsb-release
 localepurge
@@ -42,10 +42,10 @@ screen
 dtach
 nano
 ntp
-ncurses-term    /* support additional $TERM values */
+ncurses-term            /* support additional $TERM values */
 
 shellinabox
-stunnel4        /* provide ssl to shellinabox */
+stunnel4                /* provide ssl to shellinabox */
 
 perl-openssl-defaults   /* libnet-ssleay-perl depends (webmin depends) */
 libnet-ssleay-perl      /* webmin depends  */
@@ -82,10 +82,10 @@ bsd-mailx
 postfix
 webmin-postfix
 
-authbind        /* add-water (confconsole lets encrypt) depends */
-dehydrated      /* add-water (confconsole lets encrypt) recommends (actually depends) */
-python-bottle   /* add-water (confconsole lets encrypt) depends */
-python-requests /* confconsole lets encrypt recommends (actually depends) */
+authbind                /* add-water (confconsole lets encrypt) depends */
+dehydrated              /* add-water (confconsole lets encrypt) recommends (actually depends) */
+python3-bottle          /* add-water (confconsole lets encrypt) depends */
+python3-requests        /* confconsole lets encrypt recommends (actually depends) */
 
 #ifndef CHROOT_ONLY
 acpi-support-base

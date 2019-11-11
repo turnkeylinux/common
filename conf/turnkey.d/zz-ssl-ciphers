@@ -53,10 +53,12 @@ if [ -f $CONF ]; then
 fi
 
 # Stunnel (provides Webmin & Webshell)
-CONF="/etc/stunnel/stunnel.conf"
-if [ -f "$CONF" ]; then
-    sed -i "s|ciphers=.*|ciphers=$SECURE_CIPHER_LIST\n|" $CONF
-fi
+CONF="/etc/stunnel/webmin.conf /etc/stunnel/shellinabox.conf"
+for conf in $CONF; do
+    if [ -f "$conf" ]; then
+        sed -i "s|ciphers=.*|ciphers=$SECURE_CIPHER_LIST\n|" $conf
+    fi
+done
 
 # Additional Webmin
 CGI=/usr/share/webmin/session_login.cgi
