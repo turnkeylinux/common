@@ -2,7 +2,7 @@
 apache2
 webmin-apache
 
-mysql-server
+default-mysql-server
 webmin-mysql
 
 webmin-phpini
