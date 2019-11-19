@@ -74,9 +74,9 @@ class MySQL:
 
 def usage(s=None):
     if s:
-        print >> sys.stderr, "Error:", s
-    print >> sys.stderr, "Syntax: %s [options]" % sys.argv[0]
-    print >> sys.stderr, __doc__
+        print("Error:", s, file=sys.stderr)
+    print("Syntax: %s [options]" % sys.argv[0], file=sys.stderr)
+    print(__doc__, file=sys.stderr)
     sys.exit(1)
 
 def main():
@@ -85,7 +85,7 @@ def main():
         opts, args = getopt.gnu_getopt(sys.argv[1:], "hu:p:",
                      ['help', 'user=', 'pass=', 'query='])
 
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     username="adminer"
