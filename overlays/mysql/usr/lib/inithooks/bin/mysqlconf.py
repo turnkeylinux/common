@@ -110,9 +110,11 @@ def main():
 
     # edge case: update DEBIAN_CNF
     if username == "debian-sys-maint":
-        old = file(DEBIAN_CNF).read()
+        with open(DEBIAN_CNF, 'r') as fob:
+            old = fob.read()
         new = re.sub("password = (.*)\n", "password = %s\n" % password, old)
-        file(DEBIAN_CNF, "w").write(new)
+        with open(DEBIAN_CNF, 'w') as fob:
+            fob.write(new)
 
     # execute any adhoc specified queries
     for query in queries:
