@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Copyright (c) 2008 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
 
 """
@@ -20,7 +20,7 @@ import getopt
 import signal
 
 from dialog_wrapper import Dialog
-from executil import ExecError, system
+from os import system
 
 DEBIAN_CNF = "/etc/mysql/debian.cnf"
 
@@ -45,12 +45,7 @@ class MySQL:
             self.selfstarted = True
 
     def _is_alive(self):
-        try:
-            system('mysqladmin -s ping >/dev/null 2>&1')
-        except ExecError:
-            return False
-
-        return True
+        return system('mysqladmin -s ping >/dev/null 2>&1') == 0
 
     def _start(self):
         system("mysqld --skip-networking >/dev/null 2>&1 &")
