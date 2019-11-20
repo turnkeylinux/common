@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Copyright (c) 2008 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
 
 """
@@ -20,7 +20,7 @@ import getopt
 import signal
 
 from dialog_wrapper import Dialog
-from executil import ExecError, system
+from os import system
 
 DEBIAN_CNF = "/etc/mysql/debian.cnf"
 
@@ -45,12 +45,7 @@ class MySQL:
             self.selfstarted = True
 
     def _is_alive(self):
-        try:
-            system('mysqladmin -s ping >/dev/null 2>&1')
-        except ExecError:
-            return False
-
-        return True
+        return system('mysqladmin -s ping >/dev/null 2>&1') == 0
 
     def _start(self):
         system("mysqld --skip-networking >/dev/null 2>&1 &")
@@ -74,9 +69,9 @@ class MySQL:
 
 def usage(s=None):
     if s:
-        print >> sys.stderr, "Error:", s
-    print >> sys.stderr, "Syntax: %s [options]" % sys.argv[0]
-    print >> sys.stderr, __doc__
+        print("Error:", s, file=sys.stderr)
+    print("Syntax: %s [options]" % sys.argv[0], file=sys.stderr)
+    print(__doc__, file=sys.stderr)
     sys.exit(1)
 
 def main():
@@ -85,7 +80,7 @@ def main():
         opts, args = getopt.gnu_getopt(sys.argv[1:], "hu:p:",
                      ['help', 'user=', 'pass=', 'query='])
 
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     username="adminer"
@@ -115,9 +110,11 @@ def main():
 
     # edge case: update DEBIAN_CNF
     if username == "debian-sys-maint":
-        old = file(DEBIAN_CNF).read()
+        with open(DEBIAN_CNF, 'r') as fob:
+            old = fob.read()
         new = re.sub("password = (.*)\n", "password = %s\n" % password, old)
-        file(DEBIAN_CNF, "w").write(new)
+        with open(DEBIAN_CNF, 'w') as fob:
+            fob.write(new)
 
     # execute any adhoc specified queries
     for query in queries:
