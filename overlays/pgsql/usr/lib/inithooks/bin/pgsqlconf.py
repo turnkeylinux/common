@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Copyright (c) 2008 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
 
 """
@@ -15,9 +15,9 @@ import getopt
 import signal
 import subprocess
 
-from subprocess import Popen, PIPE
+from os import system
+from subprocess import Popen, PIPE, check_output, CalledProcessError
 from dialog_wrapper import Dialog
-from executil import ExecError, system, getoutput
 
 class Error(Exception):
     pass
@@ -46,13 +46,13 @@ class PostgreSQL:
 
     def _is_alive(self):
         try:
-            getoutput('/etc/init.d/postgresql', 'status')
+            check_output(['/etc/init.d/postgresql', 'status'])
             
-        except ExecError, e:
-            if e.exitcode == 3: #ie. stopped
+        except CalledProcessError as e:
+            if e.returncode == 3: #ie. stopped
                 return False
             else:
-                raise Error("Unknown postgresql status exitcode: %s" % e.exitcode)
+                raise Error("Unknown postgresql status exitcode: %s" % e.returncode)
 
         return True
 
@@ -74,9 +74,9 @@ class PostgreSQL:
 
 def usage(s=None):
     if s:
-        print >> sys.stderr, "Error:", s
-    print >> sys.stderr, "Syntax: %s [options]" % sys.argv[0]
-    print >> sys.stderr, __doc__
+        print("Error:", s, file=sys.stderr)
+    print("Syntax: %s [options]" % sys.argv[0], file=sys.stderr)
+    print(__doc__, file=sys.stderr)
     sys.exit(1)
 
 def main():
@@ -85,7 +85,7 @@ def main():
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "hu:p:",
                                        ['help', 'user=', 'pass='])
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     username="postgres"
@@ -108,7 +108,9 @@ def main():
     p = PostgreSQL()
 
     # set password
-    p.execute("alter user %s with encrypted password E\'%s\';" % (username, escape_chars(password)))
+    p.execute(
+            ("alter user %s with encrypted password E\'%s\';" % (username, escape_chars(password)))
+            .encode('utf8'))
 
 if __name__ == "__main__":
     main()
