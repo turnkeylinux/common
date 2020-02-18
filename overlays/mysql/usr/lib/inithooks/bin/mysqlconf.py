@@ -21,18 +21,13 @@ import signal
 
 from dialog_wrapper import Dialog
 from os import system
+import pymysql
+import pymysql.cursors
 
 DEBIAN_CNF = "/etc/mysql/debian.cnf"
 
 class Error(Exception):
     pass
-
-def escape_chars(s):
-    """escape special characters: required by nested quotes in query"""
-    s = s.replace("\\", "\\\\")  # \  ->  \\
-    s = s.replace('"', '\\"')    # "  ->  \"
-    s = s.replace("'", "'\\''")  # '  ->  '\''
-    return s
 
 class MySQL:
     def __init__(self):
@@ -43,6 +38,15 @@ class MySQL:
         if not self._is_alive():
             self._start()
             self.selfstarted = True
+
+        self.connect()
+
+    def connect(self):
+        self.connection = pymysql.connect(
+            unix_socket='/run/mysqld/mysqld.sock',
+            user='root',
+            cursorclass=pymysql.cursors.DictCursor)
+        self.connected = True
 
     def _is_alive(self):
         return system('mysqladmin -s ping >/dev/null 2>&1') == 0
@@ -64,8 +68,17 @@ class MySQL:
     def __del__(self):
         self._stop()
 
-    def execute(self, query):
-        system("mysql --defaults-file=%s -B -e '%s'" % (DEBIAN_CNF, query))
+    def execute(self, query, interp=None):
+        if not self.connected:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(query, interp)
+            self.connection.commit()
+        finally:
+            self.connection.close()
+            self.connected = False
 
 def usage(s=None):
     if s:
@@ -106,7 +119,10 @@ def main():
     m = MySQL()
 
     # set password
-    m.execute('update mysql.user set Password=PASSWORD(\"%s\") where User=\"%s\"; flush privileges;' % (escape_chars(password), username))
+    #m.execute('update mysql.user set authentication_string=PASSWORD(%s) where User=%s',
+    #    (password, username))
+    m.execute('ALTER USER %s@localhost IDENTIFIED BY %s', (username, password))
+    m.execute('FLUSH PRIVILEGES')
 
     # edge case: update DEBIAN_CNF
     if username == "debian-sys-maint":
