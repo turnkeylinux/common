@@ -23,19 +23,6 @@ SOURCES_LIST=/etc/apt/sources.list.d
 PREFS_LIST=/etc/apt/preferences.d
 mkdir -p $SOURCES_LIST $PREFS_LIST
 
-# hack to install gpg before proper source.list entries have been set up
-echo "Installing gpg (required to configure gpg keys for apt)."
-temp_list=/tmp/debian-sources.list
-cat > /tmp/debian-sources.list <<EOF
-deb http://deb.debian.org/debian $CODENAME main
-deb http://security.debian.org/ $CODENAME/updates main
-EOF
-options="-qq -y -o Dir::Etc::sourcelist=$temp_list -o Dir::Etc::sourceparts="
-apt-get $options update
-apt-get $options install gpg gpg-agent
-apt-get clean
-rm $temp_list
-
 # keys are provided as ascii armoured for transparency; but secure apt requires
 # gpg keyrting files
 key_dir=/usr/share/keyrings
