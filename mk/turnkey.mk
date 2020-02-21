@@ -17,7 +17,7 @@ COMMON_REMOVELISTS_FINAL += turnkey
 
 FAB_SHARE_PATH ?= /usr/share/fab
 
-APT_OVERLAY = fab-apply-overlay $(COMMON_OVERLAYS_PATH)/turnkey.d/apt $O/bootstrap;
+APT_OVERLAY = fab-apply-overlay $(COMMON_OVERLAYS_PATH)/bootstrap_apt $O/bootstrap;
 
 ifdef PHP_VERSION
     ifneq ($(PHP_VERSION),)
@@ -35,7 +35,7 @@ define _bootstrap/post
 	$(APT_OVERLAY)
 	fab-chroot $O/bootstrap "echo nameserver 8.8.8.8 > /etc/resolv.conf";
 	fab-chroot $O/bootstrap "echo nameserver 8.8.4.4 >> /etc/resolv.conf";
-	fab-chroot $O/bootstrap --script $(COMMON_CONF_PATH)/turnkey.d/apt;
+	fab-chroot $O/bootstrap --script $(COMMON_CONF_PATH)/bootstrap_apt;
 endef
 bootstrap/post += $(_bootstrap/post)
 
