@@ -10,6 +10,8 @@ live-boot                   /* live-boot replaces casper in v16.x */
 live-tools                  /* live tools provides additional tools for live booting */
 live-boot-initramfs-tools
 initramfs-tools
+firmware-linux-free
+busybox
 
 #ifdef UBUNTU
 upstart

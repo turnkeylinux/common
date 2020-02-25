@@ -3,7 +3,7 @@ RELEASE ?= debian/$(shell lsb_release -s -c)
 CDROOT ?= gfxboot-turnkey
 HOSTNAME ?= $(shell basename "$(shell pwd)")
 
-CONF_VARS += HOSTNAME ROOT_PASS NONFREE PHP_VERSION
+CONF_VARS += HOSTNAME ROOT_PASS NONFREE PHP_VERSION TKL_TESTING BACKPORTS
 CONF_VARS += WEBMIN_THEME WEBMIN_FW_TCP_INCOMING WEBMIN_FW_TCP_INCOMING_REJECT WEBMIN_FW_UDP_INCOMING WEBMIN_FW_NAT_EXTRA WEBMIN_FW_MANGLE_EXTRA
 # these are needed to control styling of credits (e.g., conf/apache-credit)
 CONF_VARS += CREDIT_STYLE CREDIT_STYLE_EXTRA CREDIT_ANCHORTEXT CREDIT_LOCATION
@@ -17,7 +17,7 @@ COMMON_REMOVELISTS_FINAL += turnkey
 
 FAB_SHARE_PATH ?= /usr/share/fab
 
-APT_OVERLAY = fab-apply-overlay $(COMMON_OVERLAYS_PATH)/turnkey.d/apt $O/bootstrap;
+APT_OVERLAY = fab-apply-overlay $(COMMON_OVERLAYS_PATH)/bootstrap_apt $O/bootstrap;
 
 ifdef PHP_VERSION
     ifneq ($(PHP_VERSION),)
@@ -35,7 +35,7 @@ define _bootstrap/post
 	$(APT_OVERLAY)
 	fab-chroot $O/bootstrap "echo nameserver 8.8.8.8 > /etc/resolv.conf";
 	fab-chroot $O/bootstrap "echo nameserver 8.8.4.4 >> /etc/resolv.conf";
-	fab-chroot $O/bootstrap --script $(COMMON_CONF_PATH)/turnkey.d/apt;
+	fab-chroot $O/bootstrap --script $(COMMON_CONF_PATH)/bootstrap_apt;
 endef
 bootstrap/post += $(_bootstrap/post)
 
