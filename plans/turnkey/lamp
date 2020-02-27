@@ -1,9 +1,8 @@
+#include <turnkey/mysql>
+
 /* default lamp plan */
 apache2
 webmin-apache
-
-default-mysql-server
-webmin-mysql
 
 webmin-phpini
 
