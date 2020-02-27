@@ -4,8 +4,6 @@
 apache2
 webmin-apache
 
-webmin-mysql
-
 webmin-phpini
 
 adminer
