@@ -24,10 +24,12 @@ jitterentropy-rngd
 
 tklbam                  /* still depends on py2 for now */
 gnupg                   /* tklbam depends - new for Stretch */
+
 hubdns
 inithooks
 python3-dialog          /* tkl tools depends */
-turnkey-sysinfo         /* As of v16.0, includes turnkey-version executable */
+turnkey-sysinfo
+turnkey-version
 
 cron
 cron-apt
@@ -90,4 +92,3 @@ python3-requests        /* confconsole lets encrypt recommends (actually depends
 #ifndef CHROOT_ONLY
 acpi-support-base
 #endif
-
