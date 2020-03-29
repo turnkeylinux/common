@@ -16,12 +16,9 @@ chmod +x $BIN/mysqltuner
 dl $URL/basic_passwords.txt $BIN
 dl $URL/vulnerabilities.csv $BIN
 
-# start mysql server
-service mysql start
-
 # secure mysql installation
-ADMIN_PWORD=$(mcookie)
-mysql --defaults-extra-file=/etc/mysql/debian.cnf <<EOF
+service mysql start
+mysql <<EOF
 USE mysql;
 # remove anonymous users
 DELETE FROM user WHERE User='';
@@ -32,13 +29,5 @@ DELETE FROM user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', ':
 # remove test database
 DROP DATABASE IF EXISTS test;
 DELETE FROM db WHERE Db='test' OR Db='test\\_%';
-
-# add root-like user
-GRANT ALL ON *.* to 'adminer'@localhost IDENTIFIED BY '$ADMIN_PWORD';
-
-# reload privilege tables
-FLUSH PRIVILEGES;
 EOF
-
-# stop mysql server
 service mysql stop

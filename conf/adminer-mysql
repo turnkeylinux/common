@@ -20,5 +20,14 @@ ln -s $TKL_THEME $THEME_FILE
 sed -i '/^.*\$tkl_server/ s|DB_DESC|MySQL|' $TKL_INDEX
 sed -i '/^.*\$tkl_database/ s|DRIVER|server|' $TKL_INDEX
 
-# Set Adminer MySQL user account password
+# Create root-like adminer MySQL user account
+service mysql start
+ADMIN_PWORD=$(mcookie)
+mysql <<EOF
+USE mysql;
+GRANT ALL ON *.* to 'adminer'@localhost IDENTIFIED BY '$ADMIN_PWORD';
+EOF
+service mysql stop
+
+# Enable Adminer MySQL user password inithook
 chmod +x /usr/lib/inithooks/firstboot.d/35adminer-mysqlpass
