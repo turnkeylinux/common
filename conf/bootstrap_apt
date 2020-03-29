@@ -73,7 +73,7 @@ if [ -n "$PHP_VERSION" ]; then
     cat > $SOURCES_LIST/php.list <<EOF
 # DEB.SURY.ORG repo for php
 
-deb [signed-by=/usr/share/keyrings/php-sury.org.gpg] https://packages.sury.org/php/ stretch main
+deb [signed-by=/usr/share/keyrings/php-sury.org.gpg] https://packages.sury.org/php/ $CODENAME main
 EOF
 
     cat > /etc/apt/preferences.d/php-sury.pref <<EOF
