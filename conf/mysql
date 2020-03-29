@@ -6,13 +6,15 @@ dl() {
     cd $2; curl -L -f -O $PROXY $1; cd -
 }
 
-URL="https://raw.githubusercontent.com/major/MySQLTuner-perl/master/mysqltuner.pl"
-dl $URL /usr/local/bin
-mv /usr/local/bin/mysqltuner.pl /usr/local/bin/mysqltuner
-chmod +x /usr/local/bin/mysqltuner 
-
-# set password
-[ "$MYSQL_PASS" ] && /usr/lib/inithooks/bin/mysqlconf.py --pass="$MYSQL_PASS"
+# Install mysqltuner as recommended:
+# https://github.com/major/MySQLTuner-perl#downloadinstallation
+BIN=/usr/local/bin
+URL="https://raw.githubusercontent.com/major/MySQLTuner-perl/master"
+dl $URL/mysqltuner.pl $BIN
+mv $BIN/mysqltuner.pl $BIN/mysqltuner
+chmod +x $BIN/mysqltuner
+dl $URL/basic_passwords.txt $BIN
+dl $URL/vulnerabilities.csv $BIN
 
 # start mysql server
 service mysql start
@@ -40,4 +42,3 @@ EOF
 
 # stop mysql server
 service mysql stop
-
