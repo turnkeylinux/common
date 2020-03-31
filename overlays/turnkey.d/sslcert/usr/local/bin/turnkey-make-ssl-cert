@@ -1,4 +1,4 @@
-#! /bin/bash -ex
+#! /bin/bash -e
 # ---------------------------------------------------------------------------
 # turnkey-make-ssl-cert - "Make server cert for TurnKey GNU/Linux appliance"
 
@@ -42,6 +42,8 @@
 # 2015-08-06 Released turnkey-make-ssl-cert ver. 1.2
 # 2017-03-06 Released turnkey-make-ssl-cert ver. 1.3
 # ---------------------------------------------------------------------------
+
+[[ $DEBUG != y ]] || set -x
 
 PROGNAME=${0##*/}
 VERSION="1.3"
