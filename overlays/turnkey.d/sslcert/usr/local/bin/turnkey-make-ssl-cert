@@ -335,9 +335,10 @@ if [[ "$GEN_DH" == "true" ]]; then
         msg="Diffie-Hellman parameter generation failed."
         error_exit "$msg OpenSSL output: " $TMPOUT
     elif [[ $DH_BITS -lt 2048 ]]; then
-        msg="Diffie-Hellman parameter bit size is $DH_BITS. Recommended"
-        msg="$msg minimum is $DH_BITS_REC; 4096 is best, but may take hours to"
-        warning "$msg generate."
+        msg="Diffie-Hellman parameter bit size is $DH_BITS. Recommended
+             minimum is $DH_BITS_REC; 4096 is best, but may take hours to
+             generate."
+        warning $msg
         info "Recommended to rerun with '--dh-bits $DH_BITS_REC' (or larger)."
     fi
 fi
