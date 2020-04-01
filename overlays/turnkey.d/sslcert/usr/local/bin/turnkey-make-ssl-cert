@@ -79,7 +79,7 @@ info() { echo "INFO [$PROGNAME]: $@"; }
 warning() { echo "WARNING [$PROGNAME]: $@" >&2 ; }
 
 error_exit() {
-  echo -e "ERROR [${PROGNAME}]: ${1:-"Unknown Error"}" >&2
+  echo -e ERROR [${PROGNAME}]: ${1:-"Unknown Error"} >&2
   if [ $2 ] && [ -f $2 ]; then
     cat $2 >&2
   fi
@@ -299,8 +299,6 @@ else
   CSR="${CERT%.*}.csr"
 fi
 
-
-
 # don't overwrite existing key and cert files without permission
 if [[ -f $CERT ]] && [[ -f $KEY ]]; then
     # except when only generating dhparams
@@ -308,8 +306,9 @@ if [[ -f $CERT ]] && [[ -f $KEY ]]; then
         error_exit "Output file already exists: $CERT"
     fi
 elif [[ $DH_ONLY == true ]]; then
-    msg="$CERT & $KEY files don't exist, won't be able to rebuild combined"
-    error_exit "$msg cert.pem file. Please rerun with different options."
+    msg="$CERT & $KEY files don't exist, won't be able to rebuild combined
+         cert.pem file. Please rerun with different options."
+    error_exit "$msg"
 fi
 
 # create the key and certificate.
@@ -317,7 +316,7 @@ if [[ $DH_ONLY == false ]]; then
     info "Generating certificate and key files."
     if ! openssl req -sha256 -config $TMPFILE -new -x509 -days $days \
             -nodes -out $CERT -keyout $KEY > $TMPOUT 2>&1; then
-        error_exit "Could not create certificate. Openssl output was:" $TMPOUT;
+        error_exit "Could not create certificate. Openssl output was:" $TMPOUT
     fi
 fi
 
@@ -332,8 +331,8 @@ if [[ "$GEN_DH" == "true" ]]; then
     fi
     info "Generating Diffie-Hellman parameters file - this may take $_time..."
     if ! openssl dhparam -out $DHP $DH_BITS > $TMPOUT 2>&1; then
-        msg="Diffie-Hellman parameter generation failed."
-        error_exit "$msg OpenSSL output: " $TMPOUT
+        msg="Diffie-Hellman parameter generation failed.  OpenSSL output: "
+        error_exit "$msg" $TMPOUT
     elif [[ $DH_BITS -lt 2048 ]]; then
         msg="Diffie-Hellman parameter bit size is $DH_BITS. Recommended
              minimum is $DH_BITS_REC; 4096 is best, but may take hours to
