@@ -299,15 +299,18 @@ else
   CSR="${CERT%.*}.csr"
 fi
 
-# don't overwrite existing key and cert files without permission
-if [[ -f $CERT ]] && [[ -f $KEY ]]; then
+# don't overwrite existing key and/or cert files without permission
+if [[ -f $CERT ]] || [[ -f $KEY ]]; then
     # except when only generating dhparams
     if [[ $OVERWRITE == false ]] && [[ $DH_ONLY == false ]]; then
-        error_exit "Output file already exists: $CERT"
+        error_exit "Output file(s) already exists: $CERT &/or $KEY"
     fi
-elif [[ $DH_ONLY == true ]]; then
-    msg="$CERT & $KEY files don't exist, won't be able to rebuild combined
-         cert.pem file. Please rerun with different options."
+fi
+
+# don't generate dhparams only unless cert & key both exist
+if [[ ! -f $CERT ]] && [[ ! -f $KEY ]] && [[ $DH_ONLY == true ]]; then
+    msg="One of $CERT & $KEY files is missing, won't be able to rebuild
+         combined cert.pem file. Please rerun with different options."
     error_exit "$msg"
 fi
 
