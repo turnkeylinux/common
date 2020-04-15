@@ -9,5 +9,5 @@ chmod +x /root/.bashrc.d/confconsole-auto
 
 # autostart "once"
 CONF=/etc/confconsole/confconsole.conf
-sed -i "s|^#autostart|^autostart|g" $CONF
-sed -i "s|^autostart.*|^autostart once|g" $CONF
+sed -i "s|^#autostart|autostart|g" $CONF
+sed -i "s|^autostart.*|autostart once|g" $CONF
