@@ -12,8 +12,15 @@ EOF
 cat >$MOTD_DIR/08-turnkey-confconsole<<'EOF'
 #!/bin/sh
 
-bold=$(tput bold)
-normal=$(tput sgr0
+if [ -z "$TERM" ]; then
+    _term=linux
+else
+    _term=$TERM
+fi
+
+bold=$(tput -T $_term bold)
+normal=$(tput -T $_term sgr0)
+
 echo "    For Advanced commandline config run:    ${bold}confconsole${normal}"
 echo
 echo "  For more info see: https://www.turnkeylinux.org/docs/confconsole"
