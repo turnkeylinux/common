@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+# copy in confconsole auto start file
+cp /usr/share/confconsole/autostart/confconsole-auto /root/.bashrc.d/
+
+# autostart "once"
+CONF=/etc/confconsole/confconsole.conf
+sed -i "s|^#autostart|^autostart|g" $CONF
+sed -i "s|^autostart.*|^autostart once|g" $CONF
