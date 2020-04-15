@@ -35,3 +35,7 @@ EOF
 rm -f $MOTD_DIR/{00-header,10-help-text} # incl. in ubuntu, not in debian
 
 chmod +x $MOTD_DIR/*
+
+# remove default Debian disclaimer
+rm /etc/motd
+touch /etc/motd
