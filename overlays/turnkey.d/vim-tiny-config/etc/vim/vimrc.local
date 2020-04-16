@@ -1,1 +1,9 @@
+source /usr/share/vim/vim81/defaults.vim
+
 set tabstop=4 shiftwidth=4 expandtab softtabstop=0
+set mouse=
+set encoding=utf-8
+
+" Prevent the defaults from being loaded again later, if the user doesn't
+" have a local vimrc (~/.vimrc)
+let skip_defaults_vim = 1
