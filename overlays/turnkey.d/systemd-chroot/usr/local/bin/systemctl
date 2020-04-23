@@ -42,6 +42,9 @@ case $1 in
     enable|disable)
         /usr/bin/systemctl $1 $2;;
 
+    mask|unmask)
+        /usr/bin/systemctl $1 $2;;
+
     *)
         fatal "Unknown command '$1'"
 esac
