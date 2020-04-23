@@ -28,7 +28,7 @@ _start_stop() {
 
 [[ "$#" -eq 2 ]] || fatal "2 arguments required (given '$@')."
 
-case in $1
+case $1 in
     start)
         _start_stop start $2;;
 
