@@ -12,6 +12,7 @@ libreadline-gplv2-dev      /* needed for rails console */
 libapr1-dev                /* needed to build passenger gem */
 libaprutil1-dev            /* needed to build passenger gem */
 libssl1.1                  /* needed to build passenger gem */
+libssl-dev
 
 libxml2-dev                /* common dep for gem building, e.g., sanitize */
 libxslt1-dev               /* common dep for gem building, e.g., sanitize */
