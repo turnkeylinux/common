@@ -1,5 +1,5 @@
 #!/bin/bash -ex
-GLOBALS='grunt grunt-cli'
+GLOBALS='grunt-cli grunt'
 
 for package in $GLOBALS; do
 	npm install -g $package
