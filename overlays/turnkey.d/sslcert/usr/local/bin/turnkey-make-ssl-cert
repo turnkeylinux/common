@@ -43,6 +43,8 @@
 # 2017-03-06 Released turnkey-make-ssl-cert ver. 1.3
 # ---------------------------------------------------------------------------
 
+[[ $DEBUG != y ]] || set -x
+
 PROGNAME=${0##*/}
 VERSION="1.3"
 
@@ -62,14 +64,22 @@ REQUEST=false
 WILD=false
 OVERWRITE=false
 EXPIRY=10y
+# Unless set via env var; set default Diffie-Hellman bit size as 1024
+DH_BITS=${DH_BITS:-1024}
+DH_BITS_REC=2048 # minimum recommended DH bit size
+GEN_DH=false
+DH_ONLY=false
 
 clean_up() { # Perform pre-exit housekeeping
   rm -f $TMPFILE $TMPOUT
   return
 }
 
+info() { echo "INFO [$PROGNAME]: $@"; }
+warning() { echo "WARNING [$PROGNAME]: $@" >&2 ; }
+
 error_exit() {
-  echo -e "${PROGNAME}: ${1:-"Unknown Error"}" >&2
+  echo -e ERROR [${PROGNAME}]: ${1:-"Unknown Error"} >&2
   if [ $2 ] && [ -f $2 ]; then
     cat $2 >&2
   fi
@@ -96,14 +106,17 @@ cat << _EOF_
 Usage: $PROGNAME [-o|--out file] [-t|--template file] [-i|--ip] [-v|--verbose] [-f|--force-overwrite] FQDN .. [FQDN]
   Generate a certificate/key pair using the list of FQDNs.
 
-Usage: $PROGNAME [-d|--default] [-t|--template file] [-i|--ip] [-v|--verbose] [-f|--force-overwrite]
-  Generate the default certificate/key pair, cert.crt, cert.key, using the hostname.
+Usage: $PROGNAME [-d|--default] [-t|--template file] [-i|--ip] [-v|--verbose] [-f|--force-overwrite] [-b|--dh-bits DH_BITS]
+  Generate the default cert.crt, cert.key, dhparam.pem file and default cert.pem file; using the hostname.
 
 Usage: $PROGNAME [-o|--out file] [-t|--template file] [-i|--ip] [-v|--verbose] [-f|--force-overwrite] [-w|--wild] domainName .. [domainName]
   Generate a wildcard certificate for the list of domains.
 
 Usage: $PROGNAME [-d|--default] [-t|--template file] [-i|--ip] [-v|--verbose] [-f|--force-overwrite] [-r|--csr] FQDN .. [FQDN]
   Generate an optional certificate signing request for the list of FQDNs.
+
+Usage: $PROGNAME -p|--dh-params-only [-b|--dh-bits DH_BITS]
+  Generate just a new dhparam.pem file of bit size DH_BITS. Also rebuilds the default cerm.pem file with update DH params.
 
 Usage: $PROGNAME [-h|--help]
   Display the help message and exit.
@@ -125,17 +138,26 @@ $(usage)
       Options:
       -h, --help              Display this help message and exit
       -o, --out [/path/]file  Write certificate to alternate location
-      -d, --default           Generate default certificate
+      -d, --default           Generate default cert, key & dhparams files
+                                plus a combined file
                                 /etc/ssl/private/cert.pem
       -e, --expiry            Set certificate expiry date
                                 default: 10y
+      -b, --dh-bits DH_BITS   Generate a Diffie-Hellman parameters file; bit
+                                size: DH_BITS (can also be set via env var)
+                                /etc/ssl/private/dhparams.pem
+                                default: $DH_BITS
+                                recommended: $DH_BITS_REC
+                                Note that 4096 is best but may take hours
+      -p, --dh-params-only    Generate a Diffie-Hellman parameters file only
+                                (Also rebuilds default cert.pem file)
       -r, --csr               Generate a certificate signing request
       -w, --wild              Generate wildcard certificate
       -t, --template file     Use alternate template file
                                 default: /etc/ssl/turnkey.cnf
       -i, --ip                Optionally include host ip addresses
       -v, --verbose           Display generated certificate
-      -f, --force-overwrite   Overwrite existing certificate
+      -f, --force-overwrite   Overwrite existing certificate files
 
       NOTE: You must be the superuser to run this script.
 
@@ -216,8 +238,10 @@ while [[ -n $1 ]]; do
   case $1 in
     -h | --help)              help_message; graceful_exit ;;
     -o | --out)               shift; CERT="$1"; OUT=true ;;
-    -d | --default)           DEFAULT=true ;;
+    -d | --default)           DEFAULT=true ; GEN_DH=true ;;
     -e | --expiry)            shift; EXPIRY="$1" ;;
+    -b | --dh-bits)           shift; DH_BITS="$1" ; GEN_DH=true ;;
+    -p | --dh-params-only)    DH_ONLY=true; GEN_DH=true ;;
     -r | --csr)               REQUEST=true ;;
     -w | --wild)              WILD=true ;;
     -t | --template)          shift; TEMPLATE="$1" ;;
@@ -229,6 +253,10 @@ while [[ -n $1 ]]; do
   esac
   shift
 done
+
+if [[ $DH_ONLY == true ]]; then
+    warning "--dh-params-only switch used, no cert or key files will be generated."
+fi
 
 expiry_days $EXPIRY
 
@@ -252,7 +280,8 @@ TMPOUT="$(mktemp)"  || error_exit "Can't create temporary file"
 create_temporary_cnf
 
 # assign file names
-if [[ $DEFAULT == true ]]; then
+DHP="$KEY_DIR/dhparams.pem"
+if [[ $DEFAULT == true ]] || [[ $DH_ONLY == true ]]; then
   OUT=false    # ignore output file
   CERT="$CERT_DIR/cert.crt"
   KEY="$KEY_DIR/cert.key"
@@ -270,25 +299,60 @@ else
   CSR="${CERT%.*}.csr"
 fi
 
-# don't overwrite existing file without permission
-if [[ -f $CERT ]] && [[ $OVERWRITE == false ]]; then
-  error_exit "Output file already exists: $CERT"
+# don't overwrite existing key and/or cert files without permission
+if [[ -f $CERT ]] || [[ -f $KEY ]]; then
+    # except when only generating dhparams
+    if [[ $OVERWRITE == false ]] && [[ $DH_ONLY == false ]]; then
+        error_exit "Output file(s) already exists: $CERT &/or $KEY"
+    fi
+fi
+
+# don't generate dhparams only unless cert & key both exist
+if [[ ! -f $CERT ]] && [[ ! -f $KEY ]] && [[ $DH_ONLY == true ]]; then
+    msg="One of $CERT & $KEY files is missing, won't be able to rebuild
+         combined cert.pem file. Please rerun with different options."
+    error_exit "$msg"
 fi
 
 # create the key and certificate.
-if ! openssl req -sha256 -config $TMPFILE -new -x509 -days $days -nodes \
-  -out $CERT -keyout $KEY > $TMPOUT 2>&1
-then
-  error_exit "Could not create certificate. Openssl output was:" $TMPOUT;
+if [[ $DH_ONLY == false ]]; then
+    info "Generating certificate and key files."
+    if ! openssl req -sha256 -config $TMPFILE -new -x509 -days $days \
+            -nodes -out $CERT -keyout $KEY > $TMPOUT 2>&1; then
+        error_exit "Could not create certificate. Openssl output was:" $TMPOUT
+    fi
+fi
+
+# gen dhparams.
+if [[ "$GEN_DH" == "true" ]]; then
+    if [[ $DH_BITS -le 1050 ]]; then
+        _time="a while"
+    elif [[ $DH_BITS -le 3000 ]]; then
+        _time="a long time"
+    else
+        _time="hours, possibly days"
+    fi
+    info "Generating Diffie-Hellman parameters file - this may take $_time..."
+    if ! openssl dhparam -out $DHP $DH_BITS > $TMPOUT 2>&1; then
+        msg="Diffie-Hellman parameter generation failed.  OpenSSL output: "
+        error_exit "$msg" $TMPOUT
+    elif [[ $DH_BITS -lt 2048 ]]; then
+        msg="Diffie-Hellman parameter bit size is $DH_BITS. Recommended
+             minimum is $DH_BITS_REC; 4096 is best, but may take hours to
+             generate."
+        warning $msg
+        info "Recommended to rerun with '--dh-bits $DH_BITS_REC' (or larger)."
+    fi
 fi
 
 # set file permissions
 chmod 400 "$KEY"
 chmod 644 "$CERT"
+chmod 400 "$DHP"
 
-# create default cert.pem file, include dhparams
-if [[ $DEFAULT == true ]]; then
-  cat "$CERT" "$KEY" "$KEY_DIR/dhparams.pem" > "$KEY_DIR/cert.pem"
+# create default cert.pem file, including dhparams
+if [[ $DEFAULT == true ]] || [[ $DH_ONLY == true ]]; then
+  cat "$CERT" "$KEY" "$DHP" > "$KEY_DIR/cert.pem"
   chmod 400 "$KEY_DIR/cert.pem"
 fi
 
@@ -299,7 +363,7 @@ if [[ $REQUEST == true ]]; then
 
 cat << _EOF_ >&2
 
-${PROGNAME}: WARNING: organizationName = "TurnKey GNU/Linux"
+WARNING [${PROGNAME}]: organizationName = "TurnKey GNU/Linux"
     Unless you work for TurnKey, you probably want to edit the
     template file, /etc/ssl/turnkey.cnf or create a custom copy
     and use the [-t|--template] option.

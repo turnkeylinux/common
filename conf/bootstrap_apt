@@ -1,0 +1,136 @@
+#!/bin/bash -e
+# create apt sources
+# environment variables:
+#   - required: CODENAME
+#   - optional: NONFREE
+#   - optional: TKL_TESTING
+#   - optional: BACKPORTS
+#   - optional: PHP_VERSION
+
+# Note, to install packages from backports:
+# - set 'BACKPORTS=y'; and either:
+#   - add to plan & pin package(s) to backports (via prefs file); or
+#   - install via apt using '-t $CODENAME-backports' switch
+
+fatal() {
+    echo "fatal: $@" 1>&2
+    exit 1
+}
+
+[ -n "$CODENAME" ] || fatal "CODENAME is not set"
+
+SOURCES_LIST=/etc/apt/sources.list.d
+PREFS_LIST=/etc/apt/preferences.d
+mkdir -p $SOURCES_LIST $PREFS_LIST
+
+# keys are provided as ascii armoured for transparency; but secure apt requires
+# gpg keyrting files
+key_dir=/usr/share/keyrings
+repos=(main security testing)
+for repo in ${repos[@]}; do
+    full_path=$key_dir/tkl-$CODENAME-$repo
+    keyring=$full_path.gpg
+    keyfile=$full_path.asc
+    gpg --no-default-keyring --keyring $keyring --import $keyfile
+    rm $keyfile
+done
+# ensure that gpg-agent is killed after processing keys
+kill -9 $(pidof gpg-agent) || true
+rm -rf $HOME/.gnupg
+
+cat > $SOURCES_LIST/sources.list <<EOF
+deb [signed-by=$key_dir/tkl-$CODENAME-main.gpg] http://archive.turnkeylinux.org/debian $CODENAME main
+
+deb http://deb.debian.org/debian $CODENAME main
+deb http://deb.debian.org/debian $CODENAME contrib
+#deb http://deb.debian.org/debian $CODENAME non-free
+EOF
+
+cat > $SOURCES_LIST/security.sources.list <<EOF
+deb [signed-by=$key_dir/tkl-$CODENAME-security.gpg] http://archive.turnkeylinux.org/debian $CODENAME-security main
+
+deb http://security.debian.org/ $CODENAME/updates main
+deb http://security.debian.org/ $CODENAME/updates contrib
+#deb http://security.debian.org/ $CODENAME/updates non-free
+EOF
+
+TKL_TESTING_LIST=$SOURCES_LIST/turnkey-testing.list
+cat > $TKL_TESTING_LIST.disabled <<EOF
+deb [signed-by=$key_dir/tkl-$CODENAME-testing.gpg] http://archive.turnkeylinux.org/debian $CODENAME-testing main
+EOF
+
+DEB_BACKPORT_LIST=$SOURCES_LIST/debian-backports.list
+cat > $DEB_BACKPORT_LIST.disabled <<EOF
+deb http://deb.debian.org/debian $CODENAME-backports main
+EOF
+
+if [ -n "$PHP_VERSION" ]; then
+    # install support for https repo
+    PKGS="apt-transport-https lsb-release ca-certificates"
+    apt update
+    DEBIAN_FRONTEND=noninteractive apt install -y $PKGS
+
+    cat > $SOURCES_LIST/php.list <<EOF
+# DEB.SURY.ORG repo for php
+
+deb [signed-by=/usr/share/keyrings/php-sury.org.gpg] https://packages.sury.org/php/ $CODENAME main
+EOF
+
+    cat > /etc/apt/preferences.d/php-sury.pref <<EOF
+Package: *
+Pin: origin packages.sury.org
+Pin-Priority: 10
+
+Package: php${PHP_VERSION}-*
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: php-common
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: php-pear
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: php-imagick
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: php-redis
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: php-igbinary
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: libapache2-mod-php${PHP_VERSION}
+Pin: origin packages.sury.org
+Pin-Priority: 550
+EOF
+    if [[ "$(awk 'BEGIN{ print 7.0<'${PHP_VERSION}' }')" == '1' ]]; then
+        cat >> /etc/apt/preferences.d/php-sury.pref <<EOF
+
+Package: libpcre3
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: libzip4
+Pin: origin packages.sury.org
+Pin-Priority: 550
+EOF
+    fi
+
+fi
+
+if [ "$NONFREE" ]; then
+    sed -i "/non-free/ s|^#||" $SOURCES_LIST/sources.list
+    sed -i "/non-free/ s|^#||" $SOURCES_LIST/security.sources.list
+fi
+if [ "$TKL_TESTING" ]; then
+    mv $TKL_TESTING_LIST.disabled $TKL_TESTING_LIST
+fi
+if [ "$BACKPORTS" ]; then
+    mv $DEB_BACKPORT_LIST.disabled $DEB_BACKPORT_LIST
+fi

@@ -1,6 +1,12 @@
 #!/bin/sh -e
 
-set ${WEBMIN_THEME:=theme-stressfree}
+set ${WEBMIN_THEME:=authentic-theme}
 
-echo "theme=$WEBMIN_THEME" >> /etc/webmin/config
-echo "preroot=$WEBMIN_THEME" >> /etc/webmin/miniserv.conf
+CONF_DIR=/etc/webmin
+LOGO_DIR=$CONF_DIR/$WEBMIN_THEME
+
+echo "theme=$WEBMIN_THEME" >> $CONF_DIR/config
+echo "preroot=$WEBMIN_THEME" >> $CONF_DIR/miniserv.conf
+
+mv $LOGO_DIR/tkl-logo-white.png $LOGO_DIR/logo.png
+mv $LOGO_DIR/tkl-logo-black.png $LOGO_DIR/logo_welcome.png

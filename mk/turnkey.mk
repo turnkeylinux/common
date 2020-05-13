@@ -1,18 +1,30 @@
 RELEASE ?= debian/$(shell lsb_release -s -c)
 
 CDROOT ?= gfxboot-turnkey
-HOSTNAME ?= $(shell basename $(shell pwd))
+HOSTNAME ?= $(shell basename "$(shell pwd)")
 
-CONF_VARS += HOSTNAME ROOT_PASS NONFREE
+CONF_VARS += HOSTNAME ROOT_PASS NONFREE PHP_VERSION TKL_TESTING BACKPORTS
 CONF_VARS += WEBMIN_THEME WEBMIN_FW_TCP_INCOMING WEBMIN_FW_TCP_INCOMING_REJECT WEBMIN_FW_UDP_INCOMING WEBMIN_FW_NAT_EXTRA WEBMIN_FW_MANGLE_EXTRA
 # these are needed to control styling of credits (e.g., conf/apache-credit)
 CONF_VARS += CREDIT_STYLE CREDIT_STYLE_EXTRA CREDIT_ANCHORTEXT CREDIT_LOCATION
+# these are needed to ensure github queries don't get limited
+CONF_VARS += GITHUB_USER GITHUB_USER_TOKEN
 
 COMMON_OVERLAYS := turnkey.d $(COMMON_OVERLAYS)
 COMMON_CONF := turnkey.d $(COMMON_CONF)
 COMMON_REMOVELISTS += turnkey
+COMMON_REMOVELISTS_FINAL += turnkey
 
 FAB_SHARE_PATH ?= /usr/share/fab
+
+APT_OVERLAY = fab-apply-overlay $(COMMON_OVERLAYS_PATH)/bootstrap_apt $O/bootstrap;
+
+ifdef PHP_VERSION
+    ifneq ($(PHP_VERSION),)
+        # only executed if PHP_VERSION is defined and is non-empty
+        APT_OVERLAY += fab-apply-overlay $(COMMON_OVERLAYS_PATH)/php-sury $O/bootstrap;
+    endif
+endif
 
 # below hacks allow inheritors to define their own hooks, which will be
 # prepended. warning: first line *needs* to be empty for this to work
@@ -20,10 +32,10 @@ FAB_SHARE_PATH ?= /usr/share/fab
 # setup apt and dns for root.build
 define _bootstrap/post
 
-	fab-apply-overlay $(COMMON_OVERLAYS_PATH)/turnkey.d/apt $O/bootstrap;
-	fab-chroot $O/bootstrap --script $(COMMON_CONF_PATH)/turnkey.d/apt;
+	$(APT_OVERLAY)
 	fab-chroot $O/bootstrap "echo nameserver 8.8.8.8 > /etc/resolv.conf";
 	fab-chroot $O/bootstrap "echo nameserver 8.8.4.4 >> /etc/resolv.conf";
+	fab-chroot $O/bootstrap --script $(COMMON_CONF_PATH)/bootstrap_apt;
 endef
 bootstrap/post += $(_bootstrap/post)
 
@@ -50,7 +62,6 @@ define _root.patched/post
 
 	fab-chroot $O/root.patched "dpkg -i *.deb && rm *.deb && rm -f /var/log/dpkg.log"
 
-	fab-chroot $O/root.patched "which insserv >/dev/null && insserv"
 	fab-chroot $O/root.patched "which postsuper >/dev/null && postsuper -d ALL || true"
 endef
 root.patched/post += $(_root.patched/post)

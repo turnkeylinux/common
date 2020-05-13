@@ -8,6 +8,9 @@ fi
 postconf -e inet_interfaces=localhost
 postconf -e myhostname=$HOSTNAME
 
+# harden postfix banner
+postconf -e smtpd_banner='$myhostname ESMTP'
+
 /etc/init.d/postfix start
 /etc/init.d/postfix stop
 

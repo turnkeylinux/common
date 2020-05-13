@@ -1,6 +1,4 @@
-git-core
+git
 git-daemon-sysvinit
-bzr
-python-paramiko     # required to bzr-push
-mercurial
 subversion
+libapache2-mod-authnz-external # for git-http

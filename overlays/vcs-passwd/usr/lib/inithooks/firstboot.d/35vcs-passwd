@@ -1,0 +1,7 @@
+#!/bin/bash -e
+# set vcs user password
+
+. /etc/default/inithooks
+
+[ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
+$INITHOOKS_PATH/bin/setpass.py vcs --pass="$APP_PASS"

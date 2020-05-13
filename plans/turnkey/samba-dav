@@ -17,10 +17,11 @@ libdbd-mysql-perl
 libfilesys-smbclient-perl
 liburi-perl
 libcgi-pm-perl
+liblist-moreutils-perl
+
 apache2                
 webmin-apache
 
-apache2-mpm-prefork    
 libapache2-mod-authnz-external
 
 build-essential

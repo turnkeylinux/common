@@ -1,23 +1,25 @@
 #!/bin/bash -e
 
-# create default configuration
+# create default configuration; now uses custom TurnKey service file
+# (for shellinabox stunnel conf, see common shellinabox overlay)
 cat >/etc/default/shellinabox<<EOF
 SHELLINABOX_DAEMON_START=1
 SHELLINABOX_PORT=12319
 SHELLINABOX_ARGS="--no-beep --disable-ssl --localhost-only"
 EOF
 
-# enable stunnel to automatically start services
-sed -i "s|ENABLED=0|ENABLED=1|" /etc/default/stunnel4
+# TurnKey is now providing a shellinabox systemd service file.
+# First disable the current service (which is generated from the init.d script
+# via systemd-sysv integration):
+systemctl disable shellinabox
+# Then explictly enable the TurnKey provided service file:
+systemctl enable /usr/lib/systemd/system/shellinabox.service
 
-# configure stunnel to provide ssl support
-cat >>/etc/stunnel/stunnel.conf<<EOF
-[shellinabox]
-accept  = 12320
-connect = 127.0.0.1:12319
-TIMEOUTclose = 0
-
-EOF
+# Stunnel TLS/SSL support for shellinabox (aka Webshell) is now configured
+# via a stunnel.conf file - see shellinabox and/or stunnel common overlays for
+# details; sevice is enabled here (note systemctl exits with non-zero exit
+# code, but it does work):
+systemctl enable stunnel4@shellinabox.service || true
 
 # update securetty (for root login)
 echo >> /etc/securetty
@@ -28,3 +30,9 @@ while [ $COUNT -le 40 ]; do
     ((COUNT=$COUNT+1))
 done
 
+# set default theme as white on black - closes #1060
+CONF_ENABL=/etc/shellinabox/options-enabled
+CONF_AVAIL=/etc/shellinabox/options-available
+rm $CONF_ENABL/00*
+ln -s $CONF_AVAIL/00_White\ On\ Black.css $CONF_ENABL/00+White\ On\ Black.css
+ln -s $CONF_AVAIL/00+Black\ on\ White.css $CONF_ENABL/00_Black\ on\ White.css

@@ -1,4 +1,0 @@
-Explanation: Pin Adminer from backports
-Package: adminer
-Pin: release a=jessie-backports
-Pin-Priority: 500

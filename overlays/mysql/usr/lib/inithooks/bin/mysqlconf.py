@@ -1,11 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Copyright (c) 2008 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
 
 """
 Configure MySQL (sets MySQL password and optionally executes query)
 
 Options:
-    -u --user=    mysql username (default: root)
+    -u --user=    mysql username (default: adminer)
     -p --pass=    unless provided, will ask interactively
 
     --query=      optional query to execute after setting password
@@ -20,19 +20,14 @@ import getopt
 import signal
 
 from dialog_wrapper import Dialog
-from executil import ExecError, system
+from os import system
+import pymysql
+import pymysql.cursors
 
 DEBIAN_CNF = "/etc/mysql/debian.cnf"
 
 class Error(Exception):
     pass
-
-def escape_chars(s):
-    """escape special characters: required by nested quotes in query"""
-    s = s.replace("\\", "\\\\")  # \  ->  \\
-    s = s.replace('"', '\\"')    # "  ->  \"
-    s = s.replace("'", "'\\''")  # '  ->  '\''
-    return s
 
 class MySQL:
     def __init__(self):
@@ -44,13 +39,17 @@ class MySQL:
             self._start()
             self.selfstarted = True
 
-    def _is_alive(self):
-        try:
-            system('mysqladmin -s ping >/dev/null 2>&1')
-        except ExecError:
-            return False
+        self.connect()
 
-        return True
+    def connect(self):
+        self.connection = pymysql.connect(
+            unix_socket='/run/mysqld/mysqld.sock',
+            user='root',
+            cursorclass=pymysql.cursors.DictCursor)
+        self.connected = True
+
+    def _is_alive(self):
+        return system('mysqladmin -s ping >/dev/null 2>&1') == 0
 
     def _start(self):
         system("mysqld --skip-networking >/dev/null 2>&1 &")
@@ -69,14 +68,23 @@ class MySQL:
     def __del__(self):
         self._stop()
 
-    def execute(self, query):
-        system("mysql --defaults-file=%s -B -e '%s'" % (DEBIAN_CNF, query))
+    def execute(self, query, interp=None):
+        if not self.connected:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(query, interp)
+            self.connection.commit()
+        finally:
+            self.connection.close()
+            self.connected = False
 
 def usage(s=None):
     if s:
-        print >> sys.stderr, "Error:", s
-    print >> sys.stderr, "Syntax: %s [options]" % sys.argv[0]
-    print >> sys.stderr, __doc__
+        print("Error:", s, file=sys.stderr)
+    print("Syntax: %s [options]" % sys.argv[0], file=sys.stderr)
+    print(__doc__, file=sys.stderr)
     sys.exit(1)
 
 def main():
@@ -85,10 +93,10 @@ def main():
         opts, args = getopt.gnu_getopt(sys.argv[1:], "hu:p:",
                      ['help', 'user=', 'pass=', 'query='])
 
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
-    username="root"
+    username="adminer"
     password=""
     queries=[]
 
@@ -111,13 +119,18 @@ def main():
     m = MySQL()
 
     # set password
-    m.execute('update mysql.user set Password=PASSWORD(\"%s\") where User=\"%s\"; flush privileges;' % (escape_chars(password), username))
+    #m.execute('update mysql.user set authentication_string=PASSWORD(%s) where User=%s',
+    #    (password, username))
+    m.execute('ALTER USER %s@localhost IDENTIFIED BY %s', (username, password))
+    m.execute('FLUSH PRIVILEGES')
 
     # edge case: update DEBIAN_CNF
     if username == "debian-sys-maint":
-        old = file(DEBIAN_CNF).read()
+        with open(DEBIAN_CNF, 'r') as fob:
+            old = fob.read()
         new = re.sub("password = (.*)\n", "password = %s\n" % password, old)
-        file(DEBIAN_CNF, "w").write(new)
+        with open(DEBIAN_CNF, 'w') as fob:
+            fob.write(new)
 
     # execute any adhoc specified queries
     for query in queries:

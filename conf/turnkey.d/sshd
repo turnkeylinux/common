@@ -6,6 +6,29 @@ sed -i "/^PermitRootLogin/ s/without-password/yes/" /etc/ssh/sshd_config
 # disable sshd dns checks (if resolution fails will prevent logins)
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
+# harden ssh daemon
+sed -i '{
+  /^X11Forwarding/ d
+  /^TCPKeepAlive/ d
+  /^AllowTcpForwarding/ d
+  /^ClientAliveCountMax/ d
+  /^MaxAuthTries/ d
+  /^MaxSessions/ d
+}' /etc/ssh/sshd_config
+
+cat >> /etc/ssh/sshd_config <<EOF
+
+# https://github.com/turnkeylinux/tracker/issues/1092
+TCPKeepAlive yes
+
+# SSH hardening recommended by lynis
+X11Forwarding no
+AllowTcpForwarding no
+ClientAliveCountMax 2
+MaxAuthTries 3
+MaxSessions 2
+EOF
+
 # configure root login banner directive (enabled by inithooks#sudoadmin)
 cat >> /etc/ssh/sshd_config <<EOF
 
@@ -13,4 +36,3 @@ Match user root
 Banner /root/.ssh/banner
 Match user *
 EOF
-

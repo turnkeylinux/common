@@ -1,0 +1,72 @@
+#!/bin/bash -e
+
+[[ -n $DEBUG ]] && set -x
+
+repo_path="$1" # user/repo_name
+tmp_dir=/tmp/gh_releases
+rm -rf $tmp_dir
+mkdir -p $tmp_dir
+
+fatal() {
+    echo -e "\n[FATAL] $1" 1>&2
+    exit 1
+}
+usage() {
+    echo "Usage: gh_releases.sh <user>/<repo>" 1>&2
+    echo "Note: requires GITHUB_USER and GITHUB_USER_TOKEN" 1>&2
+    echo "      environment variables to be set." 1>&2
+    echo "For debugging, set DEBUG=y." 1>&2
+}
+
+if [[ -z "$repo_path" ]]; then
+    usage
+    fatal "user/repo not provided!"
+fi
+if [[ -z "$GITHUB_USER" ]]; then
+    usage
+    fatal "GITHUB_USER not set!"
+fi
+if [[ -z "$GITHUB_USER_TOKEN" ]]; then
+    usage
+    fatal "GITHUB_USER_TOKEN not set!"
+fi
+
+echo -n "Fetching releases from github for \"$repo_path\"... " 1>&2
+
+get_page() {
+    url=$1
+    key=$2
+    page=$3
+    tmp_file=$(mktemp $tmp_dir/XXXX.tmp)
+    curl -u "$GITHUB_USER:$GITHUB_USER_TOKEN" -b /tmp/cookies.txt -c /tmp/cookies.txt -s "${url}?page=${page}&per_page=100" > $tmp_file || true
+    if grep "Bad credentials" $tmp_file >/dev/null ; then
+        fatal "Bad GitHub credentials"
+    else
+        grep -oP "\"$key\": \"\\K(.*)(?=\")" $tmp_file
+        rm -f $tmp_file
+    fi
+}
+
+get_all_pages() {
+    url=$1
+    key=$2
+    declare -i page=0
+    last_page="$(get_page "$url" "$key" "$page")"
+    touch /tmp/gh_releases
+
+    while [[ -n "$last_page" ]]
+    do
+        echo "$last_page" >> $tmp_dir/releases
+        page+=1
+        last_page="$(get_page "$url" "$key" "$page")"
+    done
+}
+
+
+get_all_pages "https://api.github.com/repos/${repo_path}/releases" "tag_name"
+get_all_pages "https://api.github.com/repos/${repo_path}/tags" "name"
+
+echo "Done!" 1>&2
+cat $tmp_dir/releases | sort --version-sort --unique
+[[ -z $DEBUG ]] && rm -rf $tmp_dir
+

@@ -5,27 +5,18 @@ HELLOWORLD=/usr/local/src/helloworld
 
 mkdir -p $REPOS
 
-esc() {
-    echo $1 | sed "s/\//\\\\\//g"
-}
-
-#used by git, bzr, hg
-dvcs_repo() {
-    TARGET=$REPOS/$1/helloworld
-    mkdir -p $TARGET
-    cd $TARGET
-    $1 init
-    cp $HELLOWORLD/* $TARGET
-    FILE=$TARGET/helloworld.py
-    sed -i "s/world/wordl/" $FILE && $1 add . && $1 commit -m "initial commit"
-    sleep 2 # workaround for damn hg checking modification times!!
-    sed -i "s/wordl/world/" $FILE && $1 add . && $1 commit -m "fixed typo"
-}
-
 # create git repo
 export GIT_COMMITTER_EMAIL=root@localhost
 export GIT_AUTHOR_EMAIL=root@localhost
-dvcs_repo git
+
+TARGET=$REPOS/git/helloworld
+mkdir -p $TARGET
+cd $TARGET
+git init
+cp $HELLOWORLD/* $TARGET
+FILE=$TARGET/helloworld.py
+sed -i "s/world/wordl/" $FILE && git add . && git commit -m "initial commit"
+sed -i "s/wordl/world/" $FILE && git add . && git commit -m "fixed typo"
 
 touch $REPOS/git/helloworld/.git/git-daemon-export-ok
 GITPUB=/var/lib/git
@@ -35,37 +26,6 @@ echo "Hello World" > $REPOS/git/helloworld/.git/description
 
 sed -i "/GIT_DAEMON_ENABLE/ s/false/true/" /etc/default/git-daemon
 chown -R www-data:root $GITPUB
-
-# configure bzr repo
-export BZR_EMAIL=root@localhost
-dvcs_repo bzr
-
-cd /etc/init.d
-update-rc.d bzr defaults
-
-# create mercurial repo
-export EMAIL=root@localhost
-dvcs_repo hg
-
-cat >$REPOS/hg/helloworld/.hg/hgrc<<EOF
-[web]
-contact = root@localhost
-description = Hello World
-EOF
-
-cat >/etc/mercurial/hgweb.config<<EOF
-[web]
-style = git-web
-
-[collections]
-/srv/repos/hg/ = /srv/repos/hg/
-EOF
-
-cp /usr/share/doc/mercurial/examples/hgweb.cgi /usr/lib/cgi-bin
-chmod +x /usr/lib/cgi-bin/hgweb.cgi
-ln -s /etc/mercurial/hgweb.config /usr/lib/cgi-bin/hgweb.config
-
-sed -i "s|^config = \(.*\)|config = \"hgweb.config\"|" /usr/lib/cgi-bin/hgweb.cgi
 
 # create subversion repo
 TARGET=$REPOS/svn/helloworld
@@ -85,7 +45,9 @@ rm -rf /tmp/svn
 cd /etc/init.d
 update-rc.d svnserve defaults
 
-
 # cleanup
 rm -rf $HELLOWORLD
 
+# create vcs user
+useradd -d /srv/repos vcs
+chown -R vcs:vcs /srv/repos

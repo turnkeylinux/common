@@ -3,7 +3,7 @@ ssl_certificate_key  /etc/ssl/private/cert.key;
 ssl_session_timeout  5m;
 ssl_session_cache shared:SSL:50m;
 
-ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+ssl_protocols TLSv1.2 TLSv1.3;
 
 # ciphers added by conf/turnkey.d/zz-ssl-ciphers script
 ssl_ciphers '';

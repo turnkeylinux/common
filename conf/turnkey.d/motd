@@ -9,10 +9,28 @@ cat >$MOTD_DIR/00-turnkey-sysinfo<<'EOF'
 exec /usr/share/turnkey-sysinfo/contrib/motd
 EOF
 
+cat >$MOTD_DIR/08-turnkey-confconsole<<'EOF'
+#!/bin/sh
+
+if [ -z "$TERM" ]; then
+    _term=linux
+else
+    _term=$TERM
+fi
+
+bold=$(tput -T $_term bold)
+normal=$(tput -T $_term sgr0)
+
+echo "    For Advanced commandline config run:    ${bold}confconsole${normal}"
+echo
+echo "  For more info see: https://www.turnkeylinux.org/docs/confconsole"
+echo
+EOF
+
 cat >$MOTD_DIR/10-nonpersistent-mode<<'EOF'
 #!/bin/sh
 
-if grep -q boot=casper /proc/cmdline; then
+if grep -q boot=casper /proc/cmdline || grep -q boot=live /proc/cmdline; then
     echo "  Warning: Non-persistent mode"
     echo
     echo "    The system is running in live non-persistent mode. Changes will"
@@ -22,8 +40,9 @@ fi
 EOF
 
 rm -f $MOTD_DIR/{00-header,10-help-text} # incl. in ubuntu, not in debian
+
 chmod +x $MOTD_DIR/*
 
+# remove default Debian disclaimer
 rm /etc/motd
-ln -s /var/run/motd /etc/motd
-
+touch /etc/motd

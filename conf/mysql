@@ -1,12 +1,24 @@
 #!/bin/sh -e
 
-[ "$MYSQL_PASS" ] && /usr/lib/inithooks/bin/mysqlconf.py --pass="$MYSQL_PASS"
+# download mysqltuner
+dl() {
+    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
+    cd $2; curl -L -f -O $PROXY $1; cd -
+}
 
-# start mysql server
-/etc/init.d/mysql start
+# Install mysqltuner as recommended:
+# https://github.com/major/MySQLTuner-perl#downloadinstallation
+BIN=/usr/local/bin
+URL="https://raw.githubusercontent.com/major/MySQLTuner-perl/master"
+dl $URL/mysqltuner.pl $BIN
+mv $BIN/mysqltuner.pl $BIN/mysqltuner
+chmod +x $BIN/mysqltuner
+dl $URL/basic_passwords.txt $BIN
+dl $URL/vulnerabilities.csv $BIN
 
 # secure mysql installation
-mysql --defaults-extra-file=/etc/mysql/debian.cnf <<EOF
+service mysql start
+mysql <<EOF
 USE mysql;
 # remove anonymous users
 DELETE FROM user WHERE User='';
@@ -17,11 +29,5 @@ DELETE FROM user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', ':
 # remove test database
 DROP DATABASE IF EXISTS test;
 DELETE FROM db WHERE Db='test' OR Db='test\\_%';
-
-# reload privilege tables
-FLUSH PRIVILEGES;
 EOF
-
-# stop mysql server
-/etc/init.d/mysql stop
-
+service mysql stop

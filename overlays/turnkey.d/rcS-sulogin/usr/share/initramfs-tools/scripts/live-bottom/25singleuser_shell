@@ -1,0 +1,42 @@
+#!/bin/sh
+
+PREREQ=""
+DESCRIPTION="Configuring single user shell respawning..."
+
+. /scripts/functions
+
+prereqs()
+{
+    echo "$PREREQ"
+}
+
+case $1 in
+# get pre-requisites
+prereqs)
+    prereqs
+    exit 0
+    ;;
+esac
+
+log_begin_msg "$DESCRIPTION"
+
+# ubuntu/lucid
+CONF=/root/etc/init/rcS.conf
+[ -e $CONF ] || exit 0
+
+cat > $CONF <<EOF
+start on runlevel S
+stop on runlevel
+
+console owner
+script
+    while true; do
+        echo "Running a shell"
+        /bin/bash
+    done
+end script
+EOF
+
+log_end_msg
+exit 0
+

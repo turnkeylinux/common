@@ -1,0 +1,6 @@
+# rm composer auth token
+/root/.composer/auth.json
+
+# rm common systemctl chroot workaround(s)
+/usr/local/bin/service
+/usr/local/bin/systemctl

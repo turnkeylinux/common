@@ -1,0 +1,50 @@
+#!/bin/bash -e
+
+# Temporary TKLDev build time systemctl wrapper.
+#
+# Only passes enable|disable as other actions will fail.
+
+fatal() { echo "FATAL [$0]: $@" 1>&2; exit 1; }
+warning() { echo "WARNING [$0]: $@"; }
+
+_start_stop() {
+    exit_code=0
+
+    # try service first; note this is also wrapped; see /usl/local/bin/service
+    service $2 $1 || exit_code=$?
+
+    if [[ "$exit_code" -eq 0 ]]; then
+        return
+    else
+        # check if an init.d script exists
+        initd=/etc/init.d/$2
+        if [[ -f "$initd" ]]; then
+            $initd $1 || fatal "$initd $1 returned a non-zero exit code."
+        else
+            fatal "Unable to $1 service: $2 (tried 'service $2 $1', and $initd doesn't exist)."
+        fi
+    fi
+}
+
+[[ "$#" -eq 2 ]] || fatal "2 arguments required (given '$@')."
+
+case $1 in
+    start)
+        _start_stop start $2;;
+
+    stop)
+        _start_stop stop $2;;
+
+    restart|reload)
+        _stop $2
+        _start $2;;
+
+    enable|disable)
+        /usr/bin/systemctl $1 $2;;
+
+    mask|unmask)
+        /usr/bin/systemctl $1 $2;;
+
+    *)
+        fatal "Unknown command '$1'"
+esac

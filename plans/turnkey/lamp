@@ -1,15 +1,15 @@
-apache2                
+#include <turnkey/mysql>
+
+/* default lamp plan */
+apache2
 webmin-apache
 
-apache2-mpm-prefork    
-mysql-server           
-webmin-mysql
-
-php5-mysql             # MySQL module for php5
-libapache2-mod-php5    # server-side, HTML-embedded scripting language (apache 2 module)
 webmin-phpini
 
 adminer
-php5-cli
 
-libperl4-corelibs-perl # php5-common depends on lsof; which depends on this
+/* if you need these components for PHP 5.6 see lamp56 plan */
+
+php-mysql
+libapache2-mod-php
+php-cli

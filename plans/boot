@@ -1,18 +1,23 @@
-systemd              # even in CHROOT_ONLY we need systemctl to configure systemd services
+systemd         /* even in CHROOT_ONLY we need systemctl to configure systemd services */
 
 #ifndef CHROOT_ONLY
 
-syslinux             # Collection of bootloaders
-syslinux-common      # Collection of bootloaders (common)
-isolinux             # Collection of bootloaders (ISO 9960 bootloader)
-casper               # Run a "live" preinstalled system from read-only media
-hdparm               # Tune hard disk parameters for high performance
+syslinux                    /* Collection of bootloaders */
+syslinux-common             /* Collection of bootloaders (common) */
+isolinux                    /* Collection of bootloaders (ISO 9960) */
+hdparm                      /* Tune hard disk parameters for high performance */
+live-boot                   /* live-boot replaces casper in v16.x */
+live-tools                  /* live tools provides additional tools for live booting */
+live-boot-initramfs-tools
+initramfs-tools
+firmware-linux-free
+busybox
 
 #ifdef UBUNTU
 upstart
 #endif
 #ifdef DEBIAN
-sysvinit
+systemd-sysv
 #endif
 
 #ifdef KERNEL

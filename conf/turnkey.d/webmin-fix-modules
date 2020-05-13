@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+# webmin-lvm & webmin-raid install fails due to changed dependencies
+# i.e. webmin-lvm depends on webmin-raid which depends on webmin-fdisk, but
+# webmin-raid install fails because webmin-fdisk isn't intalled at that point
+
+# this is a workaround (closes #1091)
+
+dpkg-reconfigure webmin-raid webmin-lvm

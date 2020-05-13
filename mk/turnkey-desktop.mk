@@ -28,6 +28,7 @@ COMMON_CONF += turnkey.d/sysctl
 COMMON_CONF += $(COMMON_CONF_TMP)
 
 COMMON_REMOVELISTS += turnkey
+COMMON_REMOVELISTS_FINAL += turnkey
 
 FAB_SHARE_PATH ?= /usr/share/fab
 

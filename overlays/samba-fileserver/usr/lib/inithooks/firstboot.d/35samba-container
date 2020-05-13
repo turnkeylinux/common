@@ -1,0 +1,23 @@
+#!/bin/bash -e
+# force setting of Samba root password in a fileserver container
+#
+# 30rootpass is disabled by default in containers as root password is set
+# externally. This means that in Fileserver based applainces, the Samba
+# root password is not set (setpass.py in fileserver also sets samba password).
+# This script will force the root Samba user password to be set separately
+# (via sambapass.py).
+
+if [[ ! -x /usr/lib/inithooks/firstboot.d/30rootpass ]]; then
+
+    USERNAME=root
+
+    . /etc/default/inithooks
+    [ "$(echo $SUDOADMIN | tr [A-Z] [a-z] )" = "true" ] && USERNAME=admin
+
+    [ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
+    if [ -n "$ROOT_PASS" ]; then
+       APP_PASS=$ROOT_PASS
+    fi
+    $INITHOOKS_PATH/bin/sambapass.py $USERNAME --pass="$APP_PASS"
+
+fi
