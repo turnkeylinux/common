@@ -43,8 +43,15 @@ EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install 2.4.5
-rbenv global 2.4.5
+RBY_VER=2.6.6
+
+MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
+rbenv global $RBY_VER
+
+echo "deb [signed-by=/usr/share/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
+
+apt update && apt install --no-install-recommends yarn
+
 
 gem update --system
 
@@ -66,7 +73,7 @@ sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/mods-available/passenge
 # start mysql server
 service postgresql start
 
-su postgres -c "createuser --no-superuser --createdb --no-createrole $DB_USER"
+su postgres -c "createuser --no-superuser --createdb $DB_USER"
 su postgres -c "psql postgres" <<< "alter user $DB_USER with encrypted password '$DB_PASS';"
 
 # create databases for each environment
@@ -119,4 +126,5 @@ sed -i "s|@APPNAME@|$APPNAME|g" /etc/logrotate.d/$APPNAME
 a2ensite $APPNAME
 
 service postgresql stop
+
 
