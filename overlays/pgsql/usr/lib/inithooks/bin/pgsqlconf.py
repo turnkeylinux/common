@@ -16,7 +16,7 @@ import signal
 import subprocess
 
 from os import system
-from subprocess import Popen, PIPE, check_output, CalledProcessError
+from subprocess import check_output, CalledProcessError
 from dialog_wrapper import Dialog
 
 class Error(Exception):
@@ -67,10 +67,10 @@ class PostgreSQL:
         self._stop()
 
     def execute(self, query):
-        p = Popen("su postgres -lc 'psql -q %s'" % self.database, shell=True, stdin=PIPE)
-        p.communicate(query)
-        if p.returncode != 0:
-            raise ExecError("postgres command failed")
+        subprocess.run(
+            ['su', 'postgres', '-lc', 'psql -q "%s"' % self.database],
+            input = query, check = True
+        )
 
 def usage(s=None):
     if s:
