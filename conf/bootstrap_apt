@@ -23,6 +23,10 @@ SOURCES_LIST=/etc/apt/sources.list.d
 PREFS_LIST=/etc/apt/preferences.d
 mkdir -p $SOURCES_LIST $PREFS_LIST
 
+# Default Debian PHP version. This should return the current:
+#   apt-cache policy php | sed -n "\|Candidate:|s|.*:\([0-9]\.[0-9]*\)+.*|\1|p"
+DEBIAN_PHP_V=7.3
+
 # keys are provided as ascii armoured for transparency; but secure apt requires
 # gpg keyrting files
 key_dir=/usr/share/keyrings
@@ -66,7 +70,7 @@ EOF
 
 if [ -n "$PHP_VERSION" ]; then
     # install support for https repo
-    PKGS="apt-transport-https lsb-release ca-certificates"
+    PKGS="lsb-release ca-certificates"
     apt update
     DEBIAN_FRONTEND=noninteractive apt install -y $PKGS
 
@@ -109,7 +113,7 @@ Package: libapache2-mod-php${PHP_VERSION}
 Pin: origin packages.sury.org
 Pin-Priority: 550
 EOF
-    if [[ "$(awk 'BEGIN{ print 7.0<'${PHP_VERSION}' }')" == '1' ]]; then
+    if [[ "$(awk 'BEGIN{ print '${DEBIAN_PHP_V}'<'${PHP_VERSION}' }')" == '1' ]]; then
         cat >> /etc/apt/preferences.d/php-sury.pref <<EOF
 
 Package: libpcre3
