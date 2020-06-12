@@ -70,7 +70,7 @@ EOF
 
 if [ -n "$PHP_VERSION" ]; then
     # install support for https repo
-    PKGS="apt-transport-https lsb-release ca-certificates"
+    PKGS="lsb-release ca-certificates"
     apt update
     DEBIAN_FRONTEND=noninteractive apt install -y $PKGS
 
