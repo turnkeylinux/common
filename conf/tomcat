@@ -37,7 +37,25 @@ sed -i "s/^#JAVA_HOME.*/JAVA_HOME=\/usr\/lib\/jvm\/${JVM}/" /etc/default/$TOMCAT
 if [ -e /etc/apache2/sites-available/jktomcat.conf ]; then
     a2dissite 000-default
     a2ensite jktomcat
+
+    # as jktomcat.conf comes from the tomcat-apache overlay; do other
+    # tomcat-apache stuff here too...
+
+    # Restore default server.xml file (overwritten by tomcat overlay)
+    cp /usr/share/$TOMCAT/etc/server.xml /etc/$TOMCAT/server.xml
+
+    # disable 16tomcat-sslcert - only neded for standalone tomcat
+    chmod -x /usr/lib/inithooks/firstboot.d/16tomcat-sslcert
+
+    conf_files="tomcat-users.xml"
+else
+    conf_files="tomcat-users.xml server.xml"
 fi
+
+# create convenience links to original conf that we overwrite
+for conf in $conf_files; do
+    ln -s /usr/share/$TOMCAT/etc/$conf /etc/$TOMCAT/$conf.orig
+done
 
 # from https://bugs.launchpad.net/ubuntu/+source/tomcat7/+bug/1232258
 create_link() {
