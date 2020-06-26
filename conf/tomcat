@@ -41,18 +41,18 @@ if [ -e /etc/apache2/sites-available/jktomcat.conf ]; then
     # as jktomcat.conf comes from the tomcat-apache overlay; do other
     # tomcat-apache stuff here too...
 
-    # Restore default server.xml file (overwritten by tomcat overlay)
-    cp /usr/share/$TOMCAT/etc/server.xml /etc/$TOMCAT/server.xml
-
     # disable 16tomcat-sslcert - only neded for standalone tomcat
     chmod -x /usr/lib/inithooks/firstboot.d/16tomcat-sslcert
 
-    conf_files="tomcat-users.xml"
-else
-    conf_files="tomcat-users.xml server.xml"
+    # Workaround Apache issue finding 'ajp13_worker'.
+    # As per https://stackoverflow.com/a/59584388/3363571
+    mods_available=/etc/apache2/mods-available
+    mv $mods_available/httpd-jk.conf $mods_available/jk.conf
+    ln -f -s $mods_available/jk.conf /etc/libapache2-mod-jk/httpd-jk.conf
 fi
 
 # create convenience links to original conf that we overwrite
+conf_files="tomcat-users.xml server.xml"
 for conf in $conf_files; do
     ln -s /usr/share/$TOMCAT/etc/$conf /etc/$TOMCAT/$conf.orig
 done
