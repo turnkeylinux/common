@@ -47,7 +47,7 @@ def main():
 
     tomcat_user_conf = f"/etc/{TOMCAT}/tomcat-users.xml"
     doc = xml.dom.minidom.parse(tomcat_user_conf).documentElement
-    users = doc.getElementsByTagName('user')1
+    users = doc.getElementsByTagName('user')
     for user in users:
         if not user.getAttribute('username') == 'admin':
             continue
