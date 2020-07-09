@@ -36,8 +36,8 @@ case $1 in
         _start_stop stop $2;;
 
     restart|reload)
-        _stop $2
-        _start $2;;
+        _start_stop stop $2
+        _start_stop start $2;;
 
     enable|disable)
         /usr/bin/systemctl $1 $2;;
