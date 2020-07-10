@@ -7,6 +7,8 @@ Configure MySQL (sets MySQL password and optionally executes query)
 Options:
     -u --user=    mysql username (default: adminer)
     -p --pass=    unless provided, will ask interactively
+    -H --host=    hostname - optional (default: localhost)
+                  - never asked interactively
 
     --query=      optional query to execute after setting password
 
@@ -91,13 +93,14 @@ def main():
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "hu:p:",
-                     ['help', 'user=', 'pass=', 'query='])
+                     ['help', 'user=', 'pass=', 'host=', 'query='])
 
     except getopt.GetoptError as e:
         usage(e)
 
     username="adminer"
     password=""
+    hostname="localhost"
     queries=[]
 
     for opt, val in opts:
@@ -107,6 +110,8 @@ def main():
             username = val
         elif opt in ('-p', '--pass'):
             password = val
+        elif opt in ('-H', '--host'):
+            hostname = val
         elif opt in ('--query'):
             queries.append(val)
 
@@ -121,7 +126,7 @@ def main():
     # set password
     #m.execute('update mysql.user set authentication_string=PASSWORD(%s) where User=%s',
     #    (password, username))
-    m.execute('ALTER USER %s@localhost IDENTIFIED BY %s', (username, password))
+    m.execute('ALTER USER %s@%s IDENTIFIED BY %s', (username, hostname, password))
     m.execute('FLUSH PRIVILEGES')
 
     # edge case: update DEBIAN_CNF
@@ -138,4 +143,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
