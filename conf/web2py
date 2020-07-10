@@ -9,10 +9,11 @@ SRC=/usr/local/src
 W2PPASS=turnkey
 W2PROOT=/var/www/web2py
 
-# download and unpack web2py
-dl http://www.web2py.com/examples/static/web2py_src.zip $SRC
-unzip $SRC/web2py_src.zip -d $(dirname $W2PROOT)
-rm $SRC/web2py_src.zip
+# clone web2py
+cd /var/www
+RELEASES="$(/usr/local/bin/gh_releases web2py/web2py)"
+VER=$(echo "${RELEASES}" | sort --version-sort | tail -1)
+git clone --recursive --branch $VER https://github.com/web2py/web2py
 
 # Install GitPython in virtualenv to workaround turnkey-pylib
 # git.py conflict
