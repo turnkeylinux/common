@@ -48,3 +48,7 @@ echo "COMMIT" >> $CONF
 
 sed -i "/^$/d" $CONF
 
+# As of Buster, Debian uses nftables for firewall; but webmin only supports legacy
+# iptables - see https://github.com/webmin/webmin/issues/1097
+update-alternatives --set iptables /usr/sbin/iptables-legacy
+update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
