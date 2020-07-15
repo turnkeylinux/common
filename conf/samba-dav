@@ -21,9 +21,7 @@ mv $SRC/logout $WEBROOT/cgi-bin
 chmod a+rx $WEBROOT $WEBROOT/cgi-bin
 chmod -R a+r $WEBROOT
 
-echo yes | perl -MCPAN -e 'install DateTime::Format::Human::Duration'
-
-cpan install IO::Compress::Brotli
+echo yes | perl -MCPAN -e 'install IO::Compress::Brotli'
 
 apt purge -y build-essential
 apt autoremove -y
