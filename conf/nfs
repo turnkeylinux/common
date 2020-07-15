@@ -1,3 +1,3 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
-echo -e "/home\t\t/srv/homes\tnone\tbind\t\t0\t0" >> /etc/fstab
+echo -e "/home\t\t/srv/homes\tnone\tbind,nofail\t\t0\t0" >> /etc/fstab
