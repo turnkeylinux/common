@@ -3,17 +3,22 @@
 SRC=/usr/local/src
 WEBROOT=/var/www/webdavcgi
 GIT_SOURCE=https://github.com/DanRohde/webdavcgi.git
-TAG_RELEASE=5569b51
+TEST_COMMIT=875e44f
 
-# Note: latest release is v1.1.2 - 5 Oct 2017; however, most commits since then
-# appear to be bugfixes and basic testing suggests all is well in master. So
-# cloning to latest commit at time of testing.
+# Note: latest release tag is v1.1.2 - 5 Oct 2017; however, commits since then
+# appear to be bugfixes and improvements and testing suggests all is well in
+# master. So shallow cloning master and checking that the latest commit at
+# build time is the one tested.
 
-git clone $GIT_SOURCE $WEBROOT
+git clone --depth=1 $GIT_SOURCE $WEBROOT
 
 cd $WEBROOT
-git checkout $TAG_RELEASE
-rm -R $WEBROOT/.git
+# Echo warning if not the tested commit ID
+HEAD_ID=$(git rev-parse --short HEAD)
+if [[ "$HEAD_ID" != "$TEST_ID" ]]; then
+    echo '[WARN] WebDAVCGI HEAD commit ID is untested!'
+    echo "       - update TEST_COMMIT in common/samba-dav to fix."
+fi
 
 mv $SRC/webdav.conf $WEBROOT
 mv $SRC/logout $WEBROOT/cgi-bin
@@ -21,9 +26,7 @@ mv $SRC/logout $WEBROOT/cgi-bin
 chmod a+rx $WEBROOT $WEBROOT/cgi-bin
 chmod -R a+r $WEBROOT
 
-echo yes | perl -MCPAN -e 'install DateTime::Format::Human::Duration'
-
-cpan install IO::Compress::Brotli
+echo yes | perl -MCPAN -e 'install IO::Compress::Brotli'
 
 apt purge -y build-essential
 apt autoremove -y

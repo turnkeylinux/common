@@ -18,6 +18,7 @@ libfilesys-smbclient-perl
 liburi-perl
 libcgi-pm-perl
 liblist-moreutils-perl
+libdatetime-format-human-duration-perl
 
 apache2                
 webmin-apache
