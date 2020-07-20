@@ -3,7 +3,7 @@
 # zz-ssl-ciphers
 #
 # This script was instigated by John Carver 
-# It provides a common set of hardened SSL/TLS ciphers fo all webserver apps
+# It provides a common set of hardened SSL/TLS ciphers for all webserver apps
 # Base configuration is provided by relevant overlay files
 
 set ${CERTFILE:="/etc/ssl/private/cert.pem"}
@@ -26,7 +26,8 @@ fatal() {
 
 # Apache2
 CONF="/etc/apache2/mods-available/ssl.conf"
-if [ -f "$CONF" ]; then
+BIN="/usr/sbin/a2enmod"
+if [ -f "$CONF" -a -x "$BIN" ]; then
     sed -i "s|^\(\s*SSLCipherSuite\s\+\).*$|\1${SECURE_CIPHER_LIST}|g" $CONF    
     a2enmod ssl
     a2enconf security
