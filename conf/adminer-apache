@@ -1,8 +1,12 @@
 #!/bin/sh -e
 
-echo Listen 12322 >> /etc/apache2/ports.conf
-ln -s /etc/adminer/apache.conf /etc/apache2/sites-available/adminer.conf
-a2ensite adminer
+FILE=/etc/apache2/ports.conf
+BIN=/usr/sbin/a2ensite
+if [ -f "$FILE" -a -x "$BIN" ]; then
+    echo Listen 12322 >> /etc/apache2/ports.conf
+    ln -s /etc/adminer/apache.conf /etc/apache2/sites-available/adminer.conf
+    a2ensite adminer
+fi
 
 # add mcrypt support to apache2 (if not already configured)
 #debconf-set-selections << END

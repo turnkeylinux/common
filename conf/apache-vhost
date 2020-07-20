@@ -1,5 +1,7 @@
 #!/bin/sh -e
 
 # each site is defined on its own, this removes the warnings
-sed -i "s|^NameVirtualHost \(.*\)||" /etc/apache2/ports.conf
-
+CONF="/etc/apache2/ports.conf"
+if [ -f "$CONF" ]; then
+    sed -i "s|^NameVirtualHost \(.*\)||" $CONF
+fi
