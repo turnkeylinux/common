@@ -11,7 +11,7 @@ _start_stop() {
     exit_code=0
 
     # try service first; note this is also wrapped; see /usl/local/bin/service
-    service $2 $1 || exit_code=$?
+    /usr/local/bin/service $2 $1 || exit_code=$?
 
     if [[ "$exit_code" -eq 0 ]]; then
         return
@@ -26,25 +26,63 @@ _start_stop() {
     fi
 }
 
-[[ "$#" -eq 2 ]] || fatal "2 arguments required (given '$@')."
+[[ "$#" -ge 2 ]] || fatal "At least 2 arguments required (given '$@')."
 
-case $1 in
-    start)
-        _start_stop start $2;;
+unset COMMAND SERVICE_NAME IGNORED
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        start|stop|restart|reload|enable|disable|mask|unmask|is-failed|is-active)
+            if [[ -z "$COMMAND" ]]; then
+                COMMAND=$1
+                shift
+            else
+                warning "Already had command set ('$COMMAND')."
+                warning "Now setting as '$COMMAND'."
+                shift
+            fi;;
+        --*)
+            IGNORED="$IGNORED $1"
+            warning "Swtich '$1' will be ignored."
+            shift;;
+        *)
+            if [[ -z "$SERVICE_NAME" ]]; then
+                SERVICE_NAME=$1
+                shift
+            else
+                warning "Already had service name set ('$SERVICE_NAME')."
+                warning "Resetting to '$SERVICE_NAME'."
+                shift
+            fi;;
+    esac
+done
 
-    stop)
-        _start_stop stop $2;;
+if [[ -n "$COMMAND" ]] && [[ -n "$SERVICE_NAME" ]]; then
+    case $COMMAND in
+        start)
+            _start_stop start $SERVICE_NAME;;
+        stop)
+            _start_stop stop $SERVICE_NAME;;
 
-    restart|reload)
-        _start_stop stop $2
-        _start_stop start $2;;
+        restart|reload)
+            _start_stop stop $SERVICE_NAME
+            _start_stop start $SERVICE_NAME;;
 
-    enable|disable)
-        /usr/bin/systemctl $1 $2;;
+        enable|disable)
+            /usr/bin/systemctl $COMMAND $SERVICE_NAME;;
 
-    mask|unmask)
-        /usr/bin/systemctl $1 $2;;
+        mask|unmask)
+            /usr/bin/systemctl $COMMAND $SERVICE_NAME;;
 
-    *)
-        fatal "Unknown command '$1'"
-esac
+        is-failed)
+            warning "Call to 'is-failed' always returns FALSE (exit code 1)."
+            echo false >2
+            exit 1;;
+
+        is-active)
+            warning "Call to 'is-active' always returns TRUE (exit code 0)."
+            echo true >2
+            exit 0;;
+    esac
+else
+    fatal "Command ('$COMMAND') and/or Service name ('$SERVICE_NAME') not set or not found."
+fi

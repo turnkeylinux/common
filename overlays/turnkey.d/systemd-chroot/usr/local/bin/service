@@ -8,6 +8,8 @@ if [[ $1 == "apache2" ]]; then
     fi
 elif [[ $1 == "mysql" ]]; then
     /etc/init.d/mysql $2
+elif [[ $1 == "zoneminder.service" ]]; then
+    echo "ignoring zoneminder ..."
 else
     /usr/sbin/service $@
 fi
