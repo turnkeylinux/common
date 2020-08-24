@@ -11,7 +11,7 @@ _start_stop() {
     exit_code=0
 
     # try service first; note this is also wrapped; see /usl/local/bin/service
-    service $2 $1 || exit_code=$?
+    /usr/local/bin/service $2 $1 || exit_code=$?
 
     if [[ "$exit_code" -eq 0 ]]; then
         return
@@ -26,7 +26,7 @@ _start_stop() {
     fi
 }
 
-[[ "$#" -eq 2 ]] || fatal "At least 2 arguments required (given '$@')."
+[[ "$#" -ge 2 ]] || fatal "At least 2 arguments required (given '$@')."
 
 unset COMMAND SERVICE_NAME IGNORED
 while [[ "$#" -gt 0 ]]; do
