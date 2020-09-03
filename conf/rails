@@ -44,7 +44,7 @@ EOF
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
 # <= 2.4 can no longer install due to missing libssl1.0 dep
-RBY_VER=2.5.7
+RBY_VER=2.7.1
 
 MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
 rbenv global $RBY_VER
