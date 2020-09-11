@@ -1,9 +1,8 @@
+#include <turnkey/mysql>
+
 apache2
 webmin-apache
 apache2-dev
-
-default-mysql-server
-webmin-mysql
 
 build-essential             /* needed to build gems */
 libgmp-dev                  /* real package behind virtual libgmp10-dev which is required */
