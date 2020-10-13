@@ -1,13 +1,14 @@
 [Unit]
 Description=Universal SSL tunnel for network daemons (%i)
-After=network.target syslog.target
-Before=%i.target
+After=network.target
+Before=%i.service
 
 [Service]
 Type=forking
 ExecStart=/usr/bin/stunnel4 /etc/stunnel/%i.conf
 PIDFile=/var/lib/stunnel4/%i.pid
 TimeoutSec=600
+RestartSec=1s
 Restart=always
 PrivateTmp=yes
 
