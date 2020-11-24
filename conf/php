@@ -26,7 +26,6 @@ set ${PHP_UPLOAD_MAX_FILESIZE:=8M}      # php.ini default: 2MB
 
 # no TKLDEV facility to adjust these, but should be ok defaults
 set ${OPCACHE_INTERNAL_STR_BUFF:=8}     # php.ini default: 4(MB)
-set ${OPCACHE_FAST_SHUTDOWN:=1}         # php.ini default: 0 (disabled)
 set ${OPCACHE_REVALIDATE_FREQ:=30}      # php.ini default: 2 (seconds)
 
 cli_ini=cli/php.ini
@@ -40,7 +39,6 @@ for f in /etc/php/?.?/*/php.ini; do
     # adjust opcache settings for Apache only (not cli)
     if [ "${f%%$cli_ini}" = "$f" ]; then
         setini $f opcache.interned_strings_buffer $OPCACHE_INTERNAL_STR_BUFF
-        setini $f opcache.fast_shutdown $OPCACHE_FAST_SHUTDOWN
         setini $f opcache.revalidate_freq $OPCACHE_REVALIDATE_FREQ
     fi
 done
