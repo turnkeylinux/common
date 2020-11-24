@@ -29,7 +29,7 @@ fatal() { echo "[FATAL]: $@"; exit 1; }
 shallow_clone() {
     repo=$1
     mv ${repo} ${repo}.bak
-    git clone --depth 1 file:///${repo}.bak ${repo} >/dev/null 1>&2
+    git clone --depth 1 file:///${repo}.bak ${repo} >/dev/null 2>&1
     cp ${repo}.bak/.git/config ${repo}/.git/config
     orig_log=$(git --git-dir=${repo}.bak/.git log --pretty=oneline -1)
     new_log=$(git --git-dir=${repo}/.git log --pretty=oneline -1)
@@ -41,24 +41,27 @@ shallow_clone() {
     fi
 }
 
-setup() {
-    vendor_dir=$(find /var/www -type d -name 'vendor')
-    lines=$(echo "${vendor_dir}" | wc -l)
-    if [[ "${lines}" -lt 1 ]]; then
-        fatal "No vendor directory found in /var/www"
-    elif [[ "${lines}" -gt 1 ]]; then
-        fatal "Multiple vendor directories found in /var/www: " ${vendor_dir}
+cleanup() {
+    vendor_dirs=/var/www/*/vendor
+    vendor_dir=$(echo ${vendor_dirs[0]}) # only include first glob match verbatim
+    if ! [[ -d ${vendor_dir} ]]; then
+        fatal "No vendor directory found (looked for '/var/www/*/vendor')"
     fi
     echo "Vendor dir size prior to cleanup:"
     du -h -s ${vendor_dir}
     for git_dir in $(find ${vendor_dir} -type d -name '.git'); do
         shallow_clone $(dirname ${git_dir})
     done
+    echo "Vendor dir size post cleanup:"
+    du -h -s ${vendor_dir}
 }
 
-case in $1; do
-    -h|--help)
-        usage;;
-    *)
-        usage "No arguments are accepted.";;
-esac
+if [[ $# -gt 0 ]]; then
+    case ${1} in
+        -h|--help)
+            usage;;
+        *)
+            usage "No arguments are accepted.";;
+    esac
+fi
+cleanup
