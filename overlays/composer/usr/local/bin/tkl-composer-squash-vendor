@@ -1,0 +1,64 @@
+#/bin/bash -ex
+
+usage() {
+    echo "$@"
+    cat <<EOF
+$(basname $0) [-h|--help]
+
+Options:
+
+    -h|--help   Show this help text and exit
+
+Composer does not allow shallow clones. This script provides a way to work
+around that. It will convert a full git repositiory cloned by composer, into a
+shallow clone.
+
+It will process all git repositories (directories which contain a '.git' dir)
+which are sub directories of any 'vendor' directory within /var/www.
+
+It works by creating a local shallow clone from the local full clone. Then
+copying the git config of the original (i.e. replace the local "remote") and
+replacing the original full clone directory with the shallow clone.
+EOF
+    exit 1
+}
+
+info() { echo "[INFO]: $@"; }
+fatal() { echo "[FATAL]: $@"; exit 1; }
+
+shallow_clone() {
+    repo=$1
+    mv ${repo} ${repo}.bak
+    git clone --depth 1 file:///${repo}.bak ${repo} >/dev/null 1>&2
+    cp ${repo}.bak/.git/config ${repo}/.git/config
+    orig_log=$(git --git-dir=${repo}.bak/.git log --pretty=oneline -1)
+    new_log=$(git --git-dir=${repo}/.git log --pretty=oneline -1)
+    if [[ "$new_log" != "$orig_log" ]]; then
+        fatal "${repo} HEAD does not match original."
+    else
+        info "${repo} made shallow; cleaning up tmp files."
+        rm -rf ${repo}.bak
+    fi
+}
+
+setup() {
+    vendor_dir=$(find /var/www -type d -name 'vendor')
+    lines=$(echo "${vendor_dir}" | wc -l)
+    if [[ "${lines}" -lt 1 ]]; then
+        fatal "No vendor directory found in /var/www"
+    elif [[ "${lines}" -gt 1 ]]; then
+        fatal "Multiple vendor directories found in /var/www: " ${vendor_dir}
+    fi
+    echo "Vendor dir size prior to cleanup:"
+    du -h -s ${vendor_dir}
+    for git_dir in $(find ${vendor_dir} -type d -name '.git'); do
+        shallow_clone $(dirname ${git_dir})
+    done
+}
+
+case in $1; do
+    -h|--help)
+        usage;;
+    *)
+        usage "No arguments are accepted.";;
+esac
