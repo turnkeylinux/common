@@ -34,9 +34,11 @@ shallow_clone() {
     orig_log=$(git --git-dir=${repo}.bak/.git log --pretty=oneline -1)
     new_log=$(git --git-dir=${repo}/.git log --pretty=oneline -1)
     if [[ "$new_log" != "$orig_log" ]]; then
-        fatal "${repo} HEAD does not match original."
+        rm -rf ${repo}
+        mv ${repo}.bak ${repo}
+        fatal "Updated ${repo} HEAD did not match original. Backup restored."
     else
-        info "${repo} made shallow; cleaning up tmp files."
+        info "${repo} made shallow; cleaning up temporary backup files."
         rm -rf ${repo}.bak
     fi
 }
