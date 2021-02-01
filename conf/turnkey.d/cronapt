@@ -1,8 +1,12 @@
-#!/bin/sh -e
+#!/bin/bash -e
+
+# Note that a Confconsole plugin that allows the user to select between these
+# profiles is included as overlays/turnkey.d/cronapt-confconsole
 
 [ -e /etc/cron-apt ] || exit 0
 
 cd /etc/cron-apt
+mkdir -p action-available.d
 
 cat >> config << EOF
 MAILON="never"
@@ -11,9 +15,52 @@ EOF
 
 echo -n > action.d/3-download
 
-cat > action.d/5-install << EOF
-autoclean -q -y
-upgrade -q -y \
+cat > action.d/5-install.README << EOF
+# These files named '5-install.XXX' relate to the '5-install' cronapt script
+# located in /etc/cron-apt/actions.d/
+#
+# Which particular config.d file to be applied is determined by what the
+# symlink /etc/cron-apt/config.d/5-install points to.
+#
+#
+# 5-install.1 aka 'default'
+# -------------------------
+#
+# This is the historic and default TurnKey cron-apt behaviour. Only packages
+# from the security.sources.list repositories will be installed. Any conflicts
+# or missing dependencies will not be installed and will cause package removal.
+# This package removal may cause one or more services to fail.
+#
+# 5-install.2 aka 'alternate'
+# ---------------------------
+#
+# This is a new option which is similar to the default. However, it will not
+# allow removal of packages. This will maximise uptime of all services, but
+# conversely, may also allow services with unpatched security vulnerabilities
+# to continue running.
+EOF
+
+cat > action-available.d/5-install.1 << EOF
+autoclean -y
+
+# cron-apt updates as per historical and current TurnKey default
+# Please see 5-install.README for details
+
+dist-upgrade -y \
+    -o APT::Get::Show-Upgraded=true \
+    -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/security.sources.list \
+    -o Dir::Etc::sourceparts=nonexistent \
+    -o DPkg::Options::=--force-confdef \
+    -o DPkg::Options::=--force-confold
+EOF
+
+cat > action-available.d/5-install.2 << EOF
+autoclean -y
+
+# cron-apt will not allow removal of pkgs
+# Please see 5-install.README for details
+
+upgrade -y \
     -o APT::Get::Upgrade-Allow-New=true \
     -o APT::Get::Show-Upgraded=true \
     -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/security.sources.list \
@@ -21,3 +68,6 @@ upgrade -q -y \
     -o DPkg::Options::=--force-confdef \
     -o DPkg::Options::=--force-confold
 EOF
+
+# Enable original config as default
+ln -sf ../action-available.d/5-install.1 action.d/5-install
