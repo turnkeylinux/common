@@ -4,8 +4,8 @@ from pathlib import Path
 from typing import List, Tuple, Union
 
 FILE_PATH = Path('/etc/cron-apt/action.d/5-install')
-CONF_DEFAULT = Path('/etc/cron-apt/action-available.d/5-install.1')
-CONF_ALT = Path('/etc/cron-apt/action-available.d/5-install.2')
+CONF_DEFAULT = Path('/etc/cron-apt/action-available.d/5-install.default')
+CONF_ALT = Path('/etc/cron-apt/action-available.d/5-install.alt')
 
 doc_url = 'www.turnkeylinux.org/docs/auto-secupdates#issue-res'
 

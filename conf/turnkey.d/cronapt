@@ -23,16 +23,16 @@ cat > action.d/5-install.README << EOF
 # symlink /etc/cron-apt/config.d/5-install points to.
 #
 #
-# 5-install.1 aka 'default'
-# -------------------------
+# 5-install.default aka 'default'
+# -------------------------------
 #
 # This is the historic and default TurnKey cron-apt behaviour. Only packages
 # from the security.sources.list repositories will be installed. Any conflicts
 # or missing dependencies will not be installed and will cause package removal.
 # This package removal may cause one or more services to fail.
 #
-# 5-install.2 aka 'alternate'
-# ---------------------------
+# 5-install.alt aka 'alternate'
+# -----------------------------
 #
 # This is a new option which is similar to the default. However, it will not
 # allow removal of packages. This will maximise uptime of all services, but
@@ -40,12 +40,8 @@ cat > action.d/5-install.README << EOF
 # to continue running.
 EOF
 
-cat > action-available.d/5-install.1 << EOF
+cat > action-available.d/5-install.default << EOF
 autoclean -y
-
-# cron-apt updates as per historical and current TurnKey default
-# Please see 5-install.README for details
-
 dist-upgrade -y \
     -o APT::Get::Show-Upgraded=true \
     -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/security.sources.list \
@@ -54,12 +50,8 @@ dist-upgrade -y \
     -o DPkg::Options::=--force-confold
 EOF
 
-cat > action-available.d/5-install.2 << EOF
+cat > action-available.d/5-install.alt << EOF
 autoclean -y
-
-# cron-apt will not allow removal of pkgs
-# Please see 5-install.README for details
-
 upgrade -y \
     -o APT::Get::Upgrade-Allow-New=true \
     -o APT::Get::Show-Upgraded=true \
@@ -70,4 +62,4 @@ upgrade -y \
 EOF
 
 # Enable original config as default
-ln -sf ../action-available.d/5-install.1 action.d/5-install
+ln -sf ../action-available.d/5-install.default action.d/5-install
