@@ -15,13 +15,21 @@ EOF
 
 echo -n > action.d/3-download
 
-cat > action.d/5-install.README << EOF
-# These files named '5-install.XXX' relate to the '5-install' cronapt script
-# located in /etc/cron-apt/actions.d/
+cat > TurnKey_Linux_5-install.README << EOF
+# The files in actiona-available.d named '5-install.XXX' relate to the
+# '5-install' cronapt script located in /etc/cron-apt/actions.d/
 #
-# Which particular config.d file to be applied is determined by what the
+# Which particular action to be applied is determined by which file the
 # symlink /etc/cron-apt/config.d/5-install points to.
 #
+# To double check this; use this::
+#
+#       ls -l /etc/cron-apt/action.d/5-install
+#
+# E.g. here is the expected output under default condition (only important
+# part shown)::
+#
+#       /etc/cron-apt/action.d/5-install -> ../action-available.d/5-install.default
 #
 # 5-install.default aka 'default'
 # -------------------------------
