@@ -23,7 +23,7 @@ sed -i '/^.*\$tkl_database/ s|DRIVER|server|' $TKL_INDEX
 # Create root-like adminer MySQL user account
 service mysql start
 ADMIN_PWORD=$(mcookie)
-mysql -u root -e <<EOF
+mysql <<EOF
 USE mysql;
 GRANT ALL PRIVILEGES ON *.* to 'adminer'@localhost IDENTIFIED BY '$ADMIN_PWORD' WITH GRANT OPTION;
 EOF
