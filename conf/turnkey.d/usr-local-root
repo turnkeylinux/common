@@ -1,0 +1,10 @@
+#/bin/bash -e
+
+# Make default root:root ownership of /usr/local and 755 permissions.
+#
+# See TurnKey issue: https://github.com/turnkeylinux/tracker/issues/1440 &
+# Debian bug https://bugs.debian.org/299007.
+
+rm /usr/share/base-files/staff-group-for-usr-local
+chown -R root:root /usr/local
+find /usr/local -type d -exec chmod 755 \;
