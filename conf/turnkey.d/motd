@@ -9,6 +9,26 @@ cat >$MOTD_DIR/00-turnkey-sysinfo<<'EOF'
 exec /usr/share/turnkey-sysinfo/contrib/motd
 EOF
 
+cat >$MOTD_DIR/07-check-inithooks<<'EOF'
+#!/bin/sh
+
+if grep RUN_FIRSTBOOT /etc/default/inithooks | grep -i RUN_FIRSTBOOT=true; then
+    if ! grep -q boot=casper /proc/cmdline || grep -q boot=live /proc/cmdline; then
+        if [ -z "$TERM" ]; then
+            _term=linux
+        else
+            _term=$TERM
+        fi
+
+        bold=$(tput -T $_term bold)
+        normal=$(tput -T $_term sgr0)
+
+        echo "    ${bold}WARNING:${normal} Firstboot hooks will rerun on reboot!"
+        echo
+    fi
+fi
+EOF
+
 cat >$MOTD_DIR/08-turnkey-confconsole<<'EOF'
 #!/bin/sh
 
