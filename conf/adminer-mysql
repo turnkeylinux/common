@@ -25,7 +25,7 @@ service mysql start
 ADMIN_PWORD=$(mcookie)
 mysql <<EOF
 USE mysql;
-GRANT ALL ON *.* to 'adminer'@localhost IDENTIFIED BY '$ADMIN_PWORD' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* to 'adminer'@localhost IDENTIFIED BY '$ADMIN_PWORD' WITH GRANT OPTION;
 EOF
 service mysql stop
 
