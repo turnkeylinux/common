@@ -16,7 +16,7 @@ EOF
 echo -n > action.d/3-download
 
 cat > TurnKey_Linux_5-install.README << EOF
-# The files in actiona-available.d named '5-install.XXX' relate to the
+# The files in action-available.d named '5-install.XXX' relate to the
 # '5-install' cronapt script located in /etc/cron-apt/actions.d/
 #
 # Which particular action to be applied is determined by which file the
