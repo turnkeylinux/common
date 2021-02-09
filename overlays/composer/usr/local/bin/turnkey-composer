@@ -1,0 +1,14 @@
+#!/bin/bash -e
+
+[[ -z "$DEBUG" ]] || set -x
+
+COMPOSER_USER="${COMPOSER_USER:-www-data}"
+COMPOSER_USER_HOME=$(getent passwd $COMPOSER_USER | cut -d: -f6) || true
+
+if [[ -n "$COMPOSER_USER" ]] && [[ -n "$COMPOSER_USER_HOME"  ]]; then
+    COMPOSER_HOME="${COMPOSER_HOME:-$COMPOSER_USER_HOME/.composer}"
+fi
+
+COMMAND="composer $@"
+
+runuser $COMPOSER_USER -s /bin/bash -c "$COMMAND"
