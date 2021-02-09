@@ -84,6 +84,8 @@ bsd-mailx
 postfix
 webmin-postfix
 
+qemu-guest-agent        /* QEMU/KVM guest tools - as requested in #1356 */
+
 authbind                /* add-water (confconsole lets encrypt) depends */
 dehydrated              /* add-water (confconsole lets encrypt) recommends (actually depends) */
 python3-bottle          /* add-water (confconsole lets encrypt) depends */
