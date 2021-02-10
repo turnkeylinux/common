@@ -4,5 +4,4 @@ COMMON_OVERLAYS += apache adminer confconsole-lamp
 COMMON_CONF += apache-vhost apache-cgi adminer-apache adminer-mysql
 
 include $(FAB_PATH)/common/mk/turnkey/php.mk
-include $(FAB_PATH)/common/mk/turnkey/composer.mk
 include $(FAB_PATH)/common/mk/turnkey/mysql.mk
