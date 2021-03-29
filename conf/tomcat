@@ -44,12 +44,6 @@ if [ -e /etc/apache2/sites-available/jktomcat.conf ]; then
     # disable 16tomcat-sslcert - only neded for standalone tomcat
     chmod -x /usr/lib/inithooks/firstboot.d/16tomcat-sslcert
 
-    # Workaround Apache issue finding 'ajp13_worker'.
-    # Alternate workaround leveraging info from:
-    # https://stackoverflow.com/a/59584388/3363571
-    a2dismod jk
-    mods_available=/etc/apache2/mods-available
-    ln -s $mods_available/httpd-jk.conf $mods_available/jk.conf
     a2enmod jk
 fi
 
