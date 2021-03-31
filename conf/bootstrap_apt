@@ -28,7 +28,7 @@ mkdir -p $SOURCES_LIST $PREFS_LIST
 DEBIAN_PHP_V=7.3
 
 # keys are provided as ascii armoured for transparency; but secure apt requires
-# gpg keyrting files
+# gpg keyring files
 key_dir=/usr/share/keyrings
 repos=(main security testing)
 for repo in ${repos[@]}; do
@@ -69,15 +69,20 @@ deb http://deb.debian.org/debian $CODENAME-backports main
 EOF
 
 if [ -n "$PHP_VERSION" ]; then
+    # Use 3rd party sury.org repo
     # install support for https repo
     PKGS="lsb-release ca-certificates"
     apt update
     DEBIAN_FRONTEND=noninteractive apt install -y $PKGS
 
+    # download keyfile
+    keyfile=/usr/share/keyrings/php-sury.org.gpg
+    wget -O $keyfile https://packages.sury.org/php/apt.gpg
+
     cat > $SOURCES_LIST/php.list <<EOF
 # DEB.SURY.ORG repo for php
 
-deb [signed-by=/usr/share/keyrings/php-sury.org.gpg] https://packages.sury.org/php/ $CODENAME main
+deb [signed-by=$keyfile] https://packages.sury.org/php/ $CODENAME main
 EOF
 
     cat > /etc/apt/preferences.d/php-sury.pref <<EOF

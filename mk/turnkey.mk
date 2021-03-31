@@ -19,13 +19,6 @@ FAB_SHARE_PATH ?= /usr/share/fab
 
 APT_OVERLAY = fab-apply-overlay $(COMMON_OVERLAYS_PATH)/bootstrap_apt $O/bootstrap;
 
-ifdef PHP_VERSION
-    ifneq ($(PHP_VERSION),)
-        # only executed if PHP_VERSION is defined and is non-empty
-        APT_OVERLAY += fab-apply-overlay $(COMMON_OVERLAYS_PATH)/php-sury $O/bootstrap;
-    endif
-endif
-
 # below hacks allow inheritors to define their own hooks, which will be
 # prepended. warning: first line *needs* to be empty for this to work
 
