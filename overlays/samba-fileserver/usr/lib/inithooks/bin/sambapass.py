@@ -53,7 +53,7 @@ def main():
 
     subprocess.run(
         ['smbpasswd', '-a', '-s', username],
-        f'{password}\n{password}\n',
+        input=f'{password}\n{password}\n',
         text=True
     )
 
