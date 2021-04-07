@@ -40,9 +40,11 @@ while [[ "$#" -gt 0 ]]; do
                 warning "Now setting as '$COMMAND'."
                 shift
             fi;;
+        status)
+            fatal "Status currently not supported in a chroot.";;
         --*)
             IGNORED="$IGNORED $1"
-            warning "Swtich '$1' will be ignored."
+            warning "Switch '$1' will be ignored."
             shift;;
         *)
             if [[ -z "$SERVICE_NAME" ]]; then
