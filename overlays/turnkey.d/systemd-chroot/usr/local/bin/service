@@ -1,16 +1,15 @@
 #!/bin/bash
 
-if [[ $1 == "apache2" ]]; then
+if [[ $1 == "apache2"* ]]; then
     if [[ $2 == "reload" ]]; then
         APACHE_STARTED_BY_SYSTEMD=y /usr/sbin/apache2ctl restart
     else
         APACHE_STARTED_BY_SYSTEMD=y /usr/sbin/apache2ctl $2
     fi
-elif [[ $1 == "mysql" ]]; then
+elif [[ $1 == "mysql"* ]] || [[ $1 == "mariadb"* ]]; then
     /etc/init.d/mysql $2
-elif [[ $1 == "zoneminder.service" ]]; then
+elif [[ $1 == "zoneminder"* ]]; then
     echo "ignoring zoneminder ..."
 else
     /usr/sbin/service $@
 fi
-
