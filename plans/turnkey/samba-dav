@@ -26,3 +26,5 @@ webmin-apache
 libapache2-mod-authnz-external
 
 build-essential
+
+webmin-exports
