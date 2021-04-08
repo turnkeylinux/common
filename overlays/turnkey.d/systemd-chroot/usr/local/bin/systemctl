@@ -26,12 +26,21 @@ _start_stop() {
     fi
 }
 
-[[ "$#" -ge 2 ]] || fatal "At least 2 arguments required (given '$@')."
+_is_running() {
+    pid=$(pgrep $1)
+    if [[ -n "$pid" ]]; then
+        echo 'true'
+    else
+        echo 'false'
+    fi
+}
 
-unset COMMAND SERVICE_NAME IGNORED
+[[ "$#" -gt 1 ]] || fatal "At least 1 argument required (none given)."
+
+unset COMMAND SERVICE_NAME QUIET IGNORED
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        start|stop|restart|reload|enable|disable|mask|unmask|is-failed|is-active)
+        start|stop|restart|reload|enable|disable|mask|unmask|is-failed|is-active|daemon-reload)
             if [[ -z "$COMMAND" ]]; then
                 COMMAND=$1
                 shift
@@ -42,13 +51,17 @@ while [[ "$#" -gt 0 ]]; do
             fi;;
         status)
             fatal "Status currently not supported in a chroot.";;
+        --quiet)
+            warning "--quiet is only honored with commands is-active|is-failed."
+            QUIET=true
+            shift;;
         --*)
             IGNORED="$IGNORED $1"
             warning "Switch '$1' will be ignored."
             shift;;
         *)
             if [[ -z "$SERVICE_NAME" ]]; then
-                SERVICE_NAME=$1
+                SERVICE_NAME=${1%.service} # remove trailing '.service' if included
                 shift
             else
                 warning "Already had service name set ('$SERVICE_NAME')."
@@ -58,32 +71,48 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-if [[ -n "$COMMAND" ]] && [[ -n "$SERVICE_NAME" ]]; then
+if [[ -n "$COMMAND" ]]; then
+
+    if [[ "$SERVICE_NAME" == "ghost_localhost" ]] \
+            && [[ "$COMMAND" == 'enable' ]]; then
+        SERVICE_NAME=ghost
+    fi
+
+    if [[ "$COMMAND" != "daemon-reload" ]] && [[ -z "$SERVICE_NAME" ]]; then
+        fatal "Service name required with $COMMAND"
+    fi
+
     case $COMMAND in
-        start)
-            _start_stop start $SERVICE_NAME;;
-        stop)
-            _start_stop stop $SERVICE_NAME;;
+        start|stop)
+            _start_stop $COMMAND $SERVICE_NAME;;
 
         restart|reload)
             _start_stop stop $SERVICE_NAME
             _start_stop start $SERVICE_NAME;;
 
         enable|disable)
-            /usr/bin/systemctl $COMMAND $SERVICE_NAME;;
+            /usr/bin/systemctl $COMMAND $SERVICE_NAME || exit_code=$?
+            exit $exit_code;;
 
         mask|unmask)
-            /usr/bin/systemctl $COMMAND $SERVICE_NAME;;
+            /usr/bin/systemctl $COMMAND $SERVICE_NAME || exit_code=$?
+            exit $exit_code;;
 
-        is-failed)
-            warning "Call to 'is-failed' always returns FALSE (exit code 1)."
-            echo false >2
-            exit 1;;
-
-        is-active)
-            warning "Call to 'is-active' always returns TRUE (exit code 0)."
-            echo true >2
+        daemon-reload)
+            warning "Ignoring daemon-reload, init scripts not cached."
             exit 0;;
+
+        is-failed|is-active)
+            running=$(_is_running $SERVICE_NAME)
+            if $running; then
+                [[ -n "$QUIET" ]] || echo "active"
+                [[ "$COMMAND" != "is-failed" ]] || exit 0
+                exit 1
+            else
+                [[ -n "$QUIET" ]] || echo "inactive"
+                [[ "$COMMAND" != "is-failed" ]] || exit 1
+                exit 0
+            fi;;
     esac
 else
     fatal "Command ('$COMMAND') and/or Service name ('$SERVICE_NAME') not set or not found."
