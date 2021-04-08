@@ -11,9 +11,9 @@ EOF
 # TurnKey is now providing a shellinabox systemd service file.
 # First disable the current service (which is generated from the init.d script
 # via systemd-sysv integration):
-systemctl disable shellinabox
+/lib/systemd/systemd-sysv-install disable shellinabox || true
 # Then explictly enable the TurnKey provided service file:
-systemctl enable /usr/lib/systemd/system/shellinabox.service
+systemctl enable shellinabox.service || true
 
 # Stunnel TLS/SSL support for shellinabox (aka Webshell) is now configured
 # via a stunnel.conf file - see shellinabox and/or stunnel common overlays for
