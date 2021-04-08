@@ -10,6 +10,13 @@ elif [[ $1 == "mysql"* ]] || [[ $1 == "mariadb"* ]]; then
     /etc/init.d/mysql $2
 elif [[ $1 == "zoneminder"* ]]; then
     echo "ignoring zoneminder ..."
+elif [[ $1 == "odoo"* ]]; then
+    if [[ $2 == "stop" ]] || [[ $2 == "restart" ]]; then
+        kill -9 $(pgrep odoo)
+    fi
+    if [[ $2 == "start" ]] || [[ $2 == "restart" ]]; then
+        runuser odoo -s /bin/bash -c "/usr/bin/odoo --config /etc/odoo/odoo.conf --logfile /var/log/odoo/odoo-server.log &"
+    fi
 else
     /usr/sbin/service $@
 fi
