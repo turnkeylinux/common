@@ -3,7 +3,7 @@
 SRC=/usr/local/src
 WEBROOT=/var/www/webdavcgi
 GIT_SOURCE=https://github.com/DanRohde/webdavcgi.git
-TEST_COMMIT=875e44f
+TEST_ID=875e44f
 
 # Note: latest release tag is v1.1.2 - 5 Oct 2017; however, commits since then
 # appear to be bugfixes and improvements and testing suggests all is well in
