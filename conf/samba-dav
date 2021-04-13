@@ -3,7 +3,7 @@
 SRC=/usr/local/src
 WEBROOT=/var/www/webdavcgi
 GIT_SOURCE=https://github.com/DanRohde/webdavcgi.git
-TEST_COMMIT=875e44f
+TEST_ID=875e44f
 
 # Note: latest release tag is v1.1.2 - 5 Oct 2017; however, commits since then
 # appear to be bugfixes and improvements and testing suggests all is well in
@@ -28,7 +28,14 @@ chmod -R a+r $WEBROOT
 
 echo yes | perl -MCPAN -e 'install IO::Compress::Brotli'
 
-apt purge -y build-essential
+# build custom Filesys::SmbClient module from Dan Rohde (WebDAV-CGI dev)
+# fix for https://github.com/turnkeylinux/tracker/issues/1597
+cd $WEBROOT/helper/FilesysSmbClient
+perl Makefile.PL
+make
+make install
+
+apt purge -y build-essential libsmbclient-dev
 apt autoremove -y
 
 a2enmod rewrite
