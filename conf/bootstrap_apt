@@ -28,7 +28,7 @@ mkdir -p $SOURCES_LIST $PREFS_LIST
 DEBIAN_PHP_V=7.3
 
 # keys are provided as ascii armoured for transparency; but secure apt requires
-# gpg keyrting files
+# gpg keyring files
 key_dir=/usr/share/keyrings
 repos=(main security testing)
 for repo in ${repos[@]}; do
@@ -69,15 +69,20 @@ deb http://deb.debian.org/debian $CODENAME-backports main
 EOF
 
 if [ -n "$PHP_VERSION" ]; then
+    # Use 3rd party sury.org repo
     # install support for https repo
     PKGS="lsb-release ca-certificates"
-    apt update
-    DEBIAN_FRONTEND=noninteractive apt install -y $PKGS
+    apt-get update
+    DEBIAN_FRONTEND=noninteractive apt-get install -y $PKGS
+
+    # download keyfile
+    keyfile=/usr/share/keyrings/php-sury.org.gpg
+    wget -O $keyfile https://packages.sury.org/php/apt.gpg
 
     cat > $SOURCES_LIST/php.list <<EOF
 # DEB.SURY.ORG repo for php
 
-deb [signed-by=/usr/share/keyrings/php-sury.org.gpg] https://packages.sury.org/php/ $CODENAME main
+deb [signed-by=$keyfile] https://packages.sury.org/php/ $CODENAME main
 EOF
 
     cat > /etc/apt/preferences.d/php-sury.pref <<EOF
@@ -89,7 +94,7 @@ Package: php${PHP_VERSION}-*
 Pin: origin packages.sury.org
 Pin-Priority: 550
 
-Package: php-common
+Package: libapache2-mod-php${PHP_VERSION}
 Pin: origin packages.sury.org
 Pin-Priority: 550
 
@@ -101,21 +106,6 @@ Package: php-imagick
 Pin: origin packages.sury.org
 Pin-Priority: 550
 
-Package: php-redis
-Pin: origin packages.sury.org
-Pin-Priority: 550
-
-Package: php-igbinary
-Pin: origin packages.sury.org
-Pin-Priority: 550
-
-Package: libapache2-mod-php${PHP_VERSION}
-Pin: origin packages.sury.org
-Pin-Priority: 550
-EOF
-    if [[ "$(awk 'BEGIN{ print '${DEBIAN_PHP_V}'<'${PHP_VERSION}' }')" == '1' ]]; then
-        cat >> /etc/apt/preferences.d/php-sury.pref <<EOF
-
 Package: libpcre3
 Pin: origin packages.sury.org
 Pin-Priority: 550
@@ -123,18 +113,60 @@ Pin-Priority: 550
 Package: libzip4
 Pin: origin packages.sury.org
 Pin-Priority: 550
-EOF
-    fi
 
+# only enable below if using latest php version
+#Package: php-common
+#Pin: origin packages.sury.org
+#Pin-Priority: 550
+
+#Package: php-imagick
+#Pin: origin packages.sury.org
+#Pin-Priority: 550
+
+#Package: php-redis
+#Pin: origin packages.sury.org
+#Pin-Priority: 550
+
+#Package: php-igbinary
+#Pin: origin packages.sury.org
+#Pin-Priority: 550
+
+EOF
+
+    # create php-mysql package that depends on PHP_VERSION - this allows adminer to install cleanly
+    PKG=php-mysql
+    mkdir -p /tmp/$PKG/DEBIAN
+    PKG_V="2:${PHP_VERSION}"
+    cd  /tmp
+    cat > /tmp/$PKG/DEBIAN/control <<EOF
+Package: php-mysql
+Version: $PKG_V
+Section: custom
+Priority: optional
+Architecture: all
+Essential: no
+Depends: php${PHP_VERSION}-mysql
+Installed-Size: 1024
+Maintainer: Jeremy Davis <jeremy@turnkeylinux.org>
+Description: Dummy Package to allow Adminer to install cleanly without Debian php-mysql package.
+EOF
+    apt-get update
+    dpkg-deb --build ${PKG}
+    DEBIAN_FRONTEND=noninteractive apt-get install ./${PKG}.deb -y --allow-downgrades --autoremove
+    apt-mark hold php-mysql="${PKG_V}"
+    cd -
+    rm -rf /tmp/${PKG}*
 fi
 
 if [ "$NONFREE" ]; then
     sed -i "/non-free/ s|^#||" $SOURCES_LIST/sources.list
     sed -i "/non-free/ s|^#||" $SOURCES_LIST/security.sources.list
 fi
+
 if [ "$TKL_TESTING" ]; then
     mv $TKL_TESTING_LIST.disabled $TKL_TESTING_LIST
 fi
+
 if [ "$BACKPORTS" ]; then
     mv $DEB_BACKPORT_LIST.disabled $DEB_BACKPORT_LIST
 fi
