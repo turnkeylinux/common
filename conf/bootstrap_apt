@@ -70,8 +70,8 @@ EOF
 
 if [ -n "$PHP_VERSION" ]; then
     # Use 3rd party sury.org repo
-    # install support for https repo
-    PKGS="lsb-release ca-certificates"
+    # install support for https repo & wget (to download gpg key)
+    PKGS="lsb-release ca-certificates wget"
     apt-get update
     DEBIAN_FRONTEND=noninteractive apt-get install -y $PKGS
 
