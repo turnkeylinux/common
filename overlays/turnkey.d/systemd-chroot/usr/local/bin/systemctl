@@ -35,7 +35,11 @@ _is_running() {
     fi
 }
 
-[[ "$#" -gt 1 ]] || fatal "At least 1 argument required (none given)."
+if [[ "$#" -lt 1 ]]; then
+    # XXX hack for gitlab - respond to 'systemctl | grep "\-\.mount"'
+    echo "-.mount                                                                                     loaded active mounted   Root Mount"
+    exit 0
+fi
 
 unset COMMAND SERVICE_NAME QUIET IGNORED
 while [[ "$#" -gt 0 ]]; do
