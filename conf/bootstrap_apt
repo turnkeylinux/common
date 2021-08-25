@@ -72,7 +72,7 @@ if [ -n "$PHP_VERSION" ]; then
     # Use 3rd party sury.org repo
     # install support for https repo & wget (to download gpg key)
     PKGS="lsb-release ca-certificates wget"
-    apt-get update
+    apt-get update --allow-releaseinfo-change
     DEBIAN_FRONTEND=noninteractive apt-get install -y $PKGS
 
     # download keyfile
@@ -150,7 +150,7 @@ Installed-Size: 1024
 Maintainer: Jeremy Davis <jeremy@turnkeylinux.org>
 Description: Dummy Package to allow Adminer to install cleanly without Debian php-mysql package.
 EOF
-    apt-get update
+    apt-get update --allow-releaseinfo-change
     dpkg-deb --build ${PKG}
     DEBIAN_FRONTEND=noninteractive apt-get install ./${PKG}.deb -y --allow-downgrades --autoremove
     apt-mark hold php-mysql="${PKG_V}"
