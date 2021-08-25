@@ -150,7 +150,7 @@ Installed-Size: 1024
 Maintainer: Jeremy Davis <jeremy@turnkeylinux.org>
 Description: Dummy Package to allow Adminer to install cleanly without Debian php-mysql package.
 EOF
-    apt-get update --allow-releaseinfo-change
+    apt-get update
     dpkg-deb --build ${PKG}
     DEBIAN_FRONTEND=noninteractive apt-get install ./${PKG}.deb -y --allow-downgrades --autoremove
     apt-mark hold php-mysql="${PKG_V}"
@@ -170,3 +170,7 @@ fi
 if [ "$BACKPORTS" ]; then
     mv $DEB_BACKPORT_LIST.disabled $DEB_BACKPORT_LIST
 fi
+
+# This hack ensures that any changes to 'Suite' and 'Version' changes are
+# accepted and don't interupt install
+apt-get update --allow-releaseinfo-change
