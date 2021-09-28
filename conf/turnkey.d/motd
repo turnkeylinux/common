@@ -12,7 +12,7 @@ EOF
 cat >$MOTD_DIR/07-check-inithooks<<'EOF'
 #!/bin/sh
 
-if grep RUN_FIRSTBOOT /etc/default/inithooks | grep -i RUN_FIRSTBOOT=true; then
+if grep RUN_FIRSTBOOT /etc/default/inithooks | grep -iq RUN_FIRSTBOOT=true; then
     if ! grep -q boot=casper /proc/cmdline || grep -q boot=live /proc/cmdline; then
         if [ -z "$TERM" ]; then
             _term=linux
