@@ -55,7 +55,7 @@ while [[ "$#" -gt 0 ]]; do
             fi;;
         status)
             fatal "Status currently not supported in a chroot.";;
-        --quiet)
+        -q|--quiet)
             warning "--quiet is only honored with commands is-active|is-failed."
             QUIET=true
             shift;;
