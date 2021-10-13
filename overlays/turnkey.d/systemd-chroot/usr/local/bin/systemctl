@@ -56,7 +56,6 @@ while [[ "$#" -gt 0 ]]; do
         status)
             fatal "Status currently not supported in a chroot.";;
         -q|--quiet)
-            warning "--quiet is only honored with commands is-active|is-failed."
             QUIET=true
             shift;;
         --*)
@@ -80,6 +79,12 @@ if [[ -n "$COMMAND" ]]; then
     if [[ "$SERVICE_NAME" == "ghost_localhost" ]] \
             && [[ "$COMMAND" == 'enable' ]]; then
         SERVICE_NAME=ghost
+    fi
+
+    if [[ "$QUIET" == 'true' ]] \
+        && [[ "$COMMAND" != "is-failed" ]] \
+        && [[ "$COMMAND" != "is-active" ]]; then
+            warning "--quiet is only honored with commands is-active|is-failed."
     fi
 
     if [[ "$COMMAND" != "daemon-reload" ]] && [[ -z "$SERVICE_NAME" ]]; then
@@ -108,13 +113,13 @@ if [[ -n "$COMMAND" ]]; then
 
         is-failed|is-active)
             running=$(_is_running $SERVICE_NAME)
-            if $running; then
-                [[ -n "$QUIET" ]] || echo "active"
-                [[ "$COMMAND" != "is-failed" ]] || exit 0
+            if [[ "$running" == 'true' ]]; then
+                [[ -n "$QUIET" ]] || echo "active/running"
+                [[ "$COMMAND" == "is-active" ]] || exit 0
                 exit 1
             else
-                [[ -n "$QUIET" ]] || echo "inactive"
-                [[ "$COMMAND" != "is-failed" ]] || exit 1
+                [[ -n "$QUIET" ]] || echo "inactive/failed"
+                [[ "$COMMAND" == "is-failed" ]] || exit 1
                 exit 0
             fi;;
     esac
