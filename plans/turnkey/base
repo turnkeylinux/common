@@ -74,6 +74,7 @@ webmin-syslog
 
 iptables
 webmin-firewall
+webmin-firewall6
 fail2ban
 webmin-fail2ban
 
