@@ -27,7 +27,7 @@ fatal() {
 # Apache2
 CONF="/etc/apache2/mods-available/ssl.conf"
 if [ -f "$CONF" ]; then
-    sed -i "s|^\(\s*SSLCipherSuite\s\+\).*$|\1${SECURE_CIPHER_LIST}|g" $CONF    
+    sed -i "s|^\(\s*SSLCipherSuite\s\+\).*$|\1${SECURE_CIPHER_LIST}|g" $CONF
     a2enmod ssl
     a2enconf security
 fi
