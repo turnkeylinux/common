@@ -1,11 +1,14 @@
-#!/bin/sh -e
+#!/bin/sh -ex
 
-# enable fastcgi modules
-lighty-enable-mod fastcgi || true
-lighty-enable-mod fastcgi-php || true
+# Conf script to configure LigHTTPd webserver
+#
+# To use with php-fpm, ensure that conf/php-fpm script is also run
 
-# minimize fastcgi children
-sed -i '/max-procs/ s/=>.*/=> 1,/; /PHP_FCGI_CHILDREN/ s/=>.*/=> "1",/g' /etc/lighttpd/conf-available/*fastcgi*
+# Remove default webroot
+rm -r /var/www/html
+
+# Disable default unconfigured site
+lighty-disable-mod unconfigured
 
 # load mod_setenv
-sed -i '/server.modules = (/a \\t"mod_setenv",' /etc/lighttpd/lighttpd.conf
+sed -i '\|server.modules = (|a \\t"mod_setenv",' /etc/lighttpd/lighttpd.conf
