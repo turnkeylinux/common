@@ -1,11 +1,13 @@
 #!/bin/bash -e
 
+PHP_V=$(php --version | grep ^PHP | sed "s|^PHP \([7-9]\.[0-9]\).*|\1|")
+
 if which a2enmod > /dev/null; then
-    PHP_V=$(sed "s|^PHP \([7-9]\.[0-9]\).*|\1|")
     a2enconf php${PHP_V}-fpm
     a2dismod php${PHP_V}
     a2enmod proxy_fcgi
 elif which lighttpd > /dev/null; then
+    sed -i "s|php-fpm.sock|php${PHP_V}-fpm.sock|g" /etc/lighttpd/conf-available/*php-fpm*
     lighty-enable-mod fastcgi-php-fpm
 elif which nginx > /dev/null; then
     echo "[$0] WARNING - NOT DONE YET - Need to enable PHP-FPM for Nginx"
