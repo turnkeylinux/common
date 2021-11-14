@@ -24,6 +24,12 @@ fatal() {
     exit 1
 }
 
+# Postfix
+CONF=/etc/postfix/main.cf
+if [ -f "$CONF" ]; then
+    sed -i "/tls_medium_cipherlist/ s|ZZ_SSL_CIPHERS|$SECURE_CIPHER_LIST|" $CONF
+fi
+
 # Apache2
 CONF="/etc/apache2/mods-available/ssl.conf"
 if [ -f "$CONF" ]; then
