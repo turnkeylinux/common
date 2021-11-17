@@ -39,8 +39,9 @@ if [ -f "$CONF" ]; then
 fi
 
 # Nginx
-CONF="/etc/nginx/include/ssl"
+CONF="/etc/nginx/snippets/ssl.conf"
 if [ -f "$CONF" ]; then
+    # SSL enabled by default (see overlay)
     sed -i "s|ssl_ciphers '.*|ssl_ciphers '${SECURE_CIPHER_LIST}';|" $CONF
 fi
 

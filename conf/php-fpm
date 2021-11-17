@@ -10,5 +10,11 @@ elif which lighttpd > /dev/null; then
     sed -i "s|php-fpm.sock|php${PHP_V}-fpm.sock|g" /etc/lighttpd/conf-available/*php-fpm*
     lighty-enable-mod fastcgi-php-fpm
 elif which nginx > /dev/null; then
-    echo "[$0] WARNING - NOT DONE YET - Need to enable PHP-FPM for Nginx"
+    sed -i "s|php-fpm.sock|php${PHP_V}-fpm.sock|g" /etc/nginx/snippets/php-fpm.conf
+    # enabled for tkl-default site in overlay
+    DEFAULT=/etc/nginx/sites-available/tkl-default
+    if [[ -f "$DEFAULT" ]]; then
+        sed -i "/index index.html index.htm;/ s|;| index.php;|" $DEFAULT
+        sed -i "/include snippets/php-fpm.conf;/ s|# ||" $DEFAULT
+    fi
 fi
