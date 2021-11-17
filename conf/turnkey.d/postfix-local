@@ -10,14 +10,20 @@ postconf -e myhostname=$HOSTNAME
 
 # harden postfix
 postconf -e smtpd_banner='$myhostname ESMTP'
-postconf -e smtpd_tls_auth_only=yes
+
+# force TLS connections only - might break sending of mail so leaving disabled
+#postconf -e smtpd_tls_auth_only=yes
+
 # by default leave the snakeoil cert/key in place
 #postconf -e smtpd_tls_cert_file=/etc/ssl/private/cert.pem
 #postconf -e smtpd_tls_key_file=/etc/ssl/private/cert.key
+
+# despite name, accepts more bits (i.e. > 1024 bits)
 postconf -e smtpd_tls_dh1024_param_file=/etc/ssl/private/dhparams.pem
 postconf -e smtpd_tls_mandatory_protocols='!SSLv2, !SSLv3, !TLSv1, !TLSv1.1'
 postconf -e smtpd_tls_protocols='!SSLv2, !SSLv3, !TLSv1, !TLSv1.1'
 postconf -e smtpd_tls_mandatory_ciphers=medium
+
 # ciphers set by common/conf/turnkey.d/zz-ssl-ciphers
 postconf -e tls_medium_cipherlist="ZZ_SSL_CIPHERS"
 postconf -e tls_preempt_cipherlist=no
