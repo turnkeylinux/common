@@ -1,3 +1,6 @@
+# rm apt-cacher-ng conf
+/etc/apt/apt.conf.d/00apt-cacher-ng
+
 # rm composer auth token
 /root/.composer/auth.json
 /var/www/.composer/auth.json
