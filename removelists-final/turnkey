@@ -1,5 +1,5 @@
-# rm apt-cacher-ng conf
-/etc/apt/apt.conf.d/00apt-cacher-ng
+# rm apt proxy conf
+/etc/apt/apt.conf.d/01proxy
 
 # rm composer auth token
 /root/.composer/auth.json

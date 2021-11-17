@@ -24,10 +24,10 @@ PREFS_LIST=/etc/apt/preferences.d
 CONF_DIR=/etc/apt/apt.conf.d
 mkdir -p $SOURCES_LIST $PREFS_LIST $CONF_DIR
 
-# use local TKLDev apt-cacher-ng (port 3140)
-cat > /etc/apt/apt.conf.d/00apt-cacher-ng <<EOF
-Acquire::http::proxy "http://127.0.0.1:3140";
-Acquire::https::proxy "http://127.0.0.1:3140";
+# use local TKLDev squid caching proxy (port 3128)
+cat > /etc/apt/apt.conf.d/01proxy <<EOF
+Acquire::http::proxy "http://127.0.0.1:3128";
+Acquire::https::proxy "http://127.0.0.1:3128";
 EOF
 
 # Default Debian PHP version. This should return the current:
