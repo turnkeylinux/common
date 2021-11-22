@@ -25,10 +25,15 @@ CONF_DIR=/etc/apt/apt.conf.d
 mkdir -p $SOURCES_LIST $PREFS_LIST $CONF_DIR
 
 # use local TKLDev squid caching proxy (port 3128)
-cat > /etc/apt/apt.conf.d/01proxy <<EOF
+cat > $CONF_DIR/01proxy <<EOF
 Acquire::http::proxy "http://127.0.0.1:3128";
 Acquire::https::proxy "http://127.0.0.1:3128";
 EOF
+
+# update CA certs (custom cacher cert should already have been added)
+[[ -e /usr/local/share/ca-certificates/squid_proxy.crt ]] \
+    || fatal "Squid CA cert not found."
+update-ca-certificates
 
 # Default Debian PHP version. This should return the current:
 #   apt-cache policy php | sed -n "\|Candidate:|s|.*:\([0-9]\.[0-9]*\)+.*|\1|p"
