@@ -31,7 +31,7 @@ Acquire::https::proxy "http://127.0.0.1:3128";
 EOF
 
 # update CA certs (custom cacher cert should already have been added)
-[[ -e /usr/local/share/ca-certificates/squid_proxy.crt ]] \
+[[ -e /usr/local/share/ca-certificates/squid_proxyCA.crt ]] \
     || fatal "Squid CA cert not found."
 update-ca-certificates
 
