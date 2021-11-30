@@ -7,7 +7,14 @@ if [[ $1 == "apache2"* ]]; then
         APACHE_STARTED_BY_SYSTEMD=y /usr/sbin/apache2ctl $2
     fi
 elif [[ $1 == "mysql"* ]] || [[ $1 == "mariadb"* ]]; then
-    /etc/init.d/mysql $2
+    if [[ -f /etc/init.d/mariadb ]]; then
+        /etc/init.d/mariadb $2
+    elif [[ -f /etc/init.d/mysql ]]; then
+        /etc/init.d/mysql $2
+    else
+        echo "No mariadb or mysql init script found" >&2
+        exit 1
+    fi
 elif [[ $1 == "zoneminder"* ]]; then
     echo "ignoring zoneminder ..."
 elif [[ $1 == "odoo"* ]]; then

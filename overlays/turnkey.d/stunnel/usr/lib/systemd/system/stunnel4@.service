@@ -13,4 +13,4 @@ Restart=always
 PrivateTmp=yes
 
 [Install]
-WantedBy=multi-user.target Alias=stunnel4.service
+WantedBy=multi-user.target

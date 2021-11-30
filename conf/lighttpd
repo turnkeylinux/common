@@ -1,0 +1,14 @@
+#!/bin/sh -ex
+
+# Conf script to configure LigHTTPd webserver
+#
+# To use LigHTTPd with php-fpm, ensure to include conf/php-fpm script
+
+# Remove contents of default webroot
+rm -r /var/www/html/*
+
+# Disable default unconfigured site
+lighty-disable-mod unconfigured
+
+# Load mod_setenv
+lighty-enable-mod setenv || true

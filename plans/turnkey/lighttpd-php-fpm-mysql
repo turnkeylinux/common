@@ -1,0 +1,13 @@
+#include <turnkey/mysql>
+
+lighttpd
+lighttpd-mod-openssl
+
+php-fpm
+php-gd
+php-cli
+php-curl
+php-mysql
+webmin-phpini
+
+adminer
