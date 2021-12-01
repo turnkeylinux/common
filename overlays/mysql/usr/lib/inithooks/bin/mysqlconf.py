@@ -21,7 +21,7 @@ import getopt
 
 import signal
 
-from dialog_wrapper import Dialog
+from libinithooks.dialog_wrapper import Dialog
 from os import system
 import pymysql
 import pymysql.cursors
