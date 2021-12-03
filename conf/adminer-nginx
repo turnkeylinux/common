@@ -1,8 +1,8 @@
 #!/bin/sh -e
 
 # Adminer Nginx Confg Script
+# Note that this requires conf/php-fpm
 
 # Link conf file to available-sites, and enable it
-ln -s /etc/adminer/nginx.conf /etc/nginx/sites-available/50-adminer.conf
-ln -s /etc/nginx/sites-available/50-adminer.conf /etc/nginx/sites-enabled/50-adminer.conf
-
+ln -s /etc/adminer/nginx.conf /etc/nginx/sites-available/adminer
+ln -s /etc/nginx/sites-available/adminer /etc/nginx/sites-enabled/adminer

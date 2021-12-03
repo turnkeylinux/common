@@ -16,6 +16,10 @@ chmod +x $BIN/mysqltuner
 dl $URL/basic_passwords.txt $BIN
 dl $URL/vulnerabilities.csv $BIN
 
+# As of Debian Buster, there is no longer a /etc/init.d/mysql script, so let's
+# link the mariadb one.
+ln -s /etc/init.d/mariadb /etc/init.d/mysql
+
 # secure mysql installation
 service mysql start
 mysql <<EOF

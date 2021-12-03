@@ -23,7 +23,6 @@ resolvconf              /* confconsole recommends */
 jitterentropy-rngd
 
 tklbam                  /* still depends on py2 for now */
-gnupg                   /* tklbam depends - new for Stretch */
 
 hubdns
 inithooks
@@ -65,6 +64,7 @@ webmin-lvm
 webmin-tklbam
 webmin-updown
 webmin-filemin
+fdisk                   /* webmin-fdisk recommends */
 unzip                   /* webmin-updown recommends */
 libfile-mimeinfo-perl   /* webmin-filemin requires to extract archives */
 
@@ -74,6 +74,7 @@ webmin-syslog
 
 iptables
 webmin-firewall
+webmin-firewall6
 fail2ban
 webmin-fail2ban
 

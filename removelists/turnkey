@@ -1,7 +1,5 @@
 /etc/resolvconf/resolv.conf.d/original
 
-/etc/apt/apt.conf.d/01proxy
-
 /etc/apt/trusted.gpg~
 /etc/apt/trusted.gpg.d/debian.gpg~
 /etc/apt/trusted.gpg.d/turnkey.gpg~

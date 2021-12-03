@@ -65,7 +65,7 @@ WILD=false
 OVERWRITE=false
 EXPIRY=10y
 # Unless set via env var; set default Diffie-Hellman bit size as 1024
-DH_BITS=${DH_BITS:-1024}
+DH_BITS=${DH_BITS:-2048}
 DH_BITS_REC=2048 # minimum recommended DH bit size
 GEN_DH=false
 DH_ONLY=false
@@ -146,9 +146,11 @@ $(usage)
       -b, --dh-bits DH_BITS   Generate a Diffie-Hellman parameters file; bit
                                 size: DH_BITS (can also be set via env var)
                                 /etc/ssl/private/dhparams.pem
+                                valid options: 1024 | 2048 | 4096
                                 default: $DH_BITS
                                 recommended: $DH_BITS_REC
-                                Note that 4096 is best but may take hours
+                                Note that as of v1.4 an audited dh_params is
+                                provided (as per RFC7919)
       -p, --dh-params-only    Generate a Diffie-Hellman parameters file only
                                 (Also rebuilds default cert.pem file)
       -r, --csr               Generate a certificate signing request
@@ -257,6 +259,16 @@ done
 if [[ $DH_ONLY == true ]]; then
     warning "--dh-params-only switch used, no cert or key files will be generated."
 fi
+if [[ $DH_BITS -ne 1024 ]] && [[ $DH_BITS -ne 2048 ]] \
+                                    && [[ $DH_BITS -ne 4096 ]]; then
+    error_exit "DH_BITS must be one of 1024, 2048 or 4096."
+elif [[ $DH_BITS -eq 1024 ]]; then
+    msg="DH_BITS of 1024 is not recommended and may leave https connections"
+    msg="$msg with your webserver vulnerable to attack. Unless you need to"
+    msg="$msg support really old clients (e.g. Windows XP, Internet Explorer"
+    msg="$msg <11, etc) use 2048 or 4096 bits."
+    warning "$msg"
+fi
 
 expiry_days $EXPIRY
 
@@ -325,23 +337,14 @@ fi
 
 # gen dhparams.
 if [[ "$GEN_DH" == "true" ]]; then
-    if [[ $DH_BITS -le 1050 ]]; then
-        _time="a while"
-    elif [[ $DH_BITS -le 3000 ]]; then
-        _time="a long time"
-    else
-        _time="hours, possibly days"
-    fi
-    info "Generating Diffie-Hellman parameters file - this may take $_time..."
-    if ! openssl dhparam -out $DHP $DH_BITS > $TMPOUT 2>&1; then
+    msg="Generating Diffie-Hellman parameters file - using predifined"
+    msg="$msg parameters as per RFC7919."
+    info "$msg"
+    if ! openssl genpkey -genparam -algorithm DH \
+                -pkeyopt dh_param:ffdhe$DH_BITS -out $DHP \
+                -outform PEM > $TMPOUT 2>&1; then
         msg="Diffie-Hellman parameter generation failed.  OpenSSL output: "
         error_exit "$msg" $TMPOUT
-    elif [[ $DH_BITS -lt 2048 ]]; then
-        msg="Diffie-Hellman parameter bit size is $DH_BITS. Recommended
-             minimum is $DH_BITS_REC; 4096 is best, but may take hours to
-             generate."
-        warning $msg
-        info "Recommended to rerun with '--dh-bits $DH_BITS_REC' (or larger)."
     fi
 fi
 

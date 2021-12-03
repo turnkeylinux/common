@@ -21,11 +21,23 @@ fatal() {
 
 SOURCES_LIST=/etc/apt/sources.list.d
 PREFS_LIST=/etc/apt/preferences.d
-mkdir -p $SOURCES_LIST $PREFS_LIST
+CONF_DIR=/etc/apt/apt.conf.d
+mkdir -p $SOURCES_LIST $PREFS_LIST $CONF_DIR
+
+# use local TKLDev squid caching proxy (port 3128)
+cat > $CONF_DIR/01proxy <<EOF
+Acquire::http::proxy "http://127.0.0.1:3128";
+Acquire::https::proxy "http://127.0.0.1:3128";
+EOF
+
+# update CA certs (custom cacher cert should already have been added)
+[[ -e /usr/local/share/ca-certificates/squid_proxyCA.crt ]] \
+    || fatal "Squid CA cert not found."
+update-ca-certificates
 
 # Default Debian PHP version. This should return the current:
 #   apt-cache policy php | sed -n "\|Candidate:|s|.*:\([0-9]\.[0-9]*\)+.*|\1|p"
-DEBIAN_PHP_V=7.3
+DEBIAN_PHP_V=7.4
 
 # keys are provided as ascii armoured for transparency; but secure apt requires
 # gpg keyring files
@@ -42,6 +54,12 @@ done
 kill -9 $(pidof gpg-agent) || true
 rm -rf $HOME/.gnupg
 
+if [[ "$CODENAME" == "stretch" ]] || [[ "$CODENAME" == "buster" ]];then
+    sec_repo="$CODENAME/updates"
+else
+    sec_repo="$CODENAME-security"
+fi
+
 cat > $SOURCES_LIST/sources.list <<EOF
 deb [signed-by=$key_dir/tkl-$CODENAME-main.gpg] http://archive.turnkeylinux.org/debian $CODENAME main
 
@@ -53,9 +71,9 @@ EOF
 cat > $SOURCES_LIST/security.sources.list <<EOF
 deb [signed-by=$key_dir/tkl-$CODENAME-security.gpg] http://archive.turnkeylinux.org/debian $CODENAME-security main
 
-deb http://security.debian.org/ $CODENAME/updates main
-deb http://security.debian.org/ $CODENAME/updates contrib
-#deb http://security.debian.org/ $CODENAME/updates non-free
+deb http://security.debian.org/ $sec_repo main
+deb http://security.debian.org/ $sec_repo contrib
+#deb http://security.debian.org/ $sec_repo non-free
 EOF
 
 TKL_TESTING_LIST=$SOURCES_LIST/turnkey-testing.list
