@@ -24,16 +24,29 @@ PREFS_LIST=/etc/apt/preferences.d
 CONF_DIR=/etc/apt/apt.conf.d
 mkdir -p $SOURCES_LIST $PREFS_LIST $CONF_DIR
 
-# use local TKLDev squid caching proxy (port 3128)
+# TEMP support 17.0rc build on 16.x
+guest_build=$(cat /etc/debian_version | cut -d. -f1)
+BUSTER_BASE=""
+PROXY_PORT=3128
+if [[ $guest_build -eq 11 ]] && [[ -f /bullseye_on_buster ]]; then
+    export BUSTER_BASE=y
+    PROXY_PORT=8124
+fi
+
+# Configure apt proxy
 cat > $CONF_DIR/01proxy <<EOF
-Acquire::http::proxy "http://127.0.0.1:3128";
-Acquire::https::proxy "http://127.0.0.1:3128";
+Acquire::http::proxy "http://127.0.0.1:$PROXY_PORT";
+Acquire::https::proxy "http://127.0.0.1:$PROXY_PORT";
 EOF
 
 # update CA certs (custom cacher cert should already have been added)
-[[ -e /usr/local/share/ca-certificates/squid_proxyCA.crt ]] \
-    || fatal "Squid CA cert not found."
-update-ca-certificates
+if [[ -e /usr/local/share/ca-certificates/squid_proxyCA.crt ]]; then
+    update-ca-certificates
+elif [[ -n "$BUSTER_BASE" ]]; then
+    echo "Buster base detected, skipping importing Squid CA cert."
+else
+    fatal "Squid CA cert not found."
+fi
 
 # Default Debian PHP version. This should return the current:
 #   apt-cache policy php | sed -n "\|Candidate:|s|.*:\([0-9]\.[0-9]*\)+.*|\1|p"
