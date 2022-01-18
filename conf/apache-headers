@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+# Enable headers module - so HSTS headers work (included in ssl.conf)
+
+a2enmod headers
