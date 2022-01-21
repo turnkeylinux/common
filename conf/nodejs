@@ -1,9 +1,36 @@
 #!/bin/bash -ex
 GLOBALS='grunt-cli grunt'
 
+SRC=/usr/local/src
+
+USER=node
+NODEAPP=/opt/tklweb-cp
+
+# setup tklweb-cp
+mkdir -p $NODEAPP/public/javascripts
+mkdir -p $NODEAPP/public/stylesheets
+mkdir -p $NODEAPP/public/images
+
+mv /var/www/js/* $NODEAPP/public/javascripts/
+mv /var/www/css/* $NODEAPP/public/stylesheets/
+mv /var/www/images/* $NODEAPP/public/images/
+
+rm -rf /var/www/{js,css,images}
+
+chown -R $USER:$USER $NODEAPP
+
+npm i -g pm2
+# install deps
+su -lc "[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY; cd $NODEAPP && npm install" $USER 
+
+
+su node -lc "cd /opt/tklweb-cp && pm2 start /opt/tklweb-cp/ecosystem.config.js"
+sleep 5
+su node -lc "pm2 save -u node --hp /home/node"
+su node -lc "pm2 kill -u node --hp /home/node"
+
 for package in $GLOBALS; do
 	npm install -g $package
 done
 
 rm -rf /tmp/npm*
-rm -f /etc/nginx/sites-enabled/default

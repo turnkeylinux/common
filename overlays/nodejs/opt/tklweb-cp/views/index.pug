@@ -1,0 +1,37 @@
+extends layout
+
+block title-block
+  h1= title
+
+block container-1
+  ul
+    li: a(href='#cp')
+      span Control Panel
+
+  div#cp
+    div.fragment-content
+      div
+        a(href=`https://${httphost}:12320`)
+          img(src="/images/shell.png")
+          span Web Shell
+
+      div
+        a(href= `https://${httphost}:12321`)
+          img(src="/images/webmin.png")
+          span Webmin
+
+      div
+
+      div
+
+      div
+
+      h2 Resources
+      ul
+        li: a(href="https://www.turnkeylinux.org/nodejs") TurnKey Node.js release notes
+
+        li: a(href="https://nodejs.org/api/")  Node.JS Manual & Documentation
+
+        li: a(href="https://www.npmjs.com/")  NPM - Node package registry
+
+        li: a(href="https://github.com/sindresorhus/awesome-nodejs") Awesome Node.JS: a curated list of delightful Node.js packages and resources

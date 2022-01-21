@@ -1,0 +1,12 @@
+{
+    "name": "tklweb-cp"
+  , "version": "0.0.3"
+  , "private": true
+  , "dependencies": {
+      "express": ">=4.5.0"
+    , "pug": "3.x.x"
+    , "body-parser": ">= 1.19.0"
+    , "method-override": ">= 3.0.0"
+    , "errorhandler": ">= 1.5.0"
+  }
+}
