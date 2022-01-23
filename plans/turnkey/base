@@ -36,6 +36,7 @@ cron-apt
 etckeeper               /* still depends on py2 for now */
 git
 
+hardening-runtime       /* Kernel hardening config */
 lsb-release
 localepurge
 man-db
