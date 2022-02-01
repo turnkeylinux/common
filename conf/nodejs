@@ -1,10 +1,13 @@
 #!/bin/bash -ex
+
 GLOBALS='grunt-cli grunt'
-
 SRC=/usr/local/src
-
 USER=node
 NODEAPP=/opt/tklweb-cp
+
+PM2_BIN=/usr/local/lib/node_modules/pm2/bin/pm2
+PM2_PATH=/home/$USER/.pm2/
+PM2_LOG=/var/log/pm2-$USER
 
 # setup tklweb-cp
 mkdir -p $NODEAPP/public/javascripts
@@ -18,6 +21,16 @@ mv /var/www/images/* $NODEAPP/public/images/
 rm -rf /var/www/{js,css,images}
 
 chown -R $USER:$USER $NODEAPP
+
+mkdir -p $PM2_PATH
+
+mkdir -p $PM2_LOG
+ln -s $PM2_LOG $PM2_PATH/logs
+ln -s $PM2_LOG/pm2.log $PM2_PATH/pm2.log
+
+chown -R $USER:$USER $PM2_PATH $PM2_LOG
+
+update-rc.d pm2 defaults
 
 npm i -g pm2
 # install deps
