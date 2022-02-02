@@ -17,19 +17,22 @@ import subprocess
 
 from os import system
 from subprocess import check_output, CalledProcessError
-from dialog_wrapper import Dialog
+from libinithooks.dialog_wrapper import Dialog
+
 
 class Error(Exception):
     pass
 
+
 def escape_chars(s):
     """escape special characters"""
-    s = s.replace("\\","\\\\\\") # \   ->  \\\
-    s = s.replace('"','\\"')     # "   ->  \"
-    s = s.replace("'","\\'")     # '   ->  \'
-    s = s.replace("`","\\`")     # `   ->  \`
-    s = s.replace("$","\\$")     # $   ->  \$
+    s = s.replace("\\", "\\\\\\")  # \   ->  \\\
+    s = s.replace('"', '\\"')      # "   ->  \"
+    s = s.replace("'", "\\'")      # '   ->  \'
+    s = s.replace("`", "\\`")      # `   ->  \`
+    s = s.replace("$", "\\$")      # $   ->  \$
     return s
+
 
 class PostgreSQL:
     def __init__(self, database='postgres'):
@@ -47,9 +50,9 @@ class PostgreSQL:
     def _is_alive(self):
         try:
             check_output(['/etc/init.d/postgresql', 'status'])
-            
+
         except CalledProcessError as e:
-            if e.returncode == 3: #ie. stopped
+            if e.returncode == 3:  # ie. stopped
                 return False
             else:
                 raise Error("Unknown postgresql status exitcode: %s" % e.returncode)
@@ -72,12 +75,14 @@ class PostgreSQL:
             input = query, check = True
         )
 
+
 def usage(s=None):
     if s:
         print("Error:", s, file=sys.stderr)
     print("Syntax: %s [options]" % sys.argv[0], file=sys.stderr)
     print(__doc__, file=sys.stderr)
     sys.exit(1)
+
 
 def main():
     signal.signal(signal.SIGINT, signal.SIG_IGN)
@@ -88,8 +93,8 @@ def main():
     except getopt.GetoptError as e:
         usage(e)
 
-    username="postgres"
-    password=""
+    username = "postgres"
+    password = ""
 
     for opt, val in opts:
         if opt in ('-h', '--help'):
@@ -114,4 +119,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
