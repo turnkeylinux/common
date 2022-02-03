@@ -31,6 +31,13 @@ elif [[ $1 == "gitlab-runsvdir"* ]]; then
     if [[ $2 == "start" ]] || [[ $2 == "restart" ]]; then
        /opt/gitlab/embedded/bin/runsvdir-start &
     fi
+elif [[ $1 == "mattermost"* ]]; then
+    if [[ $2 == "stop" ]] || [[ $2 == "restart" ]]; then
+        kill -9 $(pgrep mattermost)
+    fi
+    if [[ $2 == "start" ]] || [[ $2 == "restart" ]]; then
+       /opt/mattermost/bin/mattermost &
+    fi
 else
     /usr/sbin/service $@
 fi
