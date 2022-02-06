@@ -1,6 +1,5 @@
 #!/bin/bash -ex
 
-GLOBALS='grunt-cli grunt'
 SRC=/usr/local/src
 USER=node
 NODEAPP=/opt/tklweb-cp
@@ -22,6 +21,9 @@ rm -rf /var/www/{js,css,images}
 
 chown -R $USER:$USER $NODEAPP
 
+# install tklweb-cp deps
+su -lc "[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY; cd $NODEAPP && npm install" $USER 
+
 mkdir -p $PM2_PATH
 
 mkdir -p $PM2_LOG
@@ -30,20 +32,15 @@ ln -s $PM2_LOG/pm2.log $PM2_PATH/pm2.log
 
 chown -R $USER:$USER $PM2_PATH $PM2_LOG
 
-update-rc.d pm2 defaults
+npm install -g pm2
 
-npm i -g pm2
-# install deps
-su -lc "[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY; cd $NODEAPP && npm install" $USER 
-
-
+# save ecosystem.config.js state to /home/node/.pm2/dump.pm2
 su node -lc "cd /opt/tklweb-cp && pm2 start /opt/tklweb-cp/ecosystem.config.js"
 sleep 5
 su node -lc "pm2 save -u node --hp /home/node"
 su node -lc "pm2 kill -u node --hp /home/node"
 
-for package in $GLOBALS; do
-	npm install -g $package
-done
+# common/overlays/nodejs/etc/systemd
+systemctl enable pm2-node
 
 rm -rf /tmp/npm*
