@@ -38,6 +38,39 @@ make install
 apt purge -y build-essential libsmbclient-dev
 apt autoremove -y
 
+### add "Log out button"
+TEMPLATE=$WEBROOT/templates/simple/navigation.tmpl
+
+# delete </ul> to extend the navigation bar by one more entry
+sed -i '$ d' $TEMPLATE
+
+# append a button that attempts logging in with nonexistant credentials
+# to result in a login failure that resets the previous auth data
+# if login is failed, logout is successful -> takes to tkl-webcp
+# and terminate </ul> deleted by the previous command.
+
+cat <<EOT >> $TEMPLATE
+<li title="Logout"
+onclick="$.ajax({
+  type: 'GET',
+  url: '/',
+  dataType: 'json',
+  async: true,
+  username: 'logout',
+  password: 'turnkeylinuxlogout'
+}).done(
+    function() {
+      alert('Error!')
+  }).fail(
+    function() {
+      window.location = window.location.href.replace(/^https:/, 'http:');
+  });"
+ class="dialog action history-clear"  role="menuitem" tabindex="0">
+ <span class="label">Logout</span>
+</li>
+</ul>
+EOT
+
 a2enmod rewrite
 a2enmod cgi
 a2enmod authnz_external
