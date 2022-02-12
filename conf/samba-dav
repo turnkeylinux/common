@@ -44,7 +44,7 @@ TEMPLATE=$WEBROOT/templates/simple/navigation.tmpl
 # delete </ul> to extend the navigation bar by one more entry
 sed -i '$ d' $TEMPLATE
 
-# append a button that attempts logging in with nonexistant credentials
+# append a button that attempts logging in with nonexistent credentials
 # to result in a login failure that resets the previous auth data
 # if login is failed, logout is successful -> takes to tkl-webcp
 # and terminate </ul> deleted by the previous command.
