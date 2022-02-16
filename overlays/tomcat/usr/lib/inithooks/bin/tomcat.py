@@ -12,7 +12,7 @@ import subprocess
 import xml.dom.minidom
 import signal
 
-from dialog_wrapper import Dialog
+from libinithooks.dialog_wrapper import Dialog
 
 TOMCAT = "tomcat9"
 
