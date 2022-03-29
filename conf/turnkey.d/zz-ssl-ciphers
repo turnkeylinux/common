@@ -47,16 +47,18 @@ fi
 
 # Lighttpd
 CONF="/etc/lighttpd/ssl-params.conf"
-if [ -f $CONF ]; then
+if [ -f "$CONF" ]; then
     sed -i "/CipherString/ s|ZZ_SSL_CIPHERS|$SECURE_CIPHER_LIST|" $CONF
     lighty-enable-mod ssl
 fi
 
 # Tomcat
-CONF="/etc/tomcat7/server.xml"
-if [ -f $CONF ]; then
-    sed -i "s|ciphers=|ciphers=\"${SECURE_CIPHER_LIST}\"|" $CONF
-fi
+# As of v15.x TKL uses Debian Tomcat default ciphers
+for CONF in /etc/tomcat*/server.xml; do
+    if [ -f "$CONF" ]; then
+        sed -i "s|ciphers=|ciphers=\"${SECURE_CIPHER_LIST}\"|" $CONF
+    fi
+done
 
 # Stunnel (provides Webmin & Webshell)
 CONF="/etc/stunnel/webmin.conf /etc/stunnel/shellinabox.conf"
