@@ -54,10 +54,11 @@ fi
 
 # Tomcat
 # As of v15.x TKL uses Debian Tomcat default ciphers
-CONF="/etc/tomcat*/server.xml"
-if [ -f "$CONF" ]; then
-    sed -i "s|ciphers=|ciphers=\"${SECURE_CIPHER_LIST}\"|" $CONF
-fi
+for CONF in /etc/tomcat*/server.xml; do
+    if [ -f "$CONF" ]; then
+        sed -i "s|ciphers=|ciphers=\"${SECURE_CIPHER_LIST}\"|" $CONF
+    fi
+done
 
 # Stunnel (provides Webmin & Webshell)
 CONF="/etc/stunnel/webmin.conf /etc/stunnel/shellinabox.conf"
