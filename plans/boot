@@ -2,16 +2,20 @@ systemd         /* even in CHROOT_ONLY we need systemctl to configure systemd se
 
 #ifndef CHROOT_ONLY
 
+#ifndef ARM64
 syslinux                    /* Collection of bootloaders */
 syslinux-common             /* Collection of bootloaders (common) */
 isolinux                    /* Collection of bootloaders (ISO 9960) */
-hdparm                      /* Tune hard disk parameters for high performance */
 live-boot                   /* live-boot replaces casper in v16.x */
 live-tools                  /* live tools provides additional tools for live booting */
 live-boot-initramfs-tools
+#endif
+
+hdparm                      /* Tune hard disk parameters for high performance */
 initramfs-tools
 firmware-linux-free
 busybox
+parted
 
 #ifdef UBUNTU
 upstart
@@ -32,6 +36,10 @@ linux-image-686-pae
 #endif
 #ifdef AMD64
 linux-image-amd64
+#endif
+#ifdef ARM64
+linux-image-arm64
+raspi-firmware
 #endif
 #endif
 #endif
