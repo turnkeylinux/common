@@ -3,4 +3,8 @@
 wireless-tools       # Tools for manipulating Linux Wireless Extensions
 wpasupplicant        # Client support for WPA and WPA2 (IEEE 802.11i)
 
+#ifdef ARM64
+firmware-brcm80211
+#endif
+
 #endif
