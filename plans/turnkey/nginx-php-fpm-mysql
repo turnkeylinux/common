@@ -1,7 +1,6 @@
 #include <turnkey/mysql>
 
 nginx
-libnginx-modsecurity    /* nginx modsecurity module - provided by TurnKey */
 
 php-fpm
 php-gd
