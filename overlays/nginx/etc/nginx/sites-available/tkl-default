@@ -28,7 +28,6 @@ server {
     listen [::]:443 ssl default_server;
 
     include snippets/ssl.conf;
-    include snippets/modsecurity.conf;
 
     root /var/www;
 
