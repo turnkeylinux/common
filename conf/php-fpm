@@ -14,7 +14,7 @@ elif which nginx > /dev/null; then
     # enabled for tkl-default site in overlay
     DEFAULT=/etc/nginx/sites-available/tkl-default
     if [[ -f "$DEFAULT" ]]; then
-        sed -i "/index index.html index.htm;/ s|;| index.php;|" $DEFAULT
-        sed -i "/include snippets/php-fpm.conf;/ s|# ||" $DEFAULT
+        sed -i "\|index index.html index.htm;| s|;| index.php;|" $DEFAULT
+        sed -i "\|include snippets/php-fpm.conf;| s|# ||" $DEFAULT
     fi
 fi
