@@ -19,3 +19,10 @@ ff02::2 ip6-allrouters
 ff02::3 ip6-allhosts
 EOF
 
+interfaces=/etc/network/interfaces
+if [ -f "$interfaces" ]; then
+    sed -i "s|_UNCONFIGURED_|$HOSTNAME|" $interfaces
+else
+    echo "Error $interfaces file not found - can't update hostname"
+    return 1
+fi
