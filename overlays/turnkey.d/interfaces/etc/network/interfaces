@@ -6,7 +6,8 @@ iface lo inet loopback
 
 auto eth0
 iface eth0 inet dhcp
+ hostname _UNCONFIGURED_
 
 allow-hotplug eth1
 iface eth1 inet dhcp
-
+ hostname _UNCONFIGURED_
