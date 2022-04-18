@@ -44,7 +44,7 @@ fi
 unset COMMAND SERVICE_NAME QUIET IGNORED
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        start|stop|restart|reload|enable|disable|mask|unmask|is-failed|is-active|daemon-reload)
+        start|stop|restart|reload|enable|disable|mask|unmask|is-failed|is-active|daemon-reload|list-units)
             if [[ -z "$COMMAND" ]]; then
                 COMMAND=$1
                 shift
@@ -87,7 +87,7 @@ if [[ -n "$COMMAND" ]]; then
             warning "--quiet is only honored with commands is-active|is-failed."
     fi
 
-    if [[ "$COMMAND" != "daemon-reload" ]] && [[ -z "$SERVICE_NAME" ]]; then
+    if [[ "$COMMAND" != "daemon-reload" ]] && [[ "$COMMAND" != "list-units" ]] && [[ -z "$SERVICE_NAME" ]]; then
         fatal "Service name required with $COMMAND"
     fi
 
@@ -109,6 +109,10 @@ if [[ -n "$COMMAND" ]]; then
 
         daemon-reload)
             warning "Ignoring daemon-reload, init scripts not cached."
+            exit 0;;
+
+        list-units)
+            warning "list-units: Running in chroot, ignoring" >&2
             exit 0;;
 
         is-failed|is-active)
