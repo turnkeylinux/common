@@ -14,10 +14,20 @@ usage() {
     cat >&2 <<EOF
 Usage: $(basename $0) <user>/<repo>
 
+Env Vars:
+    # used for github api
+    GITHUB_USER
+    GITHUB_USER_TOKEN
+
+    # retain temp files and set x if set
+    DEBUG
+
+    # omit tags or releases in output respectively if set
+    NO_TAGS
+    NO_RELEASES
+
 Note: Setting GITHUB_USER and GITHUB_USER_TOKEN environment variables are
       recommended. If not set, multipage results may be unreliable.
-
-      For debugging, set DEBUG=y.
 EOF
 }
 
@@ -36,6 +46,13 @@ if [[ -n "$GITHUB_USER" ]] && [[ -n "$GITHUB_USER_TOKEN" ]]; then
 else
     warning $warn "Authentication won't be used."
     USER=""
+fi
+
+if [[ -n "$NO_TAGS" ]]; then
+    warning "omitting tags (NO_TAGS is set)"
+fi
+if [[ -n "$NO_RELEASES" ]]; then
+    warning "omitting releases (NO_RELEASES is set)"
 fi
 
 echo -n "Fetching releases from github for '$repo_path'... " 1>&2
@@ -68,8 +85,8 @@ get_all_pages() {
     done
 }
 
-get_all_pages "https://api.github.com/repos/${repo_path}/releases" "tag_name"
-get_all_pages "https://api.github.com/repos/${repo_path}/tags" "name"
+[[ -z $NO_RELEASES ]] && get_all_pages "https://api.github.com/repos/${repo_path}/releases" "tag_name"
+[[ -z $NO_TAGS ]] && get_all_pages "https://api.github.com/repos/${repo_path}/tags" "name"
 
 echo "Done!" 1>&2
 cat $tmp_dir/releases | sort --version-sort --unique
