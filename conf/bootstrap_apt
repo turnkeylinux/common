@@ -163,6 +163,15 @@ Pin-Priority: 550
 #Pin-Priority: 550
 
 EOF
+    # dynamically add some extra pins as specified in appliance Makefile
+    for package_name in $PHP_EXTRA_PINS; do
+        cat >> /etc/apt/preferences.d/php-sury.pref <<EOF
+Package: $package_name
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+EOF
+    done
 
     # create php-mysql package that depends on PHP_VERSION - this allows adminer to install cleanly
     PKG=php-mysql
