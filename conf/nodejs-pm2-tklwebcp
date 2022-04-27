@@ -1,0 +1,46 @@
+#!/bin/bash -ex
+
+SRC=/usr/local/src
+USER=node
+NODEAPP=/opt/tklweb-cp
+
+PM2_BIN=/usr/local/lib/node_modules/pm2/bin/pm2
+PM2_PATH=/home/$USER/.pm2/
+PM2_LOG=/var/log/pm2-$USER
+
+# setup tklweb-cp
+mkdir -p $NODEAPP/public/javascripts
+mkdir -p $NODEAPP/public/stylesheets
+mkdir -p $NODEAPP/public/images
+
+mv /var/www/js/* $NODEAPP/public/javascripts/
+mv /var/www/css/* $NODEAPP/public/stylesheets/
+mv /var/www/images/* $NODEAPP/public/images/
+
+rm -rf /var/www/{js,css,images}
+
+chown -R $USER:$USER $NODEAPP
+
+# install tklweb-cp deps
+su -lc "[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY; cd $NODEAPP && npm install" $USER 
+
+mkdir -p $PM2_PATH
+
+mkdir -p $PM2_LOG
+ln -s $PM2_LOG $PM2_PATH/logs
+ln -s $PM2_LOG/pm2.log $PM2_PATH/pm2.log
+
+chown -R $USER:$USER $PM2_PATH $PM2_LOG
+
+npm install -g pm2
+
+# save ecosystem.config.js state to /home/node/.pm2/dump.pm2
+su node -lc "cd /opt/tklweb-cp && pm2 start /opt/tklweb-cp/ecosystem.config.js"
+sleep 5
+su node -lc "pm2 save -u node --hp /home/node"
+su node -lc "pm2 kill -u node --hp /home/node"
+
+# common/overlays/nodejs/etc/systemd
+systemctl enable pm2-node
+
+rm -rf /tmp/npm*
