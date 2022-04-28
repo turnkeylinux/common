@@ -77,7 +77,7 @@ done
 if [[ -n "$COMMAND" ]]; then
 
     if [[ "$SERVICE_NAME" == "ghost_localhost" ]] \
-            && [[ "$COMMAND" == 'enable' ]]; then
+            && [[ "$COMMAND" =~ ^(re)?start$|^stop$ ]]; then
         SERVICE_NAME=ghost
     fi
 
