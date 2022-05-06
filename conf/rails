@@ -44,7 +44,7 @@ EOF
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
 # <= 2.4 can no longer install due to missing libssl1.0 dep
-RBY_VER=2.6.6
+RBY_VER=2.7.6
 
 MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
 rbenv global $RBY_VER
@@ -71,7 +71,7 @@ MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
 MYSQL_ADMIN="mysqladmin --user=root --password=$MYSQL_PASS"
 
 # start mysql server
-/etc/init.d/mysql start
+/etc/init.d/mariadb start
 
 # create databases for each environment
 for DB_ENV in test development production; do
@@ -124,5 +124,5 @@ sed -i "s|@APPNAME@|$APPNAME|g" /etc/logrotate.d/$APPNAME
 a2ensite $APPNAME
 
 # stop mysql server
-/etc/init.d/mysql stop
+/etc/init.d/mariadb stop
 
