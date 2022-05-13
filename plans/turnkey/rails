@@ -8,7 +8,7 @@ build-essential             /* needed to build gems */
 libgmp-dev                  /* real package behind virtual libgmp10-dev which is required */
 default-libmysqlclient-dev  /* needed to build mysql gem */
 libcurl4-openssl-dev        /* needed to build passenger apache2 module */
-libreadline-gplv2-dev       /* needed for rails console */
+libreadline-dev             /* needed for rails console */
 
 libapr1-dev                 /* needed to build passenger gem */
 libaprutil1-dev             /* needed to build passenger gem */
@@ -16,5 +16,12 @@ libssl-dev                  /* needed to build passenger gem */
 
 libxml2-dev                 /* common dep for gem building, e.g., sanitize */
 libxslt1-dev                /* common dep for gem building, e.g., sanitize */
+
+libgdbm6                    /* rbenv dependency */
+libgdm-dev                  /* rbenv dependency */
+libffi-dev                  /* rbenv dependency */
+libdb-dev                   /* rbenv dependency */
+libncurses5-dev             /* rbenv dependency */
+
 
 nodejs
