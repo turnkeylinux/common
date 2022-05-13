@@ -1,8 +1,4 @@
-tomcat8
-tomcat8-admin
-tomcat8-docs
+tomcat9
+tomcat9-admin
+tomcat9-docs
 libtcnative-1
-
-/* work around missing tomcat8 depends - see: */
-/* https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=894970 */
-libservlet3.1-java

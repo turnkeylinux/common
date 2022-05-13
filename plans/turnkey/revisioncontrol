@@ -1,4 +1,4 @@
-git-core
+git
 git-daemon-sysvinit
 subversion
 libapache2-mod-authnz-external # for git-http

@@ -1,12 +1,18 @@
+#include <turnkey/mysql>
+
 apache2
 webmin-apache
-libapache2-mod-wsgi
 apache2-dev
 
-mysql-server
-webmin-mysql
+/* Python2 deps - leave py2 as default for now */
+libapache2-mod-wsgi
 python-mysqldb
 
+/* Python3 deps */
+//libapache2-mod-wsgi-py3 /* conflicts with libapache2-mod-wsgi */
+python3-mysqldb
+python3-virtualenv
+
+/* Generic deps */
 unzip
-ipython
 virtualenv

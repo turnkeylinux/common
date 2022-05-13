@@ -1,0 +1,75 @@
+#!/bin/bash -e
+
+fatal() { echo "FATAL: $@"; exit 1; }
+info() { echo "INFO: $@"; }
+
+usage() {
+    if [[ $# -gt 0 ]]; then
+        echo "ERROR: $@"
+        echo
+        exit_code=1
+    fi
+    cat << EOF
+$(basename $0) install|help [-h|--help]
+
+Arguments::
+
+    install     Install MariaDB Performance schema and Sysschema.
+    help        Show this help and exit.
+
+    -h|--help   As per 'help' (above).
+
+Environment variables::
+
+    DEBUG       Set to enable debug output.
+
+EOF
+    exit $exit_code
+}
+
+[[ -z "$DEBUG" ]] || set -x
+
+user=$(whoami)
+[[ "$(whoami)" == 'root' ]] || fatal "Must be run by root; please re-run with 'sudo'."
+
+[[ $# -ne 0 ]] || usage "Must have one argument."
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        install)
+            shift
+            continue;;
+        -h|--help|help)
+            usage;;
+        *)
+            usage "Unknown argument $1.";;
+    esac
+done
+
+exit_code=0
+SRC=/usr/local/src
+
+cat > /etc/mysql/conf.d/performance_schema.cnf <<EOF
+# Performance schema and Sysschema for MariaDB
+# Pre-installed by TurnKey.
+[mysqld]
+performance_schema = on
+EOF
+
+cd $SRC
+curl "https://codeload.github.com/FromDual/mariadb-sys/zip/master" > mariadb-sys.zip
+
+unzip mariadb-sys.zip
+cd mariadb-sys-master/
+
+mysql -u root < ./sys_10.sql || exit_code=$?
+mysql -u root -e "set global innodb_stats_on_metadata = 0;"
+
+if [[ $exit_code -ne 0 ]]; then
+    fatal "Error importing MariaDB Performance schema and Sysschema data; rolling back." >&2
+    rm -rf /etc/mysql/conf.d/performance_schema.cnf
+else
+    info "Success importing MariaDB Performance schema and Sysschema data; restarting MariaDB."
+    systemctl restart mysql
+fi
+
+[[ -n "DEBUG" ]] || rm -rf /usr/loca/src/mariadb-sys*

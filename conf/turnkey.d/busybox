@@ -1,8 +1,0 @@
-#!/bin/bash -e
-
-MKINITRAMFS=/usr/sbin/mkinitramfs
-BUSYBOXDIR=/usr/lib/initramfs-tools/bin/
-
-sed -i "s|^# BUSYBOXDIR=\(.*\)||" $MKINITRAMFS
-sed -i "s|^BUSYBOXDIR=\(.*\)|BUSYBOXDIR=\"$BUSYBOXDIR\"|" $MKINITRAMFS
-

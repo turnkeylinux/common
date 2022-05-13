@@ -2,23 +2,18 @@
 
 fatal() { echo "FATAL [$(basename $0)]: $@" 1>&2; exit 1; }
 
-TOMCAT=tomcat8
+TOMCAT=tomcat9
 
 CATALINA_HOME="/usr/share/$TOMCAT"
 CATALINA_BASE="/var/lib/$TOMCAT"
 CATALINA_TMPDIR="$CATALINA_BASE/temp"
 
 # identify JVM to use
-##We have to check Sun6, Oracle 6 and 7, openjdk 6, 7 and 8
-[ -e /usr/lib/jvm/java-6-sun ] && JVM=java-6-sun
-[ -e /usr/lib/jvm/java-6-oracle ] && JVM=java-6-oracle
-[ -e /usr/lib/jvm/java-7-oracle ] && JVM=java-7-oracle
-
-[ -e /usr/lib/jvm/java-7-openjdk-i386 ] && JVM=java-7-openjdk-i386
-[ -e /usr/lib/jvm/java-7-openjdk-amd64 ] && JVM=java-7-openjdk-amd64
-
+##We check openjdk 8 & 11
 [ -e /usr/lib/jvm/java-8-openjdk-i386 ] && JVM=java-8-openjdk-i386
 [ -e /usr/lib/jvm/java-8-openjdk-amd64 ] && JVM=java-8-openjdk-amd64
+
+[ -e /usr/lib/jvm/java-11-openjdk-amd64 ] && JVM=java-11-openjdk-amd64
 
 [ -z "$JVM" ] && fatal "JVM to use could not be identified"
 
@@ -31,7 +26,7 @@ JAVA_HOME="/usr/lib/jvm/${JVM}"
 EOF
 
 # this may not be 100% safe
-JINFO=`ls /usr/lib/jvm/.*java*8*jinfo`
+JINFO=$(ls /usr/lib/jvm/.*java*11*jinfo)
 JINFO=${JINFO%.jinfo}
 JINFO=${JINFO#*.}
 # not sure if this is actually needed
@@ -42,7 +37,21 @@ sed -i "s/^#JAVA_HOME.*/JAVA_HOME=\/usr\/lib\/jvm\/${JVM}/" /etc/default/$TOMCAT
 if [ -e /etc/apache2/sites-available/jktomcat.conf ]; then
     a2dissite 000-default
     a2ensite jktomcat
+
+    # as jktomcat.conf comes from the tomcat-apache overlay; do other
+    # tomcat-apache stuff here too...
+
+    # disable 16tomcat-sslcert - only neded for standalone tomcat
+    chmod -x /usr/lib/inithooks/firstboot.d/16tomcat-sslcert
+
+    a2enmod jk
 fi
+
+# create convenience links to original conf that we overwrite
+conf_files="tomcat-users.xml server.xml"
+for conf in $conf_files; do
+    ln -s /usr/share/$TOMCAT/etc/$conf /etc/$TOMCAT/$conf.orig
+done
 
 # from https://bugs.launchpad.net/ubuntu/+source/tomcat7/+bug/1232258
 create_link() {
@@ -54,5 +63,4 @@ create_link shared
 create_link conf
 create_link logs
 mkdir -p $CATALINA_TMPDIR
-chown $TOMCAT $CATALINA_TMPDIR
-
+chown tomcat $CATALINA_TMPDIR

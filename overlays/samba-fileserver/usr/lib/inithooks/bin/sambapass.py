@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Copyright (c) 2017 TurnKey GNU/Linux https://www.turnkeylinux.org
 # GPLv3
 """Set Samba account password
@@ -12,24 +12,24 @@ import sys
 import getopt
 import signal
 
-from executil import system
+import subprocess
 
 def fatal(s):
-    print >> sys.stderr, "Error:", s
+    print("Error:", s, file=sys.stderr)
     sys.exit(1)
 
 def usage(s=None):
     if s:
-        print >> sys.stderr, "Error:", s
-    print >> sys.stderr, "Syntax: %s <username> [options]" % sys.argv[0]
-    print >> sys.stderr, __doc__
+        print("Error:", s, file=sys.stderr)
+    print("Syntax: %s <username> [options]" % sys.argv[0], file=sys.stderr)
+    print(__doc__, file=sys.stderr)
     sys.exit(1)
 
 def main():
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "hp:", ['help', 'pass='])
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     if len(args) != 1:
@@ -44,14 +44,18 @@ def main():
             password = val
 
     if not password:
-        from dialog_wrapper import Dialog
+        from libinithooks.dialog_wrapper import Dialog
         d = Dialog('TurnKey GNU/Linux - First boot configuration')
         password = d.get_password(
             "%s Samba Password" % username.capitalize(),
             "Please enter new password for the Samba {0} account. Note: the Linux {0}".format(username)
                 +" user password will NOT be changed.")
 
-    system("(echo \"{0}\" ; echo \"{0}\" ) | smbpasswd -a -s {1}".format(password,username))
+    subprocess.run(
+        ['smbpasswd', '-a', '-s', username],
+        input=f'{password}\n{password}\n',
+        text=True
+    )
 
 if __name__ == "__main__":
     main()

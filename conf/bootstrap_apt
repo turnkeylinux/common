@@ -1,0 +1,216 @@
+#!/bin/bash -e
+# create apt sources
+# environment variables:
+#   - required: CODENAME
+#   - optional: NONFREE
+#   - optional: TKL_TESTING
+#   - optional: BACKPORTS
+#   - optional: PHP_VERSION
+
+# Note, to install packages from backports:
+# - set 'BACKPORTS=y'; and either:
+#   - add to plan & pin package(s) to backports (via prefs file); or
+#   - install via apt using '-t $CODENAME-backports' switch
+
+fatal() {
+    echo "fatal: $@" 1>&2
+    exit 1
+}
+
+[ -n "$CODENAME" ] || fatal "CODENAME is not set"
+
+SOURCES_LIST=/etc/apt/sources.list.d
+PREFS_LIST=/etc/apt/preferences.d
+CONF_DIR=/etc/apt/apt.conf.d
+mkdir -p $SOURCES_LIST $PREFS_LIST $CONF_DIR
+
+# TEMP support 17.0rc build on 16.x
+guest_build=$(cat /etc/debian_version | cut -d. -f1)
+BUSTER_BASE=""
+PROXY_PORT=3128
+if [[ $guest_build -eq 11 ]] && [[ -f /bullseye_on_buster ]]; then
+    export BUSTER_BASE=y
+    PROXY_PORT=8124
+fi
+
+# Configure apt proxy
+cat > $CONF_DIR/01proxy <<EOF
+Acquire::http::proxy "http://127.0.0.1:$PROXY_PORT";
+Acquire::https::proxy "http://127.0.0.1:$PROXY_PORT";
+EOF
+
+# update CA certs (custom cacher cert should already have been added)
+if [[ -e /usr/local/share/ca-certificates/squid_proxyCA.crt ]]; then
+    update-ca-certificates
+elif [[ -n "$BUSTER_BASE" ]]; then
+    echo "Buster base detected, skipping importing Squid CA cert."
+else
+    fatal "Squid CA cert not found."
+fi
+
+# Default Debian PHP version. This should return the current:
+#   apt-cache policy php | sed -n "\|Candidate:|s|.*:\([0-9]\.[0-9]*\)+.*|\1|p"
+DEBIAN_PHP_V=7.4
+
+# keys are provided as ascii armoured for transparency; but secure apt requires
+# gpg keyring files
+key_dir=/usr/share/keyrings
+repos=(main security testing)
+for repo in ${repos[@]}; do
+    full_path=$key_dir/tkl-$CODENAME-$repo
+    keyring=$full_path.gpg
+    keyfile=$full_path.asc
+    gpg --no-default-keyring --keyring $keyring --import $keyfile
+    rm $keyfile
+done
+# ensure that gpg-agent is killed after processing keys
+kill -9 $(pidof gpg-agent) || true
+rm -rf $HOME/.gnupg
+
+if [[ "$CODENAME" == "stretch" ]] || [[ "$CODENAME" == "buster" ]];then
+    sec_repo="$CODENAME/updates"
+else
+    sec_repo="$CODENAME-security"
+fi
+
+cat > $SOURCES_LIST/sources.list <<EOF
+deb [signed-by=$key_dir/tkl-$CODENAME-main.gpg] http://archive.turnkeylinux.org/debian $CODENAME main
+
+deb http://deb.debian.org/debian $CODENAME main
+deb http://deb.debian.org/debian $CODENAME contrib
+#deb http://deb.debian.org/debian $CODENAME non-free
+EOF
+
+cat > $SOURCES_LIST/security.sources.list <<EOF
+deb [signed-by=$key_dir/tkl-$CODENAME-security.gpg] http://archive.turnkeylinux.org/debian $CODENAME-security main
+
+deb http://security.debian.org/ $sec_repo main
+deb http://security.debian.org/ $sec_repo contrib
+#deb http://security.debian.org/ $sec_repo non-free
+EOF
+
+TKL_TESTING_LIST=$SOURCES_LIST/turnkey-testing.list
+cat > $TKL_TESTING_LIST.disabled <<EOF
+deb [signed-by=$key_dir/tkl-$CODENAME-testing.gpg] http://archive.turnkeylinux.org/debian $CODENAME-testing main
+EOF
+
+DEB_BACKPORT_LIST=$SOURCES_LIST/debian-backports.list
+cat > $DEB_BACKPORT_LIST.disabled <<EOF
+deb http://deb.debian.org/debian $CODENAME-backports main
+EOF
+
+if [ -n "$PHP_VERSION" ]; then
+    # Use 3rd party sury.org repo
+    # install support for https repo & wget (to download gpg key)
+    PKGS="lsb-release ca-certificates wget"
+    apt-get update --allow-releaseinfo-change
+    DEBIAN_FRONTEND=noninteractive apt-get install -y $PKGS
+
+    # download keyfile
+    keyfile=/usr/share/keyrings/php-sury.org.gpg
+    wget -O $keyfile https://packages.sury.org/php/apt.gpg
+
+    cat > $SOURCES_LIST/php.list <<EOF
+# DEB.SURY.ORG repo for php
+
+deb [signed-by=$keyfile] https://packages.sury.org/php/ $CODENAME main
+EOF
+
+    cat > /etc/apt/preferences.d/php-sury.pref <<EOF
+Package: *
+Pin: origin packages.sury.org
+Pin-Priority: 10
+
+Package: php${PHP_VERSION}-*
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: libapache2-mod-php${PHP_VERSION}
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: php-pear
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: php-imagick
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: libpcre3
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+Package: libzip4
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+# only enable below if using latest php version
+#Package: php-common
+#Pin: origin packages.sury.org
+#Pin-Priority: 550
+
+#Package: php-imagick
+#Pin: origin packages.sury.org
+#Pin-Priority: 550
+
+#Package: php-redis
+#Pin: origin packages.sury.org
+#Pin-Priority: 550
+
+#Package: php-igbinary
+#Pin: origin packages.sury.org
+#Pin-Priority: 550
+
+EOF
+    # dynamically add some extra pins as specified in appliance Makefile
+    for package_name in $PHP_EXTRA_PINS; do
+        cat >> /etc/apt/preferences.d/php-sury.pref <<EOF
+Package: $package_name
+Pin: origin packages.sury.org
+Pin-Priority: 550
+
+EOF
+    done
+
+    # create php-mysql package that depends on PHP_VERSION - this allows adminer to install cleanly
+    PKG=php-mysql
+    mkdir -p /tmp/$PKG/DEBIAN
+    PKG_V="2:${PHP_VERSION}"
+    cd  /tmp
+    cat > /tmp/$PKG/DEBIAN/control <<EOF
+Package: php-mysql
+Version: $PKG_V
+Section: custom
+Priority: optional
+Architecture: all
+Essential: no
+Depends: php${PHP_VERSION}-mysql
+Installed-Size: 1024
+Maintainer: Jeremy Davis <jeremy@turnkeylinux.org>
+Description: Dummy Package to allow Adminer to install cleanly without Debian php-mysql package.
+EOF
+    apt-get update
+    dpkg-deb --build ${PKG}
+    DEBIAN_FRONTEND=noninteractive apt-get install ./${PKG}.deb -y --allow-downgrades --autoremove
+    apt-mark hold php-mysql="${PKG_V}"
+    cd -
+    rm -rf /tmp/${PKG}*
+fi
+
+if [ "$NONFREE" ]; then
+    sed -i "/non-free/ s|^#||" $SOURCES_LIST/sources.list
+    sed -i "/non-free/ s|^#||" $SOURCES_LIST/security.sources.list
+fi
+
+if [ "$TKL_TESTING" ]; then
+    mv $TKL_TESTING_LIST.disabled $TKL_TESTING_LIST
+fi
+
+if [ "$BACKPORTS" ]; then
+    mv $DEB_BACKPORT_LIST.disabled $DEB_BACKPORT_LIST
+fi
+
+# This hack ensures that any changes to 'Suite' and 'Version' changes are
+# accepted and don't interupt install
+apt-get update --allow-releaseinfo-change

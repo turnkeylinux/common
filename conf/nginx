@@ -1,0 +1,14 @@
+#!/bin/bash -e
+
+# Conf script to adjust Nginx defaults.
+# Note that if you wish to use PHP (via PHP-FPM) be sure to include conf/php-fpm
+
+CONF=/etc/nginx/nginx.conf
+
+# disable gzip (security) - see https://bugs.debian.org/773332
+sed -i "/^\s*gzip on;/ s|gzip|# gzip|" $CONF
+sed -i "/gzip on/ s|;.*|; # leave gzip disabled - see https://bugs.debian.org/773332|" $CONF
+
+# disable default site and enable tkl-default
+rm -r /etc/nginx/sites-enabled/*default*
+ln -s /etc/nginx/sites-available/tkl-default /etc/nginx/sites-enabled/tkl-default

@@ -14,7 +14,7 @@ WEBROOT=/var/www/$APPNAME
 LOGSDIR=/var/log/$APPNAME
 
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
-GEMOPTS="--no-rdoc --no-ri"
+GEMOPTS="--no-document"
 
 git clone https://github.com/rbenv/rbenv.git /usr/local/rbenv --depth=1
 git clone https://github.com/rbenv/ruby-build.git /usr/local/rbenv/plugins/ruby-build --depth=1
@@ -43,8 +43,11 @@ EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install 2.3.5
-rbenv global 2.3.5
+# <= 2.4 can no longer install due to missing libssl1.0 dep
+RBY_VER=2.7.6
+
+MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
+rbenv global $RBY_VER
 
 gem update --system
 
@@ -53,7 +56,7 @@ gem install $GEMOPTS rails
 gem install $GEMOPTS passenger
 gem install $GEMOPTS rake
 gem install $GEMOPTS bundler --force
-gem install $GEMOPTS mysql -- --with-mysql-config='/usr/bin/mysql_config'
+gem install $GEMOPTS mysql2 -- --with-mysql-config='/usr/bin/mysql_config'
 gem install $GEMOPTS execjs
 
 rbenv rehash
@@ -68,7 +71,7 @@ MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
 MYSQL_ADMIN="mysqladmin --user=root --password=$MYSQL_PASS"
 
 # start mysql server
-/etc/init.d/mysql start
+/etc/init.d/mariadb start
 
 # create databases for each environment
 for DB_ENV in test development production; do
@@ -79,7 +82,7 @@ done
 
 # seed rails application (3.x requires new)
 cd /var/www
-if $(rails --version | grep -q "Rails 2.3"); then
+if $(rails --version | grep -q "Rails 2.5"); then
     rails $APPNAME -d mysql --skip
 else
     rails new $APPNAME -d mysql --skip
@@ -121,5 +124,5 @@ sed -i "s|@APPNAME@|$APPNAME|g" /etc/logrotate.d/$APPNAME
 a2ensite $APPNAME
 
 # stop mysql server
-/etc/init.d/mysql stop
+/etc/init.d/mariadb stop
 

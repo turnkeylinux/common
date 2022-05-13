@@ -1,0 +1,70 @@
+#!/bin/bash -e
+
+W2PROOT=/var/www/web2py
+
+usage() {
+    cat << EOF
+$(basename $0) py2|py3|status|help
+Set python version for Web2Py to use
+
+Arguments:
+
+    py2     use python2*
+    py3     use python3*
+    status  return current version number of python in use by Web2py
+    help    print this message and exit
+
+* - Note changing python version requires install of relevant Apache mod_wsgi
+    module. This is handled by apt and requires internet access.
+EOF
+    exit 1
+}
+
+apt_install() {
+    echo "Replacing current module with $1, please wait."
+    echo "NOTE: exsing module is removed; ignore following 'apache2_reload' warnings."
+    DEBIAN_FRONTEND=noninteractive apt-get install -y $1
+}
+
+status() {
+    venv_path=$(basename $(readlink $W2PROOT/venv))
+    echo "${venv_path#venv}"
+}
+
+py2() {
+    apt_install libapache2-mod-wsgi
+    rm -f $W2PROOT/venv
+    ln -s $W2PROOT/venv2 $W2PROOT/venv
+}
+
+py3() {
+    apt_install libapache2-mod-wsgi-py3
+    rm -f $W2PROOT/venv
+    ln -s $W2PROOT/venv3 $W2PROOT/venv
+}
+
+change() {
+    new=$1
+    current="py$(status)"
+    if [[ "$current" != "$new" ]]; then
+        echo "Updating package lists, please wait."
+        apt update -qq
+        $new
+        echo "Restarting Apache, please wait."
+        systemctl restart apache2
+    fi
+} 
+
+case $1 in
+    py2|py3)
+         change ${1};;
+    status)
+         status;;
+    *)
+         if [[ $# -eq 0 ]]; then
+             echo "Arguement required"
+         else
+             echo "Unknown arguement '$1'"
+         fi
+         usage;;
+esac

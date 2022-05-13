@@ -1,0 +1,12 @@
+#include <turnkey/mysql>
+
+nginx
+
+php-fpm
+php-gd
+php-cli
+php-curl
+php-mysql
+webmin-phpini
+
+adminer

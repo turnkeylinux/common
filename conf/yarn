@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+mkdir -p /usr/share/keyrings
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key --keyring /usr/share/keyrings/yarn.gpg add -
+
+mv /etc/apt/sources.list.d/yarn.list.disabled /etc/apt/sources.list.d/yarn.list
+
+apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes yarn

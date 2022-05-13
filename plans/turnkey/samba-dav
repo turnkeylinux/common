@@ -14,10 +14,13 @@ libmime-tools-perl
 libnet-ldap-perl
 libimage-exiftool-perl
 libdbd-mysql-perl
-libfilesys-smbclient-perl
+//libfilesys-smbclient-perl     /* Buggy in Buster - see #1597 */
 liburi-perl
 libcgi-pm-perl
 liblist-moreutils-perl
+libdatetime-format-human-duration-perl
+
+libsmbclient-dev                /* Build custom perl module from source - see #1597 */
 
 apache2                
 webmin-apache
@@ -25,3 +28,5 @@ webmin-apache
 libapache2-mod-authnz-external
 
 build-essential
+
+webmin-exports

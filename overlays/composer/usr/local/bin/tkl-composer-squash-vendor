@@ -1,0 +1,69 @@
+#/bin/bash -ex
+
+usage() {
+    echo "$@"
+    cat <<EOF
+$(basname $0) [-h|--help]
+
+Options:
+
+    -h|--help   Show this help text and exit
+
+Composer does not allow shallow clones. This script provides a way to work
+around that. It will convert a full git repositiory cloned by composer, into a
+shallow clone.
+
+It will process all git repositories (directories which contain a '.git' dir)
+which are sub directories of any 'vendor' directory within /var/www.
+
+It works by creating a local shallow clone from the local full clone. Then
+copying the git config of the original (i.e. replace the local "remote") and
+replacing the original full clone directory with the shallow clone.
+EOF
+    exit 1
+}
+
+info() { echo "[INFO]: $@"; }
+fatal() { echo "[FATAL]: $@"; exit 1; }
+
+shallow_clone() {
+    repo=$1
+    mv ${repo} ${repo}.bak
+    git clone --depth 1 file:///${repo}.bak ${repo} >/dev/null 2>&1
+    cp ${repo}.bak/.git/config ${repo}/.git/config
+    orig_log=$(git --git-dir=${repo}.bak/.git log --pretty=oneline -1)
+    new_log=$(git --git-dir=${repo}/.git log --pretty=oneline -1)
+    if [[ "$new_log" != "$orig_log" ]]; then
+        rm -rf ${repo}
+        mv ${repo}.bak ${repo}
+        fatal "Updated ${repo} HEAD did not match original. Backup restored."
+    else
+        info "${repo} made shallow; cleaning up temporary backup files."
+        rm -rf ${repo}.bak
+    fi
+}
+
+cleanup() {
+    vendor_dirs=/var/www/*/vendor
+    vendor_dir=$(echo ${vendor_dirs[0]}) # only include first glob match verbatim
+    if ! [[ -d ${vendor_dir} ]]; then
+        fatal "No vendor directory found (looked for '/var/www/*/vendor')"
+    fi
+    echo "Vendor dir size prior to cleanup:"
+    du -h -s ${vendor_dir}
+    for git_dir in $(find ${vendor_dir} -type d -name '.git'); do
+        shallow_clone $(dirname ${git_dir})
+    done
+    echo "Vendor dir size post cleanup:"
+    du -h -s ${vendor_dir}
+}
+
+if [[ $# -gt 0 ]]; then
+    case ${1} in
+        -h|--help)
+            usage;;
+        *)
+            usage "No arguments are accepted.";;
+    esac
+fi
+cleanup

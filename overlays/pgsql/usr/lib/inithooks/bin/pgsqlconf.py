@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Copyright (c) 2008 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
 
 """
@@ -15,21 +15,24 @@ import getopt
 import signal
 import subprocess
 
-from subprocess import Popen, PIPE
-from dialog_wrapper import Dialog
-from executil import ExecError, system, getoutput
+from os import system
+from subprocess import check_output, CalledProcessError
+from libinithooks.dialog_wrapper import Dialog
+
 
 class Error(Exception):
     pass
 
+
 def escape_chars(s):
     """escape special characters"""
-    s = s.replace("\\","\\\\\\") # \   ->  \\\
-    s = s.replace('"','\\"')     # "   ->  \"
-    s = s.replace("'","\\'")     # '   ->  \'
-    s = s.replace("`","\\`")     # `   ->  \`
-    s = s.replace("$","\\$")     # $   ->  \$
+    s = s.replace("\\", "\\\\\\")  # \   ->  \\\
+    s = s.replace('"', '\\"')      # "   ->  \"
+    s = s.replace("'", "\\'")      # '   ->  \'
+    s = s.replace("`", "\\`")      # `   ->  \`
+    s = s.replace("$", "\\$")      # $   ->  \$
     return s
+
 
 class PostgreSQL:
     def __init__(self, database='postgres'):
@@ -46,13 +49,13 @@ class PostgreSQL:
 
     def _is_alive(self):
         try:
-            getoutput('/etc/init.d/postgresql', 'status')
-            
-        except ExecError, e:
-            if e.exitcode == 3: #ie. stopped
+            check_output(['/etc/init.d/postgresql', 'status'])
+
+        except CalledProcessError as e:
+            if e.returncode == 3:  # ie. stopped
                 return False
             else:
-                raise Error("Unknown postgresql status exitcode: %s" % e.exitcode)
+                raise Error("Unknown postgresql status exitcode: %s" % e.returncode)
 
         return True
 
@@ -67,17 +70,19 @@ class PostgreSQL:
         self._stop()
 
     def execute(self, query):
-        p = Popen("su postgres -lc 'psql -q %s'" % self.database, shell=True, stdin=PIPE)
-        p.communicate(query)
-        if p.returncode != 0:
-            raise ExecError("postgres command failed")
+        subprocess.run(
+            ['su', 'postgres', '-lc', 'psql -q "%s"' % self.database],
+            input = query, check = True
+        )
+
 
 def usage(s=None):
     if s:
-        print >> sys.stderr, "Error:", s
-    print >> sys.stderr, "Syntax: %s [options]" % sys.argv[0]
-    print >> sys.stderr, __doc__
+        print("Error:", s, file=sys.stderr)
+    print("Syntax: %s [options]" % sys.argv[0], file=sys.stderr)
+    print(__doc__, file=sys.stderr)
     sys.exit(1)
+
 
 def main():
     signal.signal(signal.SIGINT, signal.SIG_IGN)
@@ -85,11 +90,11 @@ def main():
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "hu:p:",
                                        ['help', 'user=', 'pass='])
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
-    username="postgres"
-    password=""
+    username = "postgres"
+    password = ""
 
     for opt, val in opts:
         if opt in ('-h', '--help'):
@@ -108,8 +113,9 @@ def main():
     p = PostgreSQL()
 
     # set password
-    p.execute("alter user %s with encrypted password E\'%s\';" % (username, escape_chars(password)))
+    p.execute(
+            ("alter user %s with encrypted password E\'%s\';" % (username, escape_chars(password)))
+            .encode('utf8'))
 
 if __name__ == "__main__":
     main()
-

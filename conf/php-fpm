@@ -1,3 +1,17 @@
-a2enconf php7.0-fpm 
-a2dismod php7.0 
-a2enmod proxy_fcgi
+#!/bin/bash -e
+
+PHP_V=$(php --version | sed -En "s|^PHP ([7-9]\.[0-9]*).*|\1|p")
+
+if which a2enmod > /dev/null; then
+    a2enconf php${PHP_V}-fpm
+    a2dismod php${PHP_V}
+    a2enmod proxy_fcgi
+elif which lighttpd > /dev/null; then
+    lighty-enable-mod fastcgi-php-fpm
+elif which nginx > /dev/null; then
+    DEFAULT=/etc/nginx/sites-available/tkl-default
+    if [[ -f "$DEFAULT" ]]; then
+        sed -i "\|index index.html index.htm;| s|;| index.php;|" $DEFAULT
+        sed -i "\|include snippets/php-fpm.conf;| s|#||" $DEFAULT
+    fi
+fi

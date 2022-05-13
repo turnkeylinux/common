@@ -1,0 +1,26 @@
+#!/bin/bash -e
+
+[[ -z "$DEBUG" ]] || set -x
+
+export COMPOSER_USER="${COMPOSER_USER:-www-data}"
+export COMPOSER_USER_HOME=$(getent passwd $COMPOSER_USER | cut -d: -f6) || true
+
+if [[ -n "$COMPOSER_USER" ]] && [[ -n "$COMPOSER_USER_HOME"  ]]; then
+    export COMPOSER_HOME="${COMPOSER_HOME:-$COMPOSER_USER_HOME/.composer}"
+fi
+
+if [[ ! -e "$COMPOSER_HOME" ]]; then
+    mkdir -p $COMPOSER_HOME
+elif [[ ! -d "$COMPOSER_HOME" ]]; then
+    echo "Fatal: COMPOSER_HOME ($COMPOSER_HOME) exists but is a file."
+    exit 1
+fi
+chown -R $COMPOSER_USER:$COMPOSER_USER $COMPOSER_HOME
+
+ENV="COMPOSER_HOME=$COMPOSER_HOME"
+[[ -z "$COMPOSER_MEMORY_LIMIT" ]] || ENV="$ENV COMPOSER_MEMORY_LIMIT=$COMPOSER_MEMORY_LIMIT"
+[[ -z "$HTTPS_PROXY_REQUEST_FULLURI" ]] || ENV="$ENV HTTPS_PROXY_REQUEST_FULLURI=$HTTPS_PROXY_REQUEST_FULLURI"
+
+COMMAND="composer $@"
+
+runuser $COMPOSER_USER -s /bin/bash -c "$ENV $COMMAND"

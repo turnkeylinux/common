@@ -3,17 +3,22 @@
 SRC=/usr/local/src
 WEBROOT=/var/www/webdavcgi
 GIT_SOURCE=https://github.com/DanRohde/webdavcgi.git
-TAG_RELEASE=5569b51
+TEST_ID=875e44f
 
-# Note: latest release is v1.1.2 - 5 Oct 2017; however, most commits since then
-# appear to be bugfixes and basic testing suggests all is well in master. So
-# cloning to latest commit at time of testing.
+# Note: latest release tag is v1.1.2 - 5 Oct 2017; however, commits since then
+# appear to be bugfixes and improvements and testing suggests all is well in
+# master. So shallow cloning master and checking that the latest commit at
+# build time is the one tested.
 
-git clone $GIT_SOURCE $WEBROOT
+git clone --depth=1 $GIT_SOURCE $WEBROOT
 
 cd $WEBROOT
-git checkout $TAG_RELEASE
-rm -R $WEBROOT/.git
+# Echo warning if not the tested commit ID
+HEAD_ID=$(git rev-parse --short HEAD)
+if [[ "$HEAD_ID" != "$TEST_ID" ]]; then
+    echo '[WARN] WebDAVCGI HEAD commit ID is untested!'
+    echo "       - update TEST_COMMIT in common/samba-dav to fix."
+fi
 
 mv $SRC/webdav.conf $WEBROOT
 mv $SRC/logout $WEBROOT/cgi-bin
@@ -21,12 +26,50 @@ mv $SRC/logout $WEBROOT/cgi-bin
 chmod a+rx $WEBROOT $WEBROOT/cgi-bin
 chmod -R a+r $WEBROOT
 
-echo yes | perl -MCPAN -e 'install DateTime::Format::Human::Duration'
+echo yes | perl -MCPAN -e 'install IO::Compress::Brotli'
 
-cpan install IO::Compress::Brotli
+# build custom Filesys::SmbClient module from Dan Rohde (WebDAV-CGI dev)
+# fix for https://github.com/turnkeylinux/tracker/issues/1597
+cd $WEBROOT/helper/FilesysSmbClient
+perl Makefile.PL
+make
+make install
 
-apt purge -y build-essential
+apt purge -y build-essential libsmbclient-dev
 apt autoremove -y
+
+### add "Log out button"
+TEMPLATE=$WEBROOT/templates/simple/navigation.tmpl
+
+# delete </ul> to extend the navigation bar by one more entry
+sed -i '$ d' $TEMPLATE
+
+# append a button that attempts logging in with nonexistent credentials
+# to result in a login failure that resets the previous auth data
+# if login is failed, logout is successful -> takes to tkl-webcp
+# and terminate </ul> deleted by the previous command.
+
+cat <<EOT >> $TEMPLATE
+<li title="Logout"
+onclick="$.ajax({
+  type: 'GET',
+  url: '/',
+  dataType: 'json',
+  async: true,
+  username: 'logout',
+  password: 'turnkeylinuxlogout'
+}).done(
+    function() {
+      alert('Error!')
+  }).fail(
+    function() {
+      window.location = window.location.href.replace(/^https:/, 'http:');
+  });"
+ class="dialog action history-clear"  role="menuitem" tabindex="0">
+ <span class="label">Logout</span>
+</li>
+</ul>
+EOT
 
 a2enmod rewrite
 a2enmod cgi

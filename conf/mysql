@@ -6,19 +6,23 @@ dl() {
     cd $2; curl -L -f -O $PROXY $1; cd -
 }
 
-URL="https://raw.githubusercontent.com/major/MySQLTuner-perl/master/mysqltuner.pl"
-dl $URL /usr/local/bin
-mv /usr/local/bin/mysqltuner.pl /usr/local/bin/mysqltuner
-chmod +x /usr/local/bin/mysqltuner 
+# Install mysqltuner as recommended:
+# https://github.com/major/MySQLTuner-perl#downloadinstallation
+BIN=/usr/local/bin
+URL="https://raw.githubusercontent.com/major/MySQLTuner-perl/master"
+dl $URL/mysqltuner.pl $BIN
+mv $BIN/mysqltuner.pl $BIN/mysqltuner
+chmod +x $BIN/mysqltuner
+dl $URL/basic_passwords.txt $BIN
+dl $URL/vulnerabilities.csv $BIN
 
-# set password
-[ "$MYSQL_PASS" ] && /usr/lib/inithooks/bin/mysqlconf.py --pass="$MYSQL_PASS"
-
-# start mysql server
-service mysql start
+# As of Debian Buster, there is no longer a /etc/init.d/mysql script, so let's
+# link the mariadb one.
+ln -s /etc/init.d/mariadb /etc/init.d/mysql
 
 # secure mysql installation
-mysql --defaults-extra-file=/etc/mysql/debian.cnf <<EOF
+service mysql start
+mysql <<EOF
 USE mysql;
 # remove anonymous users
 DELETE FROM user WHERE User='';
@@ -29,14 +33,5 @@ DELETE FROM user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', ':
 # remove test database
 DROP DATABASE IF EXISTS test;
 DELETE FROM db WHERE Db='test' OR Db='test\\_%';
-
-# add root-like user
-INSERT INTO mysql.user ( Host , User , Password , Select_priv , Insert_priv , Update_priv , Delete_priv , Create_priv , Drop_priv , Reload_priv , Shutdown_priv , Process_priv , File_priv , Grant_priv , References_priv , Index_priv , Alter_priv , Show_db_priv , Super_priv , Create_tmp_table_priv , Lock_tables_priv , Execute_priv , Repl_slave_priv , Repl_client_priv , Create_view_priv , Show_view_priv , Create_routine_priv , Alter_routine_priv , Create_user_priv , Event_priv, Trigger_priv, Create_tablespace_priv, ssl_type , max_questions , max_updates , max_connections , max_user_connections) VALUES ( '%', 'adminer', '', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', '', '0', '0', '0', '0');
-
-# reload privilege tables
-FLUSH PRIVILEGES;
 EOF
-
-# stop mysql server
 service mysql stop
-

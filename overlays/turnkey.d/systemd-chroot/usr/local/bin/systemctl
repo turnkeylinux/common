@@ -1,0 +1,132 @@
+#!/bin/bash -e
+
+# Temporary TKLDev build time systemctl wrapper.
+#
+# Only passes enable|disable as other actions will fail.
+
+fatal() { echo "FATAL [$0]: $@" 1>&2; exit 1; }
+warning() { echo "WARNING [$0]: $@"; }
+
+_start_stop() {
+    exit_code=0
+
+    # try service first; note this is also wrapped; see /usl/local/bin/service
+    /usr/local/bin/service $2 $1 || exit_code=$?
+
+    if [[ "$exit_code" -eq 0 ]]; then
+        return
+    else
+        # check if an init.d script exists
+        initd=/etc/init.d/$2
+        if [[ -f "$initd" ]]; then
+            $initd $1 || fatal "$initd $1 returned a non-zero exit code."
+        else
+            fatal "Unable to $1 service: $2 (tried 'service $2 $1', and $initd doesn't exist)."
+        fi
+    fi
+}
+
+_is_running() {
+    pid=$(pgrep $1)
+    if [[ -n "$pid" ]]; then
+        echo 'true'
+    else
+        echo 'false'
+    fi
+}
+
+if [[ "$#" -lt 1 ]]; then
+    # XXX hack for gitlab - respond to 'systemctl | grep "\-\.mount"'
+    echo "-.mount                                                                                     loaded active mounted   Root Mount"
+    exit 0
+fi
+
+unset COMMAND SERVICE_NAME QUIET IGNORED
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        start|stop|restart|reload|enable|disable|mask|unmask|is-failed|is-active|daemon-reload|list-units)
+            if [[ -z "$COMMAND" ]]; then
+                COMMAND=$1
+                shift
+            else
+                warning "Already had command set ('$COMMAND')."
+                warning "Now setting as '$COMMAND'."
+                shift
+            fi;;
+        status)
+            fatal "Status currently not supported in a chroot.";;
+        -q|--quiet)
+            QUIET=true
+            shift;;
+        --*)
+            IGNORED="$IGNORED $1"
+            warning "Switch '$1' will be ignored."
+            shift;;
+        *)
+            if [[ -z "$SERVICE_NAME" ]]; then
+                SERVICE_NAME=${1%.service} # remove trailing '.service' if included
+                shift
+            else
+                warning "Already had service name set ('$SERVICE_NAME')."
+                warning "Resetting to '$SERVICE_NAME'."
+                shift
+            fi;;
+    esac
+done
+
+if [[ -n "$COMMAND" ]]; then
+
+    if [[ "$SERVICE_NAME" == "ghost_localhost" ]] \
+            && [[ "$COMMAND" =~ ^(re)?start$|^stop$ ]]; then
+        SERVICE_NAME=ghost
+    fi
+
+    if [[ "$QUIET" == 'true' ]] \
+        && [[ "$COMMAND" != "is-failed" ]] \
+        && [[ "$COMMAND" != "is-active" ]]; then
+            warning "--quiet is only honored with commands is-active|is-failed."
+    fi
+
+    if [[ "$COMMAND" != "daemon-reload" ]] && [[ "$COMMAND" != "list-units" ]] && [[ -z "$SERVICE_NAME" ]]; then
+        fatal "Service name required with $COMMAND"
+    fi
+
+    case $COMMAND in
+        start|stop)
+            _start_stop $COMMAND $SERVICE_NAME;;
+
+        restart|reload)
+            _start_stop stop $SERVICE_NAME
+            _start_stop start $SERVICE_NAME;;
+
+        enable|disable)
+            /usr/bin/systemctl $COMMAND $SERVICE_NAME || exit_code=$?
+            exit $exit_code;;
+
+        mask|unmask)
+            /usr/bin/systemctl $COMMAND $SERVICE_NAME || exit_code=$?
+            exit $exit_code;;
+
+        daemon-reload)
+            warning "Ignoring daemon-reload, init scripts not cached."
+            exit 0;;
+
+        list-units)
+            warning "list-units: Running in chroot, ignoring" >&2
+            exit 0;;
+
+        is-failed|is-active)
+            running=$(_is_running $SERVICE_NAME)
+            if [[ "$running" == 'true' ]]; then
+                [[ -n "$QUIET" ]] || echo "active/running"
+                [[ "$COMMAND" == "is-active" ]] || exit 0
+                exit 1
+            else
+                [[ -n "$QUIET" ]] || echo "inactive/failed"
+                [[ "$COMMAND" == "is-failed" ]] || exit 1
+                exit 0
+            fi;;
+    esac
+else
+    fatal "Command ('$COMMAND') and/or Service name ('$SERVICE_NAME') not set or not found."
+fi

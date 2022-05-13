@@ -14,7 +14,7 @@ WEBROOT=/var/www/$APPNAME
 LOGSDIR=/var/log/$APPNAME
 
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
-GEMOPTS="--no-rdoc --no-ri"
+GEMOPTS="--no-document"
 
 git clone https://github.com/rbenv/rbenv.git /usr/local/rbenv --depth=1
 git clone https://github.com/rbenv/ruby-build.git /usr/local/rbenv/plugins/ruby-build --depth=1
@@ -43,15 +43,20 @@ EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install 2.4.3
-rbenv global 2.4.3
+RBY_VER=2.6.6
+
+MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
+rbenv global $RBY_VER
 
 gem update --system
 
 gem install $GEMOPTS rack
 gem install $GEMOPTS rails
 gem install $GEMOPTS bundler --force
-gem install $GEMOPTS passenger
+# Pin passenger to 6.0.4 (lastest=6.0.6) to workaround "Redis::InheritedError"
+# issue. See discussion here:
+# https://groups.google.com/g/canvas-lms-users/c/2TQiN27sBcE
+gem install $GEMOPTS passenger:6.0.4
 gem install $GEMOPTS rake
 gem install $GEMOPTS pg
 gem install $GEMOPTS execjs
@@ -66,7 +71,7 @@ sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/mods-available/passenge
 # start mysql server
 service postgresql start
 
-su postgres -c "createuser --no-superuser --createdb --no-createrole $DB_USER"
+su postgres -c "createuser --no-superuser --createdb $DB_USER"
 su postgres -c "psql postgres" <<< "alter user $DB_USER with encrypted password '$DB_PASS';"
 
 # create databases for each environment
@@ -119,4 +124,3 @@ sed -i "s|@APPNAME@|$APPNAME|g" /etc/logrotate.d/$APPNAME
 a2ensite $APPNAME
 
 service postgresql stop
-

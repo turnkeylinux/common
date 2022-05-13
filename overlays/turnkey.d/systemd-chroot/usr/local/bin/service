@@ -1,0 +1,51 @@
+#!/bin/bash
+
+if [[ $1 == "apache2"* ]]; then
+    if [[ $2 == "reload" ]]; then
+        APACHE_STARTED_BY_SYSTEMD=y /usr/sbin/apache2ctl restart
+    else
+        APACHE_STARTED_BY_SYSTEMD=y /usr/sbin/apache2ctl $2
+    fi
+elif [[ $1 == "mysql"* ]] || [[ $1 == "mariadb"* ]]; then
+    if [[ -f /etc/init.d/mariadb ]]; then
+        /etc/init.d/mariadb $2
+    elif [[ -f /etc/init.d/mysql ]]; then
+        /etc/init.d/mysql $2
+    else
+        echo "No mariadb or mysql init script found" >&2
+        exit 1
+    fi
+elif [[ $1 == "zoneminder"* ]]; then
+    echo "ignoring zoneminder ..."
+elif [[ $1 == "odoo"* ]]; then
+    if [[ $2 == "stop" ]] || [[ $2 == "restart" ]]; then
+        kill -9 $(pgrep odoo)
+    fi
+    if [[ $2 == "start" ]] || [[ $2 == "restart" ]]; then
+        runuser odoo -s /bin/bash -c "/usr/bin/odoo --config /etc/odoo/odoo.conf --logfile /var/log/odoo/odoo-server.log &"
+    fi
+elif [[ $1 == "gitlab-runsvdir"* ]]; then
+    if [[ $2 == "stop" ]] || [[ $2 == "restart" ]]; then
+        kill -9 $(pgrep runsvdir)
+    fi
+    if [[ $2 == "start" ]] || [[ $2 == "restart" ]]; then
+       /opt/gitlab/embedded/bin/runsvdir-start &
+    fi
+elif [[ $1 == "mattermost"* ]]; then
+    if [[ $2 == "stop" ]] || [[ $2 == "restart" ]]; then
+        kill -9 $(pgrep mattermost)
+    fi
+    if [[ $2 == "start" ]] || [[ $2 == "restart" ]]; then
+       /opt/mattermost/bin/mattermost &
+    fi
+elif [[ $1 == "ghost"* ]]; then
+    if [[ $2 == "stop" ]] || [[ $2 == "restart" ]]; then
+        kill -9 $(pgrep ghost) $(pgrep node) $(pgrep sudo)
+    fi
+    if [[ $2 == "start" ]] || [[ $2 == "restart" ]]; then
+        cd /opt/ghost
+        sudo -u ghost /usr/local/bin/node /usr/local/bin/ghost start &
+    fi
+else
+    /usr/sbin/service $@
+fi

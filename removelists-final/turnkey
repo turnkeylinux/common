@@ -1,5 +1,14 @@
+# rm apt proxy conf
+/etc/apt/apt.conf.d/01proxy
+
 # rm composer auth token
 /root/.composer/auth.json
+/var/www/.composer/auth.json
 
-# rm apache systemd not working in chroot workaround
+# rm composer cache
+/root/.cache/composer
+/var/www/.composer/cache
+
+# rm common systemctl chroot workaround(s)
 /usr/local/bin/service
+/usr/local/bin/systemctl

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """Set web2py admin console password
 
 Option:
@@ -6,18 +6,19 @@ Option:
 
 """
 
+import os
 import sys
 import getopt
 import hashlib
 
-from executil import system
+import subprocess
 from dialog_wrapper import Dialog
 
 def usage(s=None):
     if s:
-        print >> sys.stderr, "Error:", s
-    print >> sys.stderr, "Syntax: %s [options]" % sys.argv[0]
-    print >> sys.stderr, __doc__
+        print("Error:", s, file=sys.stderr)
+    print("Syntax: %s [options]" % sys.argv[0], file=sys.stderr)
+    print(__doc__, file=sys.stderr)
     sys.exit(1)
 
 def main():
@@ -26,7 +27,7 @@ def main():
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "h",
                                        ['help', 'pass='])
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     password = ""
@@ -44,11 +45,14 @@ def main():
     
     fpath = "/var/www/web2py/parameters_443.py"
 
-    password_script = "python -c 'from gluon.main import save_password; save_password(\"%s\", 443)'" % password
-    system("cd /var/www/web2py && %s" % password_script)
+    os.chdir('/var/www/web2py')
+    subprocess.run([
+        'python', '-c',
+        "from gluon.main import save_password; save_password(\"%s\", 443)" % password
+    ])
 
-    system("chown www-data:www-data %s" % fpath)
-    system("chmod 640 %s" % fpath)
+    subprocess.run(["chown", "www-data:www-data", fpath])
+    subprocess.run(["chmod", "640", fpath])
 
 if __name__ == "__main__":
     main()
