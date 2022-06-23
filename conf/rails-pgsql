@@ -43,7 +43,7 @@ EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-RBY_VER=2.6.6
+RBY_VER=2.7.6
 
 MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
 rbenv global $RBY_VER
