@@ -18,9 +18,9 @@ fatal() {
 }
 
 build_dummy_pkg() {
-    PKG=$1
+    declare PKG=$1
     mkdir -p /tmp/$PKG/DEBIAN
-    PKG_V="2:${PHP_VERSION}"
+    declare PKG_V="2:${PHP_VERSION}"
     cd  /tmp
     cat > /tmp/$PKG/DEBIAN/control <<EOF
 Package: $PKG
