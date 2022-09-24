@@ -29,15 +29,43 @@
 #   - add to plan & pin package(s) to backports (via prefs file); or
 #   - install via apt using '-t $CODENAME-backports' switch
 
-fatal() {
-    echo "fatal: $@" 1>&2
-    exit 1
-}
+fatal() { echo "fatal: $@" 1>&2; exit 1; }
 
 [ ! -f /turnkey-buildenv ] || source /turnkey-buildenv
 [ -n "$RELEASE" ] || fatal "RELEASE is not set"
 CODENAME=$(basename $RELEASE)
+[ -n "$CODENAME" ] || fatal "CODENAME is not set"
+distro=$(dirname $RELEASE)
+if [[ "$distro" != 'debian' ]] && [[ "$distro" != 'ubuntu' ]]; then
+    fatal "Only supported distros are 'debian' and 'ubuntu' (got '{$distro}')"
+fi
 rm -rf /turnkey-buildenv
+
+case $CODENAME in
+    buster|bullseye|bookworm)
+        MIRROR_URL=http://deb.debian.org/debian
+        SEC_MIRROR=http://security.debian.org/
+        KEY_CODENAME=$CODENAME
+        CONTRIB="contrib"
+        NON_FREE="non-free"
+        ;;
+    # Note - only Ubuntu LTS
+    focal|jammy)
+        MIRROR_URL=http://archive.ubuntu.com/ubuntu
+        SEC_MIRROR=$MIRROR_URL
+        CONTRIB="universe"
+        NON_FREE="restricted multiverse"
+        ;;&
+    focal)
+        KEY_CODENAME="bullseye"
+        ;;
+    jammy)
+        KEY_CODENAME="bookworm"
+        ;;
+    *)
+        fatal "Codename '$CODENAME' not supported"
+        ;;
+esac
 
 SOURCES_LIST=/etc/apt/sources.list.d
 PREFS_LIST=/etc/apt/preferences.d
@@ -55,10 +83,11 @@ if [[ "$HOST_DEB_VER" != "$deb_ver" ]]; then
         fatal "Debian releases older than Stretch no longer supported"
     fi
 fi
-if [[ $deb_ver -le 10 ]]; then
+
+if [[ $deb_ver -le 10 ]] && [[ "$distro" == 'debian' ]]; then
     sec_repo="$CODENAME/updates"
     PROXY_PORT=8124
-elif [[ $deb_ver -ge 11 ]]; then
+elif [[ $deb_ver -ge 11 ]] || [[ "$distro" == 'ubuntu' ]]; then
     sec_repo="$CODENAME-security"
     PROXY_PORT=3128
 fi
@@ -108,24 +137,24 @@ if [[ -z "$NO_TURNKEY_APT_REPO" ]]; then
 fi
 
 cat > $SOURCES_LIST/sources.list <<EOF
-deb [signed-by=$key_dir/tkl-$CODENAME-main.gpg] http://archive.turnkeylinux.org/debian $CODENAME main
+deb [signed-by=$key_dir/tkl-$KEY_CODENAME-main.gpg] http://archive.turnkeylinux.org/debian $KEY_CODENAME main
 
-deb http://deb.debian.org/debian $CODENAME main
-deb http://deb.debian.org/debian $CODENAME contrib
-#deb http://deb.debian.org/debian $CODENAME non-free
+deb $MIRROR_URL $CODENAME main
+deb $MIRROR_URL $CODENAME $CONTRIB
+#deb $MIRROR_URL $CODENAME $NON_FREE
 EOF
 
 cat > $SOURCES_LIST/security.sources.list <<EOF
-deb [signed-by=$key_dir/tkl-$CODENAME-security.gpg] http://archive.turnkeylinux.org/debian $CODENAME-security main
+deb [signed-by=$key_dir/tkl-$KEY_CODENAME-security.gpg] http://archive.turnkeylinux.org/debian $KEY_CODENAME-security main
 
-deb http://security.debian.org $sec_repo main
-deb http://security.debian.org $sec_repo contrib
-#deb http://security.debian.org $sec_repo non-free
+deb $SEC_MIRROR $sec_repo main
+deb $SEC_MIRROR $sec_repo $CONTRIB
+#deb $SEC_MIRROR $sec_repo $NON_FREE
 EOF
 
 TKL_TESTING_LIST=$SOURCES_LIST/turnkey-testing.list
 cat > $TKL_TESTING_LIST.disabled <<EOF
-deb [signed-by=$key_dir/tkl-$CODENAME-testing.gpg] http://archive.turnkeylinux.org/debian $CODENAME-testing main
+deb [signed-by=$key_dir/tkl-$KEY_CODENAME-testing.gpg] http://archive.turnkeylinux.org/debian $KEY_CODENAME-testing main
 EOF
 
 DEB_BACKPORT_LIST=$SOURCES_LIST/debian-backports.list
