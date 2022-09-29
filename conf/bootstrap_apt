@@ -117,10 +117,6 @@ deb [signed-by=$keyfile] https://packages.sury.org/php/ $CODENAME main
 EOF
 
     cat > /etc/apt/preferences.d/php-sury.pref <<EOF
-Package: *
-Pin: origin packages.sury.org
-Pin-Priority: 10
-
 Package: php${PHP_VERSION}-*
 Pin: origin packages.sury.org
 Pin-Priority: 550
@@ -148,6 +144,10 @@ Pin-Priority: 550
 Package: php-common
 Pin: origin packages.sury.org
 Pin-Priority: 550
+
+Package: *
+Pin: origin packages.sury.org
+Pin-Priority: 10
 
 # only enable below if using latest php version
 #Package: php-imagick

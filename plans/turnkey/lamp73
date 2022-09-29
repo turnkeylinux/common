@@ -1,0 +1,15 @@
+#include <turnkey/mysql>
+
+/* normal lamp components */
+apache2
+webmin-apache
+
+webmin-phpini
+
+adminer
+
+/* PHP 7.3 specific */
+
+php7.3-mysql
+libapache2-mod-php7.3
+php7.3-cli
