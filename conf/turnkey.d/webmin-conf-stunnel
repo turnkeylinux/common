@@ -7,7 +7,7 @@ systemctl enable stunnel4@webmin.service || true
 
 WEBMIN_PORT=${WEBMIN_PORT:=12321}
 
-sed -i "/^accept/ s|=.*|= $WEBMIN_PORT|" /etc/stunnel/webmin.conf
+sed -i "/^accept/ s|=.*|= :::$WEBMIN_PORT|" /etc/stunnel/webmin.conf
 
 CONF=/etc/webmin/miniserv.conf
 
