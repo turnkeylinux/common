@@ -149,6 +149,10 @@ Package: php-common
 Pin: origin packages.sury.org
 Pin-Priority: 550
 
+Package: *
+Pin: origin packages.sury.org
+Pin-Priority: 10
+
 # only enable below if using latest php version
 #Package: php-imagick
 #Pin: origin packages.sury.org
