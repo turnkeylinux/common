@@ -1,5 +1,3 @@
-build-essential
-ca-certificates
-openssl
+#include <turnkey/nodejs>
 
 nginx
