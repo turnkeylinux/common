@@ -1,3 +1,5 @@
 build-essential
 ca-certificates
 openssl
+
+nginx
