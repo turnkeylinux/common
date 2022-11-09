@@ -1,12 +1,18 @@
 #include <boot>
 #include <net>
 #include <console>
+#ifdef ARM64
+#include <wifi>
+#endif
 
 wget
 curl
 rsync
 
+#ifndef ARM64
 di-live
+#endif
+
 whiptail                /* di-live recommends */
 kbd                     /* di-live recommends */
 lvm2                    /* di-live recommends */
@@ -15,7 +21,6 @@ eject                   /* di-live recommends */
 
 confconsole
 kbd                     /* confconsole recommends */
-di-live                 /* confconsole recommends */
 resolvconf              /* confconsole recommends */
 
 /* jiiterentropy-rngd provides entropy from cpu jitter; req'd in buster to */

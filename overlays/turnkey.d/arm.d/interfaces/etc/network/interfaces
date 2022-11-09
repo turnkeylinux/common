@@ -1,0 +1,17 @@
+# UNCONFIGURED INTERFACES
+# remove the above line if you edit this file
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+allow-hotplug eth1
+iface eth1 inet dhcp
+
+allow-hotplug wlan0
+iface wlan0 inet dhcp
+    wpa-ssid my-network-ssid
+    wpa-psk s3kr3t_P4ss
+
