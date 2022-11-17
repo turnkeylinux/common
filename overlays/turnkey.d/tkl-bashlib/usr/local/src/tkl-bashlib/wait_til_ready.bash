@@ -1,5 +1,16 @@
-# Part of - and requires - tkl-bashlib
-# - see 'init' script in this directory for more info
+# (c) 2022 - TurnKey GNU/Linux - all rights reserved
+#
+# This script is part of TKLDev BashLib.
+#
+# The source can be located locally on TKLDev:
+#   ${FAB_PATH}/common/overlays/turnkey.d/tkl-bashlib
+#
+# To use it within a conf script, first source the base 'init' script:
+#
+#   source /usr/local/src/tkl-bashlib/init
+#
+# For more info, including licence, please see the README.rst (should be in
+# the same dir as this file).
 
 # check if port is listening
 port_listening() {

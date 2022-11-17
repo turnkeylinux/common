@@ -1,16 +1,16 @@
-# This script is provided by TurnKey GNU/Linux to allow reuse of bash code
-# snippets in TKLDev appliance build code.
+# (c) 2022 - TurnKey GNU/Linux - all rights reserved
 #
-# This init script contains some base setup and loads all other .bash files
-# in this directory.
+# This script is part of TKLDev BashLib.
 #
-# It is provided by common/overlays/turnkey.d/tkl-bashlib
+# The source can be located locally on TKLDev:
+#   ${FAB_PATH}/common/overlays/turnkey.d/tkl-bashlib
 #
-# To use it, source this base 'init' script:
+# To use it within a conf script, first source this base 'init' script:
 #
-#     source /usr/local/src/tkl-bashlib/init
+#   source /usr/local/src/tkl-bashlib/init
 #
-# Licence: GPLv3 (or later)
+# For more info, including licence, please see the README.rst (should be in
+# the same dir as this file).
 
 # set proxy env vars (if not already set)
 if [[ -n "${FAB_HTTP_PROXY}" ]]; then
