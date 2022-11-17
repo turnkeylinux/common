@@ -1,0 +1,50 @@
+# This script is provided by TurnKey GNU/Linux to allow reuse of bash code
+# snippets in TKLDev appliance build code.
+#
+# This init script contains some base setup and loads all other .bash files
+# in this directory.
+#
+# It is provided by common/overlays/turnkey.d/tkl-bashlib
+#
+# To use it, source this base 'init' script:
+#
+#     source /usr/local/src/tkl-bashlib/init
+#
+# Licence: GPLv3 (or later)
+
+# set proxy env vars (if not already set)
+if [[ -n "${FAB_HTTP_PROXY}" ]]; then
+    if [[ -z "${http_proxy}" ]]; then
+        export http_proxy=${FAB_HTTP_PROXY}
+    fi
+fi
+if [[ -n "${FAB_HTTPS_PROXY}" ]]; then
+    if [[ -z "${https_proxy}" ]]; then
+        export https_proxy=${FAB_HTTPS_PROXY}
+    fi
+fi
+
+# set non-interactive dpkg/apt front end
+export DEBIAN_FRONTEND=noninteractive
+
+# functions for errors and warnings
+fatal() { echo "FATAL: ${@}" >&2; exit 1; }
+warn() { echo "WARN: ${@}" >&2; exit 1; }
+
+# check for integers
+# if any elements of $@ are _not_ integers - will return 1
+is_integer() {
+    [[ "$#" -gt 0 ]] || fatal "is_integer requires at least one argument"
+    for item in $@; do
+        if [[ -n "${item##*[!0-9]*}" ]]; then
+            continue
+        else
+            return 1
+        fi
+    done
+}
+
+# load all other .bash files
+for _f in $(dirname ${BASH_SOURCE[0]})/*.bash; do
+    source ${_f}
+done

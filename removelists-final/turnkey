@@ -12,3 +12,6 @@
 # rm common systemctl chroot workaround(s)
 /usr/local/bin/service
 /usr/local/bin/systemctl
+
+# rm bashlib
+/usr/local/src/tkl-bashlib
