@@ -56,6 +56,7 @@ get_http_status() {
             fatal "Port must be an integer, 'auto' or unset (${port})";;
     esac
 
+    [[ "${schema}" != "https" ]] || args="${args} --insecure"
     curl ${args} ${schema}://localhost:${port} 2>/dev/null \
         | head -1 | sed -nE "s|^.*([0-9]{3}).*|\1|p"
 }
