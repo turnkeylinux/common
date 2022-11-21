@@ -46,7 +46,7 @@ To contribute to the development of bashlib, please open a pull request.
 
 Generally it is desireable to only add new '.bash' files. That is because
 existing appliance buildcode may depend on the current code "as is"
-(including any buggy behvaiour). So please be especially careful if/when
+(including any buggy behaviour). So please be especially careful if/when
 modifying existing files and functions.
 
 .. _DRY: https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
