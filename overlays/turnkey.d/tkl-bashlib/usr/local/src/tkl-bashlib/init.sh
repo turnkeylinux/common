@@ -13,15 +13,11 @@
 # the same dir as this file).
 
 # set proxy env vars (if not already set)
-if [[ -n "${FAB_HTTP_PROXY}" ]]; then
-    if [[ -z "${http_proxy}" ]]; then
-        export http_proxy=${FAB_HTTP_PROXY}
-    fi
+if [[ -n "${FAB_HTTP_PROXY}" ]] && [[ -z "${http_proxy}" ]]; then
+    export http_proxy=${FAB_HTTP_PROXY}
 fi
-if [[ -n "${FAB_HTTPS_PROXY}" ]]; then
-    if [[ -z "${https_proxy}" ]]; then
-        export https_proxy=${FAB_HTTPS_PROXY}
-    fi
+if [[ -n "${FAB_HTTPS_PROXY}" ]] && [[ -z "${https_proxy}" ]]; then
+    export https_proxy=${FAB_HTTPS_PROXY}
 fi
 
 # set non-interactive dpkg/apt front end
