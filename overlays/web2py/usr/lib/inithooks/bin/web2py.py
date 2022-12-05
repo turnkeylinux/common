@@ -12,7 +12,7 @@ import getopt
 import hashlib
 
 import subprocess
-from dialog_wrapper import Dialog
+from libinithooks.dialog_wrapper import Dialog
 
 def usage(s=None):
     if s:
@@ -47,7 +47,7 @@ def main():
 
     os.chdir('/var/www/web2py')
     subprocess.run([
-        'python', '-c',
+        'python3', '-c',
         "from gluon.main import save_password; save_password(\"%s\", 443)" % password
     ])
 

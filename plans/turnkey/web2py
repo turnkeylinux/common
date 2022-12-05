@@ -4,12 +4,8 @@ apache2
 webmin-apache
 apache2-dev
 
-/* Python2 deps - leave py2 as default for now */
-libapache2-mod-wsgi
-python-mysqldb
-
 /* Python3 deps */
-//libapache2-mod-wsgi-py3 /* conflicts with libapache2-mod-wsgi */
+libapache2-mod-wsgi-py3 /* conflicts with libapache2-mod-wsgi */
 python3-mysqldb
 python3-virtualenv
 
