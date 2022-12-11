@@ -99,11 +99,7 @@ if [[ -n "$COMMAND" ]]; then
             _start_stop stop $SERVICE_NAME
             _start_stop start $SERVICE_NAME;;
 
-        enable|disable)
-            /usr/bin/systemctl $COMMAND $SERVICE_NAME || exit_code=$?
-            exit $exit_code;;
-
-        mask|unmask)
+        enable|disable|mask|unmask)
             /usr/bin/systemctl $COMMAND $SERVICE_NAME || exit_code=$?
             exit $exit_code;;
 

@@ -1,51 +1,91 @@
 #!/bin/bash
 
-if [[ $1 == "apache2"* ]]; then
-    if [[ $2 == "reload" ]]; then
-        APACHE_STARTED_BY_SYSTEMD=y /usr/sbin/apache2ctl restart
-    else
-        APACHE_STARTED_BY_SYSTEMD=y /usr/sbin/apache2ctl $2
-    fi
-elif [[ $1 == "mysql"* ]] || [[ $1 == "mariadb"* ]]; then
-    if [[ -f /etc/init.d/mariadb ]]; then
-        /etc/init.d/mariadb $2
-    elif [[ -f /etc/init.d/mysql ]]; then
-        /etc/init.d/mysql $2
-    else
-        echo "No mariadb or mysql init script found" >&2
-        exit 1
-    fi
-elif [[ $1 == "zoneminder"* ]]; then
-    echo "ignoring zoneminder ..."
-elif [[ $1 == "odoo"* ]]; then
-    if [[ $2 == "stop" ]] || [[ $2 == "restart" ]]; then
-        kill -9 $(pgrep odoo)
-    fi
-    if [[ $2 == "start" ]] || [[ $2 == "restart" ]]; then
-        runuser odoo -s /bin/bash -c "/usr/bin/odoo --config /etc/odoo/odoo.conf --logfile /var/log/odoo/odoo-server.log &"
-    fi
-elif [[ $1 == "gitlab-runsvdir"* ]]; then
-    if [[ $2 == "stop" ]] || [[ $2 == "restart" ]]; then
-        kill -9 $(pgrep runsvdir)
-    fi
-    if [[ $2 == "start" ]] || [[ $2 == "restart" ]]; then
-       /opt/gitlab/embedded/bin/runsvdir-start &
-    fi
-elif [[ $1 == "mattermost"* ]]; then
-    if [[ $2 == "stop" ]] || [[ $2 == "restart" ]]; then
-        kill -9 $(pgrep mattermost)
-    fi
-    if [[ $2 == "start" ]] || [[ $2 == "restart" ]]; then
-       /opt/mattermost/bin/mattermost &
-    fi
-elif [[ $1 == "ghost"* ]]; then
-    if [[ $2 == "stop" ]] || [[ $2 == "restart" ]]; then
-        kill -9 $(pgrep ghost) $(pgrep node) $(pgrep sudo)
-    fi
-    if [[ $2 == "start" ]] || [[ $2 == "restart" ]]; then
-        cd /opt/ghost
-        sudo -u ghost /usr/local/bin/node /usr/local/bin/ghost start &
-    fi
-else
-    /usr/sbin/service $@
-fi
+# Temporary TKLDev build time service wrapper.
+#
+# Should deal with common build time calls to "service" with common actions
+# If the service isn't recognised, then will fall back to /usr/bin/service
+
+
+stop_start() {
+    _action=$1 # stop|start|restart
+    shift
+    _service=$1 # service name - only used with stop|restart
+    shift
+    _command="$@" # command to run - only used with start|restart
+
+    case $_action in
+        stop|restart)
+            pid=$(pgrep $_service)
+            if [[ "$_service" == "ghost" ]]; then
+                pid="$pid $(pgrep node) $(pgrep sudo)"
+            fi
+            kill -9 $pid
+            ;;&
+        start|restart)
+            $_command
+            ;;
+        stop)
+            # catch stop after 'stop|restart' falls through
+            ;;
+        *)
+            echo "Unrecognised action: $_action" >&2
+            exit 1
+            ;;
+    esac
+}
+
+case $1 in
+
+    apache2)
+        if [[ $2 == "reload" ]]; then
+            APACHE_STARTED_BY_SYSTEMD=y /usr/sbin/apache2ctl restart
+        else
+            APACHE_STARTED_BY_SYSTEMD=y /usr/sbin/apache2ctl $2
+        fi
+        ;;
+
+    mysql|mariadb)
+        if [[ -f /etc/init.d/mariadb ]]; then
+            /etc/init.d/mariadb $2
+        elif [[ -f /etc/init.d/mysql ]]; then
+            /etc/init.d/mysql $2
+        else
+            echo "No mariadb or mysql init script found" >&2
+            exit 1
+        fi
+        ;;
+
+    zoneminder)
+        echo "ignoring zoneminder ..."
+        ;;
+
+    odoo)
+        stop_start $1 $2 \
+            runuser odoo -s /bin/bash -c "/usr/bin/odoo --config /etc/odoo/odoo.conf --logfile /var/log/odoo/odoo-server.log &"
+        ;;
+
+    gitlab-runsvdir*)
+        stop_start $1 $2 \
+            /opt/gitlab/embedded/bin/runsvdir-start &
+        ;;
+
+    ghost)
+        stop_start $1 $2 \
+            cd /opt/ghost; sudo -u ghost /usr/local/bin/node /usr/local/bin/ghost start &
+        ;;
+
+    mattermost)
+        stop_start $1 $2 \
+            /opt/mattermost/bin/mattermost &
+        ;;
+
+    redis)
+        stop_start $1 $2 \
+            runuser www-data -s /bin/bash -c "/usr/sbin/php-fpm?.? --daemonize --fpm-config /etc/php/*.*/fpm/php-fpm.conf"
+        ;;
+
+    *)
+        echo "$(basename $0) tkldev service wrapper falling back to /usr/sbin/service"
+        /usr/sbin/service $@
+        ;;
+esac
