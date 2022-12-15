@@ -70,17 +70,22 @@ class MySQL:
     def __del__(self):
         self._stop()
 
-    def execute(self, query, interp=None):
+    def execute(self, query, interp=None, output=False):
         if not self.connected:
             self.connect()
 
         try:
             with self.connection.cursor() as cursor:
                 cursor.execute(query, interp)
+                if output:
+                    result = cursor.fetchall()
             self.connection.commit()
         finally:
             self.connection.close()
             self.connected = False
+        if output:
+            return result
+
 
 def usage(s=None):
     if s:
