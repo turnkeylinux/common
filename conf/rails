@@ -13,7 +13,7 @@ DB_PASS=$(mcookie)
 WEBROOT=/var/www/$APPNAME
 LOGSDIR=/var/log/$APPNAME
 
-[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
+[ "$FAB_HTTP_PROXY" ] && export http_proxy=$FAB_HTTP_PROXY
 GEMOPTS="--no-document"
 
 git clone https://github.com/rbenv/rbenv.git /usr/local/rbenv --depth=1
@@ -87,7 +87,7 @@ if $(rails --version | grep -q "Rails 2.5"); then
 else
     rails new $APPNAME -d mysql --skip
 fi
-unset HTTP_PROXY
+unset http_proxy
 
 CONF=$WEBROOT/config/database.yml
 sed -i "s|username:.*|username: $DB_USER|g" $CONF
