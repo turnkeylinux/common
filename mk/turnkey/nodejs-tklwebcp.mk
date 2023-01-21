@@ -1,4 +1,5 @@
-COMMON_OVERLAYS += tkl-webcp nodejs-pm2-tklwebcp
-COMMON_CONF += tkl-webcp nodejs-pm2-tklwebcp
+include $(FAB_PATH)/common/mk/turnkey/tkl-webcp.mk
+include $(FAB_PATH)/common/mk/turnkey/nginx-nodejs.mk
 
-include $(FAB_PATH)/common/mk/turnkey/nodejs.mk
+COMMON_OVERLAYS += nodejs-pm2-tklwebcp
+COMMON_CONF += nodejs-pm2-tklwebcp
