@@ -9,4 +9,4 @@ export ARTISAN_DIR="${ARTISAN_DIR:-$WEBROOT}"
 
 COMMAND="php $ARTISAN_DIR/artisan $@"
 
-runuser $ARTISAN_USER -s /bin/bash -c "$COMMAND"
+/usr/sbin/runuser $ARTISAN_USER -s /bin/bash -c "$COMMAND"
