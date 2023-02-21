@@ -7,15 +7,14 @@ HOSTNAME ?= $(shell basename $(shell pwd))
 CONF_VARS += HOSTNAME ROOT_PASS NONFREE
 
 COMMON_OVERLAYS_TMP := $(COMMON_OVERLAYS)
-COMMON_OVERLAYS := turnkey.d/apt
+COMMON_OVERLAYS := bootstrap_apt
 COMMON_OVERLAYS += turnkey.d/bashrc
 COMMON_OVERLAYS += turnkey.d/grub
 COMMON_OVERLAYS += turnkey.d/profile
 COMMON_OVERLAYS += $(COMMON_OVERLAYS_TMP)
 
 COMMON_CONF_TMP := $(COMMON_CONF)
-COMMON_CONF := turnkey.d/apt
-COMMON_CONF += turnkey.d/busybox
+COMMON_CONF := bootstrap_apt
 COMMON_CONF += turnkey.d/console-setup
 COMMON_CONF += turnkey.d/cronapt
 COMMON_CONF += turnkey.d/hostname
@@ -38,8 +37,10 @@ FAB_SHARE_PATH ?= /usr/share/fab
 # setup apt and dns for root.build
 define _bootstrap/post
 
-	fab-apply-overlay $(COMMON_OVERLAYS_PATH)/turnkey.d/apt $O/bootstrap;
-	fab-chroot $O/bootstrap --script $(COMMON_CONF_PATH)/turnkey.d/apt;
+	fab-apply-overlay $(COMMON_OVERLAYS_PATH)/bootstrap_apt $O/bootstrap;
+	mkdir -p $O/bootstrap/usr/local/share/ca-certificates/;
+	cp /usr/local/share/ca-certificates/squid_proxyCA.crt $O/bootstrap/usr/local/share/ca-certificates/;
+	fab-chroot $O/bootstrap --script $(COMMON_CONF_PATH)/bootstrap_apt;
 	fab-chroot $O/bootstrap "echo nameserver 8.8.8.8 > /etc/resolv.conf";
 	fab-chroot $O/bootstrap "echo nameserver 8.8.4.4 >> /etc/resolv.conf";
 endef
@@ -78,4 +79,3 @@ endef
 root.patched/post += $(_root.patched/post)
 
 include $(FAB_SHARE_PATH)/product.mk
-
