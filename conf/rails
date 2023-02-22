@@ -43,7 +43,6 @@ EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-# <= 2.4 can no longer install due to missing libssl1.0 dep
 RBY_VER=2.7.6
 
 MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
@@ -67,26 +66,22 @@ PASSENGER_ROOT=$(echo $(ls -d /usr/local/rbenv/versions/*/lib/ruby/gems/*/gems/p
 sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/mods-available/passenger.*
 
 # convenience execution variables
-MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
-MYSQL_ADMIN="mysqladmin --user=root --password=$MYSQL_PASS"
+MYSQL_BATCH="mysql --batch"
 
 # start mysql server
-/etc/init.d/mariadb start
+service mariadb start
 
 # create databases for each environment
 for DB_ENV in test development production; do
     DB_NAME=${APPNAME}_${DB_ENV}
-    $MYSQL_ADMIN create $DB_NAME;
+    mysqladmin create $DB_NAME;
     $MYSQL_BATCH --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
 done
 
 # seed rails application (3.x requires new)
 cd /var/www
-if $(rails --version | grep -q "Rails 2.5"); then
-    rails $APPNAME -d mysql --skip
-else
-    rails new $APPNAME -d mysql --skip
-fi
+rails new $APPNAME -d mysql --skip
+
 unset http_proxy
 
 CONF=$WEBROOT/config/database.yml
