@@ -213,6 +213,16 @@ fi
 
 if [ "$BACKPORTS" ]; then
     mv $DEB_BACKPORT_LIST.disabled $DEB_BACKPORT_LIST
+
+    # dynamically add some extra pins as specified in appliance Makefile
+    for package_name in $BACKPORTS_PINS; do
+        cat >> /etc/apt/preferences.d/debian-backports.pref <<EOF
+Package: $package_name
+Pin: release a=$CODENAME-backports
+Pin-Priority: 500
+
+EOF
+    done
 fi
 
 # This hack ensures that any changes to 'Suite' and 'Version' changes are
