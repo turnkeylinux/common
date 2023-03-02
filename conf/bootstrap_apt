@@ -215,7 +215,7 @@ if [ "$BACKPORTS" ]; then
     mv $DEB_BACKPORT_LIST.disabled $DEB_BACKPORT_LIST
 
     # dynamically add some extra pins as specified in appliance Makefile
-    [[ -n "$BACKPORTS_PINS" ]] || fatal "BACKPORTS env var set bu no BACKPORTS_PINS specified"
+    [[ -n "$BACKPORTS_PINS" ]] || fatal "BACKPORTS env var set but no BACKPORTS_PINS specified"
     for package_name in $BACKPORTS_PINS; do
         cat >> /etc/apt/preferences.d/debian-backports.pref <<EOF
 Package: $package_name
