@@ -97,6 +97,7 @@ EOF
 DEB_BACKPORT_LIST=$SOURCES_LIST/debian-backports.list
 cat > $DEB_BACKPORT_LIST.disabled <<EOF
 deb http://deb.debian.org/debian $CODENAME-backports main
+#deb http://deb.debian.org/debian $CODENAME-backports non-free
 EOF
 
 if [ -n "$PHP_VERSION" ]; then
@@ -213,6 +214,19 @@ fi
 
 if [ "$BACKPORTS" ]; then
     mv $DEB_BACKPORT_LIST.disabled $DEB_BACKPORT_LIST
+    if [ "$BACKPORTS_NONFREE" ]; then
+        sed -i "/non-free/ s|^#||" $DEB_BACKPORT_LIST
+    fi
+
+    # dynamically add some extra pins as specified in appliance Makefile
+    for package_name in $BACKPORTS_PINS; do
+        cat >> /etc/apt/preferences.d/debian-backports.pref <<EOF
+Package: $package_name
+Pin: release a=$CODENAME-backports
+Pin-Priority: 500
+
+EOF
+    done
 fi
 
 # This hack ensures that any changes to 'Suite' and 'Version' changes are

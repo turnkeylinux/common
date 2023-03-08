@@ -3,14 +3,14 @@ RELEASE ?= debian/$(shell lsb_release -s -c)
 CDROOT ?= gfxboot-turnkey
 HOSTNAME ?= $(shell basename "$(shell pwd)")
 
-CONF_VARS += HOSTNAME ROOT_PASS NONFREE PHP_VERSION TKL_TESTING BACKPORTS
+CONF_VARS += HOSTNAME ROOT_PASS NONFREE BACKPORTS_NONFREE PHP_VERSION TKL_TESTING BACKPORTS
 CONF_VARS += WEBMIN_THEME WEBMIN_FW_TCP_INCOMING WEBMIN_FW_TCP_INCOMING_REJECT WEBMIN_FW_UDP_INCOMING WEBMIN_FW_NAT_EXTRA WEBMIN_FW_MANGLE_EXTRA
 # these are needed to control styling of credits (e.g., conf/apache-credit)
 CONF_VARS += CREDIT_STYLE CREDIT_STYLE_EXTRA CREDIT_ANCHORTEXT CREDIT_LOCATION
 # these are needed to ensure github queries don't get limited
 CONF_VARS += GITHUB_USER GITHUB_USER_TOKEN
-# for dynamically adding pins to sury
-CONF_VARS += PHP_EXTRA_PINS
+# for dynamically adding pins to sury & backports respectively
+CONF_VARS += PHP_EXTRA_PINS BACKPORTS_PINS
 
 COMMON_OVERLAYS := turnkey.d $(COMMON_OVERLAYS)
 COMMON_CONF := turnkey.d $(COMMON_CONF)
