@@ -13,6 +13,7 @@ lvm2                    /* di-live recommends */
 file                    /* di-live recommends */
 eject                   /* di-live recommends */
 
+turnkey-lazyclass       /* why not installed as confconsole dep? */
 confconsole
 kbd                     /* confconsole recommends */
 di-live                 /* confconsole recommends */
@@ -22,7 +23,7 @@ resolvconf              /* confconsole recommends */
 /* seed entropy in early boot (especially useful when live booting).       */
 jitterentropy-rngd
 
-tklbam                  /* still depends on py2 for now */
+//tklbam                  /* still depends on py2 for now */
 
 hubdns
 inithooks
@@ -61,7 +62,7 @@ webmin-custom
 webmin-fdisk
 webmin-raid
 webmin-lvm
-webmin-tklbam
+//webmin-tklbam
 webmin-updown
 webmin-filemin
 fdisk                   /* webmin-fdisk recommends */
@@ -92,6 +93,6 @@ dehydrated              /* add-water (confconsole lets encrypt) recommends (actu
 python3-bottle          /* add-water (confconsole lets encrypt) depends */
 python3-requests        /* confconsole lets encrypt recommends (actually depends) */
 
-#ifndef CHROOT_ONLY
+//ifndef CHROOT_ONLY
 acpi-support-base
-#endif
+//endif
