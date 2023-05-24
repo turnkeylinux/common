@@ -1,0 +1,20 @@
+#!/bin/sh -e
+
+# Copying cert.pem and dhparams.pem to pure-ftpd.pem and pure-ftpd-dhparams.pem.
+cp /etc/ssl/private/cert.pem /etc/ssl/private/pure-ftpd.pem
+cp /etc/ssl/private/dhparams.pem /etc/ssl/private/pure-ftpd-dhparams.pem
+
+# Remove root from users that cannot login into the system via FTP
+sed -i "s|^root$|# root|g"  /etc/ftpusers
+
+# Configure settings for pure-ftpd
+echo yes > /etc/pure-ftpd/conf/ChrootEveryone
+echo yes > /etc/pure-ftpd/conf/Daemonize
+echo no > /etc/pure-ftpd/conf/NoAnonymous
+echo 0 > /etc/pure-ftpd/conf/MinUID
+echo yes > /etc/pure-ftpd/conf/AllowUserFXP
+echo 1 > /etc/pure-ftpd/conf/TLS
+echo HIGH:MEDIUM:+TLSv1:\!SSLv2:\!SSLv3 > /etc/pure-ftpd/conf/TLSCipherSuite
+
+# Restart pure-ftpd.service
+systemctl restart pure-ftpd
