@@ -5,6 +5,7 @@
 wget
 curl
 rsync
+zstd                    /* recommended (new default) initramfs compression */
 
 di-live
 whiptail                /* di-live recommends */
