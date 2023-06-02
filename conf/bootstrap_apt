@@ -46,19 +46,21 @@ mkdir -p $SOURCES_LIST $PREFS_LIST $CONF_DIR
 
 # transition - add specific Debian base transition changes here
 deb_ver=$(sed -nE "s|^([0-9]+).*|\1|p" /etc/debian_version)
-if [[ -n "$HOST_DEB_VER" ]] && [[ "$HOST_DEB_VER" != "$deb_ver" ]]; then
+[[ -n "$HOST_DEB_VER" ]] || HOST_DEB_VER=$deb_ver
+if [[ "$HOST_DEB_VER" != "$deb_ver" ]]; then
     echo "# Transition build detected - building v$deb_ver on v$HOST_DEB_VER"
     if [[ $HOST_DEB_VER -ne $((deb_ver - 1)) ]]; then
         fatal "Detected more than one Debian major version difference"
     elif [[ $deb_ver -lt 9 ]]; then
         fatal "Debian releases older than Stretch no longer supported"
-    elif [[ $deb_ver -le 10 ]]; then
-        sec_repo="$CODENAME/updates"
-        PROXY_PORT=8124
-    elif [[ $deb_ver -ge 11 ]]; then
-        sec_repo="$CODENAME-security"
-        PROXY_PORT=3128
     fi
+fi
+if [[ $deb_ver -le 10 ]]; then
+    sec_repo="$CODENAME/updates"
+    PROXY_PORT=8124
+elif [[ $deb_ver -ge 11 ]]; then
+    sec_repo="$CODENAME-security"
+    PROXY_PORT=3128
 fi
 
 if [[ "${APT_PROXY_OVERRIDE,,}" -eq "disable" ]]; then
