@@ -2,8 +2,8 @@
 
 # create apt sources
 # environment variables:
-#   - CODENAME <required>:
-#       - OS codename to use
+#   - RELEASE <required>:
+#       - OS distro and codename to use (e.g. 'debian/bookworm')
 #   - NONFREE <optional>:
 #       - set to enable non-free by default
 #   - TKL_TESTING <optional>:
@@ -34,8 +34,9 @@ fatal() {
     exit 1
 }
 
-[ -n "$CODENAME" ] || fatal "CODENAME is not set"
 [ ! -f /turnkey-buildenv ] || source /turnkey-buildenv
+[ -n "$RELEASE" ] || fatal "RELEASE is not set"
+CODENAME=$(basename $RELEASE)
 rm -rf /turnkey-buildenv
 
 SOURCES_LIST=/etc/apt/sources.list.d
