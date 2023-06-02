@@ -210,7 +210,7 @@ Pin-Priority: 550
 EOF
     # dynamically add some extra pins as specified in appliance Makefile
     for package_name in $PHP_EXTRA_PINS; do
-        if grep -q "Package: $package_name" /etc/apt/preferences.d/php-sury.pref; then
+        if grep -q "^Package: $package_name\$" /etc/apt/preferences.d/php-sury.pref; then
             continue
         fi
         cat >> /etc/apt/preferences.d/php-sury.pref <<EOF
