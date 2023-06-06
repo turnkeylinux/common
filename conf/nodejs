@@ -6,6 +6,7 @@ git clone https://github.com/tj/n
 cd n && make install
 
 # if NODE_VER unset, fallback to latest LTS
+[[ -n "$NODE_VER" ]] || echo "NODE_VER not set - falling back to latest LTS node"
 NODE_VER="${NODE_VER:-lts}"
 n $NODE_VER
 

@@ -43,7 +43,8 @@ EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-RBY_VER="${RBY_VER:-3.2.2}"
+[[ -n "$RBY_VER" ]] || echo "RBY_VER not set - falling back to latest stable Ruby"
+RBY_VER="${RBY_VER:--l}"
 
 MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
 rbenv global $RBY_VER
