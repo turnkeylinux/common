@@ -63,7 +63,7 @@ elif [[ $deb_ver -ge 11 ]]; then
     PROXY_PORT=3128
 fi
 
-if [[ "${APT_PROXY_OVERRIDE,,}" -eq "disable" ]]; then
+if [[ "${APT_PROXY_OVERRIDE,,}" == "disable" ]]; then
     PROXY_PORT=
 elif [[ -n $APT_PROXY_OVERRIDE ]]; then
     PROXY_PORT=$APT_PROXY_OVERRIDE
