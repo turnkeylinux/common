@@ -1,11 +1,11 @@
 #!/bin/bash -ex
 
-if [ $HOSTNAME ]; then
+if [[ -n "$HOSTNAME" ]]; then
     APPNAME=$HOSTNAME
-    [ "$APPNAME" == "rails" ] && APPNAME=railsapp ## namespace conflict
+    [[ "$APPNAME" == "rails" ]] && APPNAME=railsapp # avoid namespace conflict
 else
     echo "'$(basename $0)' error: hostname not defined"
-    return 1
+    exit 1
 fi
 
 DB_USER=$APPNAME
@@ -43,7 +43,7 @@ EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-RBY_VER=3.1.4
+RBY_VER="${RBY_VER:-3.2.2}"
 
 MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
 rbenv global $RBY_VER

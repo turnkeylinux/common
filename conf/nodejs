@@ -5,8 +5,9 @@ cd /usr/local/src
 git clone https://github.com/tj/n
 cd n && make install
 
-# install latest LTS node
-n lts
+# if NODE_VER unset, fallback to latest LTS
+NODE_VER="${NODE_VER:-lts}"
+n $NODE_VER
 
 # user-global npm installation: we don't need root for npm global installs
 
