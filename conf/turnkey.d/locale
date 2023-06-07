@@ -43,7 +43,10 @@ DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
 localepurge
 
 # remove non en webmin docs
-locales="af ar be bg ca cs da de el es eu fa fi fr he hr hu it ja ko lt lv ms mt nl no pl pt pt_BR ro ru sk sl sv th tr ur uk vi zh zh_TW"
-for locale in $locales; do
-    find /usr/share/webmin/ -name "*\.$locale\.*" -exec rm -rf {} +
-done
+if [[ -d /usr/share/webmin ]]; then
+    locales="af ar be bg ca cs da de el es eu fa fi fr he hr hu it ja ko lt \
+             lv ms mt nl no pl pt pt_BR ro ru sk sl sv th tr ur uk vi zh zh_TW"
+    for locale in $locales; do
+        find /usr/share/webmin/ -name "*\.$locale\.*" -exec rm -rf {} +
+    done
+fi
