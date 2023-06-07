@@ -23,7 +23,7 @@ resolvconf              /* confconsole recommends */
 /* seed entropy in early boot (especially useful when live booting).       */
 jitterentropy-rngd
 
-//tklbam                  /* still depends on py2 for now */
+tklbam                  /* still depends on py2 for now */
 
 hubdns
 inithooks
@@ -34,7 +34,7 @@ turnkey-version
 cron
 cron-apt
 
-etckeeper               /* still depends on py2 for now */
+etckeeper
 git
 
 lsb-release
@@ -62,7 +62,7 @@ webmin-custom
 webmin-fdisk
 webmin-raid
 webmin-lvm
-//webmin-tklbam
+webmin-tklbam
 webmin-updown
 webmin-filemin
 fdisk                   /* webmin-fdisk recommends */

@@ -1,12 +1,28 @@
 #!/bin/bash -e
+
 # create apt sources
 # environment variables:
-#   - required: CODENAME
-#   - optional: NONFREE
-#   - optional: TKL_TESTING
-#   - optional: BACKPORTS
-#   - optional: PHP_VERSION
-#   - optional: APT_PROXY_OVERRIDE
+#   - RELEASE <required>:
+#       - OS distro and codename to use (e.g. 'debian/bookworm')
+#   - NONFREE <optional>:
+#       - set to enable non-free by default
+#   - TKL_TESTING <optional>:
+#       - set to enable the TUrnKey testing repo
+#   - BACKPORTS <optional>:
+#       - set to enable Debian backports repo
+#   - PHP_VERSION <optional>:
+#       - set to desired PHP version from Sury PHP repo
+#   - PHP_EXTRA_PINS <optional>:
+#       - space separated list of additional Sury php pkgs to pin 500
+#   - APT_PROXY_OVERRIDE <optional>:
+#       - override proxy default proxy; use one of:
+#           - full remote url (starting with 'http/s')
+#           - port number (for localhost proxy)
+#           - 'disable' (disable proxy)
+#   - HOST_DEB_VER <optional>:
+#       - if not the same as guest, apply relevant transition changes
+#   - NO_TURNKEY_APT_REPO <optional>:
+#       - disable TurnKey apt repos - useful during early transition
 
 # Note, to install packages from backports:
 # - set 'BACKPORTS=y'; and either:
@@ -18,26 +34,36 @@ fatal() {
     exit 1
 }
 
-[ -n "$CODENAME" ] || fatal "CODENAME is not set"
-if grep "NO_TURNKEY_APT_REPO" /turnkey-transition-info; then
-    TRANSITION_NO_TURNKEY_APT_REPO=y
-fi
+[ ! -f /turnkey-buildenv ] || source /turnkey-buildenv
+[ -n "$RELEASE" ] || fatal "RELEASE is not set"
+CODENAME=$(basename $RELEASE)
+rm -rf /turnkey-buildenv
 
 SOURCES_LIST=/etc/apt/sources.list.d
 PREFS_LIST=/etc/apt/preferences.d
 CONF_DIR=/etc/apt/apt.conf.d
 mkdir -p $SOURCES_LIST $PREFS_LIST $CONF_DIR
 
-# TEMP support 17.0rc build on 16.x
-guest_build=$(cat /etc/debian_version | cut -d. -f1 | cut -d/ -f2)
-BUSTER_BASE=""
-PROXY_PORT=3128
-if [[ "$guest_build" -eq "11" ]] && [[ -f /bullseye_on_buster ]]; then
-    export BUSTER_BASE=y
+# transition - add specific Debian base transition changes here
+deb_ver=$(sed -nE "s|^([0-9]+).*|\1|p" /etc/debian_version)
+[[ -n "$HOST_DEB_VER" ]] || HOST_DEB_VER=$deb_ver
+if [[ "$HOST_DEB_VER" != "$deb_ver" ]]; then
+    echo "# Transition build detected - building v$deb_ver on v$HOST_DEB_VER"
+    if [[ $HOST_DEB_VER -ne $((deb_ver - 1)) ]]; then
+        fatal "Detected more than one Debian major version difference"
+    elif [[ $deb_ver -lt 9 ]]; then
+        fatal "Debian releases older than Stretch no longer supported"
+    fi
+fi
+if [[ $deb_ver -le 10 ]]; then
+    sec_repo="$CODENAME/updates"
     PROXY_PORT=8124
+elif [[ $deb_ver -ge 11 ]]; then
+    sec_repo="$CODENAME-security"
+    PROXY_PORT=3128
 fi
 
-if [[ "${APT_PROXY_OVERRIDE,,}" -eq "disable" ]]; then
+if [[ "${APT_PROXY_OVERRIDE,,}" == "disable" ]]; then
     PROXY_PORT=
 elif [[ -n $APT_PROXY_OVERRIDE ]]; then
     PROXY_PORT=$APT_PROXY_OVERRIDE
@@ -54,17 +80,17 @@ fi
 # update CA certs (custom cacher cert should already have been added)
 if [[ -e /usr/local/share/ca-certificates/squid_proxyCA.crt ]]; then
     update-ca-certificates
-elif [[ -n "$BUSTER_BASE" ]]; then
-    echo "Buster base detected, skipping importing Squid CA cert."
+elif [[ $deb_ver -le 10 ]]; then
+    echo "Buster base (or earlier) detected, skipping importing Squid CA cert."
 else
     fatal "Squid CA cert not found."
 fi
 
-# Default Debian PHP version. This should return the current:
-#   apt-cache policy php | sed -n "\|Candidate:|s|.*:\([0-9]\.[0-9]*\)+.*|\1|p"
-DEBIAN_PHP_V=7.4
+# Set default Debian PHP version
+DEBIAN_PHP_V=$(apt-cache policy php \
+                | sed -n "\|Candidate:|s|.*:\([0-9]\.[0-9]*\)+.*|\1|p")
 
-if [[ -z "$TRANSITION_NO_TURNKEY_APT_REPO" ]]; then
+if [[ -z "$NO_TURNKEY_APT_REPO" ]]; then
     # keys are provided as ascii armoured for transparency; but secure apt requires
     # gpg keyring files
     key_dir=/usr/share/keyrings
@@ -79,12 +105,6 @@ if [[ -z "$TRANSITION_NO_TURNKEY_APT_REPO" ]]; then
     # ensure that gpg-agent is killed after processing keys
     kill -9 $(pidof gpg-agent) || true
     rm -rf $HOME/.gnupg
-fi
-
-if [[ "$CODENAME" == "stretch" ]] || [[ "$CODENAME" == "buster" ]];then
-    sec_repo="$CODENAME/updates"
-else
-    sec_repo="$CODENAME-security"
 fi
 
 cat > $SOURCES_LIST/sources.list <<EOF
@@ -114,7 +134,7 @@ deb http://deb.debian.org/debian $CODENAME-backports main
 #deb http://deb.debian.org/debian $CODENAME-backports non-free
 EOF
 
-if [[ -n $TRANSITION_NO_TURNKEY_APT_REPO ]]; then
+if [[ -n "$NO_TURNKEY_APT_REPO" ]]; then
     find $SOURCES_LIST -type f -exec sed -i '/archive.turnkeylinux.org/ s/^/#/g' {} \;
 fi
 
@@ -168,9 +188,13 @@ Package: php-common
 Pin: origin packages.sury.org
 Pin-Priority: 550
 
-Package: *
+Package: libpcre2-8-0
 Pin: origin packages.sury.org
-Pin-Priority: 10
+Pin-Priority: 550
+
+Package: libgd3
+Pin: origin packages.sury.org
+Pin-Priority: 550
 
 # only enable below if using latest php version
 #Package: php-imagick
@@ -188,6 +212,9 @@ Pin-Priority: 10
 EOF
     # dynamically add some extra pins as specified in appliance Makefile
     for package_name in $PHP_EXTRA_PINS; do
+        if grep -q "^Package: $package_name\$" /etc/apt/preferences.d/php-sury.pref; then
+            continue
+        fi
         cat >> /etc/apt/preferences.d/php-sury.pref <<EOF
 Package: $package_name
 Pin: origin packages.sury.org

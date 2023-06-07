@@ -10,6 +10,7 @@ live-boot                   /* live-boot replaces casper in v16.x */
 live-tools                  /* live tools provides additional tools for live booting */
 live-boot-initramfs-tools
 initramfs-tools
+zstd                        /* recommended (new bookworm default) initramfs compression */
 firmware-linux-free
 busybox
 
