@@ -30,6 +30,7 @@ inithooks
 python3-dialog          /* tkl tools depends */
 turnkey-sysinfo
 turnkey-version
+turnkey-ssl             /* new tkl pkg - moved from common overlay/conf */
 
 cron
 cron-apt
