@@ -48,6 +48,9 @@ case $CODENAME in
         KEY_CODENAME=$CODENAME
         CONTRIB="contrib"
         NON_FREE="non-free"
+        ;;&
+    bookworm)
+        SEC_MIRROR="${SEC_MIRROR}debian-security"
         ;;
     # Note - only Ubuntu LTS
     focal|jammy)
@@ -140,6 +143,13 @@ cat > $SOURCES_LIST/sources.list <<EOF
 deb [signed-by=$key_dir/tkl-$KEY_CODENAME-main.gpg] http://archive.turnkeylinux.org/debian $KEY_CODENAME main
 
 deb $MIRROR_URL $CODENAME main
+EOF
+if [[ $deb_ver -ge 12 ]]; then
+    cat >> $SOURCES_LIST/sources.list <<EOF
+deb $MIRROR_URL $CODENAME non-free-firmware
+EOF
+fi
+cat >> $SOURCES_LIST/sources.list <<EOF
 deb $MIRROR_URL $CODENAME $CONTRIB
 #deb $MIRROR_URL $CODENAME $NON_FREE
 EOF
@@ -148,6 +158,13 @@ cat > $SOURCES_LIST/security.sources.list <<EOF
 deb [signed-by=$key_dir/tkl-$KEY_CODENAME-security.gpg] http://archive.turnkeylinux.org/debian $KEY_CODENAME-security main
 
 deb $SEC_MIRROR $sec_repo main
+EOF
+if [[ $deb_ver -ge 12 ]]; then
+    cat >> $SOURCES_LIST/security.sources.list <<EOF
+deb $SEC_MIRROR $sec_repo non-free-firmware
+EOF
+fi
+cat >> $SOURCES_LIST/security.sources.list <<EOF
 deb $SEC_MIRROR $sec_repo $CONTRIB
 #deb $SEC_MIRROR $sec_repo $NON_FREE
 EOF
@@ -159,8 +176,15 @@ EOF
 
 DEB_BACKPORT_LIST=$SOURCES_LIST/debian-backports.list
 cat > $DEB_BACKPORT_LIST.disabled <<EOF
-deb http://deb.debian.org/debian $CODENAME-backports main
-#deb http://deb.debian.org/debian $CODENAME-backports non-free
+deb $MIRROR_URL $CODENAME-backports main
+EOF
+if [[ $deb_ver -ge 12 ]]; then
+    cat >> $DEB_BACKPORT_LIST.disabled <<EOF
+deb $MIRROR_URL $CODENAME-backports non-free-firmware
+EOF
+fi
+cat >> $DEB_BACKPORT_LIST.disabled <<EOF
+#deb $MIRROR_URL $CODENAME-backports non-free
 EOF
 
 if [[ -n "$NO_TURNKEY_APT_REPO" ]]; then
