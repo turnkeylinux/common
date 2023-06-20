@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+CONF=/etc/webmin/miniserv.conf
+
+sed -i 's/port=.*/port=12321/' $CONF
+sed -i 's/listen=.*/listen=12321/' $CONF

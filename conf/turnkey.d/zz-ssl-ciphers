@@ -60,13 +60,8 @@ for CONF in /etc/tomcat*/server.xml; do
     fi
 done
 
-# Stunnel (provides Webmin & Webshell)
-CONF="/etc/stunnel/webmin.conf /etc/stunnel/shellinabox.conf"
-for conf in $CONF; do
-    if [ -f "$conf" ]; then
-        sed -i "s|ciphers=.*|ciphers=$SECURE_CIPHER_LIST\n|" $conf
-    fi
-done
+CONF=/etc/webmin/miniserv.conf
+echo "ssl_cipher_list=$SECURE_CIPHER_LIST" >> $CONF
 
 # Additional Webmin
 CGI=/usr/share/webmin/session_login.cgi
