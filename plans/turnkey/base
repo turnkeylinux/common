@@ -19,6 +19,9 @@ kbd                     /* confconsole recommends */
 di-live                 /* confconsole recommends */
 resolvconf              /* confconsole recommends */
 
+/* Dbus is new default package in v18.x */
+dbus
+
 /* jiiterentropy-rngd provides entropy from cpu jitter; req'd in buster to */
 /* seed entropy in early boot (especially useful when live booting).       */
 jitterentropy-rngd
