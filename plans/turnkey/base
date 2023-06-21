@@ -47,9 +47,6 @@ nano
 ntp
 ncurses-term            /* support additional $TERM values */
 
-shellinabox
-stunnel4                /* provide ssl to shellinabox */
-
 perl-openssl-defaults   /* libnet-ssleay-perl depends (webmin depends) */
 libnet-ssleay-perl      /* webmin depends  */
 webmin
