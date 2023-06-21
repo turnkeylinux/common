@@ -62,9 +62,3 @@ done
 
 CONF=/etc/webmin/miniserv.conf
 echo "ssl_cipher_list=$SECURE_CIPHER_LIST" >> $CONF
-
-# Additional Webmin
-CGI=/usr/share/webmin/session_login.cgi
-if [ -f $CGI ]; then
-    sed -i "/Set-Cookie/ s/sec/sec; httpOnly/g" $CGI
-fi
