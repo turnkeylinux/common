@@ -1,0 +1,54 @@
+#!/bin/bash -e
+
+[[ -z "$DEBUG" ]] || set -x
+
+export PHP_USER="${PHP_USER:-www-data}"
+export PHP_HOME="${PHP_HOME:-/var/www}"
+
+usage() {
+    cat <<EOF
+$(basename $0) [-h|--help] [PHP_SCRIPT [ARGS]]
+
+Run php scripts as an alternate user ($PHP_USER).
+
+Arguments:
+
+    PHP_SCRIPT  script to run
+    ARGS        arguments/options to pass to script
+
+    scripts run relative to \$PHP_HOME ($PHP_HOME)
+
+Options:
+
+    -h|--help   Show this help and exit
+
+Env vars:
+
+    PHP_USER    Linux user to run php as
+    PHP_HOME    Base dir to run php from
+    DEBUG       Verbose output - for debugging
+
+EOF
+    if [[ "$PHP_HOME" == '/var/www' ]]; then
+        cat <<EOF
+Change the default \$PHP_HOME by setting an env var (e.g. in ~/.bashrc.d)
+or change the default in the top of this script:
+    - $0
+EOF
+    fi
+    exit
+}
+
+case "$@" in
+    -h|--help)
+        usage;;
+esac
+
+if [[ ! -d "$PHP_HOME" ]]; then
+    echo "Fatal: PHP_HOME ($PHP_HOME) does not exist."
+    exit 1
+fi
+
+COMMAND="cd $PHP_HOME; /usr/bin/php $@"
+
+runuser $PHP_USER -s /bin/bash -c "$COMMAND"
