@@ -47,7 +47,7 @@ man-db
 screen
 dtach
 nano
-ntp
+ntpsec
 ncurses-term            /* support additional $TERM values */
 
 perl-openssl-defaults   /* libnet-ssleay-perl depends (webmin depends) */
