@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-set ${WEBMIN_FW_TCP_INCOMING:=22 80 443 12320 12321}
+set ${WEBMIN_FW_TCP_INCOMING:=22 80 443 12321}
 
 CONF=/etc/iptables.up.rules
 

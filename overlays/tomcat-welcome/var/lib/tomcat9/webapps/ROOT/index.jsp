@@ -40,13 +40,10 @@
                         src="images/tomcat.png"/>Virtual Hosts</a>
                     </div>
                     <div>
-                        <a href="https://<%= request.getServerName() %>:12320">
-                        <img src="images/shell.png"/>Web Shell</a>
-                    </div>
-                    <div>
                         <a href="https://<%= request.getServerName() %>:12321">
                         <img src="images/webmin.png"/>Webmin</a>
                     </div>
+                    <div></div>
                     <div></div>
 
                     <h2>Resources and references</h2>
