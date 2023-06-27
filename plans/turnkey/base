@@ -13,7 +13,6 @@ lvm2                    /* di-live recommends */
 file                    /* di-live recommends */
 eject                   /* di-live recommends */
 
-turnkey-lazyclass       /* why not installed as confconsole dep? */
 confconsole
 kbd                     /* confconsole recommends */
 di-live                 /* confconsole recommends */
