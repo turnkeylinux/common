@@ -1,0 +1,4 @@
+#!/bin/bash -e
+
+a2enmod security2
+a2enmod evasive

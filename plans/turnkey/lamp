@@ -2,6 +2,8 @@
 
 /* default lamp plan */
 apache2
+libapache2-mod-evasive 
+libapache2-mod-security2
 webmin-apache
 
 webmin-phpini
