@@ -1,0 +1,4 @@
+#!/bin/bash -ex
+
+echo "Cleaning redundant .pyc files - this might take a while."
+py3clean /

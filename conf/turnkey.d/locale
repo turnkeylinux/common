@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 cat >> /etc/default/locale << EOF
 LANG=en_US.UTF-8
