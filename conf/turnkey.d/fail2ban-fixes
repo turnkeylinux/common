@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+# make fail2ban default to reading journal - see #1844 (Debian #1037437)
+sed -i "\|^backend = auto|s|auto|systemd|" /etc/fail2ban/jail.conf
+
 # On firstboot (especially live) a race condition can occur where the auth.log
 # does not exist (yet) when fail2ban tries to start; which causes it to fail.
 # So make sure it exists:
