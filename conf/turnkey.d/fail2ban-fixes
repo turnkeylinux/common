@@ -1,10 +1,7 @@
 #!/bin/bash -e
 
-# fail2ban fix - as per Debian bug #902413
-# See also overlays/turnkey.d/fail2ban-fix/etc/systemd/system/fail2ban.service
-
-sed -i "s|/var/run/fail2ban|/run/fail2ban|" \
-    /usr/lib/tmpfiles.d/fail2ban-tmpfiles.conf
+# make fail2ban default to reading journal - see #1844 (Debian #1037437)
+sed -i "\|^backend = auto|s|auto|systemd|" /etc/fail2ban/jail.conf
 
 # On firstboot (especially live) a race condition can occur where the auth.log
 # does not exist (yet) when fail2ban tries to start; which causes it to fail.
