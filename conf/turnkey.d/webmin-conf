@@ -4,7 +4,7 @@ CONF=/etc/webmin/miniserv.conf
 
 update_or_add() {
     key=$1
-    val=$2
+    value=$2
     if grep -q "$key" $CONF; then
         sed -i "s|$key=.*|$key=$value|" $CONF
     else
