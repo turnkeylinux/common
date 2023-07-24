@@ -1,5 +1,13 @@
 #!/bin/bash -e
 
+# explictly allow ipv6 - see Debian bug #1024305:
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1024305
+
+CONF=/etc/fail2ban/fail2ban.conf
+if ! grep -q '^allowipv6' $CONF; then
+    sed -i '\|^\[Definition\]|a \\nallowipv6 = auto' $CONF
+fi
+
 # ensure that fail2ban blocks known users with incorrect key - see Debian
 # Bug #1038779 - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1038779
 cd /etc
