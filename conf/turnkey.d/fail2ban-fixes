@@ -1,7 +1,51 @@
 #!/bin/bash -e
 
-# make fail2ban default to reading journal - see #1844 (Debian #1037437)
-sed -i "\|^backend = auto|s|auto|systemd|" /etc/fail2ban/jail.conf
+# explictly allow ipv6 - see Debian bug #1024305:
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1024305
+
+CONF=/etc/fail2ban/fail2ban.conf
+if ! grep -q '^allowipv6' $CONF; then
+    sed -i '\|^\[Definition\]|a \\nallowipv6 = auto' $CONF
+fi
+
+# ensure that fail2ban blocks known users with incorrect key - see Debian
+# Bug #1038779 - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1038779
+cd /etc
+cat > fail2ban.patch <<EOF
+diff --git a/fail2ban/filter.d/sshd.conf b/fail2ban/filter.d/sshd.conf
+index d5d189b..e48f2ae 100644
+--- a/fail2ban/filter.d/sshd.conf
++++ b/fail2ban/filter.d/sshd.conf
+@@ -97,9 +97,9 @@ publickey = nofail
+ # consider failed publickey for invalid users only:
+ cmnfailre-failed-pub-invalid = ^Failed publickey for invalid user <F-USER>(?P<cond_user>\S+)|(?:(?! from ).)*?</F-USER> from <HOST>%(__on_port_opt)s(?: ssh\d*)?(?(cond_user): |(?:(?:(?! from ).)*)$)
+ # consider failed publickey for valid users too (don't need RE, see cmnfailed):
+-cmnfailre-failed-pub-any =
++cmnfailre-failed-pub-any = ^Failed publickey for <F-USER>(?P<cond_user>\S+)|(?:(?! from ).)*?</F-USER> from <HOST>%(__on_port_opt)s(?: ssh\d*)?(?(cond_user): |(?:(?:(?! from ).)*)$)
+ # same as invalid, but consider failed publickey for valid users too, just as no failure (helper to get IP and user-name only, see cmnfailed):
+-cmnfailre-failed-pub-nofail = <cmnfailre-failed-pub-invalid>
++cmnfailre-failed-pub-nofail = <cmnfailre-failed-pub-any>
+ # don't consider failed publickey as failures (don't need RE, see cmnfailed):
+ cmnfailre-failed-pub-ignore =
+EOF
+git apply fail2ban.patch
+rm fail2ban.patch
+cd -
+
+cat > /etc/cron.weekly/fail2ban <<EOF
+#!/bin/sh
+#
+# Periodically vacuum database to prevent it growing endlessly- see Debian
+# Bug #1010011 - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1010011
+
+sqlite="/usr/bin/sqlite3"
+database="/var/lib/fail2ban/fail2ban.sqlite3"
+
+[ -x $sqlite ] && [ -f $database ] || exit 0
+
+$sqlite $database "VACUUM;"
+EOF
+chmod +x /etc/cron.weekly/fail2ban
 
 # On firstboot (especially live) a race condition can occur where the auth.log
 # does not exist (yet) when fail2ban tries to start; which causes it to fail.
