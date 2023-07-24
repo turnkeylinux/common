@@ -1,8 +1,5 @@
 #!/bin/bash -e
 
-# make fail2ban default to reading journal - see #1844 (Debian #1037437)
-sed -i "\|^backend = auto|s|auto|systemd|" /etc/fail2ban/jail.conf
-
 # ensure that fail2ban blocks known users with incorrect key - see Debian
 # Bug #1038779 - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1038779
 cd /etc

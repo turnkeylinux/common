@@ -1,0 +1,24 @@
+# fail2ban default config provided by TurnKey
+#
+# This is a work in progress and currently only provides marginal improvement
+# beyond Debian default.
+#
+# To help out, please see:
+# https://github.com/turnkeylinux/tracker/issues/1022
+
+[DEFAULT]
+ignoreip    = 127.0.0.1/8 ::1  
+bantime     = 3600
+findtime    = 10
+maxretry    = 2
+backend     = systemd
+
+[sshd]
+enabled     = true
+port        = ssh,22
+action      = iptables[name=SSH, port=22, protocol=tcp]
+
+[webmin-auth]
+enabled     = true
+port        = 12321
+action      = iptables[name=webmin, port=12321, protocol=tcp]
