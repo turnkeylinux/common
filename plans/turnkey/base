@@ -77,6 +77,7 @@ iptables
 webmin-firewall
 webmin-firewall6
 fail2ban
+python3-systemd         /* fail2ban recommends - required for fail2ban without rsyslog */
 webmin-fail2ban
 
 ssh
