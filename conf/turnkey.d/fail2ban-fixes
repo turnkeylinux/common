@@ -10,13 +10,11 @@ fi
 
 # ensure that fail2ban blocks known users with incorrect key - see Debian
 # Bug #1038779 - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1038779
-cd /etc
+
 cat > fail2ban.patch <<EOF
-diff --git a/fail2ban/filter.d/sshd.conf b/fail2ban/filter.d/sshd.conf
-index d5d189b..e48f2ae 100644
---- a/fail2ban/filter.d/sshd.conf
-+++ b/fail2ban/filter.d/sshd.conf
-@@ -97,9 +97,9 @@ publickey = nofail
+--- /etc/fail2ban/filter.d/sshd.conf.orig
++++ /etc/fail2ban/filter.d/sshd.conf
+@@ -97,9 +97,9 @@
  # consider failed publickey for invalid users only:
  cmnfailre-failed-pub-invalid = ^Failed publickey for invalid user <F-USER>(?P<cond_user>\S+)|(?:(?! from ).)*?</F-USER> from <HOST>%(__on_port_opt)s(?: ssh\d*)?(?(cond_user): |(?:(?:(?! from ).)*)$)
  # consider failed publickey for valid users too (don't need RE, see cmnfailed):
@@ -27,10 +25,10 @@ index d5d189b..e48f2ae 100644
 +cmnfailre-failed-pub-nofail = <cmnfailre-failed-pub-any>
  # don't consider failed publickey as failures (don't need RE, see cmnfailed):
  cmnfailre-failed-pub-ignore =
+
 EOF
 git apply fail2ban.patch
 rm fail2ban.patch
-cd -
 
 cat > /etc/cron.weekly/fail2ban <<EOF
 #!/bin/sh
