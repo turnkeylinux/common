@@ -15,19 +15,17 @@ fatal() { echo "FATAL: $@" >&2; exit 1; }
 [[ "$(id -u)" -eq 0 ]] \
     || fatal "$(basename $0) must be run as root, please re-run with sudo"
 
-export COMPOSER_USER="${COMPOSER_USER:-www-data}"
-export COMPOSER_USER_HOME=$(getent passwd $COMPOSER_USER | cut -d: -f6) || true
-export APP_ROOT="${APP_ROOT:-none}"
-
 if [[ -n "$COMPOSER_USER" ]] && [[ -n "$COMPOSER_USER_HOME"  ]]; then
     export COMPOSER_HOME="${COMPOSER_HOME:-$COMPOSER_USER_HOME/.composer}"
+else
+    fatal "unset env var(s): COMPOSER_USER='$COMPOSER_USER'"\
+          " COMPOSER_USER_HOME='$COMPOSER_USER_HOME'"
 fi
 
 if [[ ! -e "$COMPOSER_HOME" ]]; then
     mkdir -p $COMPOSER_HOME
 elif [[ ! -d "$COMPOSER_HOME" ]]; then
-    echo "Fatal: COMPOSER_HOME ($COMPOSER_HOME) exists but is a file."
-    exit 1
+    fatal "COMPOSER_HOME ($COMPOSER_HOME) exists but is a file"
 fi
 chown -R $COMPOSER_USER:$COMPOSER_USER $COMPOSER_HOME
 
@@ -47,6 +45,10 @@ Env vars::
                         Default: $COMPOSER_USER
     COMPOSER_USER_HOME  Home directory to use when running Composer
                         Default: $COMPOSER_USER_HOME
+    COMPOSER_MEMORY_LIMIT
+                        Composer memory limit (handled by composer)
+    HTTPS_PROXY_REQUEST_FULLURI
+                        Proxy to use for downloads (handled by composer)
     APP_ROOT            Directory to run composer in
                         - if set to 'none', will run in cwd
                         - if dir does not exist it will be ignored
