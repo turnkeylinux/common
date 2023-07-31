@@ -1,9 +1,23 @@
 #!/bin/bash -e
 
+# fallback defaults - adjust as desired
+USER_FALLBACK=www-data
+HOME_FALLBACK=/var/www
+APP_ROOT_FALLBACK=none
+
+export COMPOSER_USER="${COMPOSER_USER:-$USER_FALLBACK}"
+export COMPOSER_USER_HOME="${COMPOSER_USER_HOME:-$HOME_FALLBACK}"
+export APP_ROOT="${APP_ROOT:-$APP_ROOT_FALLBACK}"
+
+fatal() { echo "FATAL: $@" >&2; exit 1; }
+
 [[ -z "$DEBUG" ]] || set -x
+[[ "$(id -u)" -eq 0 ]] \
+    || fatal "$(basename $0) must be run as root, please re-run with sudo"
 
 export COMPOSER_USER="${COMPOSER_USER:-www-data}"
 export COMPOSER_USER_HOME=$(getent passwd $COMPOSER_USER | cut -d: -f6) || true
+export APP_ROOT="${APP_ROOT:-none}"
 
 if [[ -n "$COMPOSER_USER" ]] && [[ -n "$COMPOSER_USER_HOME"  ]]; then
     export COMPOSER_HOME="${COMPOSER_HOME:-$COMPOSER_USER_HOME/.composer}"
@@ -17,10 +31,39 @@ elif [[ ! -d "$COMPOSER_HOME" ]]; then
 fi
 chown -R $COMPOSER_USER:$COMPOSER_USER $COMPOSER_HOME
 
+if [[ "$1" == '-h' ]] || [[ "$1" == '--help' ]]; then
+    cat <<EOF
+Syntax $(basename $0) [-h|--help] <composer_command>
+
+Run <composer_command> as an alternate user, in the pre-defined webroot.
+
+To adjust defaults, please edit the "fallback defaults" at the top of this
+script. You can find it at '$(realpath $0)'
+
+Env vars::
+----------
+
+    COMPOSER_USER       User to run commands as
+                        Default: $COMPOSER_USER
+    COMPOSER_USER_HOME  Home directory to use when running Composer
+                        Default: $COMPOSER_USER_HOME
+    APP_ROOT            Directory to run composer in
+                        - if set to 'none', will run in cwd
+                        - if dir does not exist it will be ignored
+                        Default: $APP_ROOT
+    DEBUG               Set to enable verbose output - useful for debugging
+EOF
+    exit 1
+fi
+
 ENV="COMPOSER_HOME=$COMPOSER_HOME"
 [[ -z "$COMPOSER_MEMORY_LIMIT" ]] || ENV="$ENV COMPOSER_MEMORY_LIMIT=$COMPOSER_MEMORY_LIMIT"
 [[ -z "$HTTPS_PROXY_REQUEST_FULLURI" ]] || ENV="$ENV HTTPS_PROXY_REQUEST_FULLURI=$HTTPS_PROXY_REQUEST_FULLURI"
 
-COMMAND="composer"
+if [[ "$APP_ROOT" != "none" ]] && [[ -d "$APP_ROOT" ]]; then
+    COMMAND="cd $APP_ROOT && $ENV composer"
+else
+    COMMAND="$ENV composer"
+fi
 
-runuser $COMPOSER_USER -s /bin/bash -c "$ENV $COMMAND $(printf '%q ' "$@")"
+runuser $COMPOSER_USER -s /bin/bash -c "$COMMAND $(printf '%q ' "$@")"
