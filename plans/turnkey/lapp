@@ -3,6 +3,9 @@ libapache2-mod-php
 webmin-apache
 webmin-phpini
 
+libapache2-mod-security2
+libapache2-mod-evasive
+
 postgresql
 php-pgsql
 webmin-postgresql
