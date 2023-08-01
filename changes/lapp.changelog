@@ -2,5 +2,6 @@ turnkey-lapp-18.0 (1) turnkey; urgency=low
 
   * add mod_evasive and mod_security2 to lapp
   * use postgresql 15 (from debian repos)
+  * upstream adminer update (closes #1758)
 
  -- Stefan Davis <stefan@turnkeylinux.org>  Tue, 01 Aug 2023 02:12:50 +0000
