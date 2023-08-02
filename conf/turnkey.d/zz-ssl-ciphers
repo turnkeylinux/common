@@ -60,6 +60,13 @@ for CONF in /etc/tomcat*/server.xml; do
     fi
 done
 
+# Pure-FTPd
+PUREFTPDDIR="/etc/pure-ftpd/conf"
+if [ -d "$CONF" ]; then
+    echo 1 > ${PUREFTPDDIR}/TLS
+    echo HIGH:\!TLSv1:\!TLSv1.1:\!SSLv2:\!SSLv3:${SECURE_CIPHER_LIST} > ${PUREFTPDDIR}/TLSCipherSuite
+fi
+
 # Stunnel (provides Webmin & Webshell)
 CONF="/etc/stunnel/webmin.conf /etc/stunnel/shellinabox.conf"
 for conf in $CONF; do
