@@ -65,7 +65,7 @@ echo "ssl_cipher_list=$SECURE_CIPHER_LIST" >> $CONF
 
 # Pure-FTPd
 PUREFTPDDIR="/etc/pure-ftpd/conf"
-if [ -d "$CONF" ]; then
+if [ -d "$PUREFTPDDIR" ]; then
     echo 1 > ${PUREFTPDDIR}/TLS
     echo HIGH:\!TLSv1:\!TLSv1.1:\!SSLv2:\!SSLv3:${SECURE_CIPHER_LIST} > ${PUREFTPDDIR}/TLSCipherSuite
 fi
