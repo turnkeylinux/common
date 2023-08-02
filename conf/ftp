@@ -5,7 +5,7 @@ cp /etc/ssl/private/cert.pem /etc/ssl/private/pure-ftpd.pem
 cp /etc/ssl/private/dhparams.pem /etc/ssl/private/pure-ftpd-dhparams.pem
 
 # Remove root from users that cannot login into the system via FTP
-sed -i "s|^root$|# root|g"  /etc/ftpusers
+sed -i "s|^root$|# root|g" /etc/ftpusers
 
 # Configure settings for pure-ftpd
 echo yes > /etc/pure-ftpd/conf/ChrootEveryone
@@ -18,10 +18,3 @@ echo HIGH:MEDIUM:+TLSv1:\!SSLv2:\!SSLv3 > /etc/pure-ftpd/conf/TLSCipherSuite
 
 # Restart pure-ftpd.service
 systemctl restart pure-ftpd
-
-# Uncomment this line to bypass high grade security password prompt, and it will allow anything as a password
-# sed -i "s|^    return sum(\[lowercase, uppercase, number, nonalpha\])$|    return sum([1, 1, 1, 1])\n    # return sum([lowercase, uppercase, number, nonalpha])|g"  /usr/lib/python3/dist-packages/libinithooks/dialog_wrapper.py
-
-# Uncomment this line to redirect the storage of FTP from /root to /srv/storage for the root user.
-# sed -i "s|^root:x:0:0:root:/root:|root:x:0:0:root:/srv/storage:|g" /etc/passwd
-
