@@ -1,8 +1,8 @@
 #!/bin/sh -e
 
-# Copying cert.pem and dhparams.pem to pure-ftpd.pem and pure-ftpd-dhparams.pem.
-cp /etc/ssl/private/cert.pem /etc/ssl/private/pure-ftpd.pem
-cp /etc/ssl/private/dhparams.pem /etc/ssl/private/pure-ftpd-dhparams.pem
+# Linking cert.pem and dhparams.pem to pure-ftpd.pem and pure-ftpd-dhparams.pem.
+ln -s /etc/ssl/private/cert.pem /etc/ssl/private/pure-ftpd.pem
+ln -s /etc/ssl/private/dhparams.pem /etc/ssl/private/pure-ftpd-dhparams.pem
 
 # Remove root from users that cannot login into the system via FTP
 sed -i "s|^root$|# root|g" /etc/ftpusers
