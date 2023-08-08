@@ -15,11 +15,13 @@ stop_start() {
 
     case $_action in
         stop|restart)
-            pid=$(pgrep $_service)
+            pid=$(pgrep $_service) || true
             if [[ "$_service" == "ghost" ]]; then
                 pid="$pid $(pgrep node) $(pgrep sudo)"
+            elif [[ "$_service" == "webmin" ]]; then
+                pid="$(pgrep miniserv.pl)"
             fi
-            kill -9 $pid
+            kill $pid
             ;;&
         start|restart)
             $_command
@@ -35,6 +37,12 @@ stop_start() {
 }
 
 case $1 in
+
+    webmin)
+        export PERLLIB=/usr/share/webmin
+        stop_start $2 $1 \
+            /usr/share/webmin/miniserv.pl /etc/webmin/miniserv.conf
+        ;;
 
     apache2)
         if [[ $2 == "reload" ]]; then
