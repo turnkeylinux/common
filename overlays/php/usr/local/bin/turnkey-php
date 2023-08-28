@@ -49,6 +49,6 @@ if [[ ! -d "$PHP_HOME" ]]; then
     exit 1
 fi
 
-COMMAND="cd $PHP_HOME; /usr/bin/php $@"
+COMMAND="cd $PHP_HOME; /usr/bin/php"
 
-runuser $PHP_USER -s /bin/bash -c "$COMMAND"
+runuser $PHP_USER -s /bin/bash -c "$COMMAND $(printf '%q ' "$@")"
