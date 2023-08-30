@@ -1,0 +1,4 @@
+apache-18.0 (1) turnkey; urgency=low
+
+  * Include and enable mod_evasive and mod_security2.
+    [ Stefan Davis <stefan@turnkeylinux.org> ]

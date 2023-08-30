@@ -29,5 +29,5 @@ postconf -e tls_medium_cipherlist="ZZ_SSL_CIPHERS"
 postconf -e tls_preempt_cipherlist=no
 
 service postfix start
-systemctl enable --now postfix@-.service
+systemctl enable postfix@-.service
 service postfix stop

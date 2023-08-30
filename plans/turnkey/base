@@ -70,8 +70,6 @@ unzip                   /* webmin-updown recommends */
 libfile-mimeinfo-perl   /* webmin-filemin requires to extract archives */
 
 logrotate
-rsyslog
-webmin-syslog
 
 iptables
 webmin-firewall
