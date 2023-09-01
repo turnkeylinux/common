@@ -33,15 +33,16 @@ rm fail2ban.patch
 cat > /etc/cron.weekly/fail2ban <<EOF
 #!/bin/sh
 #
-# Periodically vacuum database to prevent it growing endlessly- see Debian
-# Bug #1010011 - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1010011
+# If fail2ban is using sqlite (not the default in TurnKey) periodically vacuum
+# database to prevent it growing endlessly - see Debian Bug #1010011
+# - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1010011
 
 sqlite="/usr/bin/sqlite3"
 database="/var/lib/fail2ban/fail2ban.sqlite3"
 
-[ -x $sqlite ] && [ -f $database ] || exit 0
+[ -x \$sqlite ] && [ -f \$database ] || exit 0
 
-$sqlite $database "VACUUM;"
+\$sqlite \$database "VACUUM;"
 EOF
 chmod +x /etc/cron.weekly/fail2ban
 
