@@ -1,3 +1,0 @@
-#!/bin/sh
-
-echo 'di-live partman-auto-lvm/no_boot boolean true' | debconf-set-selections
