@@ -1,4 +1,5 @@
-
-php-18.0
+turnkey-php-18.0 (2) turnkey; urgency=low
 
   * Debian default PHP updated to v8.2.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 14 Sep 2023 23:17:54 +0000

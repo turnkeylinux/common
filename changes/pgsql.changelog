@@ -1,7 +1,9 @@
-pgsql-18.0 (1) turnkey; urgency=low
+turnkey-pgsql-18.0 (1) turnkey; urgency=low
 
-  * Use postgresql 15 (from debian repos).
+  * Use PostgreSQL v15 (from debian repos).
     [ Stefan Davis <stefan@turnkeylinux.org> ]
 
   * Upstream/Debian Adminer update - closes #1758.
     [ Stefan Davis <stefan@turnkeylinux.org> ]
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 14 Sep 2023 23:17:54 +0000

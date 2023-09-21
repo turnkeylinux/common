@@ -1,4 +1,6 @@
-composer-18.0
+turnkey-composer-18.0 (2) turnkey; urgency=low
 
   * Install composer from Debian repos (previously installed from source)
     [ Stefan Davis <Stefan@turnkeylinux.org> ]
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 14 Sep 2023 23:19:48 +0000
