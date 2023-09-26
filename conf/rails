@@ -90,6 +90,7 @@ sed -i "s|username:.*|username: $DB_USER|g" $CONF
 sed -i "s|password:.*|password: $DB_PASS|g" $CONF
 
 # move logs to proper place
+touch $WEBROOT/log/production.log
 mv $WEBROOT/log $LOGSDIR
 ln -s $LOGSDIR $WEBROOT/log
 
@@ -105,6 +106,8 @@ a2enmod proxy_http
 a2enmod proxy
 a2enmod headers
 a2enmod passenger
+a2enmod evasive
+a2enmod security2
 
 a2dissite 000-default
 

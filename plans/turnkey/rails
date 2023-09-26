@@ -4,6 +4,11 @@ apache2
 webmin-apache
 apache2-dev
 
+libapache2-mod-security2
+libapache2-mod-evasive
+
+libyaml-dev                 /* needed to build ruby */
+
 build-essential             /* needed to build gems */
 libgmp-dev                  /* real package behind virtual libgmp10-dev which is required */
 default-libmysqlclient-dev  /* needed to build mysql gem */
