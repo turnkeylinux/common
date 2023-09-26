@@ -1,4 +1,5 @@
 #!/bin/bash -e
 
-a2enmod security2
-a2enmod evasive
+# try to enable mod, if it's not available just continue
+a2enmod security2 || true
+a2enmod evasive || true
