@@ -46,7 +46,25 @@ chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 [[ -n "$RBY_VER" ]] || echo "RBY_VER not set - falling back to latest stable Ruby"
 RBY_VER="${RBY_VER:--l}"
 
-MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
+# ruby 2.x requires openssl 1.1 not available in bookworm
+# req: https://github.com/foodcoops/foodsoft/blob/master/.ruby-version
+if [[ "$RBY_VER" == 2.* ]] then
+  unset RELEASE
+  wget https://www.openssl.org/source/openssl-1.1.1n.tar.gz
+  tar xf openssl-1.1.1n.tar.gz
+  cd openssl-1.1.1n
+  ./config --prefix=/opt/openssl-1.1.1n --openssldir=/opt/openssl-1.1.1n shared zlib
+  make
+  make install
+  rm -rf /opt/openssl-1.1.1n/certs
+  cd -
+  rm -r openssl-1.1.1n*
+  ln -s /etc/ssl/certs /opt/openssl-1.1.1n
+  MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--with-openssl-dir=/opt/openssl-1.1.1n rbenv install 2.7.8
+else
+  MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
+fi
+
 rbenv global $RBY_VER
 
 gem update --system
