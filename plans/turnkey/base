@@ -65,6 +65,7 @@ webmin-lvm
 webmin-tklbam
 webmin-updown
 webmin-filemin
+webmin-logviewer
 fdisk                   /* webmin-fdisk recommends */
 unzip                   /* webmin-updown recommends */
 libfile-mimeinfo-perl   /* webmin-filemin requires to extract archives */
