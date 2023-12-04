@@ -23,6 +23,8 @@ setini() {
 set ${PHP_MEMORY_LIMIT:=128M}           # php.ini default: 128MB (i.e. unchanged)
 set ${PHP_POST_MAX_SIZE:=16M}           # php.ini default: 8MB
 set ${PHP_UPLOAD_MAX_FILESIZE:=8M}      # php.ini default: 2MB
+set ${PHP_MAX_EXECUTION_TIME:=30}       # php.ini default: 30 (seconds - i.e. unchanged)
+set ${PHP_MAX_INPUT_VARS:=1000}         # php.ini default: 1000 (i.e. unchanged)
 
 # no TKLDEV facility to adjust these, but should be ok defaults
 set ${OPCACHE_INTERNAL_STR_BUFF:=8}     # php.ini default: 4(MB)
@@ -35,6 +37,8 @@ for f in /etc/php/?.?/*/php.ini; do
     setini $f memory_limit $PHP_MEMORY_LIMIT
     setini $f post_max_size $PHP_POST_MAX_SIZE
     setini $f upload_max_filesize $PHP_UPLOAD_MAX_FILESIZE
+    setini $f max_execution_time $PHP_MAX_EXECUTION_TIME
+    setini $f max_input_vars $PHP_MAX_INPUT_VARS
 
     # adjust opcache settings for Apache only (not cli)
     if [ "${f%%$cli_ini}" = "$f" ]; then

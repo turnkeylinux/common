@@ -2,4 +2,8 @@ turnkey-php-18.0 (2) turnkey; urgency=low
 
   * Debian default PHP updated to v8.2.
 
+  * DEV: Add support for setting max_execution_time & max_input_vars in
+    php.ini via appliance Makefile (PHP_MAX_EXECUTION_TIME &
+    PHP_MAX_INPUT_VARS).
+
  -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 14 Sep 2023 23:17:54 +0000
