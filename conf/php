@@ -6,7 +6,7 @@ setini() {
     var=$2
     val=$3
 
-    count=$(grep -c $var $file) || true
+    count=$(grep -c "^;\?$var" $file) || true
     if [ "$count" -eq 0 ]; then
         echo "[WARNING] no match for $var in $file"
     elif [ "$count" -gt 1 ]; then
