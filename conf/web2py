@@ -9,16 +9,11 @@ SRC=/usr/local/src
 W2PPASS=turnkey
 W2PROOT=/var/www/web2py
 WSGI=$W2PROOT/wsgihandler.py
-RELEASES='https://api.github.com/repos/web2py/web2py/releases/latest'
 
 # clone web2py
 cd /var/www
 
-TAG="$(
-    curl "$RELEASES" -s \
-    | grep --color=never '"tag_name":' \
-    | grep -o '[0-9][^"]\+'
-)"
+TAG="$( gh_releases web2py/web2py | tail -1 )"
 
 git clone \
     --depth 1 \
