@@ -16,7 +16,7 @@ Usage: $(basename $0) [OPTIONS] <user>/<repo>
 Options:
     -h|--help   show this help and exit
     -a|--all    show all (stable) versions, not just the most recent
-    -p|--inc-pre-release
+    -p|--pre-release
                 include alpha, beta and rc versions
 
 Env Vars:
@@ -41,7 +41,7 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         -a|--all)
             show_all=true;;
-        -p|--inc-pre-release)
+        -p|--pre-release)
             pre_release=true;;
         -h|--help)
             usage
