@@ -14,6 +14,7 @@ usage() {
 Usage: $(basename $0) [OPTIONS] <user>/<repo>
 
 Options:
+    -h|--help   show this help and exit
     -a|--all    show all (stable) versions, not just the most recent
     -p|--inc-pre-release
                 include alpha, beta and rc versions
@@ -42,6 +43,9 @@ while [[ "$#" -gt 0 ]]; do
             show_all=true;;
         -p|--inc-pre-release)
             pre_release=true;;
+        -h|--help)
+            usage
+            exit;;
         *)
             if [[ -z "$repo_path" ]]; then
                 repo_path="$1"
