@@ -2,7 +2,6 @@
 
 [[ -n $DEBUG ]] && set -x
 
-repo_path="$1" # user/repo_name
 tmp_dir=/tmp/gh_releases
 rm -rf $tmp_dir
 mkdir -p $tmp_dir
@@ -12,14 +11,19 @@ warning() { echo -e "[WARNING] $@" 1>&2; }
 
 usage() {
     cat >&2 <<EOF
-Usage: $(basename $0) <user>/<repo>
+Usage: $(basename $0) [OPTIONS] <user>/<repo>
+
+Options:
+    -a|--all    show all (stable) versions, not just the most recent
+    -p|--inc-pre-release
+                include alpha, beta and rc versions
 
 Env Vars:
     # used for github api
     GITHUB_USER
     GITHUB_USER_TOKEN
 
-    # retain temp files and set x if set
+    # retain temp files and set x
     DEBUG
 
     # omit tags or releases in output respectively if set
@@ -30,6 +34,24 @@ Note: Setting GITHUB_USER and GITHUB_USER_TOKEN environment variables are
       recommended. If not set, multipage results may be unreliable.
 EOF
 }
+
+unset show_all pre_release repo_path
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -a|--all)
+            show_all=true;;
+        -p|--inc-pre-release)
+            pre_release=true;;
+        *)
+            if [[ -z "$repo_path" ]]; then
+                repo_path="$1"
+            else
+                usage
+                fatal "Unknown option: $1"
+           fi;;
+    esac
+    shift
+done
 
 if [[ -z "$repo_path" ]]; then
     usage
@@ -89,5 +111,12 @@ get_all_pages() {
 [[ -z $NO_TAGS ]] && get_all_pages "https://api.github.com/repos/${repo_path}/tags" "name"
 
 echo "Done!" 1>&2
-cat $tmp_dir/releases | sort --version-sort --unique
+versions=$(cat $tmp_dir/releases | sort --version-sort --unique)
+if [[ -z "$pre_release" ]]; then
+    versions=$(grep -vi 'alpha\|beta\|rc' <<<"$versions")
+fi
+if [[ -z "$show_all" ]]; then
+    versions=$(tail -1 <<<"$versions")
+fi
+echo "$versions"
 [[ -z $DEBUG ]] && rm -rf $tmp_dir
