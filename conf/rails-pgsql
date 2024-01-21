@@ -43,8 +43,6 @@ EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-RBY_VER=2.7.6
-
 MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
 rbenv global $RBY_VER
 
@@ -53,10 +51,7 @@ gem update --system
 gem install $GEMOPTS rack
 gem install $GEMOPTS rails
 gem install $GEMOPTS bundler --force
-# Pin passenger to 6.0.4 (lastest=6.0.6) to workaround "Redis::InheritedError"
-# issue. See discussion here:
-# https://groups.google.com/g/canvas-lms-users/c/2TQiN27sBcE
-gem install $GEMOPTS passenger:6.0.4
+gem install $GEMOPTS passenger
 gem install $GEMOPTS rake
 gem install $GEMOPTS pg
 gem install $GEMOPTS execjs
