@@ -1,0 +1,3 @@
+[submodule "overlays/php/usr/local/bin/tkl-upgrade-php"]
+	path = overlays/php/usr/local/bin/tkl-upgrade-php
+	url = https://github.com/popsolutions/tkl-upgrade-php/
