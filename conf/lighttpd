@@ -12,3 +12,4 @@ lighty-disable-mod unconfigured
 
 # Load mod_setenv
 lighty-enable-mod setenv || true
+lighty-enable-mod accesslog || true
