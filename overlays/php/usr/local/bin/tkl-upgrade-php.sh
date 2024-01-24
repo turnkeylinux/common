@@ -9,7 +9,7 @@ choose_php_version() {
     echo "4) PHP 8.1"
     echo "5) PHP 8.2"
     echo "6) PHP 8.3"
-    read -p "Enter choice [1-5]: " php_choice
+    read -p -r "Enter choice [1-5]: " php_choice
 
     case $php_choice in
         1) PHPV_NEW="7.3";;
@@ -47,8 +47,12 @@ php -v
 # Step 1: Set PHP version to install and collect current PHP version & packages
 choose_php_version
 PHPV_OLD=$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')
-PHP_OLD_PKGS=$(apt-cache policy *php${PHPV_OLD}* | grep -v "Installed: (none)" | grep "Installed:" -B1 | sed -n "\|php${PHPV_OLD}| s|^\([a-z0-9\.-]*\).*$|\1|p" | grep -v "json")
-PHP_NEW_PKGS=$(echo "$PHP_OLD_PKGS" | sed "s|$PHPV_OLD|$PHPV_NEW|")
+PHP_OLD_PKGS=$(apt-cache policy -- "*php${PHPV_OLD}*" \
+                    | grep -v "Installed: (none)" \
+                    | grep "Installed:" -B1 \
+                    | sed -n "\|php${PHPV_OLD}| s|^\([a-z0-9\.-]*\).*$|\1|p" \
+                    | grep -v "json")
+PHP_NEW_PKGS="${PHP_OLD_PKGS//$PHPV_OLD/$PHPV_NEW}"
 
 # Step 2: Set up sury.org PHP
 curl -sSL https://packages.sury.org/php/README.txt | bash -x
@@ -56,13 +60,14 @@ curl -sSL https://packages.sury.org/php/README.txt | bash -x
 # Step 3: Install relevant new packages
 check_new_packages
 echo "Installing new packages..."
+# shellcheck disable=SC2086
 apt install -y $PHP_NEW_PKGS
 
 # Detect the web server and handle PHP module accordingly
 if systemctl is-active --quiet apache2; then
     # Apache is running
-    a2dismod php${PHPV_OLD}
-    a2enmod php${PHPV_NEW}
+    a2dismod "php${PHPV_OLD}"
+    a2enmod "php${PHPV_NEW}"
     systemctl restart apache2
 elif systemctl is-active --quiet nginx; then
     # Nginx is running, restart PHP-FPM if installed
