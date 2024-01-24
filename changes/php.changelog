@@ -2,6 +2,10 @@ turnkey-php-18.0 (2) turnkey; urgency=low
 
   * Debian default PHP updated to v8.2.
 
+  * Include new 'tkl-update-php' script - to make updating/changing PHP
+    version easier for end users.
+    [Marcos Méndez @ POPSOLUTIONS <https://github.com/marcos-mendez>]
+
   * DEV: Add support for setting max_execution_time & max_input_vars in
     php.ini via appliance Makefile (PHP_MAX_EXECUTION_TIME &
     PHP_MAX_INPUT_VARS).
