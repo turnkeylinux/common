@@ -9,7 +9,7 @@ choose_php_version() {
     echo "4) PHP 8.1"
     echo "5) PHP 8.2"
     echo "6) PHP 8.3"
-    read -p -r "Enter choice [1-5]: " php_choice
+    read -p -r "Enter choice [1-6]: " php_choice
 
     case $php_choice in
         1) PHPV_NEW="7.3";;
