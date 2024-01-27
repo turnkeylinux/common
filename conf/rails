@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+fatal() { echo -e "FATAL: $*" >&2; exit 1; }
+
 if [[ -n "$HOSTNAME" ]]; then
     APPNAME=$HOSTNAME
     [[ "$APPNAME" == "rails" ]] && APPNAME=railsapp # avoid namespace conflict
@@ -13,8 +15,10 @@ DB_PASS=$(mcookie)
 WEBROOT=/var/www/$APPNAME
 LOGSDIR=/var/log/$APPNAME
 
-[ "$FAB_HTTP_PROXY" ] && export http_proxy=$FAB_HTTP_PROXY
-GEMOPTS="--no-document"
+[[ "$FAB_HTTP_PROXY" ]] && export http_proxy=$FAB_HTTP_PROXY
+export GEMOPTS="--no-document"
+export MAKE_OPTS="-j$(nproc)"
+export RUBY_CONFIGURE_OPTS=--disable-install-doc
 
 git clone https://github.com/rbenv/rbenv.git /usr/local/rbenv --depth=1
 git clone https://github.com/rbenv/ruby-build.git /usr/local/rbenv/plugins/ruby-build --depth=1
@@ -43,23 +47,34 @@ EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-if [[ -z "$RBY_VER" ]]; then
-   RBY_VER=$(rbenv install --list | sed -En "s|^([0-9.]+)|\1|p" | sort -V | tail -1)
-   echo "RBY_VER not set - falling back to latest stable Ruby: $RBY_VER"
+RUBY_VERSIONS=$(sort -V <<<$(sed -En "s|^([0-9.]+)|\1|p" <<<$(rbenv install --list)))
+
+if [[ -n "$RBY_VER" ]]; then
+    RBY_VER_INSTALL=$(grep "$RBY_VER" <<<"$RUBY_VERSIONS")
+else
+    RBY_VER_INSTALL=$(tail -1 <<<"$RUBY_VERSIONS")
+    echo "RBY_VER not set - falling back to latest stable Ruby: $RBY_VER_INSTALL"
+fi
+if [[ -z "$RBY_VER_INSTALL" ]]; then
+    # this should only occur if RBY_VER is set and is unavailable
+    RUBY_VERSIONS=$(sed 's|.\{2\}$||g' <<<"$RUBY_VERSIONS")
+    fatal "RBY_VER: $RBY_VER unsupported; supported versions are:\n$RUBY_VERSIONS"
+else
+    echo "Installing Ruby version: $RBY_VER_INSTALL"
 fi
 
-MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
-rbenv global $RBY_VER
+rbenv install "$RBY_VER_INSTALL"
+rbenv global "$RBY_VER_INSTALL"
 
 gem update --system
 
-gem install $GEMOPTS rack
-gem install $GEMOPTS rails
-gem install $GEMOPTS passenger
-gem install $GEMOPTS rake
-gem install $GEMOPTS bundler --force
-gem install $GEMOPTS mysql2 -- --with-mysql-config='/usr/bin/mysql_config'
-gem install $GEMOPTS execjs
+gem install "$GEMOPTS" rack
+gem install "$GEMOPTS" rails
+gem install "$GEMOPTS" passenger
+gem install "$GEMOPTS" rake
+gem install "$GEMOPTS" bundler --force
+gem install "$GEMOPTS" mysql2 -- --with-mysql-config='/usr/bin/mysql_config'
+gem install "$GEMOPTS" execjs
 
 rbenv rehash
 
@@ -68,11 +83,11 @@ passenger-install-apache2-module --auto
 PASSENGER_ROOT=$(echo $(ls -d /usr/local/rbenv/versions/*/lib/ruby/gems/*/gems/passenger*))
 sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/mods-available/passenger.*
 
-# convenience execution variables
+# convenience execution variable
 MYSQL_BATCH="mysql --batch"
 
 # start mysql server
-service mariadb start
+systemctl start mariadb
 
 # create databases for each environment
 for DB_ENV in test development production; do
@@ -125,5 +140,4 @@ sed -i "s|@APPNAME@|$APPNAME|g" /etc/logrotate.d/$APPNAME
 a2ensite $APPNAME
 
 # stop mysql server
-/etc/init.d/mariadb stop
-
+systemctl stop mariadb
