@@ -6,7 +6,7 @@ if [[ -n "$HOSTNAME" ]]; then
     APPNAME=$HOSTNAME
     [[ "$APPNAME" == "rails" ]] && APPNAME=railsapp # avoid namespace conflict
 else
-    echo "'$(basename $0)' error: hostname not defined"
+    echo "'$(basename "$0")' error: hostname not defined"
     exit 1
 fi
 
@@ -16,8 +16,10 @@ WEBROOT=/var/www/$APPNAME
 LOGSDIR=/var/log/$APPNAME
 
 [[ "$FAB_HTTP_PROXY" ]] && export http_proxy=$FAB_HTTP_PROXY
+
+cores=$(nproc)
 export GEMOPTS="--no-document"
-export MAKE_OPTS="-j$(nproc)"
+export MAKE_OPTS="-j$cores"
 export RUBY_CONFIGURE_OPTS=--disable-install-doc
 
 git clone https://github.com/rbenv/rbenv.git /usr/local/rbenv --depth=1
@@ -47,7 +49,7 @@ EOF
 
 chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
-RUBY_VERSIONS=$(sort -V <<<$(sed -En "s|^([0-9.]+)|\1|p" <<<$(rbenv install --list)))
+RUBY_VERSIONS=$(sort -V <<<"$(sed -En "s|^([0-9.]+)|\1|p" <<<"$(rbenv install --list)")")
 
 if [[ -n "$RBY_VER" ]]; then
     RBY_VER_INSTALL=$(grep "$RBY_VER" <<<"$RUBY_VERSIONS")
@@ -80,7 +82,7 @@ rbenv rehash
 
 # build and configure passenger
 passenger-install-apache2-module --auto
-PASSENGER_ROOT=$(echo $(ls -d /usr/local/rbenv/versions/*/lib/ruby/gems/*/gems/passenger*))
+PASSENGER_ROOT="$(ls -d /usr/local/rbenv/versions/*/lib/ruby/gems/*/gems/passenger*)"
 sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/mods-available/passenger.*
 
 # convenience execution variable
@@ -91,30 +93,30 @@ systemctl start mariadb
 
 # create databases for each environment
 for DB_ENV in test development production; do
-    DB_NAME=${APPNAME}_${DB_ENV}
-    mysqladmin create $DB_NAME;
+    DB_NAME="${APPNAME}_${DB_ENV}"
+    mysqladmin create "$DB_NAME;"
     $MYSQL_BATCH --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
 done
 
 # seed rails application (3.x requires new)
 cd /var/www
-rails new $APPNAME -d mysql --skip
+rails new "$APPNAME" -d mysql --skip
 
 unset http_proxy
 
 CONF=$WEBROOT/config/database.yml
-sed -i "s|username:.*|username: $DB_USER|g" $CONF
-sed -i "s|password:.*|password: $DB_PASS|g" $CONF
+sed -i "s|username:.*|username: $DB_USER|g" "$CONF"
+sed -i "s|password:.*|password: $DB_PASS|g" "$CONF"
 
 # move logs to proper place
-touch $WEBROOT/log/production.log
-mv $WEBROOT/log $LOGSDIR
-ln -s $LOGSDIR $WEBROOT/log
+touch "$WEBROOT/log/production.log"
+mv "$WEBROOT/log" "$LOGSDIR"
+ln -s "$LOGSDIR" "$WEBROOT/log"
 
 # configure permissions
-chown -R root:www-data $WEBROOT
-chown -R www-data:www-data $WEBROOT/tmp
-chown -R www-data:www-data $LOGSDIR
+chown -R root:www-data "$WEBROOT"
+chown -R www-data:www-data "$WEBROOT/tmp"
+chown -R www-data:www-data "$LOGSDIR"
 
 # apache configuration
 a2enmod rewrite
@@ -128,16 +130,16 @@ a2enmod security2
 
 a2dissite 000-default
 
-mv /etc/apache2/conf/rails.conf /etc/apache2/conf/$APPNAME.conf
-sed -i "s|@APPNAME@|$APPNAME|g" /etc/apache2/conf/$APPNAME.conf
+mv /etc/apache2/conf/rails.conf "/etc/apache2/conf/$APPNAME.conf"
+sed -i "s|@APPNAME@|$APPNAME|g" "/etc/apache2/conf/$APPNAME.conf"
 
-mv /etc/apache2/sites-available/rails.conf /etc/apache2/sites-available/$APPNAME.conf
-sed -i "s|@APPNAME@|$APPNAME|g" /etc/apache2/sites-available/$APPNAME.conf
+mv /etc/apache2/sites-available/rails.conf "/etc/apache2/sites-available/$APPNAME.conf"
+sed -i "s|@APPNAME@|$APPNAME|g" "/etc/apache2/sites-available/$APPNAME.conf"
 
-mv /etc/logrotate.d/rails /etc/logrotate.d/$APPNAME
-sed -i "s|@APPNAME@|$APPNAME|g" /etc/logrotate.d/$APPNAME
+mv /etc/logrotate.d/rails "/etc/logrotate.d/$APPNAME"
+sed -i "s|@APPNAME@|$APPNAME|g" "/etc/logrotate.d/$APPNAME"
 
-a2ensite $APPNAME
+a2ensite "$APPNAME"
 
 # stop mysql server
 systemctl stop mariadb
