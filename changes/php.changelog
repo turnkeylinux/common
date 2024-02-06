@@ -1,5 +1,9 @@
 turnkey-php-18.0 (2) turnkey; urgency=low
 
+  * Includes new 'tkl-upgrade-php' helper script - to allow easy update/change
+    of PHP version - closes #1892.
+    [Marcos Méndez @ POPSOLUTIONS <https://github.com/marcos-mendez>]
+
   * Debian default PHP updated to v8.2.
 
   * Include new 'tkl-update-php' script - to make updating/changing PHP

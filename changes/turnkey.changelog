@@ -1,5 +1,9 @@
 turnkey-core-18.0 (1) turnkey; urgency=low
 
+  * Confconsole: bugfix broken DNS-01 Let's Encrypt challenge- closes #1876 &
+    #1895.
+    [Jeremy Davis <jeremy@turnkeylinux.org>]
+
   * Ensure hashfile includes URL to public key - closes #1864.
 
   * Include webmin-logviewer module by default - closes #1866.
