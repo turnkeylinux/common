@@ -44,6 +44,7 @@ turnkey-core-18.0 (1) turnkey; urgency=low
   * Web management console (webmin):
 
     - Upgraded webmin to v2.105.
+    - Include webmin-xterm module by default - closes #1904.
     - Removed stunnel reverse proxy (Webmin hosted directly now).
     - Ensure that Webmin uses HTTPS with default cert
       (/etc/ssl/private/cert.pem).
