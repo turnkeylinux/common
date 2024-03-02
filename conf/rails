@@ -50,17 +50,17 @@ RBY_VER="${RBY_VER:--l}"
 # req: https://github.com/foodcoops/foodsoft/blob/master/.ruby-version
 if [[ "$RBY_VER" == 2.* ]] then
   unset RELEASE
-  wget https://www.openssl.org/source/openssl-1.1.1n.tar.gz
-  tar xf openssl-1.1.1n.tar.gz
-  cd openssl-1.1.1n
-  ./config --prefix=/opt/openssl-1.1.1n --openssldir=/opt/openssl-1.1.1n shared zlib
+  wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz
+  tar xf openssl-1.1.1w.tar.gz
+  cd openssl-1.1.1w
+  ./config --prefix=/opt/openssl-1.1.1w --openssldir=/opt/openssl-1.1.1w shared zlib
   make
   make install
-  rm -rf /opt/openssl-1.1.1n/certs
+  rm -rf /opt/openssl-1.1.1w/certs
   cd -
-  rm -r openssl-1.1.1n*
-  ln -s /etc/ssl/certs /opt/openssl-1.1.1n
-  MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--with-openssl-dir=/opt/openssl-1.1.1n rbenv install 2.7.8
+  rm -r openssl-1.1.1w*
+  ln -s /etc/ssl/certs /opt/openssl-1.1.1w
+  MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--with-openssl-dir=/opt/openssl-1.1.1w rbenv install 2.7.8
 else
   MAKE_OPTS="-j$(nproc)" RUBY_CONFIGURE_OPTS=--disable-install-doc rbenv install $RBY_VER
 fi
