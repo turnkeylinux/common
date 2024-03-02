@@ -1,4 +1,11 @@
 #!/bin/bash -e
 
-a2enmod security2
-a2enmod evasive
+# try to enable mod, if it's not available just continue
+a2enmod security2 || true
+a2enmod evasive || true
+
+# ensure that mod_evasive can write to log
+CONF=/etc/apache2/mods-available/evasive.conf
+if [[ -f "$CONF" ]]; then
+    sed -i '\|DOSLogDir| s|#||; \|DOSLogDir| s|".*"$|"/var/log/apache2"|' $CONF
+fi

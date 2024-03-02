@@ -1,0 +1,5 @@
+turnkey-mysql-18.0 (2) turnkey; urgency=low
+
+  * Use MariaDB (MySQL replacement) v10.11.3 (from debian repos).
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 14 Sep 2023 23:17:54 +0000

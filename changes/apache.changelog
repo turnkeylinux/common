@@ -1,4 +1,9 @@
-apache-18.0 (1) turnkey; urgency=low
+turnkey-apache-18.0 (1) turnkey; urgency=low
 
-  * Include and enable mod_evasive and mod_security2.
-    [ Stefan Davis <stefan@turnkeylinux.org> ]
+  * Set mod_evasive log location - makes debugging easier.
+    [ Jeremy Davis <jeremy@turnkeylinux.org> ]
+
+  * Include and enable mod_evasive and mod_security2 by default in Apache.
+    [ Stefan Davis <Stefan@turnkeylinux.org> ]
+
+ -- Stefan Davis <stefan@turnkeylinux.org>  Tue, 01 Aug 2023 02:12:50 +0000
