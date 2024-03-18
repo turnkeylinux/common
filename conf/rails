@@ -51,22 +51,22 @@ chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 
 RUBY_VERSIONS=$(sort -V <<<"$(sed -En "s|^([0-9.]+)|\1|p" <<<"$(rbenv install --list)")")
 
-if [[ -n "$RBY_VER" ]]; then
-    RBY_VER_INSTALL=$(grep "$RBY_VER" <<<"$RUBY_VERSIONS")
+if [[ -n "$RUBY_VER" ]]; then
+    RUBY_VER_INSTALL=$(grep "$RUBY_VER" <<<"$RUBY_VERSIONS")
 else
-    RBY_VER_INSTALL=$(tail -1 <<<"$RUBY_VERSIONS")
-    echo "RBY_VER not set - falling back to latest stable Ruby: $RBY_VER_INSTALL"
+    RUBY_VER_INSTALL=$(tail -1 <<<"$RUBY_VERSIONS")
+    echo "RUBY_VER not set - falling back to latest stable Ruby: $RUBY_VER_INSTALL"
 fi
-if [[ -z "$RBY_VER_INSTALL" ]]; then
-    # this should only occur if RBY_VER is set and is unavailable
+if [[ -z "$RUBY_VER_INSTALL" ]]; then
+    # this should only occur if RUBY_VER is set and is unavailable
     RUBY_VERSIONS=$(sed 's|.\{2\}$||g' <<<"$RUBY_VERSIONS")
-    fatal "RBY_VER: $RBY_VER unsupported; supported versions are:\n$RUBY_VERSIONS"
+    fatal "RUBY_VER: $RUBY_VER unsupported; supported versions are:\n$RUBY_VERSIONS"
 else
-    echo "Installing Ruby version: $RBY_VER_INSTALL"
+    echo "Installing Ruby version: $RUBY_VER_INSTALL"
 fi
 
-rbenv install "$RBY_VER_INSTALL"
-rbenv global "$RBY_VER_INSTALL"
+rbenv install "$RUBY_VER_INSTALL"
+rbenv global "$RUBY_VER_INSTALL"
 
 gem update --system
 
