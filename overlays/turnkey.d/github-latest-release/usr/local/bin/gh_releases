@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-[[ -n $DEBUG ]] && set -x
+[[ -z $DEBUG ]] || set -x
 
 repo_path="$1" # user/repo_name
 tmp_dir=/tmp/gh_releases
@@ -67,7 +67,7 @@ get_page() {
         fatal "Bad GitHub credentials"
     else
         grep -oP "\"$key\": \"\\K(.*)(?=\")" $tmp_file
-        rm -f $tmp_file
+        [[ -n $DEBUG ]] || rm -f $tmp_file
     fi
 }
 
@@ -90,4 +90,4 @@ get_all_pages() {
 
 echo "Done!" 1>&2
 cat $tmp_dir/releases | sort --version-sort --unique
-[[ -z $DEBUG ]] && rm -rf $tmp_dir
+[[ -n $DEBUG ]] || rm -rf $tmp_dir
