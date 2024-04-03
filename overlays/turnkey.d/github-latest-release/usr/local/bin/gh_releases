@@ -7,12 +7,12 @@ tmp_dir=/tmp/gh_releases
 rm -rf $tmp_dir
 mkdir -p $tmp_dir
 
-fatal() { echo -e "\n[FATAL] $@" 1>&2; exit 1; }
-warning() { echo -e "[WARNING] $@" 1>&2; }
+fatal() { echo -e "\n[FATAL] $*" 1>&2; exit 1; }
+warning() { echo -e "[WARNING] $*" 1>&2; }
 
 usage() {
     cat >&2 <<EOF
-Usage: $(basename $0) <user>/<repo>
+Usage: $(basename "$0") <user>/<repo>
 
 Env Vars:
     # used for github api
@@ -44,7 +44,7 @@ fi
 if [[ -n "$GITHUB_USER" ]] && [[ -n "$GITHUB_USER_TOKEN" ]]; then
     USER="-u $GITHUB_USER:$GITHUB_USER_TOKEN"
 else
-    warning $warn "Authentication won't be used."
+    warning "$warn Authentication won't be used."
     USER=""
 fi
 
@@ -62,12 +62,12 @@ get_page() {
     key=$2
     page=$3
     tmp_file=$(mktemp $tmp_dir/XXXX.tmp)
-    curl $USER -b /tmp/cookies.txt -c /tmp/cookies.txt -s "${url}?page=${page}&per_page=100" > $tmp_file 2>/dev/null || true
-    if grep '"message"' $tmp_file; then
+    curl "$USER" -b /tmp/cookies.txt -c /tmp/cookies.txt -s "${url}?page=${page}&per_page=100" > "$tmp_file" 2>/dev/null || true
+    if grep '"message"' "$tmp_file"; then
         fatal "$repo_path: $(sed -En '\|message|s|^.*: "(.*)",$|\1|p' "$tmp_file")"
     else
-        grep -oP "\"$key\": \"\\K(.*)(?=\")" $tmp_file
-        [[ -n $DEBUG ]] || rm -f $tmp_file
+        grep -oP "\"$key\": \"\\K(.*)(?=\")" "$tmp_file"
+        [[ -n $DEBUG ]] || rm -f "$tmp_file"
     fi
 }
 
