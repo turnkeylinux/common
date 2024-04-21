@@ -1,10 +1,12 @@
 #!/bin/bash -ex
 
-if [ $HOSTNAME ]; then
+fatal() { echo -e "FATAL: $*" >&2; exit 1; }
+
+if [[ -n "$HOSTNAME" ]]; then
     APPNAME=$HOSTNAME
-    [ "$APPNAME" == "rails" ] && APPNAME=railsapp ## namespace conflict
+    [[ "$APPNAME" == "rails" ]] && APPNAME=railsapp ## namespace conflict
 else
-    echo "'$(basename $0)' error: hostname not defined"
+    echo "'$(basename "$0")' error: hostname not defined"
     return 1
 fi
 
@@ -13,7 +15,7 @@ DB_PASS=$(mcookie)
 WEBROOT=/var/www/$APPNAME
 LOGSDIR=/var/log/$APPNAME
 
-[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
+[[ -z "$FAB_HTTP_PROXY" ]] || export HTTP_PROXY=$FAB_HTTP_PROXY
 GEMOPTS="--no-document"
 
 git clone https://github.com/rbenv/rbenv.git /usr/local/rbenv --depth=1
@@ -46,15 +48,15 @@ chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 RUBY_VERSIONS=$(sort -V <<<"$(sed -En "s|^([0-9.]+)|\1|p" <<<"$(rbenv install --list)")")
 
 if [[ -n "$RUBY_VER" ]]; then
-    RUBY_VER_INSTALL=$(grep "$RUBY_VER" <<<"$RUBY_VERSIONS")
+    RUBY_VER_INSTALL=$(sed -n "\|$RUBY_VER|p" <<<"$RUBY_VERSIONS")
+	echo "Installing RUBY_VER: $RUBY_VER_INSTALL"
 else
     RUBY_VER_INSTALL=$(tail -1 <<<"$RUBY_VERSIONS")
     echo "RUBY_VER not set - falling back to latest stable Ruby: $RUBY_VER_INSTALL"
 fi
 if [[ -z "$RUBY_VER_INSTALL" ]]; then
     # this should only occur if RUBY_VER is set and is unavailable
-    RUBY_VERSIONS=$(sed 's|.\{2\}$||g' <<<"$RUBY_VERSIONS")
-    fatal "RUBY_VER: $RUBY_VER unsupported; supported versions are:\n$RUBY_VERSIONS"
+    fatal "RUBY_VER: $RUBY_VER unsupported; supported RUBY_VERSIONS are:\n$RUBY_VERSIONS"
 else
     echo "Installing Ruby version: $RUBY_VER_INSTALL"
 fi
@@ -76,7 +78,7 @@ rbenv rehash
 
 # build and configure passenger
 passenger-install-apache2-module --auto
-PASSENGER_ROOT=$(echo $(ls -d /usr/local/rbenv/versions/*/lib/ruby/gems/*/gems/passenger*))
+PASSENGER_ROOT=$(ls -d /usr/local/rbenv/versions/*/lib/ruby/gems/*/gems/passenger*)
 sed -i "s|PASSENGER_ROOT|$PASSENGER_ROOT|g" /etc/apache2/mods-available/passenger.*
 
 # start mysql server
@@ -93,25 +95,25 @@ done
 
 # seed rails application (3.x requires new)
 cd /var/www
-if $(rails --version | grep -q "Rails 2.3"); then
-    rails $APPNAME -d mysql --skip
+if rails --version | grep -q "Rails 2.3"; then
+    rails "$APPNAME" -d mysql --skip
 else
-    rails new $APPNAME -d mysql --skip
+    rails new "$APPNAME" -d mysql --skip
 fi
 unset HTTP_PROXY
 
 CONF=$WEBROOT/config/database.yml
-sed -i "s|username:.*|username: $DB_USER|g" $CONF
-sed -i "s|password:.*|password: $DB_PASS|g" $CONF
+sed -i "s|username:.*|username: $DB_USER|g" "$CONF"
+sed -i "s|password:.*|password: $DB_PASS|g" "$CONF"
 
 # move logs to proper place
-mv $WEBROOT/log $LOGSDIR
-ln -s $LOGSDIR $WEBROOT/log
+mv "$WEBROOT/log" "$LOGSDIR"
+ln -s "$LOGSDIR" "$WEBROOT/log"
 
 # configure permissions
-chown -R root:www-data $WEBROOT
-chown -R www-data:www-data $WEBROOT/tmp
-chown -R www-data:www-data $LOGSDIR
+chown -R root:www-data "$WEBROOT"
+chown -R www-data:www-data "$WEBROOT/tmp"
+chown -R www-data:www-data "$LOGSDIR"
 
 # apache configuration
 a2enmod rewrite
@@ -123,15 +125,15 @@ a2enmod passenger
 
 a2dissite 000-default
 
-mv /etc/apache2/conf/rails.conf /etc/apache2/conf/$APPNAME.conf
-sed -i "s|@APPNAME@|$APPNAME|g" /etc/apache2/conf/$APPNAME.conf
+mv /etc/apache2/conf/rails.conf "/etc/apache2/conf/$APPNAME.conf"
+sed -i "s|@APPNAME@|$APPNAME|g" "/etc/apache2/conf/$APPNAME.conf"
 
-mv /etc/apache2/sites-available/rails.conf /etc/apache2/sites-available/$APPNAME.conf
-sed -i "s|@APPNAME@|$APPNAME|g" /etc/apache2/sites-available/$APPNAME.conf
+mv /etc/apache2/sites-available/rails.conf "/etc/apache2/sites-available/$APPNAME.conf"
+sed -i "s|@APPNAME@|$APPNAME|g" "/etc/apache2/sites-available/$APPNAME.conf"
 
-mv /etc/logrotate.d/rails /etc/logrotate.d/$APPNAME
-sed -i "s|@APPNAME@|$APPNAME|g" /etc/logrotate.d/$APPNAME
+mv /etc/logrotate.d/rails "/etc/logrotate.d/$APPNAME"
+sed -i "s|@APPNAME@|$APPNAME|g" "/etc/logrotate.d/$APPNAME"
 
-a2ensite $APPNAME
+a2ensite "$APPNAME"
 
 service postgresql stop
