@@ -52,7 +52,7 @@ chmod +x /usr/local/rbenv/rbenv.d/rehash/gem-symlinks.bash
 RUBY_VERSIONS=$(sort -V <<<"$(sed -En "s|^([0-9.]+)|\1|p" <<<"$(rbenv install --list)")")
 
 if [[ -n "$RUBY_VER" ]]; then
-    RUBY_VER_INSTALL=$(grep "$RUBY_VER" <<<"$RUBY_VERSIONS")
+    RUBY_VER_INSTALL=$(grep "^$RUBY_VER" <<<"$RUBY_VERSIONS")
 else
     RUBY_VER_INSTALL=$(tail -1 <<<"$RUBY_VERSIONS")
     echo "RUBY_VER not set - falling back to latest stable Ruby: $RUBY_VER_INSTALL"
