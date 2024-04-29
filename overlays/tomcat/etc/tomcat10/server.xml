@@ -107,10 +107,14 @@
     <!-- TurnKey Linux default HTTPS connector on port 443 -->
     <Connector port="443" protocol="org.apache.coyote.http11.Http11NioProtocol" SSLEnabled="true"
                maxThreads="150" scheme="https" secure="true" URIEncoding="UTF-8"
-               clientAuth="false" sslProtocol="TLSv1.2" keystoreType="PKCS12"
-               keystoreFile="/etc/tomcat9/cert.p12" keystorePass="turnkey"
-               sslEnabledProtocols="TLSv1.2"
-               server="Secret" />
+               clientAuth="false" sslProtocol="TLSv1.2" sslEnabledProtocols="TLSv1.2"
+               server="Secret">
+        <SSLHostConfig>
+            <Certificate
+                certificateKeystoreFile="/etc/tomcat10/cert.p12"
+                certificateKeystorePassword="turnkey" />
+        </SSLHostConfig>
+    </Connector>
 
     <!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2
          This connector uses the APR/native implementation which always uses

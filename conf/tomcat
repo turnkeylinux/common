@@ -2,19 +2,15 @@
 
 fatal() { echo "FATAL [$(basename $0)]: $@" 1>&2; exit 1; }
 
-TOMCAT=tomcat9
+TOMCAT=tomcat10
 
 CATALINA_HOME="/usr/share/$TOMCAT"
 CATALINA_BASE="/var/lib/$TOMCAT"
 CATALINA_TMPDIR="$CATALINA_BASE/temp"
 
 # identify JVM to use
-##We check openjdk 8 & 11
-[ -e /usr/lib/jvm/java-8-openjdk-i386 ] && JVM=java-8-openjdk-i386
-[ -e /usr/lib/jvm/java-8-openjdk-amd64 ] && JVM=java-8-openjdk-amd64
-
-[ -e /usr/lib/jvm/java-11-openjdk-amd64 ] && JVM=java-11-openjdk-amd64
-
+## We check for openjdk 17
+[ -e /usr/lib/jvm/java-17-openjdk-amd64 ] && JVM=java-17-openjdk-amd64
 [ -z "$JVM" ] && fatal "JVM to use could not be identified"
 
 # configure java/tomcat environment
@@ -26,7 +22,7 @@ JAVA_HOME="/usr/lib/jvm/${JVM}"
 EOF
 
 # this may not be 100% safe
-JINFO=$(ls /usr/lib/jvm/.*java*11*jinfo)
+JINFO=$(ls /usr/lib/jvm/.*java*17*jinfo)
 JINFO=${JINFO%.jinfo}
 JINFO=${JINFO#*.}
 # not sure if this is actually needed
