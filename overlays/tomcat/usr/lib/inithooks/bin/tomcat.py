@@ -14,7 +14,7 @@ import signal
 
 from libinithooks.dialog_wrapper import Dialog
 
-TOMCAT = "tomcat9"
+TOMCAT = "tomcat10"
 
 
 def usage(s=None):
