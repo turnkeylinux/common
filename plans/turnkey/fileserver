@@ -1,0 +1,7 @@
+#include <turnkey/samba>
+#include <turnkey/samba-dav>
+#include <turnkey/compression>
+#include <turnkey/nfs>
+
+wsdd            /* Win client discovery via Web Service Discovery */
+avahi-daemon    /* Needed for Ubuntu, Mac OSX and possibly others */
