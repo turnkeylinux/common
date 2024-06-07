@@ -1,0 +1,7 @@
+#!/bin/bash -e
+
+# workaround issue with ntpd/ntpsec not able to log
+# see: https://github.com/turnkeylinux/tracker/issues/1952
+
+mkdir -p /var/log/ntpsec
+chown ntpsec:root /var/log/ntpsec
