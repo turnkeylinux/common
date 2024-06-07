@@ -1,11 +1,16 @@
 #!/bin/bash -e
 
-# try to enable mod, if it's not available just continue
+# try to enable mods, if not available just continue
 a2enmod security2 || true
 a2enmod evasive || true
 
-# ensure that mod_evasive can write to log
+# tweak mod_evasive defaults
 CONF=/etc/apache2/mods-available/evasive.conf
 if [[ -f "$CONF" ]]; then
-    sed -i '\|DOSLogDir| s|#||; \|DOSLogDir| s|".*"$|"/var/log/apache2"|' $CONF
+    # enable mod_evasive logging line - but leave default
+    sed -i '/DOSLogDir/ s|#||' $CONF
+    # update default config - resolves https://github.com/turnkeylinux/tracker/issues/1951
+    sed -Ei '/DOSPageCount/ s|^(\s*)#*(DOSPageCount)(\s*)[0-9]+|\1\2\3 5|' $CONF
+    # add additional example whitelist conf
+    sed -Ei '/DOSBlockingPeriod/a\'$'\n''    #DOSWhitelist        xxx.xxx.xxx.xxx' $CONF
 fi
