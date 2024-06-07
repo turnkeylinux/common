@@ -1,0 +1,9 @@
+turnkey-fileserver-18.0 (1) turnkey; urgency=low
+
+  * Add wsdd package for Windows Service for Devices - so Fileserver shows up
+    in Win10/11 Explorer - closes #1598.
+
+  * Install avahi-daemon by default. Provides zeroconf auto network discovery
+    and is ompatible with Apple's Bonjour service.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 06 Jun 2024 07:42:44 +0000
