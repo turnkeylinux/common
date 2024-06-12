@@ -7,6 +7,6 @@ export WEBROOT="/var/www" # DON"T FORGET TO UPDATE!
 export ARTISAN_USER="${ARTISAN_USER:-www-data}"
 export ARTISAN_DIR="${ARTISAN_DIR:-$WEBROOT}"
 
-COMMAND="php '$ARTISAN_DIR/artisan'"
+COMMAND="cd $WEBROOT; /usr/bin/php '$ARTISAN_DIR/artisan'"
 
-/usr/sbin/runuser $ARTISAN_USER -s /bin/bash -c "$COMMAND $(printf '%q ' "$@")"
+/usr/sbin/runuser "$ARTISAN_USER" -s /bin/bash -c "$COMMAND $(printf '%q ' "$@")"
