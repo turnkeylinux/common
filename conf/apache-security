@@ -7,8 +7,12 @@ a2enmod evasive || true
 # tweak mod_evasive defaults
 CONF=/etc/apache2/mods-available/evasive.conf
 if [[ -f "$CONF" ]]; then
-    # enable mod_evasive logging line - but leave default
+    # enable mod_evasive logging line using default dir
     sed -i '/DOSLogDir/ s|#||' $CONF
+    # ensure log dir exists and is writable
+    LOG_DIR=$(sed -En '/DOSLogDir/ s|^.*DOSLogDir.*"([a-z_/-]+)".*|\1|p' $CONF)
+    mkdir -p $LOG_DIR
+    chown -R $LOG_DIR
     # update default config - resolves https://github.com/turnkeylinux/tracker/issues/1951
     sed -Ei '/DOSPageCount/ s|^(\s*)#*(DOSPageCount)(\s*)[0-9]+|\1\2\3 5|' $CONF
     # add additional example whitelist conf
