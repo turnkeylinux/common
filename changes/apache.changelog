@@ -1,7 +1,6 @@
-turnkey-core-18.1 (1) turnkey; urgency=low
+turnkey-apache-18.1 (1) turnkey; urgency=low
 
   * Apache mod_evasive config improvements:
-
     - Bump DOSPageCount from (default) 2 -> 5 - closes #1951.
     - DOSLogDir - use default log dir & fix permissions - closes #1950.
     - Add DOSWhitelist example - commented out.

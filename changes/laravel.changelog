@@ -1,4 +1,4 @@
-turnkey-artisan-18.1 (1) turnkey; urgency=low
+turnkey-laravel-18.1 (1) turnkey; urgency=low
 
   * Bugfix/improve turnkey-artisan - closes #1959:
 
