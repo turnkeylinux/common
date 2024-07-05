@@ -19,12 +19,6 @@ turnkey-core-18.1 (1) turnkey; urgency=low
 
   * Reduce log noise by creating ntpsec log dir - closes #1952.
 
-  * Apache mod_evasive config improvements (LAMP/Apache only):
-
-    - Bump DOSPageCount from (default) 2 -> 5 - closes #1951.
-    - DOSLogDir - use default log dir & fix permissions - #1950.
-    - Add DOSWhitelist example - commented out.
-
  -- Jeremy Davis <jeremy@turnkeylinux.org>  Fri, 05 Jul 2024 00:13:46 +0000
 
 turnkey-core-18.0 (1) turnkey; urgency=low
