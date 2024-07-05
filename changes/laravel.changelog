@@ -1,3 +1,13 @@
+turnkey-laravel-18.1 (1) turnkey; urgency=low
+
+  * Bugfix/improve turnkey-artisan - closes #1959:
+
+    - cd to WEBROOT first - resolves some app builds failing.
+    - Use php bin absolute path - fixes cron job failures in some apps.
+    - Apply shellcheck suggestions.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Fri, 05 Jul 2024 00:13:46 +0000
+
 turnkey-php-18.0 (2) turnkey; urgency=low
 
   * Improvments to 'turnkey-artisan' wrapper/helper script.
