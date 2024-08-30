@@ -95,7 +95,7 @@ case "$1" in
             /opt/mattermost/bin/mattermost
         ;;
 
-    redis)
+    php-fpm*)
         stop_start "$2" "$1" \
             runuser www-data -s /bin/bash -c "/usr/sbin/php-fpm?.? --daemonize --fpm-config /etc/php/?.?/fpm/php-fpm.conf"
         ;;
