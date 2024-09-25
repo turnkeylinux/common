@@ -6,7 +6,7 @@ HOSTNAME ?= $(shell basename "$(shell pwd)")
 # general TKL vars
 CONF_VARS += HOSTNAME ROOT_PASS NONFREE BACKPORTS_NONFREE TKL_TESTING BACKPORTS
 # set specific software versions
-CONF_VARS += PHP_VERSION RUBY_VER NODE_VER
+CONF_VARS += PHP_VERSION RUBY_VER NODE_VER YARN_VER
 # Webmin/firewall related
 CONF_VARS += WEBMIN_THEME WEBMIN_FW_TCP_INCOMING WEBMIN_FW_TCP_INCOMING_REJECT WEBMIN_FW_UDP_INCOMING WEBMIN_FW_NAT_EXTRA WEBMIN_FW_MANGLE_EXTRA
 # these are needed to control styling of credits (e.g., conf/apache-credit)

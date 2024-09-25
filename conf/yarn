@@ -5,5 +5,10 @@ curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key --keyring /usr/share
 
 mv /etc/apt/sources.list.d/yarn.list.disabled /etc/apt/sources.list.d/yarn.list
 
+YARN="yarn"
+if [[ -n "$YARN_VER" ]]; then
+    YARN="$YARN=YARN_VER"
+fi
+
 apt-get update
-DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes yarn
+DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes "$YARN"
