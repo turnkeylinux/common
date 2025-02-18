@@ -1,9 +1,6 @@
 #include <boot>
 #include <net>
 #include <console>
-#ifdef ARM64
-#include <wifi>
-#endif
 
 wget
 curl

@@ -40,7 +40,6 @@ linux-image-amd64
 #endif
 #ifdef ARM64
 linux-image-arm64
-raspi-firmware
 #endif
 #endif
 #endif
