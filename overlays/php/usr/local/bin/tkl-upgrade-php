@@ -1,87 +1,216 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
-# Function to display PHP version choices and get user input
-choose_php_version() {
-    echo "Select the PHP version to install:"
-    echo "1) PHP 7.3"
-    echo "2) PHP 7.4"
-    echo "3) PHP 8.0"
-    echo "4) PHP 8.1"
-    echo "5) PHP 8.2"
-    echo "6) PHP 8.3"
-    echo "7) PHP 8.4"
-    read -r -p "Enter choice [1-7]: " php_choice
+import subprocess
+from subprocess import DEVNULL
+from urllib import request
+import json
+import re
+import os
+import os.path
+import sys
 
-    case $php_choice in
-        1) PHPV_NEW="7.3";;
-        2) PHPV_NEW="7.4";;
-        3) PHPV_NEW="8.0";;
-        4) PHPV_NEW="8.1";;
-        5) PHPV_NEW="8.2";;
-        6) PHPV_NEW="8.3";;
-        7) PHPV_NEW="8.4";;
-        *) echo "Invalid choice. Exiting."; exit 1;;
-    esac
-}
+PHP_VERSION_RE = re.compile(r"^Package: (php\d+\.\d+)-")
 
-# Function to check if new packages exist and exclude json if PHP version is >= 7.2
-check_new_packages() {
-    missing_pkgs=()
-    for pkg in $PHP_NEW_PKGS; do
-        if ! apt-cache show "$pkg" > /dev/null 2>&1; then
-            missing_pkgs+=("$pkg")
-        fi
-    done
 
-    if [ ${#missing_pkgs[@]} -ne 0 ]; then
-        echo "The following packages do not exist in PHP version $PHPV_NEW: ${missing_pkgs[*]}"
-        exit 1
-    fi
-}
+def get_output(args):
+    return subprocess.check_output(args, text=True).strip()
 
-# Start of the script
-echo "Starting PHP upgrade script..."
+ARCH = get_output(["dpkg", "--print-architecture"])
+CODENAME = get_output(["lsb_release", "-c"]).split()[1]
 
-# Display current PHP version
-echo "Current PHP version:"
-php -v
 
-# Step 1: Set PHP version to install and collect current PHP version & packages
-choose_php_version
-PHPV_OLD=$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')
-PHP_OLD_PKGS=$(apt-cache policy -- "*php${PHPV_OLD}*" \
-                    | grep -v "Installed: (none)" \
-                    | grep "Installed:" -B1 \
-                    | sed -n "\|php${PHPV_OLD}| s|^\([a-z0-9\.-]*\).*$|\1|p" \
-                    | grep -v "json")
-PHP_NEW_PKGS="${PHP_OLD_PKGS//$PHPV_OLD/$PHPV_NEW}"
+SECURITY_NOTICE = """
+NOTE:
+    Older version of PHP may not be actively maintained, this includes not just
+    bug fixes but also security fixes.
 
-# Step 2: Set up sury.org PHP
-curl -sSL https://packages.sury.org/php/README.txt | bash -x
+    Versions which have reached EOL should not be expected to be secure. 
 
-# Step 3: Install relevant new packages
-check_new_packages
-echo "Installing new packages..."
-# shellcheck disable=SC2086
-apt install -y $PHP_NEW_PKGS
+    It is always encouraged that you only install the newest version that
+    applies for your use case.
+"""
 
-# Detect the web server and handle PHP module accordingly
-if systemctl is-active --quiet apache2; then
-    # Apache is running
-    a2dismod "php${PHPV_OLD}"
-    a2enmod "php${PHPV_NEW}"
-    systemctl restart apache2
-elif systemctl is-active --quiet nginx; then
-    # Nginx is running, restart PHP-FPM if installed
-    systemctl restart php${PHPV_NEW}-fpm
-elif systemctl is-active --quiet lighttpd; then
-    # Lighttpd is running, restart PHP-FPM if installed
-    systemctl restart php${PHPV_NEW}-fpm
-else
-    echo "No supported web server detected. Please manually configure your web server to use the new PHP version."
-fi
+def get_supported_versions() -> dict[str, str]:
+    with request.urlopen('http://www.php.net/releases/active') as iob:
+        data = json.loads(iob.read().decode())
+    versions = {}
 
-# Update CLI version
-update-alternatives --set php /usr/bin/php${PHPV_NEW}
+    for major in data.keys():
+        for major_minor in data[major].keys():
+            tags =  data[major][major_minor]['tags']
+            if 'security' in tags:
+                versions[major_minor] = 'security only'
+            else:
+                versions[major_minor] = 'supported'
+    return versions
 
-echo "PHP upgrade completed successfully."
+
+def get_php_versions() -> list[str]:
+    """Get all available php versions and return them in the form phpx.y"""
+    print("\nChecking Available PHP Versions")
+
+    url = f"https://packages.sury.org/php/dists/{CODENAME}/main/binary-{ARCH}/Packages"
+    with request.urlopen(url) as iob:
+        data = iob.read().decode()
+
+    php_versions = set()
+
+    for line in data.splitlines():
+        m = PHP_VERSION_RE.match(line)
+        if m:
+            php_versions.add(m.group(1))
+
+    return sorted(list(php_versions))
+
+
+def choose_version(choices, version_support, deb_version) -> str:
+    print(SECURITY_NOTICE)
+
+    print("Select the PHP version to install:")
+    for i, opt in enumerate(choices):
+        support = version_support.get(opt[3:], 'end of life')
+        if opt[3:] == deb_version:
+            print(f"{i+1}). {opt} ({support}) (provided by debian)")
+        else:
+            print(f"{i+1}). {opt} ({support})")
+
+    inp = input(f"\nEnter choice [1-{len(choices)}]: ")
+
+    if not inp.isdigit():
+        print("Input must be a number! Exiting")
+        sys.exit(1)
+
+    inp = int(inp)
+
+    if inp < 1 or inp > len(choices):
+        print(f"Input out of range [1-{len(choices)}]! Exiting")
+        sys.exit(1)
+
+    return choices[inp - 1]
+
+def get_packages(php_version):
+    curr_package = None
+    packages = {}
+    for line in get_output(
+        ["apt-cache", "policy", "--", "*" + php_version]
+    ).splitlines():
+        if not line[0].isspace():
+            curr_package = line.rstrip(":")
+            packages[curr_package] = []
+        else:
+            if "Installed: (none)" in line:
+                del packages[curr_package]
+                curr_package = None
+    return packages.keys()
+
+def debian_version():
+    out = get_output(['apt-cache', 'policy', 'php'])
+    out = out.split('Version table:')[1].strip()
+
+    last_line = None
+    for line in out.splitlines():
+        if 'deb.debian.org/debian bookworm/main' in line:
+            if last_line:
+                return last_line.strip().split(':')[1].split('+')[0]
+            return None
+        last_line = line
+    return None
+
+def check_new_packages(new_packages):
+    missing_packages = []
+    found_packages = []
+    for pkg in new_packages:
+        if subprocess.run(
+                ['apt-cache', 'show', pkg],
+                stdout=DEVNULL, stderr=DEVNULL).returncode != 0:
+            missing_packages.append(pkg)
+        else:
+            found_packages.append(pkg)
+
+    if missing_packages:
+        print('The following packages do not exist in the requested PHP version:')
+        print('    ' + ', '.join(missing_packages))
+
+    return found_packages
+
+def is_active(service):
+    return subprocess.run(['systemctl', 'is-active', '--quiet', service]).returncode == 0
+
+if __name__ == '__main__':
+    print("Starting PHP upgrade script ...")
+    print("Current PHP version")
+    subprocess.run(["/usr/bin/php", "-v"])
+
+    current_php_version = get_output(
+        ["php", "-r", 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;']
+    )
+
+    print('Determining supported version ...')
+    version_support = get_supported_versions()
+    deb_version = debian_version()
+    if not deb_version:
+        print('Running "apt-get update" ...')
+
+        subprocess.run(['apt-get', 'update'])
+        deb_version = debian_version()
+
+
+    new_php_version = choose_version(get_php_versions(), version_support,
+                                     deb_version)
+    new_php_pkgs = [
+        pkg.replace("php" + current_php_version, new_php_version)
+        for pkg in get_packages(current_php_version)
+    ]
+
+    if new_php_version[3:] == deb_version:
+        if os.path.isfile('/etc/apt/sources.list.d/php.list'):
+            os.remove('/etc/apt/sources.list.d/php.list')
+        subprocess.run(['dpkg', '-r', 'debsuryorg-archive-keyring'])
+
+    else:
+
+        print('Downloading Sury Archive Keyring ...')
+
+        url = 'https://packages.sury.org/debsuryorg-archive-keyring.deb'
+        with request.urlopen(url) as iob:
+            with open('/tmp/debsuryorg-archive.keyring.deb', 'wb') as fob:
+                fob.write(iob.read())
+
+        subprocess.run(['dpkg', '-i', '/tmp/debsuryorg-archive.keyring.deb'])
+
+        with open('/etc/apt/sources.list.d/php.list', 'w') as fob:
+            fob.write(
+                'deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg]'
+                f' https://packages.sury.org/php/ {CODENAME} main'
+            )
+
+    print('Running "apt-get update" ...')
+
+    subprocess.run(['apt-get', 'update'])
+
+    found_packages = check_new_packages(new_php_pkgs)
+
+    print('Installing new packages ...')
+
+    subprocess.run(['apt-get', '-y', 'install', *found_packages])
+
+    print('Configuring Webserver ...')
+
+    if is_active('apache2'):
+        subprocess.run(['a2dismod', 'php' + current_php_version])
+        subprocess.run(['a2enmod', new_php_version])
+        subprocess.run(['systemctl', 'restart', 'apache2'])
+    elif is_active('nginx'):
+        subprocess.run(['systemctl', 'restart', new_php_version + '-fpm'])
+    elif is_active('lighttpd'):
+        subprocess.run(['systemctl', 'restart', new_php_version + '-fpm'])
+    else:
+        print(
+            "No supported web server detected. Please manually configure "
+            "your web server to use the new PHP version."
+        )
+
+    subprocess.run(['update-alternatives', '--set', 'php', '/usr/bin/' +
+                    new_php_version])
+
+    print('PHP upgrade completed successfully.')
