@@ -101,7 +101,7 @@ case "$1" in
         ;;
 
     *)
-        echo "$(basename "$0") tkldev service wrapper falling back to /usr/sbin/service"
+        echo "[$*] - unrecognized service = tkldev '$(basename "$0")' wrapper falling back to /usr/sbin/service"
         /usr/sbin/service "$@"
         ;;
 esac
