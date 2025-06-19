@@ -77,7 +77,10 @@ case "$1" in
 
     odoo)
         stop_start "$2" "$1" \
-            runuser odoo -s /bin/bash -c "/usr/bin/odoo --config /etc/odoo/odoo.conf --logfile /var/log/odoo/odoo-server.log"
+            runuser odoo -s /bin/bash -c \
+                                "/usr/bin/odoo" \
+                                " --config /etc/odoo/odoo.conf" \
+                                " --logfile /var/log/odoo/odoo-server.log"
         ;;
 
     gitlab-runsvdir*)
@@ -87,7 +90,8 @@ case "$1" in
 
     ghost)
         stop_start "$2" "$1" \
-            cd /opt/ghost; sudo -u ghost /usr/local/bin/node /usr/local/bin/ghost start
+            cd /opt/ghost; \
+            sudo -u ghost /usr/local/bin/node /usr/local/bin/ghost start
         ;;
 
     mattermost)
@@ -97,11 +101,15 @@ case "$1" in
 
     php-fpm*)
         stop_start "$2" "$1" \
-            runuser www-data -s /bin/bash -c "/usr/sbin/php-fpm?.? --daemonize --fpm-config /etc/php/?.?/fpm/php-fpm.conf"
+            runuser www-data -s /bin/bash -c \
+                                "/usr/sbin/php-fpm?.?" \
+                                " --daemonize" \
+                                " --fpm-config /etc/php/?.?/fpm/php-fpm.conf"
         ;;
 
     *)
-        echo "[$*] - unrecognized service = tkldev '$(basename "$0")' wrapper falling back to /usr/sbin/service"
+        echo "[$*] - unrecognized service = tkldev '$(basename "$0")'" \
+             " wrapper falling back to /usr/sbin/service"
         /usr/sbin/service "$@"
         ;;
 esac
