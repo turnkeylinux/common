@@ -52,6 +52,27 @@ case "$1" in
             /usr/share/webmin/miniserv.pl /etc/webmin/miniserv.conf
         ;;
 
+    postfix)
+        # /etc/init.d/postfix still exists but start|stop|reload leverage
+        # systemd. The postfix.service is a oneshot that calls /bin/true, the
+        # "real" service is a '-' instance of the 'postfix@.service' template
+        # The template is "PartOf=postfix.service"
+        case "$2" in
+            start|stop)
+                if [[ "$2" == "start" ]]; then
+                    # check config - as per postfix@.service 'ExecStartPre='
+                    /usr/lib/postfix/configure-instance.sh -
+                fi
+                # 'ExecStart'|'ExecStop' commands from postfix@.service
+                /usr/sbin/postmulti -i - -p "$2"
+                ;;
+            *)
+                echo "unexpected postfix command '$2'" >&2
+                exit 1
+                ;;
+        esac
+        ;;
+
     apache2)
         if [[ "$2" == "reload" ]]; then
             APACHE_STARTED_BY_SYSTEMD=y /usr/sbin/apache2ctl restart
