@@ -1,31 +1,42 @@
+# uncomment if not setting 'git config'
 #export GIT_AUTHOR_NAME="Your Name"
 #export GIT_AUTHOR_EMAIL="your@email.com"
-#export GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
-#export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
+#export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+#export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 
-[ -d /usr/lib/git-core ] && export PATH=/usr/lib/git-core:$PATH
 
-git_branch_bin=$(which git-branch 2>/dev/null)
-function git-branch()
-{
-    local delete=no
-    for arg; do
-        [ "$arg" == "-D" ] && delete=yes
+# TODO - bash completetion for these aliases
+# see:
+# /usr/share/bash-completion/completions/git
+
+[[ -d /usr/lib/git-core ]] && export PATH=/usr/lib/git-core:$PATH
+
+git_branch() {
+    local args=("$@")
+    local default_args=(-a -v)
+    local final_args=()
+    for arg in "${args[@]}"; do
+        if [[ "$arg" == "-D" ]] || [[ "$arg" == "-d" ]]; then
+            default_args=()
+        fi
+        final_args+=("$arg")
     done
-    if [ "$delete" == "yes" ]; then
-        $git_branch_bin -v $*
-    else
-        $git_branch_bin -v -a $*
-    fi
+    final_args=("${default_args[@]}" "${final_args[@]}")
+    /usr/lib/git-core/git-branch "${final_args[@]}"
 }
 
 # useful aliases
-alias gs="git-status"
-alias gd="git-diff"
 alias ga="git-add"
-alias gb="git-branch"
+alias gb="git_branch"  # see func above
 alias gc="git-commit"
 alias gca="git-commit -v -a"
 alias gcam="git-commit --amend -v"
+alias gd="git-diff"
+alias gg="git-grep"
 alias gl="git-log"
 alias gll="git-log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias glo="git-log --oneline"
+alias gr="git-remote -v"
+alias gs="git-status"
+
+# vim:ft=bash
