@@ -1,14 +1,16 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
-if [ ! $HOSTNAME ]; then
-    echo "'$(basename $0)' error: hostname not defined"
+if [[ ! "$HOSTNAME" ]]; then
+    echo "'$(basename "$0")' error: hostname not defined"
     return 1
 fi
 
 postconf -e inet_interfaces=localhost
-postconf -e myhostname=$HOSTNAME
+postconf -e myhostname="$HOSTNAME"
 
 # harden postfix
+# - we don't want '$myhostname' to be expanded
+# shellcheck disable=SC2016
 postconf -e smtpd_banner='$myhostname ESMTP'
 
 # force TLS connections only - might break sending of mail so leaving disabled
