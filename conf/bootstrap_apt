@@ -2,8 +2,9 @@
 
 # create apt sources
 # environment variables:
-#   - RELEASE <required>:
+#   - RELEASE <optional>:
 #       - OS distro and codename to use (e.g. 'debian/bookworm')
+#       - will fallback to host system if not set
 #   - NONFREE <optional>:
 #       - set to enable non-free by default
 #   - TKL_TESTING <optional>:
@@ -29,17 +30,22 @@
 #   - add to plan & pin package(s) to backports (via prefs file); or
 #   - install via apt using '-t $CODENAME-backports' switch
 
+warning() { echo "warning: $*" 1>&2; }
 fatal() { echo "fatal: $*" 1>&2; exit 1; }
 
 if [[ -f /turnkey-buildenv ]]; then
     # shellcheck source=/dev/null
     source /turnkey-buildenv
 fi
-if [[ -n "$RELEASE" ]]; then
+
+if [[ -z "$RELEASE" ]]; then
+    CODENAME=$(lsb_release -sc)
+    _distro=$(lsb_release -si)
+    distro=${_distro,,}
+    warning "RELEASE not set - falling back to host: $distro/$CODENAME"
+else
     CODENAME=$(basename "$RELEASE")
     distro=$(dirname "$RELEASE")
-else
-    fatal "RELEASE is not set"
 fi
 if [[ "$distro" != 'debian' ]] && [[ "$distro" != 'ubuntu' ]]; then
     fatal "Only supported distros are 'debian' and 'ubuntu' (got '{$distro}')"
@@ -199,7 +205,7 @@ if [[ -n "$NO_TURNKEY_APT_REPO" ]]; then
     find $SOURCES_LIST -type f -exec sed -i '/archive.turnkeylinux.org/ s/^/#/g' {} \;
 fi
 
-if [ -n "$PHP_VERSION" ]; then
+if [[ -n "$PHP_VERSION" ]]; then
     # Use 3rd party sury.org repo
     # install support for https repo & wget (to download gpg key)
     PKGS=(lsb-release ca-certificates wget)
@@ -207,7 +213,7 @@ if [ -n "$PHP_VERSION" ]; then
     DEBIAN_FRONTEND=noninteractive apt-get install --yes "${PKGS[@]}"
 
     # download keyfile
-    keyfile=/usr/share/keyrings/php-sury.org.gpg
+    keyfile=/usr/share/keyrings/debsuryorg-archive-keyring.gpg
     wget -O $keyfile https://packages.sury.org/php/apt.gpg
 
     cat > $SOURCES_LIST/php.list <<EOF
