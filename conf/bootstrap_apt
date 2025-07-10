@@ -2,8 +2,9 @@
 
 # create apt sources
 # environment variables:
-#   - RELEASE <required>:
+#   - RELEASE <optional>:
 #       - OS distro and codename to use (e.g. 'debian/bookworm')
+#       - will fallback to host system if not set
 #   - NONFREE <optional>:
 #       - set to enable non-free by default
 #   - TKL_TESTING <optional>:
@@ -29,31 +30,41 @@
 #   - add to plan & pin package(s) to backports (via prefs file); or
 #   - install via apt using '-t $CODENAME-backports' switch
 
-fatal() { echo "fatal: $@" 1>&2; exit 1; }
+warning() { echo "warning: $*" 1>&2; }
+fatal() { echo "fatal: $*" 1>&2; exit 1; }
 
-[ ! -f /turnkey-buildenv ] || source /turnkey-buildenv
-[ -n "$RELEASE" ] || fatal "RELEASE is not set"
-CODENAME=$(basename $RELEASE)
-[ -n "$CODENAME" ] || fatal "CODENAME is not set"
-distro=$(dirname $RELEASE)
+if [[ -f /turnkey-buildenv ]]; then
+    # shellcheck source=/dev/null
+    source /turnkey-buildenv
+fi
+
+if [[ -z "$RELEASE" ]]; then
+    CODENAME=$(lsb_release -sc)
+    _distro=$(lsb_release -si)
+    distro=${_distro,,}
+    warning "RELEASE not set - falling back to host: $distro/$CODENAME"
+else
+    CODENAME=$(basename "$RELEASE")
+    distro=$(dirname "$RELEASE")
+fi
 if [[ "$distro" != 'debian' ]] && [[ "$distro" != 'ubuntu' ]]; then
     fatal "Only supported distros are 'debian' and 'ubuntu' (got '{$distro}')"
 fi
 rm -rf /turnkey-buildenv
 
 case $CODENAME in
-    buster|bullseye|bookworm)
+    bullseye|bookworm|trixie)
         MIRROR_URL=http://deb.debian.org/debian
         SEC_MIRROR=http://security.debian.org/
         KEY_CODENAME=$CODENAME
         CONTRIB="contrib"
         NON_FREE="non-free"
         ;;&
-    bookworm)
+    bookworm|trixie)
         SEC_MIRROR="${SEC_MIRROR}debian-security"
         ;;
     # Note - only Ubuntu LTS
-    focal|jammy)
+    focal|jammy|noble)
         MIRROR_URL=http://archive.ubuntu.com/ubuntu
         SEC_MIRROR=$MIRROR_URL
         CONTRIB="universe"
@@ -64,6 +75,9 @@ case $CODENAME in
         ;;
     jammy)
         KEY_CODENAME="bookworm"
+        ;;
+    noble)
+        KEY_CODENAME="trixie"
         ;;
     *)
         fatal "Codename '$CODENAME' not supported"
@@ -127,16 +141,16 @@ if [[ -z "$NO_TURNKEY_APT_REPO" ]]; then
     # gpg keyring files
     key_dir=/usr/share/keyrings
     repos=(main security testing)
-    for repo in ${repos[@]}; do
+    for repo in "${repos[@]}"; do
         full_path=$key_dir/tkl-$CODENAME-$repo
         keyring=$full_path.gpg
         keyfile=$full_path.asc
-        gpg --no-default-keyring --keyring $keyring --import $keyfile
-        rm $keyfile
+        gpg --no-default-keyring --keyring "$keyring" --import "$keyfile"
+        rm "$keyfile"
     done
     # ensure that gpg-agent is killed after processing keys
-    kill -9 $(pidof gpg-agent) || true
-    rm -rf $HOME/.gnupg
+    kill -9 "$(pidof gpg-agent)" || true
+    rm -rf "$HOME/.gnupg"
 fi
 
 cat > $SOURCES_LIST/sources.list <<EOF
@@ -191,15 +205,15 @@ if [[ -n "$NO_TURNKEY_APT_REPO" ]]; then
     find $SOURCES_LIST -type f -exec sed -i '/archive.turnkeylinux.org/ s/^/#/g' {} \;
 fi
 
-if [ -n "$PHP_VERSION" ]; then
+if [[ -n "$PHP_VERSION" ]]; then
     # Use 3rd party sury.org repo
     # install support for https repo & wget (to download gpg key)
-    PKGS="lsb-release ca-certificates wget"
+    PKGS=(lsb-release ca-certificates wget)
     apt-get update --allow-releaseinfo-change
-    DEBIAN_FRONTEND=noninteractive apt-get install -y $PKGS
+    DEBIAN_FRONTEND=noninteractive apt-get install --yes "${PKGS[@]}"
 
     # download keyfile
-    keyfile=/usr/share/keyrings/php-sury.org.gpg
+    keyfile=/usr/share/keyrings/debsuryorg-archive-keyring.gpg
     wget -O $keyfile https://packages.sury.org/php/apt.gpg
 
     cat > $SOURCES_LIST/php.list <<EOF
