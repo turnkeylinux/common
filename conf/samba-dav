@@ -56,7 +56,7 @@ onclick="$.ajax({
   url: '/',
   dataType: 'json',
   async: true,
-  username: 'logout',
+  username: '',
   password: 'turnkeylinuxlogout'
 }).done(
     function() {
