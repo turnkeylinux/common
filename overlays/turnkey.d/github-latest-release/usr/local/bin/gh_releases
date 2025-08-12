@@ -64,7 +64,7 @@ get_page() {
     tmp_file=$(mktemp $tmp_dir/XXXX.tmp)
     curl "$USER" -b /tmp/cookies.txt -c /tmp/cookies.txt -s "${url}?page=${page}&per_page=100" > "$tmp_file" 2>/dev/null || true
     if grep '"message"' "$tmp_file"; then
-        fatal "$repo_path: $(sed -En '\|message|s|^.*: "(.*)",$|\1|p' "$tmp_file")"
+        fatal "$repo_path: $(cat "$tmp_file")"
     else
         grep -oP "\"$key\": \"\\K(.*)(?=\")" "$tmp_file"
         [[ -n $DEBUG ]] || rm -f "$tmp_file"
