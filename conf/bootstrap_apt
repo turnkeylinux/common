@@ -3,7 +3,7 @@
 # create apt sources
 # environment variables:
 #   - RELEASE <optional>:
-#       - OS distro and codename to use (e.g. 'debian/bookworm')
+#       - OS distro and codename to use (e.g. 'debian/trixie')
 #       - will fallback to host system if not set
 #   - NONFREE <optional>:
 #       - set to enable non-free by default
@@ -24,6 +24,9 @@
 #       - if not the same as guest, apply relevant transition changes
 #   - NO_TURNKEY_APT_REPO <optional>:
 #       - disable TurnKey apt repos - useful during early transition
+#   - NO_PROXY <optional>:
+#       - same as APT_PROXY_OVERRIDE=disable (will override APT_PROXY_OVERRIDE
+#         if both set to different values)
 
 # Note, to install packages from backports:
 # - set 'BACKPORTS=y'; and either:
@@ -60,7 +63,7 @@ case $CODENAME in
         CONTRIB="contrib"
         NON_FREE="non-free"
         ;;&
-    bookworm|trixie)
+    bookworm|trixie|forky)
         SEC_MIRROR="${SEC_MIRROR}debian-security"
         ;;
     # Note - only Ubuntu LTS
@@ -93,11 +96,12 @@ mkdir -p $SOURCES_LIST $PREFS_LIST $CONF_DIR
 deb_ver=$(sed -nE "s|^([0-9]+).*|\1|p" /etc/debian_version)
 [[ -n "$HOST_DEB_VER" ]] || HOST_DEB_VER=$deb_ver
 if [[ "$HOST_DEB_VER" != "$deb_ver" ]]; then
-    echo "# Transition build detected - building v$deb_ver on v$HOST_DEB_VER"
+    echo "# Transition build detected - building Debian v$deb_ver on Debian" \
+         " v$HOST_DEB_VER"
     if [[ $HOST_DEB_VER -ne $((deb_ver - 1)) ]]; then
         fatal "Detected more than one Debian major version difference"
     elif [[ $deb_ver -lt 9 ]]; then
-        fatal "Debian releases older than Stretch no longer supported"
+        fatal "Debian releases older than Buster no longer supported"
     fi
 fi
 
@@ -109,7 +113,7 @@ elif [[ $deb_ver -ge 11 ]] || [[ "$distro" == 'ubuntu' ]]; then
     PROXY_PORT=3128
 fi
 
-if [[ "${APT_PROXY_OVERRIDE,,}" == "disable" ]]; then
+if [[ "${APT_PROXY_OVERRIDE,,}" == "disable" ]] || [[ -n "$NO_PROXY" ]]; then
     PROXY_PORT=
 elif [[ -n $APT_PROXY_OVERRIDE ]]; then
     PROXY_PORT=$APT_PROXY_OVERRIDE
@@ -128,8 +132,10 @@ if [[ -e /usr/local/share/ca-certificates/squid_proxyCA.crt ]]; then
     update-ca-certificates
 elif [[ $deb_ver -le 10 ]]; then
     echo "Buster base (or earlier) detected, skipping importing Squid CA cert."
+elif [[ -z "$PROXY_PORT" ]]; then
+    echo "PROXY_PORT not set - skipping importing Squid CA cert."
 else
-    fatal "Squid CA cert not found."
+    fatal "Squid CA cert not found. (set NO_PROXY=true to skip)"
 fi
 
 # Set default Debian PHP version
