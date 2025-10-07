@@ -3,5 +3,5 @@ samba-common-bin
 smbclient       /* useful for testing (and connecting to other shares) */
 webmin-samba
 samba-vfs-modules
-
+cifs-utils
 flip            /* convert line endings between unix and dos formats */
