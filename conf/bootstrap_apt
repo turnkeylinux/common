@@ -12,7 +12,9 @@
 #   - BACKPORTS <optional>:
 #       - set to enable Debian backports repo
 #   - PHP_VERSION <optional>:
-#       - set to desired PHP version from Sury PHP repo
+#       - set to desired PHP version from Sury PHP repo - e.g. '8.5'
+#       - if 'default' or equal to the default PHP version in Debian, Sury repo
+#         will be created, but disabled by default
 #   - PHP_EXTRA_PINS <optional>:
 #       - space separated list of additional Sury php pkgs to pin 500
 #   - APT_PROXY_OVERRIDE <optional>:
@@ -160,8 +162,10 @@ fi
 if [[ -n "$BACKPORTS" ]]; then
     debian_backports_enabled="yes"
 fi
-if [[ -n "$PHP_VERSION" ]]; then
-    sury_php_enabled="yes"
+if [[ -n "$PHP_VERSION" ]] \
+    && [[ "$PHP_VERSION" != "default" ]] \
+    && [[ "$PHP_VERSION" != "$DEBIAN_PHP_V" ]]; then
+        sury_php_enabled="yes"
 fi
 if [[ -n "$NO_TURNKEY_APT_REPO" ]]; then
     tkl_apt_repo_enabled="no"
