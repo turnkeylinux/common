@@ -181,7 +181,7 @@ else
     for repo in "${repos[@]}"; do
         full_path=$key_dir/tkl-$CODENAME-$repo
         keyfile=$full_path.asc
-        if [[ $deb_ver -lt 13 ]]; then
+        if [[ $deb_ver -ge 13 ]]; then
             keyring=$key_dir/tkl-archive-keyring.gpg
         else
             keyring=$full_path.gpg
