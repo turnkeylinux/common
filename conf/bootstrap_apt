@@ -293,13 +293,16 @@ fi
 if [[ -n "$PHP_VERSION" ]]; then
     # Use 3rd party sury.org repo
     # install support for https repo & wget (to download gpg key)
+    # these packages should already be installed, but just in case
     PKGS=(lsb-release ca-certificates wget)
     apt-get update --allow-releaseinfo-change
     DEBIAN_FRONTEND=noninteractive apt-get install --yes "${PKGS[@]}"
 
-    # download keyfile
     keyfile=/usr/share/keyrings/debsuryorg-archive-keyring.gpg
-    wget -O $keyfile https://packages.sury.org/php/apt.gpg
+    curl --show-error --location --output /tmp/debsuryorg-archive-keyring.deb \
+        https://packages.sury.org/debsuryorg-archive-keyring.deb
+    dpkg -i /tmp/debsuryorg-archive-keyring.deb
+    rm /tmp/debsuryorg-archive-keyring.deb
 
     if [[ $deb_ver -ge 13 ]]; then
         cat > $SOURCES_LIST/php.sources <<EOF
@@ -309,7 +312,7 @@ URIs: https://packages.sury.org/php/
 Suites: $CODENAME
 Components: main
 Enabled: $sury_php_enabled
-Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+Signed-By: $keyfile
 EOF
     else
         cat > $SOURCES_LIST/php.list <<EOF
