@@ -1,6 +1,7 @@
 #include <turnkey/mysql>
 
 nginx
+libnginx-mod-http-modsecurity
 
 php-fpm
 php-gd
