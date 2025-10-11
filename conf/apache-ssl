@@ -1,0 +1,52 @@
+#!/bin/bash -e
+
+# try to enable mod, if not available just continue
+a2enmod ssl || true
+
+# tweak mod_evasive defaults
+CONF=/etc/apache2/mods-available/ssl.conf
+if [[ -f "$CONF" ]]; then
+    # tighten ssl protocol support
+    ssl_protocol="# Hardened TKL default\nSSLProtocol -all +TLSv1.2 +TLSv1.3"
+    sed -Ei "\|^SSLProtocol| s|^(.*)|#\1\n$ssl_protocol|" "$CONF"
+
+    cipher_suites=$(cat <<EOF
+# Explict Cipher suites recommended by Mozilla
+# https://ssl-config.mozilla.org/#server=apache&version=2.4.65&config=intermediate&openssl=3.5.1&guideline=5.7
+# (updated by TurnKey "common/conf/turnkey.d/zz-ssl-ciphers" script)
+SSLCipherSuite ZZ_SSL_CIPHERS
+EOF
+    )
+    sed -Ei "\|^SSLCipherSuite| s|^(.*)|#\1\n$cipher_suites|" "$CONF"
+    
+    cat >> "$CONF" <<EOF
+
+# Additional default TKL Apache SSL/TLS config
+
+SSLOpenSSLConfCmd Curves X25519:prime256v1:secp384r1
+
+# Explictly disable SSL compression (should default to off anyway...)
+# Note enabling SSL compression makes Apache vulnerable to CRIME attack.
+SSLCompression off
+
+# Default certificate file to use (provided by TurnKey)
+SSLCertificateFile /etc/ssl/private/cert.pem
+# Default TKL cert.pem includes key so this can remain unset
+#SSLCertificateKeyFile /etc/ssl/private/cert.key
+
+# enable HTTP/2, if available
+Protocols h2 http/1.1
+
+# OCSP Stapling
+SSLUseStapling On
+SSLStaplingCache "shmcb:logs/ssl_stapling(32768)"
+
+# HTTP Strict Transport Security (mod_headers is required)
+Header always set Strict-Transport-Security "max-age=63072000"
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+EOF
+else
+    echo "fatal: conf file $CONF not found" >&2
+    exit 1
+fi
