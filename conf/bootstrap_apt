@@ -12,7 +12,9 @@
 #   - BACKPORTS <optional>:
 #       - set to enable Debian backports repo
 #   - PHP_VERSION <optional>:
-#       - set to desired PHP version from Sury PHP repo
+#       - set to desired PHP version from Sury PHP repo - e.g. '8.5'
+#       - if 'default' or equal to the default PHP version in Debian, Sury repo
+#         will be created, but disabled by default
 #   - PHP_EXTRA_PINS <optional>:
 #       - space separated list of additional Sury php pkgs to pin 500
 #   - APT_PROXY_OVERRIDE <optional>:
@@ -60,18 +62,21 @@ case $CODENAME in
         MIRROR_URL=http://deb.debian.org/debian
         SEC_MIRROR=http://security.debian.org/
         KEY_CODENAME=$CODENAME
-        CONTRIB="contrib"
-        NON_FREE="non-free"
+        MAIN=(main)
+        CONTRIB=(contrib)
+        NON_FREE=(non-free)
         ;;&
     bookworm|trixie|forky)
         SEC_MIRROR="${SEC_MIRROR}debian-security"
+        MAIN=(main non-free-firmware)
         ;;
     # Note - only Ubuntu LTS
     focal|jammy|noble)
         MIRROR_URL=http://archive.ubuntu.com/ubuntu
         SEC_MIRROR=$MIRROR_URL
-        CONTRIB="universe"
-        NON_FREE="restricted multiverse"
+        MAIN=(main)
+        CONTRIB=(universe)
+        NON_FREE=(restricted multiverse)
         ;;&
     focal)
         KEY_CODENAME="bullseye"
@@ -142,92 +147,180 @@ fi
 DEBIAN_PHP_V=$(apt-cache policy php \
                 | sed -n "\|Candidate:|s|.*:\([0-9]\.[0-9]*\)+.*|\1|p")
 
-if [[ -z "$NO_TURNKEY_APT_REPO" ]]; then
-    # keys are provided as ascii armoured for transparency; but secure apt requires
-    # gpg keyring files
+tkl_apt_repo_enabled="yes"
+tkl_apt_testing_enabled="no"
+debian_backports_enabled="no"
+sury_php_enabled="no"
+debian_components=("${MAIN[@]}")
+if [[ -n "$NONFREE" ]]; then
+    debian_components+=("${CONTRIB[@]}" "${NON_FREE[@]}")
+fi
+if [[ -n "$TKL_TESTING" ]]; then
+    # note that if 'NO_TURNKEY_APT_REPO' is set, this will be overridden
+    tkl_apt_testing_enabled="yes"
+fi
+if [[ -n "$BACKPORTS" ]]; then
+    debian_backports_enabled="yes"
+fi
+if [[ -n "$PHP_VERSION" ]] \
+    && [[ "$PHP_VERSION" != "default" ]] \
+    && [[ "$PHP_VERSION" != "$DEBIAN_PHP_V" ]]; then
+        sury_php_enabled="yes"
+fi
+if [[ -n "$NO_TURNKEY_APT_REPO" ]]; then
+    tkl_apt_repo_enabled="no"
+    tkl_apt_testing_enabled="no"
+else
     key_dir=/usr/share/keyrings
+    # As of TKL v19.x apt repos use a single gpg keyring that is generated from
+    # the 3 separate raw ascii armored keys
+    #
+    # For prior releases, each repo had a separate gpg key generated from each
+    # of the sepaate asc keys
     repos=(main security testing)
     for repo in "${repos[@]}"; do
         full_path=$key_dir/tkl-$CODENAME-$repo
-        keyring=$full_path.gpg
         keyfile=$full_path.asc
-        gpg --no-default-keyring --keyring "$keyring" --import "$keyfile"
-        rm "$keyfile"
+        if [[ $deb_ver -ge 13 ]]; then
+            keyring=$key_dir/tkl-archive-keyring.gpg
+        else
+            keyring=$full_path.gpg
+        fi
+        # by default gpg generates "GPG keybox database version 1" files
+        # apt in Trixie requires a "PGP/GPG key public ring (v4)"
+        gpg --no-default-keyring --keyring gnupg-ring:"$keyring" --import "$keyfile"
+        chmod a+r "$keyring"
     done
     # ensure that gpg-agent is killed after processing keys
     kill -9 "$(pidof gpg-agent)" || true
+    rm -rf "$key_dir"/*~
     rm -rf "$HOME/.gnupg"
 fi
 
-cat > $SOURCES_LIST/sources.list <<EOF
+if [[ $deb_ver -ge 13 ]]; then
+    # As of TKL v19.x apt sources files are deb822 style '.sources' files
+
+    # Main repos
+    cat > $SOURCES_LIST/sources.sources <<EOF
+Types: deb
+URIs: http://archive.turnkeylinux.org/debian
+Suites: $KEY_CODENAME
+Components: main
+Enabled: $tkl_apt_repo_enabled
+Signed-By: /usr/share/keyrings/tkl-archive-keyring.gpg
+
+Types: deb
+URIs: $MIRROR_URL
+Suites: $CODENAME
+Components: ${debian_components[*]}
+Enabled: yes
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+EOF
+    # Security repos
+    cat > $SOURCES_LIST/security.sources.sources <<EOF
+Types: deb
+URIs: http://archive.turnkeylinux.org/debian
+Suites: $KEY_CODENAME-security
+Components: main
+Enabled: $tkl_apt_repo_enabled
+Signed-By: /usr/share/keyrings/tkl-archive-keyring.gpg
+
+Types: deb
+URIs: $SEC_MIRROR
+Suites: $sec_repo
+Components: ${debian_components[*]}
+Enabled: yes
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+EOF
+    # Debian backports repo
+    cat > $SOURCES_LIST/debian-backports.sources <<EOF
+Types: deb
+URIs: http://deb.debian.org/debian
+Suites: $CODENAME-backports
+Components: main
+Enabled: $debian_backports_enabled
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+EOF
+    # TurnKey testing repo
+    cat > $SOURCES_LIST/turnkey-testing.sources <<EOF
+Types: deb
+URIs: http://archive.turnkeylinux.org/debian
+Suites: $KEY_CODENAME-testing
+Components: main
+Enabled: $tkl_apt_testing_enabled
+Signed-By: /usr/share/keyrings/tkl-archive-keyring.gpg
+EOF
+else
+    # legacy sources.list files
+    cat > $SOURCES_LIST/sources.list <<EOF
 deb [signed-by=$key_dir/tkl-$KEY_CODENAME-main.gpg] http://archive.turnkeylinux.org/debian $KEY_CODENAME main
 
-deb $MIRROR_URL $CODENAME main
+deb $MIRROR_URL $CODENAME ${MAIN[*]}
+deb $MIRROR_URL $CODENAME ${CONTRIB[*]}
+#deb $MIRROR_URL $CODENAME ${NON_FREE[*]}
 EOF
-if [[ $deb_ver -ge 12 ]]; then
-    cat >> $SOURCES_LIST/sources.list <<EOF
-deb $MIRROR_URL $CODENAME non-free-firmware
-EOF
-fi
-cat >> $SOURCES_LIST/sources.list <<EOF
-deb $MIRROR_URL $CODENAME $CONTRIB
-#deb $MIRROR_URL $CODENAME $NON_FREE
-EOF
-
-cat > $SOURCES_LIST/security.sources.list <<EOF
+    cat > $SOURCES_LIST/security.sources.list <<EOF
 deb [signed-by=$key_dir/tkl-$KEY_CODENAME-security.gpg] http://archive.turnkeylinux.org/debian $KEY_CODENAME-security main
 
-deb $SEC_MIRROR $sec_repo main
+deb $SEC_MIRROR $sec_repo ${MAIN[*]}
+deb $MIRROR_URL $CODENAME ${CONTRIB[*]}
+#deb $MIRROR_URL $CODENAME ${NON_FREE[*]}
 EOF
-if [[ $deb_ver -ge 12 ]]; then
-    cat >> $SOURCES_LIST/security.sources.list <<EOF
-deb $SEC_MIRROR $sec_repo non-free-firmware
-EOF
-fi
-cat >> $SOURCES_LIST/security.sources.list <<EOF
-deb $SEC_MIRROR $sec_repo $CONTRIB
-#deb $SEC_MIRROR $sec_repo $NON_FREE
-EOF
-
-TKL_TESTING_LIST=$SOURCES_LIST/turnkey-testing.list
-cat > $TKL_TESTING_LIST.disabled <<EOF
+    TKL_TESTING_LIST=$SOURCES_LIST/turnkey-testing.list
+    if [[ -z "$TKL_TESTING" ]]; then
+        TKL_TESTING_LIST=$TKL_TESTING_LIST.disabled
+    fi
+    cat > $SOURCES_LIST/$TKL_TESTING_LIST <<EOF
 deb [signed-by=$key_dir/tkl-$KEY_CODENAME-testing.gpg] http://archive.turnkeylinux.org/debian $KEY_CODENAME-testing main
 EOF
-
-DEB_BACKPORT_LIST=$SOURCES_LIST/debian-backports.list
-cat > $DEB_BACKPORT_LIST.disabled <<EOF
-deb $MIRROR_URL $CODENAME-backports main
+    DEB_BACKPORT_LIST=$SOURCES_LIST/debian-backports.list
+    if [[ -z "$BACKPORTS" ]]; then
+        DEB_BACKPORT_LIST=$DEB_BACKPORT_LIST.disabled
+    fi
+    cat > $DEB_BACKPORT_LIST <<EOF
+deb $MIRROR_URL $CODENAME-backports ${MAIN[*]}
+deb $MIRROR_URL $CODENAME-backports ${CONTRIB[*]}
+#deb $MIRROR_URL $CODENAME-backports ${NON_FREE[*]}
 EOF
-if [[ $deb_ver -ge 12 ]]; then
-    cat >> $DEB_BACKPORT_LIST.disabled <<EOF
-deb $MIRROR_URL $CODENAME-backports non-free-firmware
-EOF
-fi
-cat >> $DEB_BACKPORT_LIST.disabled <<EOF
-#deb $MIRROR_URL $CODENAME-backports non-free
-EOF
-
-if [[ -n "$NO_TURNKEY_APT_REPO" ]]; then
-    find $SOURCES_LIST -type f -exec sed -i '/archive.turnkeylinux.org/ s/^/#/g' {} \;
+    if [[ -n "$NO_TURNKEY_APT_REPO" ]]; then
+        find $SOURCES_LIST -type f -exec sed -i '/archive.turnkeylinux.org/ s|^|#|g' {} \;
+    fi
+    if [[ -n "$NONFREE" ]]; then
+        find $SOURCES_LIST -type f -exec sed -i '/non-free/ s|^#||g' {} \;
+    fi
 fi
 
 if [[ -n "$PHP_VERSION" ]]; then
     # Use 3rd party sury.org repo
     # install support for https repo & wget (to download gpg key)
+    # these packages should already be installed, but just in case
     PKGS=(lsb-release ca-certificates wget)
     apt-get update --allow-releaseinfo-change
     DEBIAN_FRONTEND=noninteractive apt-get install --yes "${PKGS[@]}"
 
-    # download keyfile
     keyfile=/usr/share/keyrings/debsuryorg-archive-keyring.gpg
-    wget -O $keyfile https://packages.sury.org/php/apt.gpg
+    curl --show-error --location --output /tmp/debsuryorg-archive-keyring.deb \
+        https://packages.sury.org/debsuryorg-archive-keyring.deb
+    dpkg -i /tmp/debsuryorg-archive-keyring.deb
+    rm /tmp/debsuryorg-archive-keyring.deb
 
-    cat > $SOURCES_LIST/php.list <<EOF
+    if [[ $deb_ver -ge 13 ]]; then
+        cat > $SOURCES_LIST/php.sources <<EOF
+# DEB.SURY.ORG repo for php
+Types: deb
+URIs: https://packages.sury.org/php/
+Suites: $CODENAME
+Components: main
+Enabled: $sury_php_enabled
+Signed-By: $keyfile
+EOF
+    else
+        cat > $SOURCES_LIST/php.list <<EOF
 # DEB.SURY.ORG repo for php
 
 deb [signed-by=$keyfile] https://packages.sury.org/php/ $CODENAME main
 EOF
-
+    fi
     cat > /etc/apt/preferences.d/php-sury.pref <<EOF
 Package: *
 Pin: origin packages.sury.org
@@ -295,13 +388,15 @@ Pin-Priority: 550
 
 EOF
     done
-
-    # create php-mysql package that depends on PHP_VERSION - this allows adminer to install cleanly
-    PKG=php-mysql
-    mkdir -p /tmp/$PKG/DEBIAN
-    PKG_V="2:${PHP_VERSION}"
-    cd  /tmp
-    cat > /tmp/$PKG/DEBIAN/control <<EOF
+    if [[ $deb_ver -lt 13 ]]; then
+        # create php-mysql package that depends on PHP_VERSION
+        # - this allows adminer to install cleanly (not required for Trixie
+        #   onwards)
+        PKG=php-mysql
+        mkdir -p /tmp/$PKG/DEBIAN
+        PKG_V="2:${PHP_VERSION}"
+        cd  /tmp
+        cat > /tmp/$PKG/DEBIAN/control <<EOF
 Package: php-mysql
 Version: $PKG_V
 Section: custom
@@ -313,29 +408,16 @@ Installed-Size: 1024
 Maintainer: Jeremy Davis <jeremy@turnkeylinux.org>
 Description: Dummy Package to allow Adminer to install cleanly without Debian php-mysql package.
 EOF
-    apt-get update
-    dpkg-deb --build ${PKG}
-    DEBIAN_FRONTEND=noninteractive apt-get install ./${PKG}.deb -y --allow-downgrades --autoremove
-    apt-mark hold php-mysql="${PKG_V}"
-    cd -
-    rm -rf /tmp/${PKG}*
-fi
-
-if [ "$NONFREE" ]; then
-    sed -i "/non-free/ s|^#||" $SOURCES_LIST/sources.list
-    sed -i "/non-free/ s|^#||" $SOURCES_LIST/security.sources.list
-fi
-
-if [ "$TKL_TESTING" ]; then
-    mv $TKL_TESTING_LIST.disabled $TKL_TESTING_LIST
-fi
-
-if [ "$BACKPORTS" ]; then
-    mv $DEB_BACKPORT_LIST.disabled $DEB_BACKPORT_LIST
-    if [ "$BACKPORTS_NONFREE" ]; then
-        sed -i "/non-free/ s|^#||" $DEB_BACKPORT_LIST
+        apt-get update
+        dpkg-deb --build ${PKG}
+        DEBIAN_FRONTEND=noninteractive apt-get install ./${PKG}.deb -y --allow-downgrades --autoremove
+        apt-mark hold php-mysql="${PKG_V}"
+        cd -
+        rm -rf /tmp/${PKG}*
     fi
+fi
 
+if [[ "$BACKPORTS" ]]; then
     # dynamically add some extra pins as specified in appliance Makefile
     [[ -n "$BACKPORTS_PINS" ]] || fatal "BACKPORTS env var set but no BACKPORTS_PINS specified"
     for package_name in $BACKPORTS_PINS; do
