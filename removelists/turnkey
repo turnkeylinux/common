@@ -1,12 +1,3 @@
 /etc/resolvconf/resolv.conf.d/original
 
-/etc/apt/trusted.gpg~
-/etc/apt/trusted.gpg.d/debian.gpg~
-/etc/apt/trusted.gpg.d/turnkey.gpg~
-
-/var/log/dpkg.log
-/var/log/bootstrap.log
-/var/log/apt/term.log
-/var/log/apt/history.log
-
 /var/www/html
