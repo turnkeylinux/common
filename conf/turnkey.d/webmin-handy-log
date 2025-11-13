@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 # set up convenience links to Webmin log files
 
@@ -7,7 +7,7 @@ WEBMIN_LOG=/var/log/webmin
 
 mkdir -p $WEBMIN_LOG
 
-files="miniserv.log miniserv.error webmin.log"
-for f in $files; do
-    ln -s $WEBMIN_VAR/$f $WEBMIN_LOG/$f
+files=(miniserv.error webmin.log)
+for f in "${files[@]}"; do
+    ln -s "$WEBMIN_VAR/$f" "$WEBMIN_LOG/$f"
 done

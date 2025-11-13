@@ -1,6 +1,20 @@
 # rm apt proxy conf
 /etc/apt/apt.conf.d/01proxy
 
+# clean apt cache
+/var/cache/apt/archives/
+!/var/cache/apt/archives/partial
+
+# clean tmp key files
+/etc/apt/trusted.gpg~
+/etc/apt/trusted.gpg.d/*.gpg~
+
+# clean apt related logs
+/var/log/dpkg.log
+/var/log/bootstrap.log
+/var/log/apt/term.log
+/var/log/apt/history.log
+
 # rm composer auth token
 /root/.composer/auth.json
 /var/www/.composer/auth.json
@@ -15,9 +29,6 @@
 
 # rm bashlib
 /usr/local/src/tkl-bashlib
-
-# rm gh_releases
-/usr/local/bin/gh_releases
 
 # rm tmp contents
 ~/tmp/*
