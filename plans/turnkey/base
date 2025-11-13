@@ -5,8 +5,9 @@
 wget
 curl
 rsync
+zstd                    /* if installed will use to compress initramfs */
 
-di-live
+//di-live
 whiptail                /* di-live recommends */
 kbd                     /* di-live recommends */
 lvm2                    /* di-live recommends */
@@ -15,7 +16,7 @@ eject                   /* di-live recommends */
 
 confconsole
 kbd                     /* confconsole recommends */
-di-live                 /* confconsole recommends */
+//di-live                 /* confconsole recommends */
 resolvconf              /* confconsole recommends */
 
 /* Dbus is new default package in v18.x */
@@ -25,14 +26,13 @@ dbus
 /* seed entropy in early boot (especially useful when live booting).       */
 jitterentropy-rngd
 
-tklbam                  /* still depends on py2 for now */
+//tklbam                  /* still depends on py2 for now */
 
 hubdns
 inithooks
-python3-dialog          /* tkl tools depends */
 turnkey-sysinfo
 turnkey-version
-turnkey-ssl             /* new tkl pkg - moved from common overlay/conf */
+turnkey-ssl
 
 cron
 cron-apt
@@ -49,8 +49,8 @@ nano
 ntpsec
 ncurses-term            /* support additional $TERM values */
 
-perl-openssl-defaults   /* libnet-ssleay-perl depends (webmin depends) */
-libnet-ssleay-perl      /* webmin depends  */
+//perl-openssl-defaults   /* libnet-ssleay-perl depends (webmin depends) */
+//libnet-ssleay-perl      /* webmin depends  */
 webmin
 webmin-authentic-theme
 webmin-net

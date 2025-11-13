@@ -1,17 +1,30 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
-fatal() { echo "FATAL [$(basename $0)]: $@" 1>&2; exit 1; }
+fatal() { echo "FATAL [$(basename "$0")]: $*" 1>&2; exit 1; }
 
-TOMCAT=tomcat10
+if [[ -e /var/lib/tomcat10 ]]; then
+    TOMCAT=tomcat10
+elif [[ -e /var/lib/tomcat11 ]]; then
+    TOMCAT=tomcat11
+else
+    fatal "Tomcat version could not be determined"
+fi
 
 CATALINA_HOME="/usr/share/$TOMCAT"
 CATALINA_BASE="/var/lib/$TOMCAT"
 CATALINA_TMPDIR="$CATALINA_BASE/temp"
 
-# identify JVM to use
-## We check for openjdk 17
-[ -e /usr/lib/jvm/java-17-openjdk-amd64 ] && JVM=java-17-openjdk-amd64
-[ -z "$JVM" ] && fatal "JVM to use could not be identified"
+# identify JVM to use - Trixie provides openjdk 21 & 25
+if [[ -e /usr/lib/jvm/java-21-openjdk-amd64 ]]; then
+    JVM=java-21-openjdk-amd64
+    JINFO=$(ls /usr/lib/jvm/.*java*21*jinfo)
+elif [[ -e /usr/lib/jvm/java-25-openjdk-amd64 ]]; then
+    JVM=java-25-openjdk-amd64
+    JINFO=$(ls /usr/lib/jvm/.*java*25*jinfo)
+else
+    fatal "JVM to use could not be identified"
+fi
+
 
 # configure java/tomcat environment
 cat >> /etc/environment<<EOF
@@ -22,15 +35,14 @@ JAVA_HOME="/usr/lib/jvm/${JVM}"
 EOF
 
 # this may not be 100% safe
-JINFO=$(ls /usr/lib/jvm/.*java*17*jinfo)
 JINFO=${JINFO%.jinfo}
 JINFO=${JINFO#*.}
 # not sure if this is actually needed
-update-java-alternatives --jre-headless -s $JINFO
+update-java-alternatives --jre-headless -s "$JINFO"
 sed -i "s/^#JAVA_HOME.*/JAVA_HOME=\/usr\/lib\/jvm\/${JVM}/" /etc/default/$TOMCAT
 
 # configure Apache if needed (Jk connector to Tomcat)
-if [ -e /etc/apache2/sites-available/jktomcat.conf ]; then
+if [[ -e /etc/apache2/sites-available/jktomcat.conf ]]; then
     a2dissite 000-default
     a2ensite jktomcat
 
@@ -46,12 +58,12 @@ fi
 # create convenience links to original conf that we overwrite
 conf_files="tomcat-users.xml server.xml"
 for conf in $conf_files; do
-    ln -s /usr/share/$TOMCAT/etc/$conf /etc/$TOMCAT/$conf.orig
+    ln -s "/usr/share/$TOMCAT/etc/$conf" "/etc/$TOMCAT/$conf.orig"
 done
 
 # from https://bugs.launchpad.net/ubuntu/+source/tomcat7/+bug/1232258
 create_link() {
-    ln -s $CATALINA_BASE/$1 $CATALINA_HOME/$1
+    ln -s "$CATALINA_BASE/$1" "$CATALINA_HOME/$1"
 }
 create_link common
 create_link server

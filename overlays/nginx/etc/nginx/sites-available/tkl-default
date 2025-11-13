@@ -11,7 +11,7 @@
 #
 # This file will automatically load configuration files provided by other
 # applications, such as Drupal or Wordpress. These applications will be made
-# available underneath a path with that package name, such as /drupal8.
+# available underneath a path with that package name, such as /drupal12.
 #
 # Please see /usr/share/doc/nginx-doc/examples/ (from Debian nginx-doc
 # package) for more detailed examples.
@@ -22,6 +22,9 @@
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
+
+    # temporary redirect to https - update to permanent (308) for production
+    return 307 https://$host$request_uri;
 
     # SSL configuration
     listen 443 ssl default_server;
@@ -44,8 +47,17 @@ server {
     # Uncomment to enable PHP-FPM
     #include snippets/php-fpm.conf;
 
-    # deny access to .htaccess files
-    location ~ /\.ht {
+    # Deny access to all dot files
+    location ~ /\. {
         deny all;
+        access_log off;
+        log_not_found off;
+        return 404;
     }
+    # above also disables access to .well-known
+    # TKL default Let's Encrypt works fine, but other third party tools may
+    # require this section to be uncommented
+    #location ^~ /.well-known {
+    #    allow all;
+    #}
 }
