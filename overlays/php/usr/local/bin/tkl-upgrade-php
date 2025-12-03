@@ -25,7 +25,7 @@ NOTE:
     Older version of PHP may not be actively maintained, this includes not just
     bug fixes but also security fixes.
 
-    Versions which have reached EOL should not be expected to be secure. 
+    Versions which have reached EOL should not be expected to be secure.
 
     It is always encouraged that you only install the newest version that
     applies for your use case.
@@ -51,8 +51,9 @@ def get_php_versions() -> list[str]:
     """Get all available php versions and return them in the form phpx.y"""
     print("\nChecking Available PHP Versions")
 
-    url = f"https://packages.sury.org/php/dists/{CODENAME}/main/binary-{ARCH}/Packages"
-    with request.urlopen(url) as iob:
+    url = "https://packages.sury.org"
+    pkg_file_url = f"{url}/php/dists/{CODENAME}/main/binary-{ARCH}/Packages"
+    with request.urlopen(pkg_file_url) as iob:
         data = iob.read().decode()
 
     php_versions = set()
@@ -82,29 +83,28 @@ def choose_version(choices, version_support, deb_version) -> str:
         print("Input must be a number! Exiting")
         sys.exit(1)
 
-    inp = int(inp)
+    choice_inp = int(inp)
 
-    if inp < 1 or inp > len(choices):
+    if choice_inp < 1 or choice_inp > len(choices):
         print(f"Input out of range [1-{len(choices)}]! Exiting")
         sys.exit(1)
 
-    return choices[inp - 1]
+    return choices[choice_inp - 1]
 
 
-def get_packages(php_version):
-    curr_package = None
-    packages = {}
+def get_packages(php_version: str) -> list[str]:
+    curr_package = ""
+    packages: dict[str, str] = {}
     for line in get_output(
         ["apt-cache", "policy", "--", "*" + php_version]
     ).splitlines():
         if not line[0].isspace():
             curr_package = line.rstrip(":")
-            packages[curr_package] = []
-        else:
-            if "Installed: (none)" in line:
-                del packages[curr_package]
-                curr_package = None
-    return packages.keys()
+            packages[curr_package] = ""
+        elif "Installed: (none)" in line:
+            del packages[curr_package]
+            curr_package = ""
+    return list(packages.keys())
 
 
 def debian_version():
@@ -113,7 +113,7 @@ def debian_version():
 
     last_line = None
     for line in out.splitlines():
-        if "deb.debian.org/debian bookworm/main" in line:
+        if f"deb.debian.org/debian {CODENAME}/main" in line:
             if last_line:
                 return last_line.strip().split(":")[1].split("+")[0]
             return None
@@ -162,8 +162,13 @@ def php_sources(codename: str = CODENAME, enabled: bool = True) -> None:
             f"Suites: {CODENAME}\n"
             "Components: main\n"
             f"Enabled: {enabled_str}\n"
-            "Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg\n"
+            "Signed-By: /usr/share/keyrings/debsuryorg-archive-keyring.gpg\n"
         )
+
+
+def update_pins(new_php_version: str) -> None:
+    """Update/write apt pins (preferences)."""
+    # TODO....
 
 
 if __name__ == "__main__":
@@ -184,7 +189,9 @@ if __name__ == "__main__":
         subprocess.run(["apt-get", "update"])
         deb_version = debian_version()
 
-    new_php_version = choose_version(get_php_versions(), version_support, deb_version)
+    new_php_version = choose_version(
+        get_php_versions(), version_support, deb_version
+    )
     new_php_pkgs = [
         pkg.replace("php" + current_php_version, new_php_version)
         for pkg in get_packages(current_php_version)
@@ -196,7 +203,7 @@ if __name__ == "__main__":
 
     if new_php_version[3:] == deb_version:
         if os.path.isfile("/etc/apt/sources.list.d/php.list"):
-        subprocess.run(["dpkg", "-r", "debsuryorg-archive-keyring"])
+            subprocess.run(["dpkg", "-r", "debsuryorg-archive-keyring"])
     else:
         print("Downloading Sury Archive Keyring ...")
 
