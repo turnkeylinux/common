@@ -200,13 +200,17 @@ fi
 if [[ $deb_ver -ge 13 ]]; then
     # As of TKL v19.x apt sources files are deb822 style '.sources' files
 
+    SUPPORTED_ARCH=(amd64 arm64)
+
     # Main repos
     cat > $SOURCES_LIST/sources.sources <<EOF
 Types: deb
 URIs: http://archive.turnkeylinux.org/debian
 Suites: $KEY_CODENAME
 Components: main
+Architectures: ${SUPPORTED_ARCH[*]}
 Enabled: $tkl_apt_repo_enabled
+
 Signed-By: /usr/share/keyrings/tkl-archive-keyring.gpg
 
 Types: deb
@@ -223,6 +227,7 @@ URIs: http://archive.turnkeylinux.org/debian
 Suites: $KEY_CODENAME-security
 Components: main
 Enabled: $tkl_apt_repo_enabled
+Architectures: ${SUPPORTED_ARCH[*]}
 Signed-By: /usr/share/keyrings/tkl-archive-keyring.gpg
 
 Types: deb
@@ -248,10 +253,11 @@ URIs: http://archive.turnkeylinux.org/debian
 Suites: $KEY_CODENAME-testing
 Components: main
 Enabled: $tkl_apt_testing_enabled
+Architectures: ${SUPPORTED_ARCH[*]}
 Signed-By: /usr/share/keyrings/tkl-archive-keyring.gpg
 EOF
 else
-    # legacy sources.list files
+    # legacy sources.list files for bookworm and earlier
     cat > $SOURCES_LIST/sources.list <<EOF
 deb [signed-by=$key_dir/tkl-$KEY_CODENAME-main.gpg] http://archive.turnkeylinux.org/debian $KEY_CODENAME main
 
