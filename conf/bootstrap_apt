@@ -192,7 +192,7 @@ else
         chmod a+r "$keyring"
     done
     # ensure that gpg-agent is killed after processing keys
-    kill -9 "$(pidof gpg-agent)" || true
+    gpgconf --kill gpg-agent
     rm -rf "$key_dir"/*~
     rm -rf "$HOME/.gnupg"
 fi
@@ -210,7 +210,6 @@ Suites: $KEY_CODENAME
 Components: main
 Architectures: ${SUPPORTED_ARCH[*]}
 Enabled: $tkl_apt_repo_enabled
-
 Signed-By: /usr/share/keyrings/tkl-archive-keyring.gpg
 
 Types: deb
