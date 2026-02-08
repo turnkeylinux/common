@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 # create apt sources
 # environment variables:
@@ -26,9 +26,6 @@
 #       - if not the same as guest, apply relevant transition changes
 #   - NO_TURNKEY_APT_REPO <optional>:
 #       - disable TurnKey apt repos - useful during early transition
-#   - NO_PROXY <optional>:
-#       - same as APT_PROXY_OVERRIDE=disable (will override APT_PROXY_OVERRIDE
-#         if both set to different values)
 
 # Note, to install packages from backports:
 # - set 'BACKPORTS=y'; and either:
@@ -112,13 +109,13 @@ fi
 
 if [[ $deb_ver -le 10 ]] && [[ "$distro" == 'debian' ]]; then
     sec_repo="$CODENAME/updates"
-    PROXY_PORT=8124
+    PROXY_PORT="$(echo "$FAB_HTTPS_PROXY" | sed -En 's/.*:([0-9]+).*/\1/p')"
 elif [[ $deb_ver -ge 11 ]] || [[ "$distro" == 'ubuntu' ]]; then
     sec_repo="$CODENAME-security"
     PROXY_PORT=3128
 fi
 
-if [[ "${APT_PROXY_OVERRIDE,,}" == "disable" ]] || [[ -n "$NO_PROXY" ]]; then
+if [[ "${APT_PROXY_OVERRIDE,,}" == "disable" ]]; then
     PROXY_PORT=
 elif [[ -n $APT_PROXY_OVERRIDE ]]; then
     PROXY_PORT=$APT_PROXY_OVERRIDE
