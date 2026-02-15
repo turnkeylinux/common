@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 setini() {
 
@@ -6,53 +6,53 @@ setini() {
     var=$2
     val=$3
 
-    count=$(grep -c "^;\?$var" $file) || true
-    if [ "$count" -eq 0 ]; then
-        echo "[WARNING] no match for $var in $file"
-    elif [ "$count" -gt 1 ]; then
-        echo "[FATAL] more than one match for $var in $file"
+    count=$(grep -c "^;\?$var" "$file") || true
+    if [[ "$count" -eq 0 ]]; then
+        echo "[WARNING] no match for $var in $file - skipping" >&2
+    elif [[ "$count" -gt 1 ]]; then
+        echo "[FATAL] more than one match for $var in $file" >&2
         exit 1
     else
-        echo "  - $var=$val"
-        sed -i "/^;* *$var *=/ s|^;* *$var|$var|g" $file
-        sed -i "/^$var *=/ s|= *[^ ]\+|=$val|g" $file
+        echo " - Updating $file - $var=$val"
+        sed -i "/^;* *$var *=/ s|^;* *$var|$var|g" "$file"
+        sed -i "/^$var *=/ s|= *[^ ]\+|=$val|g" "$file"
     fi
 }
 
 # use these defaults unless otherwise set
-set ${PHP_MEMORY_LIMIT:=128M}           # php.ini default: 128MB (i.e. unchanged)
-set ${PHP_POST_MAX_SIZE:=16M}           # php.ini default: 8MB
-set ${PHP_UPLOAD_MAX_FILESIZE:=8M}      # php.ini default: 2MB
-set ${PHP_MAX_EXECUTION_TIME:=30}       # php.ini default: 30 (seconds - i.e. unchanged)
-set ${PHP_MAX_INPUT_VARS:=1000}         # php.ini default: 1000 (i.e. unchanged)
+set "${PHP_MEMORY_LIMIT:=128M}"         # php.ini default: 128MB (i.e. unchanged)
+set "${PHP_POST_MAX_SIZE:=16M}"         # php.ini default: 8MB
+set "${PHP_UPLOAD_MAX_FILESIZE:=8M}"    # php.ini default: 2MB
+set "${PHP_MAX_EXECUTION_TIME:=30}"     # php.ini default: 30 (seconds - i.e. unchanged)
+set "${PHP_MAX_INPUT_VARS:=1000}"       # php.ini default: 1000 (i.e. unchanged)
 
 # no TKLDEV facility to adjust these, but should be ok defaults
-set ${OPCACHE_INTERNAL_STR_BUFF:=8}     # php.ini default: 4(MB)
-set ${OPCACHE_REVALIDATE_FREQ:=30}      # php.ini default: 2 (seconds)
+set "${OPCACHE_INTERNAL_STR_BUFF:=8}"   # php.ini default: 4(MB)
+set "${OPCACHE_REVALIDATE_FREQ:=30}"    # php.ini default: 2 (seconds)
 
 cli_ini=cli/php.ini
 for f in /etc/php/?.?/*/php.ini; do
-    [ -f $f ] || continue
+    [[ -f "$f" ]] || continue
     echo "updating $f"
-    setini $f memory_limit $PHP_MEMORY_LIMIT
-    setini $f post_max_size $PHP_POST_MAX_SIZE
-    setini $f upload_max_filesize $PHP_UPLOAD_MAX_FILESIZE
-    setini $f max_execution_time $PHP_MAX_EXECUTION_TIME
-    setini $f max_input_vars $PHP_MAX_INPUT_VARS
+    setini "$f" memory_limit "$PHP_MEMORY_LIMIT"
+    setini "$f" post_max_size "$PHP_POST_MAX_SIZE"
+    setini "$f" upload_max_filesize "$PHP_UPLOAD_MAX_FILESIZE"
+    setini "$f" max_execution_time "$PHP_MAX_EXECUTION_TIME"
+    setini "$f" max_input_vars "$PHP_MAX_INPUT_VARS"
 
     # adjust opcache settings for Apache only (not cli)
-    if [ "${f%%$cli_ini}" = "$f" ]; then
-        setini $f opcache.interned_strings_buffer $OPCACHE_INTERNAL_STR_BUFF
-        setini $f opcache.revalidate_freq $OPCACHE_REVALIDATE_FREQ
+    if [[ "${f%%"$cli_ini"}" = "$f" ]]; then
+        setini "$f" opcache.interned_strings_buffer "$OPCACHE_INTERNAL_STR_BUFF"
+        setini "$f" opcache.revalidate_freq "$OPCACHE_REVALIDATE_FREQ"
     fi
 done
 
 # auto adjust webmin default php.ini path to default php
 WEBMIN_PHP_CONF=/etc/webmin/phpini/config
-if [ -f "${WEBMIN_PHP_CONF}" ]; then
-    CLI_INI="$(php -i | sed -n '\|Loaded Configuration File|s|^.*=> ||'p)"
-    CGI_INI="$(echo $CLI_INI | sed 's|cli|cgi|')"
-    APACHE_INI="$(echo $CLI_INI | sed 's|cli|apache2|')"
+if [[ -f "${WEBMIN_PHP_CONF}" ]]; then
+    CLI_INI="$(php -i | sed -n '\|Loaded Configuration File|s|^.*=> ||p')"
+    CGI_INI="${CLI_INI/cli/cgi}"
+    APACHE_INI="${CLI_INI/cli/apache2}"
     TAB="$(printf '\t')"
     cat > ${WEBMIN_PHP_CONF} <<EOF
 php_ini=${APACHE_INI}=Configuration for mod_php${TAB}\
