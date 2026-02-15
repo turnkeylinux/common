@@ -60,3 +60,7 @@ ${CGI_INI}=Configuration for scripts run via CGI${TAB}\
 ${CLI_INI}=Configuration for command-line scripts
 EOF
 fi
+
+# ensure php session dir exists and is writeable by the webserver user
+mkdir -p /var/lib/php/sessions
+chown -R www-data:www-data /var/lib/php/sessions
