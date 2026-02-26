@@ -1,20 +1,29 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 # download mysqltuner
 dl() {
-    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
-    cd $2; curl -L -f -O $PROXY $1; cd -
+    if [[ "$FAB_HTTP_PROXY" ]]; then
+       PROXY=(--proxy "$FAB_HTTP_PROXY")
+    fi
+    cd "$2"
+    curl -L -f -O "${PROXY[@]}" "$1"
+    cd -
 }
 
-# Install mysqltuner as recommended:
-# https://github.com/major/MySQLTuner-perl#downloadinstallation
+# Install mysqltuner at "latest" tag (via gh_releases) and from core dev's
+# repo[1] - rather than separate "org" repo[2]
+#
+# [1] https://github.com/jmrenouard/MySQLTuner-perl
+# [2] https://github.com/major/MySQLTuner-perl
 BIN=/usr/local/bin
-URL="https://raw.githubusercontent.com/major/MySQLTuner-perl/master"
-dl $URL/mysqltuner.pl $BIN
-mv $BIN/mysqltuner.pl $BIN/mysqltuner
-chmod +x $BIN/mysqltuner
-dl $URL/basic_passwords.txt $BIN
-dl $URL/vulnerabilities.csv $BIN
+VERSION=$(gh_releases jmrenouard/MySQLTuner-perl | sort -V | tail -1)
+REPO="jmrenouard/MySQLTuner-perl"
+URL="https://raw.githubusercontent.com/$REPO/refs/tags/$VERSION"
+dl "$URL/mysqltuner.pl" $BIN
+mv "$BIN/mysqltuner.pl" $BIN/mysqltuner
+chmod +x "$BIN/mysqltuner"
+dl "$URL/basic_passwords.txt" $BIN
+dl "$URL/vulnerabilities.csv" $BIN
 
 # As of Debian Buster, there is no longer a /etc/init.d/mysql script, so let's
 # link the mariadb one.
