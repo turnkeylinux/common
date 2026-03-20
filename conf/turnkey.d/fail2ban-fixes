@@ -27,7 +27,7 @@ cat > fail2ban.patch <<EOF
  cmnfailre-failed-pub-ignore =
 
 EOF
-git apply fail2ban.patch
+git apply --check fail2ban.patch 2>/dev/null && git apply fail2ban.patch || echo "patch already applied, skipping"
 rm fail2ban.patch
 
 cat > /etc/cron.weekly/fail2ban <<EOF
