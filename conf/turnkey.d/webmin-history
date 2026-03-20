@@ -1,5 +1,6 @@
 #!/bin/sh -e
-
-mkdir -p /etc/webmin/system-status/history
-mv /etc/webmin/system-status/history /var/webmin/
-ln -s /var/webmin/history /etc/webmin/system-status/history 
+if [ ! -L /etc/webmin/system-status/history ]; then
+    mkdir -p /etc/webmin/system-status/history
+    mv /etc/webmin/system-status/history /var/webmin/
+fi
+ln -sf /var/webmin/history /etc/webmin/system-status/history

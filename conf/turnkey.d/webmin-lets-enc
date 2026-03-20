@@ -1,7 +1,9 @@
 #/bin/bash -e
-
 # Disable Webmin Let's Encrypt config - via patch
-
-cd /usr/share/webmin/webmin
-git apply /usr/local/src/webmin.patch
-rm /usr/local/src/webmin.patch
+if [ -f /usr/local/src/webmin.patch ]; then
+    cd /usr/share/webmin/webmin
+    git apply /usr/local/src/webmin.patch
+    rm /usr/local/src/webmin.patch
+else
+    echo "webmin.patch not found, skipping (may already be applied)"
+fi
