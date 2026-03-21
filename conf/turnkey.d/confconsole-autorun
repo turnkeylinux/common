@@ -2,12 +2,20 @@
 
 # copy in confconsole auto start file
 mkdir -p /root/.bashrc.d/
-cp /usr/share/confconsole/autostart/confconsole-auto \
-    /root/.bashrc.d/confconsole-auto
-# should already be executable, but just in case
-chmod +x /root/.bashrc.d/confconsole-auto
+if [ -f /usr/share/confconsole/autostart/confconsole-auto ]; then
+    cp /usr/share/confconsole/autostart/confconsole-auto \
+        /root/.bashrc.d/confconsole-auto
+    # should already be executable, but just in case
+    chmod +x /root/.bashrc.d/confconsole-auto
+else
+    echo "Warning: confconsole-auto file not found, skipping copy"
+fi
 
 # autostart "once"
 CONF=/etc/confconsole/confconsole.conf
-sed -i "s|^#autostart|autostart|g" $CONF
-sed -i "s|^autostart.*|autostart once|g" $CONF
+if [ -f "$CONF" ]; then
+    sed -i "s|^#autostart|autostart|g" $CONF
+    sed -i "s|^autostart.*|autostart once|g" $CONF
+else
+    echo "Warning: $CONF not found, skipping autostart configuration"
+fi
