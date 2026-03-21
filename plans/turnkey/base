@@ -26,7 +26,7 @@ dbus
 /* seed entropy in early boot (especially useful when live booting).       */
 jitterentropy-rngd
 
-//tklbam                  /* still depends on py2 for now */
+tklbam
 
 hubdns
 inithooks
@@ -96,3 +96,7 @@ python3-requests        /* confconsole lets encrypt recommends (actually depends
 //ifndef CHROOT_ONLY
 acpi-support-base
 //endif
+
+/* IPv6 support for Webmin (v19) */
+libsocket6-perl
+libio-socket-ssl-perl
