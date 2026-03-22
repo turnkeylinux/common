@@ -50,6 +50,7 @@ etckeeper
 git
 
 lsb-release
+locales
 localepurge
 man-db
 screen
