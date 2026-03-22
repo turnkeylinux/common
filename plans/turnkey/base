@@ -52,6 +52,7 @@ git
 lsb-release
 locales
 localepurge
+mawk
 man-db
 screen
 dtach
