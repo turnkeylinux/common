@@ -4,6 +4,7 @@
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1024305
 
 CONF=/etc/fail2ban/fail2ban.conf
+[ -f "$CONF" ] || exit 0
 if ! grep -q '^allowipv6' $CONF; then
     sed -i '\|^\[Definition\]|a \\nallowipv6 = auto' $CONF
 fi
