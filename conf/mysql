@@ -1,14 +1,6 @@
 #!/bin/bash -e
 
-# download mysqltuner
-dl() {
-    if [[ "$FAB_HTTP_PROXY" ]]; then
-       PROXY=(--proxy "$FAB_HTTP_PROXY")
-    fi
-    cd "$2"
-    curl -L -f -O "${PROXY[@]}" "$1"
-    cd -
-}
+. /usr/local/src/tkl-bashlib/init.sh
 
 # Install mysqltuner at "latest" tag (via gh_releases) and from core dev's
 # repo[1] - rather than separate "org" repo[2]
@@ -16,9 +8,9 @@ dl() {
 # [1] https://github.com/jmrenouard/MySQLTuner-perl
 # [2] https://github.com/major/MySQLTuner-perl
 BIN=/usr/local/bin
-VERSION=$(gh_releases jmrenouard/MySQLTuner-perl | sort -V | tail -1)
+VERSION=master
 REPO="jmrenouard/MySQLTuner-perl"
-URL="https://raw.githubusercontent.com/$REPO/refs/tags/$VERSION"
+URL="https://raw.githubusercontent.com/$REPO/refs/heads/$VERSION"
 dl "$URL/mysqltuner.pl" $BIN
 mv "$BIN/mysqltuner.pl" $BIN/mysqltuner
 chmod +x "$BIN/mysqltuner"

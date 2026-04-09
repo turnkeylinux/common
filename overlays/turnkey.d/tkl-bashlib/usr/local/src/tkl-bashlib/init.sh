@@ -25,7 +25,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # functions for errors and warnings
 fatal() { echo "FATAL: ${@}" >&2; exit 1; }
-warn() { echo "WARN: ${@}" >&2; exit 1; }
+warn() { echo "WARN: ${@}" >&2; }
 
 # check for integers
 # if any elements of $@ are _not_ integers - will return 1

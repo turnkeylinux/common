@@ -30,14 +30,6 @@ if [[ -f "$CONF" ]]; then
     sed -i "/tls_medium_cipherlist/ s|ZZ_SSL_CIPHERS|$SECURE_CIPHER_LIST|" $CONF
 fi
 
-# Apache2
-CONF="/etc/apache2/mods-available/ssl.conf"
-if [[ -f "$CONF" ]]; then
-    sed -i "s|^\(\s*SSLCipherSuite\s\+\).*$|\1${SECURE_CIPHER_LIST}|g" $CONF
-    a2enmod ssl
-    a2enconf security
-fi
-
 # Nginx
 CONF="/etc/nginx/snippets/ssl.conf"
 if [[ -f "$CONF" ]]; then
@@ -69,3 +61,5 @@ if [ -d "$PUREFTPDDIR" ]; then
     echo 1 > ${PUREFTPDDIR}/TLS
     echo HIGH:\!TLSv1:\!TLSv1.1:\!SSLv2:\!SSLv3:${SECURE_CIPHER_LIST} > ${PUREFTPDDIR}/TLSCipherSuite
 fi
+
+echo "$SECURE_CIPHER_LIST" > /tmp/ZZ_SSL_CIPHERS
