@@ -5,28 +5,37 @@
 wget
 curl
 rsync
-zstd                    /* if installed will use to compress initramfs */
+zstd                    /* if installed will be used to compress initramfs */
 
-//di-live
-whiptail                /* di-live recommends */
-kbd                     /* di-live recommends */
-lvm2                    /* di-live recommends */
-file                    /* di-live recommends */
-eject                   /* di-live recommends */
+turnkey-keys            /* TKL keys packaged for v19.x */
+
+// Grub packages
+// * 'grub-pc' is required for legacy BIOS boot install
+// * 'grub-efi-amd64' is required for UEFI boot install
+// These grub packages conflict with one another but neither need be installed
+// within the live rootfs/squashfs - but are required for 'grub-install'.
+// We install grub-pc & ship grub-efi-amd64 deb (and deps) in the ISO.
+// If required, grub-efi-amd64 will be installed into the target chroot.
+grub-pc
+
+tkl-installer           /* new custom TKL installer - replaces di-live */
+
+efivar                  /* installer depends - ISO UEFI boot */
+lvm2                    /* installer recommends */
+file                    /* installer recommends */
+eject                   /* installer recommends */
 
 confconsole
 kbd                     /* confconsole recommends */
-//di-live                 /* confconsole recommends */
 resolvconf              /* confconsole recommends */
 
-/* Dbus is new default package in v18.x */
-dbus
+dbus                    /* dbus installed by default since v18.x */
 
-/* jiiterentropy-rngd provides entropy from cpu jitter; req'd in buster to */
-/* seed entropy in early boot (especially useful when live booting).       */
+// jiiterentropy-rngd provides entropy from cpu jitter; req'd to seed entropy
+// in early boot (especially useful when live booting).
 jitterentropy-rngd
 
-//tklbam                  /* still depends on py2 for now */
+tklbam                  /* depends on pypy2 for now */
 
 hubdns
 inithooks
@@ -49,8 +58,6 @@ nano
 ntpsec
 ncurses-term            /* support additional $TERM values */
 
-//perl-openssl-defaults   /* libnet-ssleay-perl depends (webmin depends) */
-//libnet-ssleay-perl      /* webmin depends  */
 webmin
 webmin-authentic-theme
 webmin-net
