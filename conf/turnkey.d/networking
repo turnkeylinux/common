@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+# it should be enabled by default but doesn't appear to be?
+systemctl enable networking.service
+
 if ! grep -s '^noarp' /etc/dhcpcd.conf; then
     cat >> /etc/dhcpcd.conf <<EOF
 
