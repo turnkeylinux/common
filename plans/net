@@ -5,6 +5,6 @@ bind9-host           # Version of 'host' bundled with BIND 9.X
 netbase              # Basic TCP/IP networking system
 net-tools            # The NET-3 networking toolkit
 iproute2             # networking and traffic control tools
-dhcpcd               # Also very small DHCPv4 and DHCPv6 client
+dhcpcd-base          # A very small DHCPv4 and DHCPv6 client
 traceroute           # Traces the route taken by packets over a tcp/ip network
 iputils-ping         # Tools to test the reachability of network hosts
