@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+# it should be enabled by default but doesn't appear to be?
+systemctl enable networking.service
+
+if ! grep -s '^noarp' /etc/dhcpcd.conf; then
+    cat >> /etc/dhcpcd.conf <<EOF
+
+# disable ARP probe - consistent behavior with udhcpd & works around slow
+# network start on boot for some buggy DHCP implementations
+noarp
+EOF
+fi
