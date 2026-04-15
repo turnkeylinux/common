@@ -52,7 +52,7 @@ cat > action-available.d/5-install.default << EOF
 autoclean -y
 dist-upgrade -y \
     -o APT::Get::Show-Upgraded=true \
-    -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/security.sources.list \
+    -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/security.sources.sources \
     -o Dir::Etc::sourceparts=nonexistent \
     -o DPkg::Options::=--force-confdef \
     -o DPkg::Options::=--force-confold
@@ -63,7 +63,7 @@ autoclean -y
 upgrade -y \
     -o APT::Get::Upgrade-Allow-New=true \
     -o APT::Get::Show-Upgraded=true \
-    -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/security.sources.list \
+    -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/security.sources.sources \
     -o Dir::Etc::sourceparts=nonexistent \
     -o DPkg::Options::=--force-confdef \
     -o DPkg::Options::=--force-confold
