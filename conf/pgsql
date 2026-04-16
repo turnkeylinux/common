@@ -7,8 +7,8 @@ CONF_DIR=/etc/postgresql/${PGSQL_VER}/main
 
 # Recreate postgres and templates using UTF-8
 pg_dropcluster --stop ${PGSQL_VER} main || true
-pg_createcluster --start -e UTF-8 ${PGSQL_VER} main
-/etc/init.d/postgresql stop
+pg_createcluster -e UTF-8 ${PGSQL_VER} main
+systemctl start postgresql
 
 # Enable password encryption
 sed -i "/^#password_encryption = on/ s/#//" $CONF_DIR/postgresql.conf
@@ -16,9 +16,10 @@ sed -i "/^#password_encryption = on/ s/#//" $CONF_DIR/postgresql.conf
 # Reduce shared_buffers (better than increasing /proc/sys/kernel/shmmax)
 sed -i "/^shared_buffers =/ s/32/24/" $CONF_DIR/postgresql.conf
 
-# Configure postgres password
-/etc/init.d/postgresql start
+# Reload config after changes
+systemctl restart postgresql
 
+# Configure postgres password
 su postgres -c 'psql postgres' << EOF
 alter user postgres with encrypted password '$PGSQL_PASS';
 EOF
@@ -27,4 +28,4 @@ EOF
 su postgres -c "createuser --superuser root"
 su postgres -c "createdb root"
 
-/etc/init.d/postgresql stop
+systemctl stop postgresql

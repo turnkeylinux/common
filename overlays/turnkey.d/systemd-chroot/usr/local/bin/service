@@ -128,6 +128,28 @@ case "$1" in
                                 " --fpm-config /etc/php/?.?/fpm/php-fpm.conf"
         ;;
 
+    postgresql)
+        PG_VER=$(ls /usr/lib/postgresql/)
+        PG_BIN="/usr/lib/postgresql/$PG_VER/bin/pg_ctl"
+        PG_DATA="/var/lib/postgresql/$PG_VER/main"
+        PG_CONF="/etc/postgresql/$PG_VER/main"
+        case "$2" in
+            start)
+                su postgres -c "$PG_BIN start -w -D $PG_DATA -o '-c config_file=$PG_CONF/postgresql.conf'"
+                ;;
+            stop)
+                su postgres -c "$PG_BIN stop -w -D $PG_DATA"
+                ;;
+            restart)
+                su postgres -c "$PG_BIN restart -w -D $PG_DATA -o '-c config_file=$PG_CONF/postgresql.conf'"
+                ;;
+            *)
+                echo "unexpected postgresql command '$2'" >&2
+                exit 1
+                ;;
+        esac
+        ;;
+
     *)
         echo "[$*] - unrecognized service = tkldev '$(basename "$0")'" \
              " wrapper falling back to /usr/sbin/service"
