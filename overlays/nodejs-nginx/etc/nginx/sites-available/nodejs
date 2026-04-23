@@ -1,11 +1,4 @@
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    server_name _;
-
-    set $nodeapp_port 8000;
-    include /etc/nginx/include/nodejs-proxy;
-}
+include /etc/nginx/snippets/ssl-redirect.conf;
 
 server {
     listen 443 ssl default_server;
