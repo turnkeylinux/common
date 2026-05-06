@@ -1,57 +1,71 @@
 <?php
-
 /** Display constant list of servers in login form with TurnKey branding.
 * @link https://www.adminer.org/plugins/#use
 * @link https://github.com/turnkeylinux/common/tree/master/overlays/adminer
 * @author Jakub Vrana, http://www.vrana.cz/
 * @author Ken Robinson, https://github.com/DocCyblade
-* @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
-* @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
+* @license https://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+* @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
 */
 class TurnKeyAdminerLoginServers {
     /** @access protected */
     var $servers, $driver;
 
     /** Set supported servers
-    * @param array array($domain) or array($domain => $description) or array($category => array())
-    * @param string
+    * @param array array($domain => $description)
+    * @param string driver name e.g. "server" for MySQL/MariaDB, "pgsql" for PostgreSQL
     */
     function __construct($servers, $driver = "server") {
         $this->servers = $servers;
         $this->driver = $driver;
+
+        // Set the driver from the submitted server on POST
+        if (!empty($_POST["auth"]["server"])) {
+            $_POST["auth"]["driver"] = $this->driver;
+        }
     }
 
     function login($login, $password) {
-        // check if server is allowed
+        // Allow only servers in our defined list
         foreach ($this->servers as $key => $val) {
-            $servers = $val;
-            if (!is_array($val)) {
-                $servers = array($key => $val);
-            }
-            foreach ($servers as $k => $v) {
-                if ((is_string($k) ? $k : $v) == SERVER) {
-                        return;
-                }
+            $server = is_string($key) ? $key : $val;
+            if ($server == Adminer\SERVER) {
+                return; // null = allow, proceed with normal auth
             }
         }
-        return false;
+        return false; // server not in list, deny
+    }
+
+    function loginFormField($name, $heading, $value) {
+        if ($name == 'driver') {
+            // Hide the driver field; we set it via the constructor
+            return '<input type="hidden" name="auth[driver]" value="' . Adminer\h($this->driver) . '">' . "\n";
+        }
+        if ($name == 'server') {
+            // Replace the free-text server field with a locked dropdown
+            $options = '';
+            foreach ($this->servers as $key => $desc) {
+                $serverVal = is_string($key) ? $key : $desc;
+                $selected  = ($serverVal == Adminer\SERVER) ? ' selected' : '';
+                $options  .= '<option value="' . Adminer\h($serverVal) . '"' . $selected . '>'
+                           . Adminer\h($desc) . '</option>';
+            }
+            return $heading . '<select name="auth[server]">' . $options . '</select>' . "\n";
+        }
+        // Return null for all other fields (username, password, permanent login)
+        // so Adminer renders them normally
+        return null;
     }
 
     function loginForm() {
-            ?>
-        <hr>
-        <b><a target="new" href="https://www.turnkeylinux.org">TurnKey Linux</a> Database Administration Console
-        - <i>Powered by <a target="new" href="https://www.adminer.org">Adminer</a></i></b>
-        <br><br>
-
-        <table cellspacing="0">
-          <tr><th><?php echo lang('Server'); ?><td><input type="hidden" name="auth[driver]" value="<?php echo $this->driver; ?>"><select name="auth[server]"><?php echo optionlist($this->servers, SERVER); ?></select>
-          <tr><th><?php echo lang('Username'); ?><td><input id="username" name="auth[username]" value="<?php echo h($_GET["username"]);  ?>">
-          <tr><th><?php echo lang('Password'); ?><td><input type="password" name="auth[password]">
-        </table>
-        <p><input type="submit" value="<?php echo lang('Login'); ?>">
-        <?php echo checkbox("auth[permanent]", 1, $_COOKIE["adminer_permanent"], lang('Permanent login')) . "\n"; ?>
-
-        <?php return true;
+        // Inject TurnKey branding above the standard login form fields
+        echo '<hr>';
+        echo '<b><a target="new" href="https://www.turnkeylinux.org">TurnKey Linux</a>'
+           . ' Database Administration Console'
+           . ' - <i>Powered by <a target="new" href="https://www.adminer.org">Adminer</a></i></b>';
+        echo '<br><br>';
+        // Return null so Adminer still renders its own form fields.
+        // Individual field customisation is handled by loginFormField() above.
+        return null;
     }
 }
