@@ -1,5 +1,6 @@
 ifupdown-ng          # updated drop-in replacement for ifupdown
 ifupdown-ng-compat   # compatibility with traditional ifupdown
+tkl-dhcpcd-ifupdown-glue    # ifupdown hooks to ensure dhcpcd honors static
 ethtool              # display or change ethernet card settings
 bind9-host           # Version of 'host' bundled with BIND 9.X
 netbase              # Basic TCP/IP networking system
