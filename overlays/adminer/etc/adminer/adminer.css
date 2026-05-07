@@ -1,20 +1,16 @@
-/* Force light theme on form inputs to match Adminer's light UI */
-input, select, textarea, button {
+/* Force light colour scheme throughout - prevents browser dark-mode bleed */
+html, body {
+    color-scheme: light;
+}
+
+/* Force light theme specifically on form inputs */
+input, select, textarea {
     color-scheme: light;
     color: #000;
     background-color: #fff;
 }
 
-hr {
-    color-scheme: light;
-    border-color: #ccc;
-    border-style: solid;
-}
-
-html, body {
-    color-scheme: light;
-}
-
+/* Footer/logout bar */
 .logout {
     background-color: #f0f0f0;
     color: #333;
@@ -22,10 +18,12 @@ html, body {
     border-top: 1px solid #ccc;
 }
 
+/* Hide username display next to logout button */
 .logout span {
     display: none;
 }
 
+/* Logout button */
 #logout {
     width: auto;
     text-indent: 0;
@@ -33,7 +31,7 @@ html, body {
     background-image: none;
     padding: 3px 8px;
     background-color: #4890E7;
-    color: white;
+    color: #fff;
     border: none;
     cursor: pointer;
 }
@@ -42,17 +40,18 @@ html, body {
     background-color: #006AEB;
 }
 
-/* Make room at the bottom of the menu for the footer/logout bar */
+/* Pull menu up to make room for fixed footer/logout bar */
 #menu {
     bottom: 4em;
 }
 
+/* Space out sidebar navigation links */
 #menu p.links a {
     display: block;
     margin: 3px 0;
 }
 
-/* Ensure the logout bar sits above the menu */
+/* Fix footer bar position so it sits over the menu */
 #foot {
     position: fixed;
     bottom: 0;
