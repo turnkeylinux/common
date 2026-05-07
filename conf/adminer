@@ -8,7 +8,9 @@ STATIC_DIR=$ADMINER_DIR/adminer/static
 # Enable nette theme
 ln -sf $ADMINER_DIR/designs/nette/adminer.css $STATIC_DIR/default.css
 
+ln -sf /etc/adminer/adminer.css /usr/share/adminer/adminer/adminer.css
+
 # ensure www-data has read access to php files in /etc/adminer
-chown root:www-data /etc/adminer /etc/adminer/tkl-*.php
+chown root:www-data /etc/adminer /etc/adminer/tkl-*.php /etc/adminer/adminer.css
 chmod 755 /etc/adminer
-chmod 644 /etc/adminer/tkl-*.php
+chmod 644 /etc/adminer/tkl-*.php /etc/adminer/adminer.css
