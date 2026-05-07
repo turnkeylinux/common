@@ -28,8 +28,16 @@ function adminer_object() {
             $this->plugins = $plugins;
         }
 
-        // Dispatch method calls to plugins first; if no plugin returns a
-        // non-null value, normal inheritance from Adminer\Adminer takes over.
+        // Explicitly override navigation() since void methods bypass __call
+        function navigation(string $missing): void {
+            foreach ($this->plugins as $plugin) {
+                if (method_exists($plugin, 'navigation')) {
+                    $plugin->navigation($missing);
+                }
+            }
+            parent::navigation($missing);
+        }
+
         function __call($name, $args) {
             foreach ($this->plugins as $plugin) {
                 if (method_exists($plugin, $name)) {
@@ -39,7 +47,6 @@ function adminer_object() {
                     }
                 }
             }
-            // For void methods (and any unhandled method), call the parent
             $parent = get_parent_class($this);
             if (method_exists($parent, $name)) {
                 return call_user_func_array(array($this, 'parent::' . $name), $args);

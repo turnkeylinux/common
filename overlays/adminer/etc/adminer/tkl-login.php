@@ -61,7 +61,7 @@ class TurnKeyAdminerLoginServers {
         // Render TurnKey branding at the top of the left pane,
         // visible both on the login page and when logged in.
         echo '<p style="padding: 8px 0; border-bottom: 1px solid #E4E2DA; margin-bottom: 8px;">';
-        echo '<a target="_blank" href="https://www.turnkeylinux.org" style="border: none; padding: 0;">'
+        echo '<a target="_blank" href="https://www.turnkeylinux.org" style="border: none; padding: 0; font-size: 1.3em;">'
            . '<b>TurnKey Linux</b></a>';
         echo '<br><small>Database Administration Console</small>';
         echo '<br><small><i>Powered by <a target="_blank" href="https://www.adminer.org" style="border: none; padding: 0;">Adminer</a></i></small>';
