@@ -6,7 +6,7 @@
 */
 function adminer_object() {
     // Explicitly include the TurnKey login plugin
-    include_once "/usr/share/adminer/plugins/tkl-login.php";
+    include_once "/etc/adminer/tkl-login.php";
 
     // Array of servers: key => display label
     // The conf script will substitute DB_DESC and DRIVER at deploy time
@@ -46,4 +46,5 @@ function adminer_object() {
 }
 
 // Include the Adminer 5 main file - this triggers the call to adminer_object() above
-include __DIR__ . "/index.php";
+chdir("/usr/share/adminer/adminer");
+include "/usr/share/adminer/adminer/index.php";
