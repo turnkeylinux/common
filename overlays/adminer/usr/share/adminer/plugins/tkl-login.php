@@ -52,20 +52,31 @@ class TurnKeyAdminerLoginServers {
             }
             return $heading . '<select name="auth[server]">' . $options . '</select>' . "\n";
         }
-        // Return null for all other fields (username, password, permanent login)
-        // so Adminer renders them normally
+        // Return null for all other fields so Adminer renders them normally
         return null;
     }
 
     function loginForm() {
-        // Inject TurnKey branding above the standard login form fields
+        // Inject TurnKey branding
         echo '<hr>';
         echo '<b><a target="new" href="https://www.turnkeylinux.org">TurnKey Linux</a>'
            . ' Database Administration Console'
            . ' - <i>Powered by <a target="new" href="https://www.adminer.org">Adminer</a></i></b>';
         echo '<br><br>';
-        // Return null so Adminer still renders its own form fields.
-        // Individual field customisation is handled by loginFormField() above.
-        return null;
+
+        // Render the form table ourselves, routing each field through
+        // loginFormField() so our driver/server overrides still apply.
+        // We must do this because returning true tells Adminer we've fully
+        // handled loginForm() and it won't render the default form.
+        echo "<table class='layout'>\n";
+        echo Adminer\adminer()->loginFormField('driver',   '', '');
+        echo Adminer\adminer()->loginFormField('server',   '<tr><th>' . Adminer\lang('Server')   . '<td>', '');
+        echo Adminer\adminer()->loginFormField('username', '<tr><th>' . Adminer\lang('Username') . '<td>', '<input id="username" name="auth[username]" value="' . Adminer\h($_GET["username"] ?? '') . '" autocomplete="username" autocapitalize="off">');
+        echo Adminer\adminer()->loginFormField('password', '<tr><th>' . Adminer\lang('Password') . '<td>', '<input type="password" name="auth[password]" autocomplete="current-password">');
+        echo "</table>\n";
+        echo '<p><input type="submit" value="' . Adminer\lang('Login') . '">';
+        echo Adminer\checkbox("auth[permanent]", 1, $_COOKIE["adminer_permanent"] ?? null, Adminer\lang('Permanent login')) . "\n";
+
+        return true; // tell Adminer we've fully handled the form
     }
 }
