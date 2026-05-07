@@ -39,9 +39,13 @@ function adminer_object() {
                     }
                 }
             }
+            // For void methods (and any unhandled method), call the parent
+            $parent = get_parent_class($this);
+            if (method_exists($parent, $name)) {
+                return call_user_func_array(array($this, 'parent::' . $name), $args);
+            }
         }
     }
-
     return new TurnKeyAdminer($plugins);
 }
 

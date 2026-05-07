@@ -1,0 +1,55 @@
+/* Force light theme on form inputs to match Adminer's light UI */
+input, select, textarea, button {
+    color-scheme: light;
+    color: #000;
+    background-color: #fff;
+}
+
+hr {
+    color-scheme: light;
+    border-color: #ccc;
+    border-style: solid;
+}
+
+html, body {
+    color-scheme: light;
+}
+
+.logout {
+    background-color: #f0f0f0;
+    color: #333;
+    box-shadow: none;
+    border-top: 1px solid #ccc;
+}
+
+#logout {
+    width: auto;
+    text-indent: 0;
+    overflow: visible;
+    background-image: none;
+    padding: 3px 8px;
+    background-color: #4890E7;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#logout:hover {
+    background-color: #006AEB;
+}
+
+/* Make room at the bottom of the menu for the footer/logout bar */
+#menu {
+    bottom: 4em;
+}
+
+/* Ensure the logout bar sits above the menu */
+#foot {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 260px;
+    z-index: 10;
+    box-sizing: border-box;
+    padding: 6px 15px;
+}
