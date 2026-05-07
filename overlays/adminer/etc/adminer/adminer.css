@@ -22,6 +22,10 @@ html, body {
     border-top: 1px solid #ccc;
 }
 
+.logout span {
+    display: none;
+}
+
 #logout {
     width: auto;
     text-indent: 0;
@@ -41,6 +45,11 @@ html, body {
 /* Make room at the bottom of the menu for the footer/logout bar */
 #menu {
     bottom: 4em;
+}
+
+#menu p.links a {
+    display: block;
+    margin: 3px 0;
 }
 
 /* Ensure the logout bar sits above the menu */
