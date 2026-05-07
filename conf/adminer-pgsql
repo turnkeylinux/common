@@ -1,21 +1,7 @@
-#!/bin/sh -e
+#!/bin/bash -ex
 
 # adminer-pgsql
 #
-#   configure adminer to only show pgsql, and to link the common theme
-
-ADMINER_DIR=/usr/share/adminer
-PLUGINS_DIR=$ADMINER_DIR/plugins
-STATIC_DIR=$ADMINER_DIR/adminer/static
-THEME_FILE=$STATIC_DIR/default.css
-TKL_INDEX=$ADMINER_DIR/adminer/tkl-index.php
-TKL_THEME=$ADMINER_DIR/designs/nette/adminer.css
-
-
-# Enable nette theme 
-mv $THEME_FILE $STATIC_DIR/default.css.bak
-ln -s $TKL_THEME $THEME_FILE
-
-# Enable only PostgreSQL
-sed -i '/^.*\$tkl_server/ s|DB_DESC|PostgreSQL|' $TKL_INDEX
-sed -i '/^.*\$tkl_database/ s|DRIVER|pgsql|' $TKL_INDEX
+# Only show Postgres
+sed -i '/^.*\$tkl_server/ s|DB_DESC|PostgreSQL|' /etc/adminer/tkl-index.php
+sed -i '/^.*\$tkl_database/ s|DRIVER|pgsql|' /etc/adminer/tkl-index.php

@@ -1,0 +1,14 @@
+#!/bin/bash -ex
+
+# Common Adminer config
+
+ADMINER_DIR=/usr/share/adminer
+STATIC_DIR=$ADMINER_DIR/adminer/static
+
+# Enable nette theme
+ln -sf $ADMINER_DIR/designs/nette/adminer.css $STATIC_DIR/default.css
+
+# ensure www-data has read access to php files in /etc/adminer
+chown root:www-data /etc/adminer /etc/adminer/tkl-*.php
+chmod 755 /etc/adminer
+chmod 644 /etc/adminer/tkl-*.php

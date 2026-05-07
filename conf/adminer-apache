@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -ex
 
 echo Listen 12322 >> /etc/apache2/ports.conf
 ln -s /etc/adminer/apache.conf /etc/apache2/sites-available/adminer.conf
