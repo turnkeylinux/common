@@ -38,6 +38,7 @@ function adminer_object() {
             parent::navigation($missing);
         }
 
+        // Explicitly override loginFormField() since typed methods bypass __call
         function loginFormField(string $name, string $heading, string $value): string {
             foreach ($this->plugins as $plugin) {
                 if (method_exists($plugin, 'loginFormField')) {
@@ -50,6 +51,9 @@ function adminer_object() {
             return parent::loginFormField($name, $heading, $value);
         }
 
+        // Dispatch all other method calls to plugins first, falling back to
+        // Adminer\Adminer. Note: typed/void methods bypass __call and need
+        // explicit overrides above.
         function __call($name, $args) {
             foreach ($this->plugins as $plugin) {
                 if (method_exists($plugin, $name)) {
@@ -68,6 +72,7 @@ function adminer_object() {
     return new TurnKeyAdminer($plugins);
 }
 
-// Include the Adminer 5 main file - this triggers the call to adminer_object() above
+// Change working directory so index.php can find its relative includes,
+// then include the Adminer 5 main file which triggers adminer_object() above.
 chdir("/usr/share/adminer/adminer");
 include "/usr/share/adminer/adminer/index.php";
