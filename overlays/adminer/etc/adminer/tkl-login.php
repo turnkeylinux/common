@@ -38,8 +38,11 @@ class TurnKeyAdminerLoginServers {
 
     function loginFormField($name, $heading, $value) {
         if ($name == 'driver') {
-            // Hide the driver field; we set it via the constructor
-            return '<input type="hidden" name="auth[driver]" value="' . Adminer\h($this->driver) . '">' . "\n";
+            // Keep as a real select so Adminer's JS onchange handler works,
+            // but hide it visually since we lock the driver
+            return '<tr style="display:none"><th>' . Adminer\lang('System') . '<td>'
+                . Adminer\html_select("auth[driver]", \Adminer\SqlDriver::$drivers, $this->driver, "loginDriver(this);")
+                . "\n";
         }
         if ($name == 'server') {
             // Lock server to localhost - no user selection needed
