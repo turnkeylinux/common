@@ -42,15 +42,8 @@ class TurnKeyAdminerLoginServers {
             return '<input type="hidden" name="auth[driver]" value="' . Adminer\h($this->driver) . '">' . "\n";
         }
         if ($name == 'server') {
-            // Replace the free-text server field with a locked dropdown
-            $options = '';
-            foreach ($this->servers as $key => $desc) {
-                $serverVal = is_string($key) ? $key : $desc;
-                $selected  = ($serverVal == Adminer\SERVER) ? ' selected' : '';
-                $options  .= '<option value="' . Adminer\h($serverVal) . '"' . $selected . '>'
-                           . Adminer\h($desc) . '</option>';
-            }
-            return $heading . '<select name="auth[server]">' . $options . '</select>' . "\n";
+            // Lock server to localhost - no user selection needed
+            return '<input type="hidden" name="auth[server]" value="localhost">' . "\n";
         }
         // Return null for all other fields (username, password, permanent login)
         // so Adminer renders them normally

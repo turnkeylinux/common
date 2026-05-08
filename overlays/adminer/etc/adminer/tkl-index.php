@@ -38,6 +38,18 @@ function adminer_object() {
             parent::navigation($missing);
         }
 
+        function loginFormField(string $name, string $heading, string $value): string {
+            foreach ($this->plugins as $plugin) {
+                if (method_exists($plugin, 'loginFormField')) {
+                    $result = $plugin->loginFormField($name, $heading, $value);
+                    if ($result !== null) {
+                        return $result;
+                    }
+                }
+            }
+            return parent::loginFormField($name, $heading, $value);
+        }
+
         function __call($name, $args) {
             foreach ($this->plugins as $plugin) {
                 if (method_exists($plugin, $name)) {
