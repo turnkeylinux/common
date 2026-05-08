@@ -51,6 +51,11 @@ input, select, textarea {
     margin: 3px 0;
 }
 
+/* Hide menu button as it has no purpose now */
+#menuopen {
+    display: none;
+}
+
 /* Fix footer bar position so it sits over the menu */
 #foot {
     position: fixed;
