@@ -1,0 +1,6 @@
+/* Force light theme on form inputs to match Adminer's light UI */
+input, select, textarea, button {
+    color-scheme: light;
+    color: #000;
+    background-color: #fff;
+}

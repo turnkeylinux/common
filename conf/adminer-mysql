@@ -1,24 +1,10 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
 # adminer-mysql
 #
-# configure adminer to only show mysql, and to link the common theme
-
-ADMINER_DIR=/usr/share/adminer
-PLUGINS_DIR=$ADMINER_DIR/plugins
-STATIC_DIR=$ADMINER_DIR/adminer/static
-THEME_FILE=$STATIC_DIR/default.css
-TKL_INDEX=$ADMINER_DIR/adminer/tkl-index.php
-TKL_THEME=$ADMINER_DIR/designs/nette/adminer.css
-
-
-# Enable nette theme 
-mv $THEME_FILE $STATIC_DIR/default.css.bak
-ln -s $TKL_THEME $THEME_FILE  
-
-# Enable only MySQL
-sed -i '/^.*\$tkl_server/ s|DB_DESC|MySQL|' $TKL_INDEX
-sed -i '/^.*\$tkl_database/ s|DRIVER|server|' $TKL_INDEX
+# Only show MySQL
+sed -i '/^.*\$tkl_server/ s|DB_DESC|MySQL|' /etc/adminer/tkl-index.php
+sed -i '/^.*\$tkl_database/ s|DRIVER|server|' /etc/adminer/tkl-index.php
 
 # Create root-like adminer MySQL user account
 service mysql start || service mariadb start

@@ -11,6 +11,5 @@ php-pgsql
 webmin-postgresql
 
 adminer
+libjs-jush      /* adminer recommends */
 php-cli
-
-//libperl4-corelibs-perl # php5-common depends on lsof; which depends on this

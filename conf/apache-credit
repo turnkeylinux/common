@@ -1,18 +1,18 @@
 #!/bin/bash -e
 # variables: CREDIT_STYLE CREDIT_STYLE_EXTRA CREDIT_ANCHORTEXT CREDIT_LOCATION
 
-if [ ! $HOSTNAME ]; then
-    echo "'$(basename $0)' error: hostname not defined"
+if [ ! "$HOSTNAME" ]; then
+    echo "'$(basename "$0")' error: hostname not defined"
     return 1
 fi
 
 capitalize() {
     FIRSTLET=$(echo "${1:0:1}" | tr "[:lower:]" "[:upper:]");
-    echo ${FIRSTLET}${1:1}
+    echo "${FIRSTLET}${1:1}"
 }
 
 strip() {
-    echo $1 | sed 's/\n//';
+    echo "$1" | sed 's/\n//';
 }
 
 # default credit styling
@@ -31,7 +31,7 @@ _CREDIT_STYLE="
     text-decoration: underline;
 }
 "
-set ${CREDIT_STYLE:=$_CREDIT_STYLE}
+set "${CREDIT_STYLE:=$_CREDIT_STYLE}"
 
 HEAD="
 <style type=\\\"text/css\\\">
@@ -39,7 +39,7 @@ $CREDIT_STYLE
 $CREDIT_STYLE_EXTRA
 </style>
 "
-set ${CREDIT_ANCHORTEXT:=$(capitalize "$HOSTNAME") Appliance}
+set "${CREDIT_ANCHORTEXT:=$(capitalize "$HOSTNAME") Appliance}"
 
 BODY="
 <div id=\\\"turnkey-credit\\\">
@@ -50,7 +50,7 @@ BODY="
 </div>
 "
 
-set ${CREDIT_LOCATION:=/}
+set "${CREDIT_LOCATION:=/}"
 cat > /etc/apache2/mods-available/substitute.conf<<EOF
 # Support TurnKey Linux by adding credit to footer
 <Location $CREDIT_LOCATION>

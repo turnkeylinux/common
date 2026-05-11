@@ -2,4 +2,3 @@
 
 # each site is defined on its own, this removes the warnings
 sed -i "s|^NameVirtualHost \(.*\)||" /etc/apache2/ports.conf
-

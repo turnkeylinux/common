@@ -1,0 +1,75 @@
+/* Force light colour scheme throughout - prevents browser dark-mode bleed */
+html, body {
+    color-scheme: light;
+}
+
+/* Force light theme specifically on form inputs */
+input, select, textarea {
+    color-scheme: light;
+    color: #000;
+    background-color: #fff;
+}
+
+/* Footer/logout bar */
+.logout {
+    background-color: #f0f0f0;
+    color: #333;
+    box-shadow: none;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+}
+
+/* Hide username display next to logout button */
+.logout span {
+    display: none;
+}
+
+/* Logout button */
+#logout {
+    width: auto;
+    text-indent: 0;
+    overflow: visible;
+    background-image: none;
+    padding: 3px 8px;
+    background-color: #4890E7;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#logout:hover {
+    background-color: #006AEB;
+}
+
+/* Pull menu up to make room for fixed footer/logout bar */
+#menu {
+    bottom: 4em;
+}
+
+/* Space out sidebar navigation links */
+#menu p.links a {
+    display: block;
+    margin: 3px 0;
+}
+
+/* Hide menu button as it has no purpose now */
+#menuopen {
+    display: none;
+}
+
+/* Fix footer bar position so it sits over the menu */
+#foot {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 305px;
+    z-index: 10;
+    box-sizing: border-box;
+    padding: 6px 15px;
+}
+
+/* Fix missing Import icon - mirror of export, red arrow pointing inward (down-left) */
+a[href*="&import="] {
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACIklEQVR42pWSz2sTQRzF3yRLikilp+1Fih4EKRVREAriP+DBu2f9O+xd8C5iQhNQW3uwqSWmFal4SUilYBGh8eKtMULSTdzEZH58fRnttmAK9rGPnYH3PjN8GZxWj+bnz7wH5A3tpqfPqnq9jmOaaLfbd0Tkbgq4rK29BOYs5PPuzVvXJ/P5b+fu37sA7ZBKOYQOR9rZ+TBbrVY/ESitdkt6vZ4458QYI9FBJI8B71f0Nl2mX9IJgOWtRqPhSyJOrIxkvUd6opRUoWQLkA36uYLIwkIqAVQqleZwqD2AnUMlgKeAfPx7+gtaAPWAgIRgnYOIQ6vVQjeOMBhoGDOENgZxHEMB2KW/sGIAPEvBAXABDkWm0Ol0Gt1ujOGw7fdWW8T9Pq5s15BOpZszM+dRq9XIQwgqAUgCCBBkMh4UBAFBGlYsxFtC5wBr5QeoBHAcoq2BM5ohB6UUhA0WoLUGoT7DOSWdoxmwyDjEWnpUsgzSYggdgPOg9ckA5wT8GGKBZTuyODDr5zA04m/ls1qPAzD852R/Ev/cC4wz8POxBryFX/8aDzDoxB1MTU0hk5lAoBQUKOGf6zAMMTs3h2az6W/5j9693rxdKpV+7n3dkyiKpN/vj+yfdCfqyne+Ur5WWVzM7edyuRsYp42N6sXi+nq2WCwerK2tydvNTSmXy7K8vCT5fGE/m80+LBQKIf5Hq6urkysrK9cKS0tXSyWZOCn3G6QVvoDblwIJAAAAAElFTkSuQmCC") no-repeat scroll 2px center;
+    padding-left: 22px;
+}

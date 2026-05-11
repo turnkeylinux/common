@@ -11,3 +11,4 @@ php-mysql
 webmin-phpini
 
 adminer
+libjs-jush      /* adminer recommends */
