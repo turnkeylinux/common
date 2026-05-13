@@ -12,7 +12,7 @@ capitalize() {
 }
 
 strip() {
-    echo "$1" | sed 's/\n//';
+    echo "$1" | tr -d '\r\n';
 }
 
 # default credit styling
@@ -50,13 +50,16 @@ BODY="
 </div>
 "
 
+HEAD="$(strip "$HEAD")"
+BODY="$(strip "$BODY")"
+
 set "${CREDIT_LOCATION:=/}"
 cat > /etc/apache2/mods-available/substitute.conf<<EOF
 # Support TurnKey Linux by adding credit to footer
 <Location $CREDIT_LOCATION>
     AddOutputFilterByType INFLATE;SUBSTITUTE;DEFLATE text/html
-    Substitute "s|</head>|$(strip "$HEAD")</head>|i"
-    Substitute "s|</body>|$(strip "$BODY")</body>|i"
+    Substitute "s|</head>|$HEAD</head>|i"
+    Substitute "s|</body>|$BODY</body>|i"
 </Location>
 EOF
 
