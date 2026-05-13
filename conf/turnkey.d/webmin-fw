@@ -1,10 +1,23 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
-set ${WEBMIN_FW_TCP_INCOMING:=22 80 443 12321}
+# TODO: drop use of iptables-legacy and use nftables directly
 
-CONF=/etc/iptables.up.rules
+set "${WEBMIN_FW_TCP_INCOMING:=22 80 443 12321}"
+# Read into an array of sorted unique values
+readarray -t WEBMIN_FW_TCP_INCOMING \
+    < <(tr ' ' '\n' <<< "$WEBMIN_FW_TCP_INCOMING" | sort -un)
 
-cat > $CONF <<EOF
+for conf in /etc/iptables.up.rules /etc/ip6tables.up.rules; do
+    if [[ "$conf" == *"ip6"* ]]; then
+        # IPv6 should all accept all ICMPv6 types, not just echo-request
+        # ICMPv6 is essential for neighbour discovery (NDP), router
+        # advertisements, and path MTU - blocking it breaks IPv6 networking
+        # in ways that aren't obvious.
+        ICMP="-A INPUT -p ipv6-icmp -j ACCEPT"
+    else
+        ICMP="-A INPUT -p icmp -m icmp --icmp-type echo-request -j ACCEPT"
+    fi
+    cat > "$conf" <<EOF
 *nat
 :PREROUTING ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
@@ -24,31 +37,38 @@ COMMIT
 :INPUT DROP [0:0]
 :OUTPUT ACCEPT [0:0]
 -A INPUT -i lo -j ACCEPT
--A INPUT -p icmp -m icmp --icmp-type echo-request -j ACCEPT
+$ICMP
 -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 EOF
+    for port in "${WEBMIN_FW_TCP_INCOMING[@]}"; do
+        echo "-A INPUT -p tcp -m tcp --dport $port -j ACCEPT" >> "$conf"
+    done
 
-for port in $WEBMIN_FW_TCP_INCOMING; do
-    echo "-A INPUT -p tcp -m tcp --dport $port -j ACCEPT" >> $CONF
+    if [[ "$WEBMIN_FW_UDP_INCOMING" ]]; then
+        readarray -t WEBMIN_FW_UDP_INCOMING \
+            < <(tr ' ' '\n' <<< "$WEBMIN_FW_UDP_INCOMING" | sort -un)
+        for port in "${WEBMIN_FW_UDP_INCOMING[@]}"; do
+            echo "-A INPUT -p udp -m udp --dport $port -j ACCEPT" >> "$conf"
+        done
+    fi
+
+    if [ "$WEBMIN_FW_TCP_INCOMING_REJECT" ]; then
+        readarray -t WEBMIN_FW_TCP_INCOMING_REJECT \
+            < <(tr ' ' '\n' <<< "$WEBMIN_FW_TCP_INCOMING_REJECT" | sort -un)
+        for port in "${WEBMIN_FW_TCP_INCOMING_REJECT[@]}"; do
+            echo "-A INPUT -p tcp -m tcp --dport $port -j REJECT" >> "$conf"
+        done
+    fi
+
+    echo "COMMIT" >> "$conf"
+    sed -i "/^$/d" "$conf"
 done
 
-if [ "$WEBMIN_FW_UDP_INCOMING" ]; then
-    for port in $WEBMIN_FW_UDP_INCOMING; do
-        echo "-A INPUT -p udp -m udp --dport $port -j ACCEPT" >> $CONF
-    done
-fi
-
-if [ "$WEBMIN_FW_TCP_INCOMING_REJECT" ]; then
-    for port in $WEBMIN_FW_TCP_INCOMING_REJECT; do
-        echo "-A INPUT -p tcp -m tcp --dport $port -j REJECT" >> $CONF
-    done
-fi
-
-echo "COMMIT" >> $CONF
-
-sed -i "/^$/d" $CONF
-
-# As of Buster, Debian uses nftables for firewall; but webmin only supports legacy
-# iptables - see https://github.com/webmin/webmin/issues/1097
+# Debian has been using nftables for firewall for some time; but historically
+# Webmin only supported legacy iptables. Webmin now supports nftables so as per
+# TODO at top of this file TKL should migrate to nftables, but for now we'll
+# continue to leverage legacy iptables functionality via 'iptables-legacy'.
+#
+# See https://github.com/webmin/webmin/issues/1097
 update-alternatives --set iptables /usr/sbin/iptables-legacy
 update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
