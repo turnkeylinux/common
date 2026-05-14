@@ -5,10 +5,10 @@ CONF=/etc/webmin/miniserv.conf
 update_or_add() {
     key=$1
     value=$2
-    if grep -q "$key" $CONF; then
-        sed -i "s|$key=.*|$key=$value|" $CONF
+    if grep -q "$key" "$CONF"; then
+        sed -i "s|$key=.*|$key=$value|" "$CONF"
     else
-        echo "$key=$value" >> $CONF
+        echo "$key=$value" >> "$CONF"
     fi
 }
 
@@ -23,6 +23,8 @@ update_or_add error_handler_403 403.cgi
 update_or_add nolog '\/stats\.cgi\?xhr\-stats\=general'
 update_or_add no_tls1 1
 update_or_add no_tls1_1 1
+# TODO: Disable TLSv1.2 in a future release (i.e. append '1': 'no_tls1_2 1')
 update_or_add no_tls1_2
 update_or_add extracas
-update_or_add ssl_hsts 0
+update_or_add ssl_hsts 1
+update_or_add ssl_redirect 1
