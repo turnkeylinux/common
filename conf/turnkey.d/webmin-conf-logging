@@ -1,6 +1,7 @@
 #!/bin/sh -e
 
 CONF=/etc/webmin/miniserv.conf
+LOG_DIR=/var/log/webmin
 
 update_or_add() {
     key=$1
@@ -28,3 +29,21 @@ update_or_add no_tls1_2
 update_or_add extracas
 update_or_add ssl_hsts 1
 update_or_add ssl_redirect 1
+# update logfile location
+update_or_add logfile "$LOG_DIR/miniserv.log"
+update_or_add errorlog "$LOG_DIR/miniserv.error"
+
+# Note: Updating Webmin config for it's own log file as below does not actually
+# work (continues to log to /var/webmin/webmin.log) but we'll work around that
+# via symlinks and update the config file to point to the actual log file
+# anyway.
+CONF=/etc/webmin/config
+update_or_add logfile "$LOG_DIR/webmin.log"
+
+# Prime log files and set permissions
+mkdir -p "$LOG_DIR"
+touch "$LOG_DIR{miniserv.log,miniserv.error,webmin.log}"
+chmod 750 "$LOG_DIR"
+chmod 640 "$LOG_DIR"*.log
+rm -f /var/webmin/webmin.log
+ln -sf /var/log/webmin/webmin.log /var/webmin/webmin.log
