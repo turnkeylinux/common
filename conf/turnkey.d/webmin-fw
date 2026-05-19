@@ -3,9 +3,19 @@
 # TODO: drop use of iptables-legacy and use nftables directly
 
 set "${WEBMIN_FW_TCP_INCOMING:=22 80 443 12321}"
+
 # Read into an array of sorted unique values
-readarray -t WEBMIN_FW_TCP_INCOMING \
-    < <(tr ' ' '\n' <<< "$WEBMIN_FW_TCP_INCOMING" | sort -un)
+# Note: lastpipe is enabled to work around race condition when combining
+# readarray directly with process substitution in bash scripts (job control
+# must be off)
+shopt -s lastpipe
+
+tr ' ' '\n' <<<"$WEBMIN_FW_TCP_INCOMING" \
+    | sort -un \
+    | readarray -t WEBMIN_FW_TCP_INCOMING
+
+# Disable lastpipe again to ensure no unexpected behavior later...
+shopt -u lastpipe
 
 for conf in /etc/iptables.up.rules /etc/ip6tables.up.rules; do
     if [[ "$conf" == *"ip6"* ]]; then
