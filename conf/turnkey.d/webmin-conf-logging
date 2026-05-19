@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 CONF=/etc/webmin/miniserv.conf
 LOG_DIR=/var/log/webmin
@@ -42,8 +42,8 @@ update_or_add logfile "$LOG_DIR/webmin.log"
 
 # Prime log files and set permissions
 mkdir -p "$LOG_DIR"
-touch "$LOG_DIR{miniserv.log,miniserv.error,webmin.log}"
+touch "$LOG_DIR"/{miniserv.log,miniserv.error,webmin.log}
 chmod 750 "$LOG_DIR"
-chmod 640 "$LOG_DIR"*.log
+chmod 640 "$LOG_DIR"/*.log
 rm -f /var/webmin/webmin.log
 ln -sf /var/log/webmin/webmin.log /var/webmin/webmin.log
