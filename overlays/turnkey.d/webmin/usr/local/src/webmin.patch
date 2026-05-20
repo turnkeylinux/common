@@ -1,19 +1,25 @@
 diff --git a/edit_ssl.cgi b/edit_ssl.cgi
-index dd98182..1a4cd77 100755
+index a8b6274..f552dbb 100755
 --- a/edit_ssl.cgi
 +++ b/edit_ssl.cgi
-@@ -259,13 +259,14 @@ print ui_tabs_end_tab();
- print ui_tabs_start_tab("mode", "lets");
- print "$text{'ssl_letsdesc'}<p>\n";
+@@ -261,19 +261,15 @@ print ui_tabs_end_tab();
  
+ # Let's Encrypt form
+ print ui_tabs_start_tab("mode", "lets");
 -my $err = &check_letsencrypt();
 +my $err = 1;
- if ($err) {
--	print "<b>",&text('ssl_letserr', $err),"</b><p>\n";
--	print &get_letsencrypt_install_message(
--		"/$module_name/edit_ssl.cgi?mode=lets", $text{'ssl_title'});
--	print "<p>\n";
--	print &text('ssl_letserr2', "../config.cgi?$module_name"),"<p>\n";
+ print $text{'ssl_letsdesc'};
+ if (!$err) {
+-	print &ui_tag('span',
+-		&ui_details({
+-			'class' => 'inline inlined',
+-			'title' => '',
+-			'content' => $text{'ssl_letsdesc2'},
+-			}))."\n".
+-		&ui_tag('style',
+-			".ui--span>details.inline>summary+span {\n".
+-			"margin-top: 0;\n".
+-			"}\n");
 +    print "<b>Unfortunately the Webmin Let's Encrypt module currrently clashes";
 +    print " with TurnKey's SSL conf and has been disabled</b><p>\n";
 +    print "<p>To use Let's Encrypt, please use <a href=";
@@ -21,5 +27,5 @@ index dd98182..1a4cd77 100755
 +    print " - see <a href='https://www.turnkeylinux.org/docs/confconsole/letsencrypt'>";
 +    print "Let's Encrypt plugin</a> docs.</p>";
  	}
- else {
- 	# Show form to create a cert
+ print "<p>\n";
+ 
