@@ -21,3 +21,14 @@ touch /var/log/adminer/{access.log,error.log}
 chown -R root:adm /var/log/adminer
 chmod 755 /var/log/adminer
 chmod 644 /var/log/adminer/*.log
+
+# Configure fail2ban protection for Adminer
+cat >> /etc/fail2ban/jail.local <<EOF
+
+[adminer-auth]
+enabled     = true
+port        = 12322
+action      = iptables[name=adminer, port=12322, protocol=tcp]
+filter      = adminer-auth
+maxretry    = 3
+EOF
