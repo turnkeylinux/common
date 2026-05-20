@@ -84,6 +84,7 @@ libfile-mimeinfo-perl   /* webmin-filemin requires to extract archives */
 logrotate
 
 iptables
+iptables-persistent
 webmin-firewall
 webmin-firewall6
 fail2ban
