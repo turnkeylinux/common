@@ -17,8 +17,9 @@ tr ' ' '\n' <<<"$WEBMIN_FW_TCP_INCOMING" \
 # Disable lastpipe again to ensure no unexpected behavior later...
 shopt -u lastpipe
 
-for conf in /etc/iptables.up.rules /etc/ip6tables.up.rules; do
-    if [[ "$conf" == *"ip6"* ]]; then
+# iptables-persistent package compatible config
+for conf in /etc/iptables/rules.v4 /etc/iptables/rules.v6; do
+    if [[ "$conf" == *"rules.v6" ]]; then
         # IPv6 should all accept all ICMPv6 types, not just echo-request
         # ICMPv6 is essential for neighbour discovery (NDP), router
         # advertisements, and path MTU - blocking it breaks IPv6 networking
