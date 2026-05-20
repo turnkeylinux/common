@@ -6,3 +6,4 @@ sed -i 's|^[[:space:]]*#([[:space:]]*"mod_redirect".*)|\1|' /etc/lighttpd/lightt
 # Link conf file to available-sites, and enable it
 ln -s /etc/adminer/lighttpd.conf /etc/lighttpd/conf-available/50-adminer.conf
 lighty-enable-mod adminer || true
+lighty-enable-mod accesslog
