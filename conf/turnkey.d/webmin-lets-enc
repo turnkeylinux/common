@@ -3,5 +3,7 @@
 # Disable Webmin Let's Encrypt config - via patch
 
 cd /usr/share/webmin/webmin
+# test patch first; --check exits non-zero if doesn't apply cleanly
+git apply --check /usr/local/src/webmin.patch
 git apply /usr/local/src/webmin.patch
 rm /usr/local/src/webmin.patch
