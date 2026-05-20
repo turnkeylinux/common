@@ -28,7 +28,9 @@ update_or_add no_tls1_1 1
 update_or_add no_tls1_2
 update_or_add extracas
 update_or_add ssl_hsts 1
+update_or_add ssl_enforce 2  # force with hsts - '1' forces ssl but not hsts
 update_or_add ssl_redirect 1
+update_or_add session_timeout 1800  # 30 minutes
 # update logfile location
 update_or_add logfile "$LOG_DIR/miniserv.log"
 update_or_add errorlog "$LOG_DIR/miniserv.error"
