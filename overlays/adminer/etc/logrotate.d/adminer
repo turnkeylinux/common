@@ -1,0 +1,23 @@
+/var/log/adminer/access.log
+/var/log/adminer/error.log {
+    weekly
+    rotate 4
+    compress
+    missingok
+    notifempty
+    sharedscripts
+    postrotate
+        # Apache
+        if systemctl is-active --quiet apache2; then
+            systemctl reload apache2
+        fi
+        # Nginx
+        if systemctl is-active --quiet nginx; then
+            systemctl reload nginx
+        fi
+        # Lighttpd
+        if systemctl is-active --quiet lighttpd; then
+            systemctl reload lighttpd
+        fi
+    endscript
+}
