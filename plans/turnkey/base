@@ -62,7 +62,9 @@ ncurses-term            /* support additional $TERM values */
 
 webmin
 webmin-authentic-theme
-webmin-net
+// webmin-net causing issues so excluded for now
+// see https://github.com/turnkeylinux/tracker/issues/2118
+//webmin-net
 webmin-software
 webmin-useradmin
 webmin-passwd
