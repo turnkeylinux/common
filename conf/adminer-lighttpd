@@ -7,3 +7,6 @@ sed -Ei 's|^[[:space:]]*#([[:space:]]*"mod_redirect".*)|\1|' /etc/lighttpd/light
 ln -s /etc/adminer/lighttpd.conf /etc/lighttpd/conf-available/50-adminer.conf
 lighty-enable-mod adminer || true
 lighty-enable-mod accesslog
+
+# Lighty doesn't support aliases, so we need to symlink tkl-index
+ln -sf /etc/adminer/tkl-index.php /usr/share/adminer/adminer/tkl-index.php
