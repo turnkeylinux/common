@@ -18,7 +18,7 @@ chmod 644 /etc/adminer/tkl-*.php /etc/adminer/adminer.css
 # Set up custom Adminer specific logging (config in relevant webserver vhosts)
 mkdir -p /var/log/adminer
 touch /var/log/adminer/{access.log,error.log}
-chown -R root:adm /var/log/adminer
+chown -R www-data:www-data /var/log/adminer
 chmod 755 /var/log/adminer
 chmod 644 /var/log/adminer/*.log
 
