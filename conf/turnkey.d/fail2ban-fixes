@@ -1,13 +1,5 @@
 #!/bin/bash -e
 
-# explictly allow ipv6 - see Debian bug #1024305:
-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1024305
-
-CONF=/etc/fail2ban/fail2ban.conf
-if ! grep -q '^allowipv6' $CONF; then
-    sed -i '\|^\[Definition\]|a \\nallowipv6 = auto' $CONF
-fi
-
 cat > /etc/cron.weekly/fail2ban <<EOF
 #!/bin/sh
 #
