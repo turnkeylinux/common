@@ -1,0 +1,51 @@
+#!/bin/bash -e
+
+CONF=/etc/webmin/miniserv.conf
+LOG_DIR=/var/log/webmin
+
+update_or_add() {
+    key=$1
+    value=$2
+    if grep -q "$key" "$CONF"; then
+        sed -i "s|$key=.*|$key=$value|" "$CONF"
+    else
+        echo "$key=$value" >> "$CONF"
+    fi
+}
+
+update_or_add port 12321
+update_or_add listen 12321
+update_or_add keyfile /etc/ssl/private/cert.pem
+update_or_add certfile
+update_or_add cipher_list_def 0
+update_or_add error_handler_401 401.cgi
+update_or_add error_handler_404 404.cgi
+update_or_add error_handler_403 403.cgi
+update_or_add nolog '\/stats\.cgi\?xhr\-stats\=general'
+update_or_add no_tls1 1
+update_or_add no_tls1_1 1
+# TODO: Disable TLSv1.2 in a future release (i.e. append '1': 'no_tls1_2 1')
+update_or_add no_tls1_2
+update_or_add extracas
+update_or_add ssl_hsts 1
+update_or_add ssl_enforce 2  # force with hsts - '1' forces ssl but not hsts
+update_or_add ssl_redirect 1
+update_or_add session_timeout 1800  # 30 minutes
+# update logfile location
+update_or_add logfile "$LOG_DIR/miniserv.log"
+update_or_add errorlog "$LOG_DIR/miniserv.error"
+
+# Note: Updating Webmin config for it's own log file as below does not actually
+# work (continues to log to /var/webmin/webmin.log) but we'll work around that
+# via symlinks and update the config file to point to the actual log file
+# anyway.
+CONF=/etc/webmin/config
+update_or_add logfile "$LOG_DIR/webmin.log"
+
+# Prime log files and set permissions
+mkdir -p "$LOG_DIR"
+touch "$LOG_DIR"/{miniserv.log,miniserv.error,webmin.log}
+chmod 750 "$LOG_DIR"
+chmod 640 "$LOG_DIR"/*.log
+rm -f /var/webmin/webmin.log
+ln -sf /var/log/webmin/webmin.log /var/webmin/webmin.log
