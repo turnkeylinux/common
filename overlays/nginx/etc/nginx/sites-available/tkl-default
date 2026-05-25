@@ -18,14 +18,18 @@
 ##
 
 # Default server configuration
-#
+
+# HTTP
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-
+    server_name _;
     # temporary redirect to https - update to permanent (308) for production
     return 307 https://$host$request_uri;
+}
 
+# HTTPS
+server {
     # SSL configuration
     listen 443 ssl default_server;
     listen [::]:443 ssl default_server;
@@ -33,8 +37,8 @@ server {
 
     root /var/www;
 
-    # Ensure index.php is at the end of this list if using php-fpm
-    index index.html index.htm;
+    # index.php can be removed from the end of this list when not using php-fpm
+    index index.html index.htm index.php;
 
     server_name _;
 
@@ -44,8 +48,8 @@ server {
         try_files $uri $uri/ =404;
     }
 
-    # Uncomment to enable PHP-FPM
-    #include snippets/php-fpm.conf;
+    # Comment to disable PHP-FPM
+    include snippets/php-fpm.conf;
 
     # Deny access to all dot files
     location ~ /\. {
