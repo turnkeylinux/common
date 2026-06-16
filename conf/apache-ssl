@@ -19,7 +19,7 @@ EOF
     )
     sed -Ei "\|^SSLCipherSuite| s|^(.*)|#\1\n$cipher_suites|" "$CONF"
     sed -i "s/ZZ_SSL_CIPHERS/$(cat /tmp/ZZ_SSL_CIPHERS)/g" "$CONF"
-    
+
     cat >> "$CONF" <<EOF
 
 # Additional default TKL Apache SSL/TLS config
