@@ -2,6 +2,7 @@
 
 nginx
 libnginx-mod-http-modsecurity
+webmin-nginx
 
 php-fpm
 php-gd
