@@ -1,0 +1,17 @@
+turnkey-adminer-19.0 (1) turnkey; urgency=low
+
+  * Full overhaul of TurnKey Adminer integration, including moving TurnKey
+    customization files to /etc/adminer (from /usr/share).
+
+  * Multiple bugfixes/improvments to default Adminer theme.
+
+  * Updated webserver config; including hardening and Adminer specific log
+    files.
+
+  * Fail2ban rules to protect Adminer log in.
+
+  * Limit access to any other databases other than locally installed database.
+    Protects against Adminer being used as a tool to attack a thrid party
+    server.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 18 Jun 2026 16:09:24 +1000

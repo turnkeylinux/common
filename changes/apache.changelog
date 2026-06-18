@@ -1,3 +1,38 @@
+turnkey-apache-19.0 (1) turnkey; urgency=low
+
+  * Modify default Apache mod_ssl conf at build time, rather than overwriting
+    it. Ensures that only explict edits are performed and avoid risk of future
+    Debian updates being overwritten.
+
+  * Updated SSL/TLS cipher list - "intermediate" level as recommended by
+    Mozilla. Aims to balance security and support for older clients.
+
+  * Explicitly set elliptic curves offered for ECDH key exchange.
+
+  * Harderned mod_security defaults:
+
+    - Block access to all '.' paths by default (e.g. '.env', '.git', etc) to
+      harden security and avoid accidental disclosure of secrets. Note this
+      will break third party Let's Encrypt integrations using HTTP-01
+      validation - e.g. certbot. TurnKey's integration is unaffected as it uses
+      a custom HTTP server to serve the challenges.
+
+    - Set additional security headers:
+        X-Content-Type-Options: "nosniff" :
+          - Prevents files from being interpretted as something other than that
+            declared by the content type.
+        Content-Security-Policy "frame-ancestors 'self';" :
+          - Prevents other sites from embedding pages within frames, defends
+            against clickjacking attacks.
+
+  * Enable HTTP/2 where possible.
+
+  * Redirect HTTP => HTTPS by default.
+
+  * Note: TLSv1.2 will be disabled by default in a future TurnKey release.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 18 Jun 2026 15:42:52 +1000
+
 turnkey-apache-18.1 (1) turnkey; urgency=low
 
   * Apache mod_evasive config improvements:
