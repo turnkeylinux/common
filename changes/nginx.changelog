@@ -1,4 +1,4 @@
-turnkey-lighttpd-19.0 (1) turnkey; urgency=low
+turnkey-nginx-19.0 (1) turnkey; urgency=low
 
   * Updated SSL/TLS cipher list - "intermediate" level as recommended by
     Mozilla. Aims to balance security and support for older clients.
@@ -12,8 +12,12 @@ turnkey-lighttpd-19.0 (1) turnkey; urgency=low
 
   * Redirect HTTP => HTTPS by default.
 
+  * Include modsecurity (previously only available for Apache).
+
   * Enable HTTP/2 by default.
+
+  * Pre-install new Nginx Webmin module.
 
   * Enable php-fpm by default in common config.
 
- -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 18 Jun 2026 16:05:02 +1000
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 18 Jun 2026 15:52:26 +1000

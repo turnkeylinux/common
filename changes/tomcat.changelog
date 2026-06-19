@@ -1,0 +1,8 @@
+turnkey-tomcat-19.0 (1) turnkey; urgency=low
+
+  * Provide support for multiple Tomcat and JVM versions (Debian Trixie
+    provides Tomcat 10 & 11 and JVM 21 & 25).
+
+  * Include updated Tomcat config compatible with Tomcat 11.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 18 Jun 2026 15:48:56 +1000
