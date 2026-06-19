@@ -25,7 +25,10 @@ turnkey-apache-19.0 (1) turnkey; urgency=low
           - Prevents other sites from embedding pages within frames, defends
             against clickjacking attacks.
 
-  * Enable HTTP/2 where possible.
+  * Enable HTTP/2 where possible. Note HTTP/2 is not compatable with Apache's
+    mod_php - which is currently the default method that TurnKey LAMP based
+    appliances host PHP applications. TurnKey will migrate to using PHP-FPM in
+    the future.
 
   * Redirect HTTP => HTTPS by default.
 
