@@ -1,0 +1,15 @@
+#include <turnkey/mysql>
+
+/* normal lamp components */
+apache2
+webmin-apache
+
+webmin-phpini
+
+adminer
+
+/* PHP 8.5 specific */
+
+php8.5-mysql
+libapache2-mod-php8.5
+php8.5-cli
