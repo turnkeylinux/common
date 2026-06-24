@@ -299,7 +299,7 @@ if [[ -n "$PHP_VERSION" ]]; then
     # Use 3rd party sury.org repo
     # install support for https repo & wget (to download gpg key)
     # these packages should already be installed, but just in case
-    PKGS=(lsb-release ca-certificates wget)
+    PKGS=(lsb-release ca-certificates wget curl)
     apt-get update --allow-releaseinfo-change
     DEBIAN_FRONTEND=noninteractive apt-get install --yes "${PKGS[@]}"
 
