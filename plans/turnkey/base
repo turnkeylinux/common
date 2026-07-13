@@ -76,6 +76,7 @@ webmin-tklbam
 webmin-updown
 webmin-filemin
 webmin-logviewer
+webmin-systemd          /* new systemd unit module in v19.x */
 webmin-xterm            /* interactive terminal module */
 fdisk                   /* webmin-fdisk recommends */
 unzip                   /* webmin-updown recommends */
