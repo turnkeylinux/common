@@ -18,13 +18,11 @@ FILE=$TARGET/helloworld.py
 sed -i "s/world/wordl/" $FILE && git add . && git commit -m "initial commit"
 sed -i "s/wordl/world/" $FILE && git add . && git commit -m "fixed typo"
 
-touch $REPOS/git/helloworld/.git/git-daemon-export-ok
 GITPUB=/var/lib/git
 git clone --bare $REPOS/git/helloworld $GITPUB/helloworld.git
 ln -s $GITPUB $REPOS/git/public
 echo "Hello World" > $REPOS/git/helloworld/.git/description
 
-sed -i "/GIT_DAEMON_ENABLE/ s/false/true/" /etc/default/git-daemon
 chown -R www-data:root $GITPUB
 
 # create subversion repo
