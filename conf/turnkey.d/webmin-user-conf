@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+# Auto logout user after 30 mins - allow user to override via "remember me"
+# checkbox on log in screen
+
+cat >> /etc/webmin/miniserv.conf <<EOF
+noremember=0
+logouttime=30
+EOF
