@@ -84,3 +84,15 @@ done
 # See https://github.com/webmin/webmin/issues/1097
 update-alternatives --set iptables /usr/sbin/iptables-legacy
 update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+
+# Override default Webmin firewall services to ensure both are started.
+# (service runs create a lock file; which will cause the other service to fail)
+for firewall_conf in iptables ip6tables; do
+    CONF="/etc/systemd/system/webmin-${firewall_conf}.service.d/override.conf"
+    mkdir -p "$(dirname $CONF)"
+    cat > "$CONF" <<EOF
+[Service]
+Restart=on-failure
+RestartSec=5s
+EOF
+done
