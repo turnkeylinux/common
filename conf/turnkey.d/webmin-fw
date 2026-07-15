@@ -18,6 +18,7 @@ tr ' ' '\n' <<<"$WEBMIN_FW_TCP_INCOMING" \
 shopt -u lastpipe
 
 # iptables-persistent package compatible config
+mkdir -p /etc/iptables
 for conf in /etc/iptables/rules.v4 /etc/iptables/rules.v6; do
     if [[ "$conf" == *"rules.v6" ]]; then
         # IPv6 should all accept all ICMPv6 types, not just echo-request
