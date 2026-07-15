@@ -76,6 +76,7 @@ webmin-tklbam
 webmin-updown
 webmin-filemin
 webmin-logviewer
+webmin-systemd          /* new systemd unit module in v19.x */
 webmin-xterm            /* interactive terminal module */
 fdisk                   /* webmin-fdisk recommends */
 unzip                   /* webmin-updown recommends */
@@ -84,7 +85,6 @@ libfile-mimeinfo-perl   /* webmin-filemin requires to extract archives */
 logrotate
 
 iptables
-iptables-persistent
 webmin-firewall
 webmin-firewall6
 fail2ban
