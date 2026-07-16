@@ -6,3 +6,4 @@
 # Link conf file to available-sites, and enable it
 ln -s /etc/adminer/nginx.conf /etc/nginx/sites-available/adminer
 ln -s /etc/nginx/sites-available/adminer /etc/nginx/sites-enabled/adminer
+mkdir -p /var/log/adminer
