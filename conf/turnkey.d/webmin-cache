@@ -1,0 +1,33 @@
+#!/bin/bash -e
+
+# Update default webmin temp cache config:
+#
+# Location:
+#   '/var/tmp/.webmin' > '/var/cache/webmin/.webmin'
+#       - Webmin will show warning about /tmp as tmpfs, so update to non-tmpfs
+#       - note webmin auto re-adds '.webmin' subdir if it's removed...
+#
+# Auto clear temp files in no-standard location:
+#   Enabled
+#
+# Max cache file age:
+#   7 days (default, but let's be explict)
+
+CONF=/etc/webmin/miniserv.conf
+CACHE_DIR=/var/cache/webmin/.webmin
+
+update_or_add() {
+    key=$1
+    value=$2
+    if grep -q "$key" "$CONF"; then
+        sed -i "s|$key=.*|$key=$value|" "$CONF"
+    else
+        echo "$key=$value" >> "$CONF"
+    fi
+}
+
+mkdir -p /var/cache/webmin
+
+update_or_add tempdir "$CACHE_DIR"
+update_or_add tempdirdelete 1
+update_or_add tempdelete_days 7
