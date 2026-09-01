@@ -6,10 +6,6 @@ if [[ -z "$HOSTNAME" ]]; then
     fatal "Hostname not defined"
 fi
 
-if grep -q ':25' <(ss -tlnp); then
-    fatal "Port 25 is already in use - must be available to set up postfix"
-fi
-
 postconf -e inet_interfaces=localhost
 postconf -e myhostname="$HOSTNAME"
 
@@ -35,6 +31,5 @@ postconf -e smtpd_tls_mandatory_ciphers=medium
 # ciphers set by common/conf/turnkey.d/zz-ssl-ciphers
 postconf -e tls_medium_cipherlist="ZZ_SSL_CIPHERS"
 
-postmulti -x postfix start
+postmulti -p check
 systemctl enable postfix@-.service
-postmulti -x postfix stop
