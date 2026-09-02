@@ -39,9 +39,10 @@ class MySQL:
         shutil.chown("/run/mysqld", user="mysql", group="mysql")
 
         self.selfstarted = False
-        if not self._is_alive():
+        state = self._state()
+        if state != "active":
             self._start()
-            self.selfstarted = True
+            self.selfstarted = state not in ("activating", "reloading")
 
         self.connect()
 
@@ -53,15 +54,15 @@ class MySQL:
         )
         self.connected = True
 
-    def _is_alive(self) -> bool:
-        return (
-            subprocess.run(
-                # don't use systemctl path - build time uses wrapper
-                ["systemctl", "is-active", "--quiet", "mariadb"],  # noqa: S607
-                check=False,
-            ).returncode
-            == 0
+    def _state(self) -> str:
+        state = subprocess.run(
+            # don't use systemctl path - build time uses wrapper
+            ["systemctl", "is-active", "mariadb"],  # noqa: S607
+            check=False,
+            stdout=subprocess.PIPE,
+            text=True,
         )
+        return state.stdout.strip()
 
     def _start(self) -> None:
         start_mysql = subprocess.run(
