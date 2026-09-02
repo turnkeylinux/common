@@ -1,0 +1,150 @@
+#!/bin/bash
+# Executed by init script
+
+# load/set general global vars
+INITHOOKS_DEFAULT="${INITHOOKS_DEFAULT:-/etc/default/inithooks}"
+# - give shellcheck explict repo path for linting package
+# shellcheck source=default/inithooks
+source "$INITHOOKS_DEFAULT"
+TERM=${TERM:-linux}
+RUN_FIRSTBOOT="${RUN_FIRSTBOOT,,}"
+TKLINFO="${TKLINFO:-/var/lib/turnkey-info}"
+REDIRECT_OUTPUT="${REDIRECT_OUTPUT,,}"
+PID=
+REBOOT_REQUIRED=
+
+# load preseeds if they exist - although preseeds file should always be empty
+# unless RUN_FIRSTBOOT=true (firstboot will wipe preseeds file)
+if [[ -f $INITHOOKS_CONF ]]; then
+    # hide this shellcheck warning for now, although we probably should
+    # include an example conf file?!
+    # shellcheck source=/dev/null
+    source "$INITHOOKS_CONF"
+    export INITHOOKS_CONF="$INITHOOKS_CONF"
+fi
+
+# ensure that log file exists and has appropriate permissions
+export INITHOOKS_LOGFILE="${INITHOOKS_LOGFILE:-/var/log/inithooks.log}"
+mkdir -p "$(dirname "$INITHOOKS_LOGFILE")"
+touch "$INITHOOKS_LOGFILE"
+chmod 640 "$INITHOOKS_LOGFILE"
+
+wait_for_boot() {
+    # wait up to 10 secs for system to be running before starting; minimizes chance
+    # of journal overwriting inithook dialog/confconsole
+    logger -t inithooks "systemctl is-system-running: $(systemctl is-system-running)"
+    for count in {1..10}; do
+        if [[ "$(systemctl is-system-running)" == "starting" ]]; then
+            logger -t inithooks "Waiting for boot to finish ($count/10 seconds)"
+            sleep 1
+        fi
+    done
+}
+
+log() {
+    # log to journal as well as $INITHOOKS_LOGFILE
+    local level=$1 # err|warn|info|debug
+    shift
+    logger -t inithooks -p "${level,,}" "$@"
+    if [[ -f "$INITHOOKS_LOGFILE" ]]; then
+        echo "${level^^}: $*" >> "$INITHOOKS_LOGFILE"
+    fi
+}
+
+if [[ "$REDIRECT_OUTPUT" == "true" ]]; then
+    # on xen redirection is performed by the inithooks-xen service
+    # on lxc and other headless deployments, redirection is handled below
+    # otherwise redirection is handled by inithooks service and redirected to
+    # tty8
+
+    if [[ ! -f "$TKLINFO/xen" ]]; then
+        TTY=$(cat /sys/devices/virtual/tty/tty0/active)
+        if [[ -z $TTY ]]; then
+            TTY=console
+        fi
+        tail -f "$INITHOOKS_LOGFILE" > "/dev/$TTY" &
+        PID="$!"
+    fi
+fi
+
+exec_scripts() {
+    local script_dir=$1
+    local firstboot=$2
+    local boot_wait_complete=
+    local script_executable=
+    local script=
+    [[ -d "$script_dir" ]] || return 0
+    readarray -d '' all_scripts < <(find "$script_dir" \( -type f -or -type l \) -print0 | sort -z)
+    for script_executable in "${all_scripts[@]}"; do
+        # this is already sourced above is it needed again here?
+        if [[ -e $INITHOOKS_CONF ]]; then
+            # as per above shellcheck $INITHOOKS_CONF note
+            # shellcheck source=/dev/null
+            source "$INITHOOKS_CONF"
+        fi
+        script=$(basename "$script_executable")
+        if [[ -n "$firstboot" && -z "$boot_wait_complete" ]]; then
+            # if firstboot, then only run <30 scripts - then wait
+            prefix="${script:0:2}"
+            if [[ $prefix =~ ^[0-9]+$ ]] && (( 10#$prefix >= 30 )); then
+                wait_for_boot
+                boot_wait_complete=true
+            fi
+        fi
+        if [[ ! -x "$script_executable" ]]; then
+            log warn "[$script] skipping"
+            continue
+        fi
+        log info "[$script] running"
+        "$script_executable"
+        exit_code=$?
+        if [[ "$exit_code" -eq 0 ]]; then
+            log info "[$script] successfully completed"
+        elif [[ "$script" = "95secupdates" ]] && [[ "$exit_code" -eq 2 ]]; then
+            log info "[$script] detected live system - skipping"
+        elif [[ "$script" = "95secupdates" ]] && [[ "$exit_code" -eq 42 ]]; then
+            REBOOT_REQUIRED=true
+            log warn "[$script] reboot is required"
+        else
+            log err "[$script] failed - exit code $exit_code"
+        fi
+    done
+    return 0
+}
+
+if [[ "$RUN_FIRSTBOOT" == "true" ]]; then
+    log info "Running firstboot scripts"
+    exec_scripts "$INITHOOKS_PATH/firstboot.d" firstboot
+fi
+
+# ensure everyboot scripts only run once per boot
+if [[ ! -f /run/inithooks-complete ]]; then
+    log info "Running everyboot scripts"
+    exec_scripts "$INITHOOKS_PATH/everyboot.d"
+    touch /run/inithooks-complete
+fi
+
+if [[ -n "$PID" ]];  then
+    log info "Killing inithooks pid $PID"
+    kill -9 $PID || true
+fi
+
+log info "Inithooks run completed"
+if [[ -n "$REBOOT_REQUIRED" ]]; then
+    log err "Rebooting now to ensure all security updates are applied"
+    systemctl reboot
+    exit 0
+fi
+
+if [[ "$REDIRECT_OUTPUT" == "true" ]]; then
+    log info "Inithooks exiting."
+else
+    # ensure confconsole --usage isn't overwritten on reboots
+    wait_for_boot
+    log info "Inithooks starting Confconsole"
+    sleep 2 # anyway to replace this?
+    log info "Confconsole started, Inithooks exiting"
+    confconsole --usage
+fi
+
+exit 0

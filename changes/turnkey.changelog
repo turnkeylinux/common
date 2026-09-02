@@ -15,8 +15,10 @@ turnkey-core-19.0 (1) turnkey; urgency=low
      work but fully functional.
 
   * Improved fail2ban config:
-    - Increased default findtime (10 minutes) & bumped maxretry (3) to minimize
-      risk of user accidentally locking themself out.
+    - Disable fail2ban while an appliance is running from a non-persistent
+      live ISO.
+    - Allow 10 retries within 10 minutes and limit bans to 10 minutes to
+      reduce accidental lockouts on installed systems.
     - Removed redundant v18.x custom patches.
 
   * Include 'zstd' by default to support smaller initramfs that unpacks faster.
