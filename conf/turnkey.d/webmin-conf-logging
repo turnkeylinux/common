@@ -26,7 +26,7 @@ update_or_add no_tls1 1
 update_or_add no_tls1_1 1
 # TODO: Disable TLSv1.2 in a future release (i.e. append '1': 'no_tls1_2 1')
 update_or_add no_tls1_2
-update_or_add extracas
+update_or_add extracas /usr/local/share/ca-certificates/cert.crt
 update_or_add ssl_hsts 1
 update_or_add ssl_enforce 2  # force with hsts - '1' forces ssl but not hsts
 update_or_add ssl_redirect 1
