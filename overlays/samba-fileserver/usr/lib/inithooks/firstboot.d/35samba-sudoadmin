@@ -11,6 +11,6 @@ if [ "$(echo $SUDOADMIN | tr [A-Z] [a-z] )" = "true" ]; then
 
     (echo "$ROOT_PASS" ; echo "$ROOT_PASS" ) | smbpasswd -a -s $USERNAME
     smbpasswd -d root
-    service samba reload
+    service smbd reload
 fi
 
