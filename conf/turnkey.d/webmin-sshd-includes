@@ -1,0 +1,10 @@
+#!/bin/sh -e
+cd /usr/share/webmin/sshd
+patch=/usr/local/src/webmin-sshd-includes.patch
+if git apply --reverse --check "$patch" 2>/dev/null; then
+    rm "$patch"
+    exit 0
+fi
+git apply --check "$patch"
+git apply "$patch"
+rm "$patch"

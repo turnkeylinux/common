@@ -1,0 +1,246 @@
+--- a/sshd-lib.pl
++++ b/sshd-lib.pl
+@@ -55,97 +55,109 @@
+ # Returns a reference to an array of SSHD config file options
+ sub get_sshd_config
+ {
+-local @rv = ( { 'dummy' => 1,
+-		'indent' => 0,
+-		'file' => $config{'sshd_config'},
+-		'line' => -1,
+-		'eline' => -1 } );
+-local $lnum = 0;
+-open(CONF, "<".$config{'sshd_config'});
+-while(<CONF>) {
+-	s/\r|\n//g;
+-	s/^\s*#.*$//g;
+-	local ($name, @values) = split(/\s+/, $_);
+-	if ($name) {
+-		local $dir = { 'name' => $name,
+-			       'values' => \@values,
+-			       'file' => $config{'sshd_config'},
+-			       'line' => $lnum };
+-		push(@rv, $dir);
+-		}
+-	$lnum++;
+-	}
+-close(CONF);
++local @rv = ( { 'dummy' => 1, 'indent' => 0,
++    'file' => $config{'sshd_config'}, 'line' => -1, 'eline' => -1 } );
++&read_sshd_includes($config{'sshd_config'}, \@rv, 0, 0);
+ return \@rv;
+ }
+ 
+-# find_value(name, &config)
++# Expand server includes in their actual order and retain each option's owner.
++sub read_sshd_includes
++{
++my ($file, $rv, $conditional, $depth) = @_;
++$depth < 16 || &error("SSH configuration includes are nested too deeply");
++require File::Glob;
++require Text::ParseWords;
++open(my $fh, '<', $file) || &error("Cannot read SSH configuration $file: $!");
++my $line = 0;
++while (my $text = <$fh>) {
++    $text =~ s/^\s+|\s+$//g;
++    if (!$text || $text =~ /^#/) { $line++; next; }
++    my ($name, @values) = Text::ParseWords::shellwords($text);
++    if (lc($name) eq 'include') {
++        foreach my $pattern (@values) {
++            last if $pattern =~ /^#/;
++            $pattern = "/etc/ssh/$pattern" if $pattern !~ m{^/};
++            foreach my $included (sort { $a cmp $b } File::Glob::bsd_glob($pattern)) {
++                next if !-f $included;
++                &read_sshd_includes($included, $rv, $conditional, $depth+1);
++                }
++            }
++        }
++    else {
++        $conditional = 1 if lc($name) eq 'match';
++        push(@$rv, { 'name' => $name, 'values' => \@values,
++            'file' => $file, 'line' => $line, 'conditional' => $conditional });
++        }
++    $line++;
++    }
++close($fh);
++}
++
+ sub find_value
+ {
+-foreach $c (@{$_[1]}) {
+-	if (lc($c->{'name'}) eq lc($_[0])) {
+-		return wantarray ? @{$c->{'values'}} : $c->{'values'}->[0];
+-		}
+-	}
+-return wantarray ? ( ) : undef;
+-}
+-
+-# find(value, &config)
++my $c = &find($_[0], $_[1]);
++return wantarray ? ($c ? @{$c->{'values'}} : ()) :
++                  ($c ? $c->{'values'}->[0] : undef);
++}
++
+ sub find
+ {
+-local @rv;
+-foreach $c (@{$_[1]}) {
+-	if (lc($c->{'name'}) eq lc($_[0])) {
+-		push(@rv, $c);
+-		}
+-	}
++my ($name, $conf) = @_;
++my $wanted = lc($name);
++$wanted = 'kbdinteractiveauthentication' if $wanted eq 'challengeresponseauthentication';
++my %seen;
++my @rv = grep { !$_->{'dummy'} &&
++    (lc($name) eq 'match' || !$_->{'conditional'}) &&
++    (lc($_->{'name'}) eq $wanted ||
++     ($wanted eq 'kbdinteractiveauthentication' && lc($_->{'name'}) eq 'challengeresponseauthentication')) &&
++    !$seen{$_->{'file'}.":".$_->{'line'}}++ } @$conf;
+ return wantarray ? @rv : $rv[0];
+ }
+ 
+-# save_directive(name, &config, [value*|&values], [before])
++# Save values in the files that supply them; new global options precede Include.
+ sub save_directive
+ {
+-local @o = &find($_[0], $_[1]);
+-local @n = ref($_[2]) ?
+-		grep { defined($_) } @{$_[2]} :
+-		grep { defined($_) } @_[2..@_-1];
+-local $lref = &read_file_lines($_[1]->[0]->{'file'});
+-local $id = ("\t" x $_[1]->[0]->{'indent'});
+-local $i;
+-local $before = $_[3] && ref($_[2]) ? &find($_[3], $_[1]) : undef;
+-for($i=0; $i<@o || $i<@n; $i++) {
+-	if (defined($o[$i]) && defined($n[$i])) {
+-		# Replacing a line
+-		$lref->[$o[$i]->{'line'}] = "$id$_[0] $n[$i]";
+-		}
+-	elsif (defined($o[$i])) {
+-		# Removing a line
+-		splice(@$lref, $o[$i]->{'line'}, 1);
+-		foreach $c (@{$_[1]}) {
+-			if ($c->{'line'} > $o[$i]->{'line'}) {
+-				$c->{'line'}--;
+-				}
+-			}
+-		}
+-	elsif (defined($n[$i]) && !$before) {
+-		# Adding a line at the end, but before the first Match directive
+-		local $ll = $_[1]->[@{$_[1]}-1]->{'line'};
+-		foreach my $m (&find("Match", $_[1])) {
+-			$ll = $m->{'line'} - 1;
+-			last;
+-			}
+-		splice(@$lref, $ll+1, 0, "$id$_[0] $n[$i]");
+-		}
+-	elsif (defined($n[$i]) && $before) {
+-		# Adding a line before the first instance of some directive
+-		splice(@$lref, $before->{'line'}, 0, "$id$_[0] $n[$i]");
+-		foreach $c (@{$_[1]}) {
+-			if ($c->{'line'} >= $before->{'line'}) {
+-				$c->{'line'}--;
+-				}
+-			}
+-		}
+-	}
++my ($name, $conf) = @_;
++my @old = &find($name, $conf);
++my @new = ref($_[2]) ? grep { defined($_) } @{$_[2]} :
++                      grep { defined($_) } @_[2..$#_];
++@old = ($old[0]) if @new == 1 && @old;
++return if @old == @new && !grep { join(' ', @{$old[$_]->{'values'}}) ne $new[$_] } 0..$#new;
++my $added = 0;
++for (my $i = 0; $i < @old || $i < @new; $i++) {
++    my $file = defined($old[$i]) ? $old[$i]->{'file'} : $conf->[0]->{'file'};
++    if ($file ne $conf->[0]->{'file'}) {
++        &lock_file($file);
++        $sshd_include_locks{$file} = 1;
++        }
++    my $lines = &read_file_lines($file);
++    if (defined($old[$i]) && defined($new[$i])) {
++        $lines->[$old[$i]->{'line'}] = "$name $new[$i]";
++        }
++    elsif (defined($old[$i])) {
++        my $line = $old[$i]->{'line'};
++        splice(@$lines, $line, 1);
++        foreach my $node (@$conf) {
++            $node->{'line'}-- if $node->{'file'} eq $file && $node->{'line'} > $line;
++            }
++        }
++    else {
++        # First obtained value wins, so insert ahead of included defaults.
++        my $position = $added++;
++        splice(@$lines, $position, 0, "$name $new[$i]");
++        foreach my $node (@$conf) {
++            $node->{'line'}++ if $node->{'file'} eq $file && $node->{'line'} >= $position;
++            }
++        }
++    }
++}
++
++sub flush_sshd_config
++{
++&flush_file_lines();
++foreach my $file (keys %sshd_include_locks) { &unlock_file($file); }
++%sshd_include_locks = ();
+ }
+ 
+ # save_socket(ports, listens)
+--- a/save_access.cgi
++++ b/save_access.cgi
+@@ -65,7 +65,7 @@
+ 	&save_directive("SilentDeny", $conf, $in{'silent'} ? 'yes' : 'no');
+ 	}
+ 
+-&flush_file_lines();
++&flush_sshd_config();
+ &unlock_file($config{'sshd_config'});
+ &webmin_log("access");
+ &redirect("");
+--- a/save_host.cgi
++++ b/save_host.cgi
+@@ -189,7 +189,7 @@
+ 	&save_directive("RemoteForward", $conf, @rforward);
+ 	}
+ 
+-&flush_file_lines();
++&flush_sshd_config();
+ &unlock_file($config{'client_config'});
+ if (&get_product_name() ne 'usermin') {
+ 	&webmin_log($in{'new'} ? "create" : $in{'delete'} ? "delete" : "update",
+--- a/save_net.cgi
++++ b/save_net.cgi
+@@ -135,7 +135,7 @@
+ 		}
+ 	}
+ 
+-&flush_file_lines();
++&flush_sshd_config();
+ &unlock_file($config{'sshd_config'});
+ &webmin_log("net");
+ &redirect("");
+--- a/save_users.cgi
++++ b/save_users.cgi
+@@ -132,7 +132,7 @@
+ 		}
+ 	}
+ 
+-&flush_file_lines();
++&flush_sshd_config();
+ &unlock_file($config{'sshd_config'});
+ &webmin_log("users");
+ &redirect("");
+--- a/save_misc.cgi
++++ b/save_misc.cgi
+@@ -95,7 +95,7 @@
+ 			$in{'separ'} ? 'yes' : 'no');
+ 	}
+ 
+-&flush_file_lines();
++&flush_sshd_config();
+ &unlock_file($config{'sshd_config'});
+ &webmin_log("misc");
+ &redirect("");
