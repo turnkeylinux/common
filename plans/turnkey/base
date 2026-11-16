@@ -5,6 +5,7 @@
 wget
 curl
 rsync
+sudo                    /* support admin commands from root and sudo-enabled accounts */
 zstd                    /* if installed will be used to compress initramfs */
 
 turnkey-keys            /* TKL keys packaged for v19.x */
