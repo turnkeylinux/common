@@ -1,6 +1,6 @@
 --- a/sshd-lib.pl
 +++ b/sshd-lib.pl
-@@ -55,97 +55,109 @@
+@@ -55,97 +55,114 @@
  # Returns a reference to an array of SSHD config file options
  sub get_sshd_config
  {
@@ -56,7 +56,9 @@
 +            }
 +        }
 +    else {
-+        $conditional = 1 if lc($name) eq 'match';
++        if (lc($name) eq 'match') {
++            $conditional = lc(join(' ', @values)) =~ /^(all|user\s+\*)$/ ? 2 : 1;
++            }
 +        push(@$rv, { 'name' => $name, 'values' => \@values,
 +            'file' => $file, 'line' => $line, 'conditional' => $conditional });
 +        }
@@ -93,11 +95,14 @@
 +my $wanted = lc($name);
 +$wanted = 'kbdinteractiveauthentication' if $wanted eq 'challengeresponseauthentication';
 +my %seen;
-+my @rv = grep { !$_->{'dummy'} &&
-+    (lc($name) eq 'match' || !$_->{'conditional'}) &&
++my @matching = grep { !$_->{'dummy'} &&
++    (lc($name) eq 'match' || !$_->{'conditional'} || $_->{'conditional'} == 2) &&
 +    (lc($_->{'name'}) eq $wanted ||
-+     ($wanted eq 'kbdinteractiveauthentication' && lc($_->{'name'}) eq 'challengeresponseauthentication')) &&
-+    !$seen{$_->{'file'}.":".$_->{'line'}}++ } @$conf;
++     ($wanted eq 'kbdinteractiveauthentication' && lc($_->{'name'}) eq 'challengeresponseauthentication')) } @$conf;
++@matching = ((grep { $_->{'conditional'} && $_->{'conditional'} == 2 } @matching),
++             (grep { !$_->{'conditional'} || $_->{'conditional'} != 2 } @matching))
++    if lc($name) ne 'match';
++my @rv = grep { !$seen{$_->{'file'}.":".$_->{'line'}}++ } @matching;
  return wantarray ? @rv : $rv[0];
  }
  

@@ -62,4 +62,23 @@ is(&find_value('PasswordAuthentication', &get_sshd_config()), 'no', 'repeated in
 
 fixture_write($main, "ChallengeResponseAuthentication no\n");
 is(&find_value('KbdInteractiveAuthentication', &get_sshd_config()), 'no', 'legacy authentication alias recognized');
+
+# Unconditional Match sections override global defaults during OpenSSH's
+# connection-specific pass, including when an owner is included twice.
+fixture_write($policy, "PasswordAuthentication yes\n");
+fixture_write($main, "HostKey $root/key\nPasswordAuthentication no\nInclude $policy\nMatch all\nInclude $policy\n");
+$conf = &get_sshd_config();
+is(&find_value('PasswordAuthentication', $conf), 'yes', 'Match all include overrides earlier global default');
+$effective = `/usr/sbin/sshd -T -f '$main' -C user=admin,host=localhost,addr=127.0.0.1`;
+like($effective, qr/^passwordauthentication yes$/m, 'native Match all result agrees');
+&lock_file($main);
+&save_directive('PasswordAuthentication', $conf, 'no');
+&flush_sshd_config();
+&unlock_file($main);
+is(fixture_read($policy), "PasswordAuthentication no\n", 'unconditional owner changed once');
+is(&find_value('PasswordAuthentication', &get_sshd_config()), 'no', 'unconditional save readback agrees');
+fixture_write($main, "PasswordAuthentication no\nMatch User *\nPasswordAuthentication yes\n");
+is(&find_value('PasswordAuthentication', &get_sshd_config()), 'yes', 'universal user match overrides global default');
+fixture_write($main, "PasswordAuthentication no\nMatch User restricted\nPasswordAuthentication yes\n");
+is(&find_value('PasswordAuthentication', &get_sshd_config()), 'no', 'specific match stays separate from default settings');
 done_testing();
